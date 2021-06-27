@@ -15,7 +15,7 @@ namespace Echo
 		virtual String getType() { return "Image"; }
 
 		// Set
-		void set(PixelFormat format, i32 width, i32 height);
+		void set(i32 width, i32 height);
 
 		// Set Value
 		void setValue(i32 x, i32 y, const Color& color);
@@ -33,7 +33,6 @@ namespace Echo
 		const vector<Color>::type& getColors() const { return m_colors; }
 
 	protected:
-		PixelFormat			m_format;
 		i32					m_width = 0;
 		i32					m_height = 0;
 		i32					m_depth = 1;

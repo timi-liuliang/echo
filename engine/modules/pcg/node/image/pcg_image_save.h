@@ -31,6 +31,7 @@ namespace Echo
 		void save(PCGImagePtr image);
 
 	protected:
+		PixelFormat		m_format = PF_R8_UINT;
 		ResourcePath	m_pathName = ResourcePath("", ".png");
 	};
 }

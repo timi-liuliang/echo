@@ -74,7 +74,7 @@ namespace Echo
 	{
 		if (m_dirtyFlag)
 		{
-			m_resultImage->set(PF_R8_UINT, m_width, m_height);
+			m_resultImage->set(m_width, m_height);
 
 			for (i32 x = 0; x < m_width; x++)
 			{

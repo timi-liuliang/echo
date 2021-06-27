@@ -62,14 +62,6 @@ namespace Echo
 	{
 		if (image)
 		{
-			i32 idx = 0;
-			vector<ui8>::type pixels(image->getWidth()*image->getHeight());
-
-			for (const Color& color : image->getColors())
-			{
-				pixels[idx++] = color.r * 255.99f;
-			}
-
 			if (!m_pathName.isEmpty())
 			{
 				String fullPath = IO::instance()->convertResPathToFullPath(m_pathName.getPath());
@@ -77,7 +69,32 @@ namespace Echo
 				if (!PathUtil::IsDirExist(pathDir))
 					PathUtil::CreateDir(pathDir);
 
-				stbi_write_png(fullPath.c_str(), image->getWidth(), image->getHeight(), 1, pixels.data(), image->getWidth() * 1);
+				if (m_format == PixelFormat::PF_R8_UINT)
+				{
+					vector<ui8>::type pixels(image->getWidth() * image->getHeight());
+
+					i32 idx = 0;
+					for (const Color& color : image->getColors())
+					{
+						pixels[idx++] = color.r * 255.99f;
+					}
+
+					i32 pixelBytes = PixelUtil::GetPixelSize(m_format);
+					stbi_write_png(fullPath.c_str(), image->getWidth(), image->getHeight(), 1, pixels.data(), image->getWidth() * pixelBytes);
+				}
+				else if (m_format == PixelFormat::PF_R16_UINT)
+				{
+					vector<ui16>::type pixels(image->getWidth() * image->getHeight());
+
+					i32 idx = 0;
+					for (const Color& color : image->getColors())
+					{
+						pixels[idx++] = ui16(color.r * 65535.99f);
+					}
+
+					i32 pixelBytes = PixelUtil::GetPixelSize(m_format);
+					stbi_write_png(fullPath.c_str(), image->getWidth(), image->getHeight(), pixelBytes, pixels.data(), image->getWidth() * pixelBytes);
+				}
 			}
 		}
 	}

@@ -47,7 +47,7 @@ namespace Echo
 	{
 		if (m_dirtyFlag)
 		{
-			m_resultImage->set(PF_R8_UINT, m_width, m_height);
+			m_resultImage->set(m_width, m_height);
 
 			// step 1
 			generateSites();
