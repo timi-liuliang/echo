@@ -1,6 +1,7 @@
 #include "pcg_image_save.h"
 #include "engine/core/io/io.h"
 #include "engine/core/util/PathUtil.h"
+#include <thirdparty/libpng/png.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
@@ -84,16 +85,24 @@ namespace Echo
 				}
 				else if (m_format == PixelFormat::PF_R16_UINT)
 				{
-					vector<ui16>::type pixels(image->getWidth() * image->getHeight());
+					// stbi don't support write 16 bit depth image, so we use libpng directly
+					// https://github.com/nothings/stb/issues/605
 
-					i32 idx = 0;
-					for (const Color& color : image->getColors())
-					{
-						pixels[idx++] = ui16(color.r * 65535.99f);
-					}
+					png_image png;
+					memset(&png, 0, sizeof(png));
+					png.version = PNG_IMAGE_VERSION;
 
-					i32 pixelBytes = PixelUtil::GetPixelSize(m_format);
-					stbi_write_png(fullPath.c_str(), image->getWidth(), image->getHeight(), 1, pixels.data(), image->getWidth() * pixelBytes);
+
+					//vector<ui16>::type pixels(image->getWidth() * image->getHeight());
+
+					//i32 idx = 0;
+					//for (const Color& color : image->getColors())
+					//{
+					//	pixels[idx++] = ui16(color.r * 65535.99f);
+					//}
+
+					//i32 pixelBytes = PixelUtil::GetPixelSize(m_format);
+					//stbi_write_png(fullPath.c_str(), image->getWidth(), image->getHeight(), 1, pixels.data(), image->getWidth() * pixelBytes);
 				}
 				else if (m_format == PixelFormat::PF_RGB8_UINT)
 				{
