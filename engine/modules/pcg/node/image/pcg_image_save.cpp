@@ -93,7 +93,15 @@ namespace Echo
 					}
 
 					i32 pixelBytes = PixelUtil::GetPixelSize(m_format);
-					stbi_write_png(fullPath.c_str(), image->getWidth(), image->getHeight(), pixelBytes, pixels.data(), image->getWidth() * pixelBytes);
+					stbi_write_png(fullPath.c_str(), image->getWidth(), image->getHeight(), 1, pixels.data(), image->getWidth() * pixelBytes);
+				}
+				else if (m_format == PixelFormat::PF_RGB8_UINT)
+				{
+
+				}
+				else if (m_format == PixelFormat::PF_RGBA8_UINT)
+				{
+
 				}
 			}
 		}
