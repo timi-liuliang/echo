@@ -369,6 +369,11 @@ namespace Echo
 				b = (float)(((i16*)pSrc)[2]);
 				a = 1.0f;
 			} break;
+			case PF_R16_UNORM:
+			{
+				r = g = b = Math::FixedToFloat(((ui16*)pSrc)[0], 16);
+				a = 1.f;
+			} break;
 			case PF_RGBA16_UNORM:
 			{
 				r = Math::FixedToFloat(((ui16*)pSrc)[0], 16);

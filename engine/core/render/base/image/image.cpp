@@ -363,9 +363,6 @@ namespace Echo
 		Color rval;
 		PixelUtil::UnpackColor(rval, m_format, &m_data[m_pixelSize * (z * m_width * m_height + m_width * y + x)]);
 
-		// reset color by pixel format
-		//rval = PixelUtil::ConvertColor(rval, m_pixFmt);
-
 		return rval;
 	}
 

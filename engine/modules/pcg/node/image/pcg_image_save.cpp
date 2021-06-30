@@ -88,7 +88,7 @@ namespace Echo
 					// stbi don't support write 16 bit depth image, so we use libpng directly
 					// https://github.com/nothings/stb/issues/605
 
-					i32 depth = 16;
+					i32 bit_depth = sizeof(png_uint_16) * 8;
 					i32 pixelSize = 1;
 
 					png_structp png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
@@ -102,7 +102,7 @@ namespace Echo
 							info_ptr, 
 							image->getWidth(), 
 							image->getHeight(), 
-							depth,
+							bit_depth,
 							PNG_COLOR_TYPE_GRAY,
 							PNG_INTERLACE_NONE,
 							PNG_COMPRESSION_TYPE_DEFAULT,
@@ -111,13 +111,15 @@ namespace Echo
 						png_uint_16** row_pointers = (png_uint_16**)png_malloc(png_ptr, image->getHeight() * sizeof(png_uint_16*));
 						for (i32 y = 0; y < image->getHeight(); y++)
 						{
-							png_uint_16* row = (png_uint_16*)png_malloc(png_ptr, sizeof(png_uint_16) * image->getWidth() * pixelSize);					
+							png_uint_16 * row = (png_uint_16*)png_malloc(png_ptr, sizeof(png_uint_16) * image->getWidth() * pixelSize);					
 							row_pointers[y] = row;
 
 							for (i32 x = 0; x < image->getWidth(); x++)
 							{
 								const Color& color = image->getValue(x, y);
-								*row++ = ui16(color.r * 65535.99f);
+								ui16 finalValue = ui16(Math::Clamp(color.r * 255.99f, 0.f, 255.f));
+
+								*row++ = finalValue;
 							}
 						}
 

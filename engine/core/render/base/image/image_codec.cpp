@@ -42,33 +42,63 @@ namespace Echo
         int width = 0;
         int height = 0;
         int channels_in_file = 0;
-        stbi_uc *pixels = stbi_load_from_memory(buffer,len,&width,&height,&channels_in_file,0);
 
-        if (!pixels) {
+        if (stbi_is_16_bit_from_memory(buffer, len))
+        {
+            int depth = 2;
+
+            stbi_us* pixels = stbi_load_16_from_memory(buffer, len, &width, &height, &channels_in_file, 0);
+            if (pixels) 
+            {
+                imgInfo.depth = depth;         // only 2D formats handled by this codec
+                imgInfo.width = width;
+                imgInfo.height = height;
+                imgInfo.size = channels_in_file * width * height * depth;
+                imgInfo.numMipmaps = 0;     // no mipmaps in non-DDS
+                imgInfo.flags = 0;
+
+                switch (channels_in_file)
+                {
+                case 1:imgInfo.pixFmt = PF_R16_UNORM; break;
+                case 3:imgInfo.pixFmt = PF_RGB16_UNORM; break;
+                case 4:imgInfo.pixFmt = PF_RGBA16_UNORM; break;
+                default: {
+                    free(pixels);
+                    EchoLogError("unsupported pixel format");
+                    return nullptr;
+                }
+                }
+            }
+
+            return (stbi_uc*)pixels;
+        }
+        else
+        {
+            stbi_uc* pixels = stbi_load_from_memory(buffer, len, &width, &height, &channels_in_file, 0);
+            if (pixels) 
+            {
+                imgInfo.depth = 1;         // only 2D formats handled by this codec
+                imgInfo.width = width;
+                imgInfo.height = height;
+                imgInfo.size = channels_in_file * width * height;
+                imgInfo.numMipmaps = 0;     // no mipmaps in non-DDS
+                imgInfo.flags = 0;
+
+                switch (channels_in_file)
+                {
+                case 1:imgInfo.pixFmt = PF_R8_UNORM; break;
+                case 3:imgInfo.pixFmt = PF_RGB8_UNORM; break;
+                case 4:imgInfo.pixFmt = PF_RGBA8_UNORM; break;
+                default: {
+                    free(pixels);
+                    EchoLogError("unsupported pixel format");
+                    return nullptr;
+                }
+                }
+            }
+
             return pixels;
         }
-
-        imgInfo.depth = 1;         // only 2D formats handled by this codec
-        imgInfo.width = width;
-        imgInfo.height = height;
-        imgInfo.size = channels_in_file * width * height;
-        imgInfo.numMipmaps = 0;     // no mipmaps in non-DDS
-        imgInfo.flags = 0;
-
-
-        switch (channels_in_file) 
-        {
-            case 1:imgInfo.pixFmt = PF_R8_UNORM;break;
-            case 3:imgInfo.pixFmt = PF_RGB8_UNORM;break;
-            case 4:imgInfo.pixFmt = PF_RGBA8_UNORM;break;
-            default:{
-                free(pixels);
-                EchoLogError("unsupported pixel format");
-                return nullptr;
-            }
-        }
-        
-        return pixels;
     }
 
     ImageCodec::ImageCodec(ImageFormat imgFmt)
