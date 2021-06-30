@@ -17,7 +17,8 @@ namespace Echo
 		// Set
 		void set(i32 width, i32 height);
 
-		// Set Value
+		// Value
+		const Color& getValue(i32 x, i32 y) const;
 		void setValue(i32 x, i32 y, const Color& color);
 
 		// Width

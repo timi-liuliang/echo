@@ -56,7 +56,8 @@ namespace Echo
         imgInfo.flags = 0;
 
 
-        switch (channels_in_file) {
+        switch (channels_in_file) 
+        {
             case 1:imgInfo.pixFmt = PF_R8_UNORM;break;
             case 3:imgInfo.pixFmt = PF_RGB8_UNORM;break;
             case 4:imgInfo.pixFmt = PF_RGBA8_UNORM;break;

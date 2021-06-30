@@ -88,21 +88,54 @@ namespace Echo
 					// stbi don't support write 16 bit depth image, so we use libpng directly
 					// https://github.com/nothings/stb/issues/605
 
-					png_image png;
-					memset(&png, 0, sizeof(png));
-					png.version = PNG_IMAGE_VERSION;
+					i32 depth = 16;
+					i32 pixelSize = 1;
 
+					png_structp png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
+					if (png_ptr)
+					{
+						png_infop info_ptr = png_create_info_struct(png_ptr);
+						setjmp(png_jmpbuf(png_ptr));
 
-					//vector<ui16>::type pixels(image->getWidth() * image->getHeight());
+						png_set_IHDR(
+							png_ptr, 
+							info_ptr, 
+							image->getWidth(), 
+							image->getHeight(), 
+							depth,
+							PNG_COLOR_TYPE_GRAY,
+							PNG_INTERLACE_NONE,
+							PNG_COMPRESSION_TYPE_DEFAULT,
+							PNG_FILTER_TYPE_DEFAULT);
 
-					//i32 idx = 0;
-					//for (const Color& color : image->getColors())
-					//{
-					//	pixels[idx++] = ui16(color.r * 65535.99f);
-					//}
+						png_uint_16** row_pointers = (png_uint_16**)png_malloc(png_ptr, image->getHeight() * sizeof(png_uint_16*));
+						for (i32 y = 0; y < image->getHeight(); y++)
+						{
+							png_uint_16* row = (png_uint_16*)png_malloc(png_ptr, sizeof(png_uint_16) * image->getWidth() * pixelSize);					
+							row_pointers[y] = row;
 
-					//i32 pixelBytes = PixelUtil::GetPixelSize(m_format);
-					//stbi_write_png(fullPath.c_str(), image->getWidth(), image->getHeight(), 1, pixels.data(), image->getWidth() * pixelBytes);
+							for (i32 x = 0; x < image->getWidth(); x++)
+							{
+								const Color& color = image->getValue(x, y);
+								*row++ = ui16(color.r * 65535.99f);
+							}
+						}
+
+						FILE* fp = fopen(fullPath.c_str(), "wb");
+						png_init_io(png_ptr, fp);
+						png_set_rows(png_ptr, info_ptr, (png_bytepp)row_pointers);
+						png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, nullptr);
+
+						for (i32 y = 0; y < image->getHeight(); y++) 
+						{
+							png_free(png_ptr, row_pointers[y]);
+						}
+
+						png_free(png_ptr, row_pointers);
+						png_destroy_write_struct(&png_ptr, &info_ptr);
+
+						fclose(fp);
+					}
 				}
 				else if (m_format == PixelFormat::PF_RGB8_UINT)
 				{

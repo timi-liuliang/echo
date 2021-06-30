@@ -27,4 +27,10 @@ namespace Echo
 			m_colors[index] = color;
 		}
 	}
+
+	const Color& PCGImage::getValue(i32 x, i32 y) const
+	{ 
+		i32 index = y * m_width + x;
+		return m_colors[index];
+	}
 }
