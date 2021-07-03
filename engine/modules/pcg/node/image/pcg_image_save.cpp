@@ -88,18 +88,24 @@ namespace Echo
 					// stbi don't support write 16 bit depth image, so we use libpng directly
 					// https://github.com/nothings/stb/issues/605
 
+					// libpng examples 
+					// https://gist.github.com/jeroen/10eb17a9fb0e5799b772
+
 					i32 bit_depth = sizeof(png_uint_16) * 8;
 					i32 pixelSize = 1;
 
-					png_structp png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
-					if (png_ptr)
+					png_structp png = png_create_write_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
+					if (png)
 					{
-						png_infop info_ptr = png_create_info_struct(png_ptr);
-						setjmp(png_jmpbuf(png_ptr));
+						png_infop info = png_create_info_struct(png);
+						setjmp(png_jmpbuf(png));
+
+						FILE* fp = fopen(fullPath.c_str(), "wb");
+						png_init_io(png, fp);
 
 						png_set_IHDR(
-							png_ptr, 
-							info_ptr, 
+							png, 
+							info, 
 							image->getWidth(), 
 							image->getHeight(), 
 							bit_depth,
@@ -108,33 +114,33 @@ namespace Echo
 							PNG_COMPRESSION_TYPE_DEFAULT,
 							PNG_FILTER_TYPE_DEFAULT);
 
-						png_uint_16** row_pointers = (png_uint_16**)png_malloc(png_ptr, image->getHeight() * sizeof(png_uint_16*));
+						png_write_info(png, info);
+						png_set_swap(png);
+
+						png_uint_16** row_pointers = (png_uint_16**)png_malloc(png, image->getHeight() * sizeof(png_uint_16*));
 						for (i32 y = 0; y < image->getHeight(); y++)
 						{
-							png_uint_16 * row = (png_uint_16*)png_malloc(png_ptr, sizeof(png_uint_16) * image->getWidth() * pixelSize);					
+							png_uint_16* row = (png_uint_16*)png_malloc(png, sizeof(png_uint_16) * image->getWidth() * pixelSize);					
 							row_pointers[y] = row;
 
 							for (i32 x = 0; x < image->getWidth(); x++)
 							{
 								const Color& color = image->getValue(x, y);
-								ui16 finalValue = ui16(Math::Clamp(color.r * 255.99f, 0.f, 255.f));
-
-								*row++ = finalValue;
+								ui16 finalValue = ui16(Math::Clamp(color.r * 65535.f, 0.f, 65535.f));
+								row[x] = finalValue;
 							}
 						}
 
-						FILE* fp = fopen(fullPath.c_str(), "wb");
-						png_init_io(png_ptr, fp);
-						png_set_rows(png_ptr, info_ptr, (png_bytepp)row_pointers);
-						png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, nullptr);
+						png_write_image(png, (png_bytepp)row_pointers);
+						png_write_end(png, nullptr);
 
 						for (i32 y = 0; y < image->getHeight(); y++) 
 						{
-							png_free(png_ptr, row_pointers[y]);
+							png_free(png, row_pointers[y]);
 						}
 
-						png_free(png_ptr, row_pointers);
-						png_destroy_write_struct(&png_ptr, &info_ptr);
+						png_free(png, row_pointers);
+						png_destroy_write_struct(&png, &info);
 
 						fclose(fp);
 					}
