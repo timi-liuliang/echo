@@ -161,8 +161,9 @@ namespace Echo
                 {
                     VertexFormat vert;
                     vert.m_position = Vector3(row * m_gridSpacing, getHeight(row, column), column * m_gridSpacing);
-                    vert.m_uv = Vector2(row, column);
+                    vert.m_color = 0xFFFFFFFF;
                     vert.m_normal = getNormal(row, column);
+                    vert.m_uv = Vector2(row, column);
                     vert.m_layerIndices = Color(0, 1, 2, 3).getABGR();
 
                     float weight = Math::IntervalRandom(0.f, 1.f);
@@ -206,6 +207,7 @@ namespace Echo
         
         MeshVertexFormat define;
         define.m_isUseNormal = true;
+        define.m_isUseVertexColor = true;
         define.m_isUseUV = true;
         define.m_isUseBlendingData = true;
         

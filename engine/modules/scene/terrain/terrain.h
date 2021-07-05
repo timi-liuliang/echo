@@ -19,6 +19,7 @@ namespace Echo
         {
             Vector3        m_position;
             Vector3        m_normal;
+            Dword		   m_color;
             Vector2        m_uv;
             Dword          m_layerIndices;
             Vector4        m_layerWeights;
