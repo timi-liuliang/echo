@@ -30,9 +30,12 @@ namespace Echo
 	{
 		CLASS_BIND_METHOD(PCGImageSave, getPathName, DEF_METHOD("getPathName"));
 		CLASS_BIND_METHOD(PCGImageSave, setPathName, DEF_METHOD("setPathName"));
+		CLASS_BIND_METHOD(PCGImageSave, getFormat,   DEF_METHOD("getFormat"));
+		CLASS_BIND_METHOD(PCGImageSave, setFormat,   DEF_METHOD("setFormat"));
 
 		CLASS_REGISTER_PROPERTY(PCGImageSave, "PathName", Variant::Type::ResourcePath, "getPathName", "setPathName");
 		CLASS_REGISTER_PROPERTY_HINT(PCGImageSave, "PathName", PropertyHintType::ResourceBehavior, "save");
+		CLASS_REGISTER_PROPERTY(PCGImageSave, "Format", Variant::Type::StringOption, "getFormat", "setFormat");
 	}
 
 	void PCGImageSave::setOutputFormat()
@@ -46,6 +49,11 @@ namespace Echo
 		{
 			m_dirtyFlag = true;
 		}
+	}
+
+	void PCGImageSave::setFormat(const StringOption& format)
+	{
+		m_format.setValue(format);
 	}
 
 	void PCGImageSave::run()
@@ -70,7 +78,7 @@ namespace Echo
 				if (!PathUtil::IsDirExist(pathDir))
 					PathUtil::CreateDir(pathDir);
 
-				if (m_format == PixelFormat::PF_R8_UINT)
+				if (m_format.getValue() == "PF_R8_UINT")
 				{
 					vector<ui8>::type pixels(image->getWidth() * image->getHeight());
 
@@ -80,10 +88,10 @@ namespace Echo
 						pixels[idx++] = color.r * 255.99f;
 					}
 
-					i32 pixelBytes = PixelUtil::GetPixelSize(m_format);
+					i32 pixelBytes = PixelUtil::GetPixelSize(PixelFormat::PF_R8_UINT);
 					stbi_write_png(fullPath.c_str(), image->getWidth(), image->getHeight(), 1, pixels.data(), image->getWidth() * pixelBytes);
 				}
-				else if (m_format == PixelFormat::PF_R16_UINT)
+				else if (m_format.getValue() == "PF_R16_UINT")
 				{
 					// stbi don't support write 16 bit depth image, so we use libpng directly
 					// https://github.com/nothings/stb/issues/605
@@ -145,11 +153,11 @@ namespace Echo
 						fclose(fp);
 					}
 				}
-				else if (m_format == PixelFormat::PF_RGB8_UINT)
+				else if (m_format.getValue() == "PF_RGB8_UINT")
 				{
 
 				}
-				else if (m_format == PixelFormat::PF_RGBA8_UINT)
+				else if (m_format.getValue() == "PF_RGBA8_UINT")
 				{
 
 				}

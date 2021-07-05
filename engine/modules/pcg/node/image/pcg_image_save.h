@@ -23,6 +23,10 @@ namespace Echo
 		const ResourcePath& getPathName() const { return m_pathName; }
 		void setPathName(const ResourcePath& pathName);
 
+		// polygon mode
+		const StringOption& getFormat() const { return m_format; }
+		void setFormat(const StringOption& format);
+
 		// Run
 		virtual void run() override;
 
@@ -31,7 +35,7 @@ namespace Echo
 		void save(PCGImagePtr image);
 
 	protected:
-		PixelFormat		m_format = PF_R16_UINT;
+		StringOption	m_format = StringOption("PF_R8_UINT", { "PF_R8_UINT","PF_R16_UINT" });
 		ResourcePath	m_pathName = ResourcePath("", ".png");
 	};
 }

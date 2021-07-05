@@ -41,6 +41,7 @@ namespace Echo
 			StringOption,
             Signal,
 			Object,
+			Enum,
 		};
 
 		enum class CallError
