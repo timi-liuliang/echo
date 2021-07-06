@@ -20,7 +20,7 @@ namespace Echo
 		CLASS_BIND_METHOD(ShaderNodeColor, getColor, DEF_METHOD("getColor"));
 		CLASS_BIND_METHOD(ShaderNodeColor, setColor, DEF_METHOD("setColor"));
 
-		CLASS_REGISTER_PROPERTY(ShaderNodeColor, "Color", Variant::Type::String, "getColor", "setColor");
+		CLASS_REGISTER_PROPERTY(ShaderNodeColor, "Color", Variant::Type::Color, "getColor", "setColor");
     }
 
     void ShaderNodeColor::setColor(const Color& color)
