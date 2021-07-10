@@ -22,6 +22,6 @@ namespace Echo
 
 	protected:
 		// update self
-		virtual void update_self() override;
+		virtual void updateInternal() override;
 	};
 }

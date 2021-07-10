@@ -69,7 +69,7 @@ namespace Echo
         void clearRenderable();
         
         // update
-        virtual void update_self() override;
+        virtual void updateInternal() override;
         
         // update vertex buffer
         void updateMeshBuffer();

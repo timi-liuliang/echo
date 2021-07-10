@@ -56,7 +56,7 @@ namespace Echo
         
 	protected:
 		// update
-		virtual void update_self() override;
+		virtual void updateInternal() override;
 
 	private:
 		b2Body*			m_body = nullptr;

@@ -56,7 +56,7 @@ namespace Echo
         virtual void start() override;
         
 		// update
-		virtual void update_self() override;
+		virtual void updateInternal() override;
 
 		// update position
 		void updatePosition(const Vector3& position);

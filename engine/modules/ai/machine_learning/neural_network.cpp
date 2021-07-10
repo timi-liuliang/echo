@@ -185,7 +185,7 @@ namespace Echo
 	}
 
 	// update
-	void NeuralNetwork::update_self()
+	void NeuralNetwork::updateInternal()
 	{
 
 	}

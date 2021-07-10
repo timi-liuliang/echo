@@ -104,7 +104,7 @@ namespace Echo
 		}
 	}
 
-	void Trail::update_self()
+	void Trail::updateInternal()
 	{
 		// update control points
 		updateControlPoints();

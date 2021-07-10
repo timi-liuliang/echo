@@ -44,7 +44,7 @@ namespace Echo
 		camera->update();
 	}
 
-	void Camera2D::update_self()
+	void Camera2D::updateInternal()
 	{
 		if (Engine::instance()->getConfig().m_isGame)
 		{

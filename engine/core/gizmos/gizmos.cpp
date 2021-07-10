@@ -349,7 +349,7 @@ namespace Echo
 			batch->clear();
 	}
 
-	void Gizmos::update_self()
+	void Gizmos::updateInternal()
 	{
 		if (isNeedRender())
 		{

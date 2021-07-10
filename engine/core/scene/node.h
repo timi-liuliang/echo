@@ -169,7 +169,7 @@ namespace Echo
         virtual void start() {}
 
         // update self
-		virtual void update_self() {}
+		virtual void updateInternal() {}
 
 	protected:
 		String			m_name;

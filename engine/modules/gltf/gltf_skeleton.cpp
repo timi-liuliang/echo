@@ -67,7 +67,7 @@ namespace Echo
 		return m_animations.isValid() ? m_clips[m_animations.getIdx()] : nullptr;
 	}
 
-	void GltfSkeleton::update_self()
+	void GltfSkeleton::updateInternal()
 	{
 		if (m_animations.isValid())
 		{

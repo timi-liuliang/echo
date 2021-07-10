@@ -97,7 +97,7 @@ namespace Echo
         }
     }
     
-    void UiImage::update_self()
+    void UiImage::updateInternal()
     {
         if (isNeedRender())
         {

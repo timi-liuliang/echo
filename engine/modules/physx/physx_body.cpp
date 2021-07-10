@@ -26,7 +26,7 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(PhysxBody, "Type", Variant::Type::StringOption, "getType", "setType");
 	}
 
-	void PhysxBody::update_self()
+	void PhysxBody::updateInternal()
 	{
 		const Vector3& shift = PhysxModule::instance()->getShift();
 		if (m_isEnable && !m_pxBody)

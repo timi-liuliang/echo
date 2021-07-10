@@ -32,7 +32,7 @@ namespace Echo
         
     protected:
         // update self
-        virtual void update_self() override;
+        virtual void updateInternal() override;
 
 		// create shape
 		virtual b2Joint* createb2Joint() { return nullptr; }

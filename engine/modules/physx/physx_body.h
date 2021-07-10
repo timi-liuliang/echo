@@ -29,7 +29,7 @@ namespace Echo
 
 	private:
 		// update
-		virtual void update_self() override;
+		virtual void updateInternal() override;
 
 	private:
 		physx::PxRigidActor*m_pxBody = nullptr;

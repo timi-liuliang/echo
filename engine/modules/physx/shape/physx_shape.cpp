@@ -30,7 +30,7 @@ namespace Echo
 
 	}
 
-	void PhysxShape::update_self()
+	void PhysxShape::updateInternal()
 	{
 		if (m_isEnable && !m_pxShape)
 		{

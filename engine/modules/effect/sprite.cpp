@@ -81,7 +81,7 @@ namespace Echo
 		}
 	}
 
-	void Sprite::update_self()
+	void Sprite::updateInternal()
 	{
 		if (isNeedRender())
 		{

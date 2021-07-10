@@ -20,6 +20,14 @@ namespace Echo
 		ECHO_CLASS(Spine, Render)
 
 	public:
+		enum BillboardType
+		{
+			None,
+			LookAt,
+			ViewDir,
+		};
+
+	public:
 		Spine();
 		virtual ~Spine();
 
@@ -43,7 +51,8 @@ namespace Echo
 
 	protected:
 		// update
-		virtual void update_self() override;
+		virtual void updateInternal() override;
+		void updateBillboard();
 
 		// submit to renderqueue
 		void submitToRenderQueue();
@@ -64,10 +73,11 @@ namespace Echo
 		spAnimationState*	m_spAnimState;
 		spAttachmentLoader*	m_attachmentLoader;
 
+		BillboardType		m_billboardType = BillboardType::LookAt;
 		AttachmentVertices	m_batch;
-		MeshPtr			m_mesh;
+		MeshPtr				m_mesh;
         ShaderProgramPtr    m_shader;
 		Material*			m_material;
-		RenderProxy*			m_renderable;
+		RenderProxy*		m_renderable;
 	};
 }

@@ -61,7 +61,7 @@ namespace Echo
         return nullptr;
     }
     
-    void Box2DJoint::update_self()
+    void Box2DJoint::updateInternal()
     {
         if(m_isEnable && !m_joint && m_dirtyFlag)
         {

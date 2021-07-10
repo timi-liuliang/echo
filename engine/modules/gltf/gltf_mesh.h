@@ -43,7 +43,7 @@ namespace Echo
 		void buildRenderable();
 
 		// update
-		virtual void update_self() override;
+		virtual void updateInternal() override;
 
 		// get global uniforms
 		virtual void* getGlobalUniformValue(const String& name) override;

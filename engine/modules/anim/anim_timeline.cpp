@@ -102,7 +102,7 @@ namespace Echo
 		m_isAnimDataDirty = true;
 	}
 
-	void Timeline::update_self()
+	void Timeline::updateInternal()
 	{
 		if (m_animations.isValid() && m_playState == PlayState::Playing)
 		{

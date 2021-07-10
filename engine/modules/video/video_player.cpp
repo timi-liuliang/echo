@@ -53,7 +53,7 @@ namespace Echo
         }
     }
 
-	void VideoPlayer::update_self()
+	void VideoPlayer::updateInternal()
 	{
 		const Vector3& position = getWorldPosition();
 		

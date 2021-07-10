@@ -103,7 +103,7 @@ namespace Echo
         }
     }
 
-	void Box2DShape::update_self()
+	void Box2DShape::updateInternal()
 	{
 		if (m_isEnable && !m_fixture)
 		{

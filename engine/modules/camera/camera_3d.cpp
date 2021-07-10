@@ -36,7 +36,7 @@ namespace Echo
 		camera->setFarClip(m_far);
 	}
 
-	void Camera3D::update_self()
+	void Camera3D::updateInternal()
 	{
 		if (Engine::instance()->getConfig().m_isGame)
 		{

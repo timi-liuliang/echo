@@ -408,7 +408,7 @@ namespace Echo
 		// script update
 		m_script.update(this);
 
-		update_self();
+		updateInternal();
 
 #ifdef ECHO_EDITOR_MODE
 		if(m_objectEditor)

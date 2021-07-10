@@ -115,7 +115,7 @@ namespace Echo
         }
     }
     
-    void UiText::update_self()
+    void UiText::updateInternal()
     {
         if (isNeedRender())
         {

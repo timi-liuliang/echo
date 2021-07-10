@@ -102,7 +102,7 @@ namespace Echo
         }
     }
 
-	void AudioPlayer::update_self()
+	void AudioPlayer::updateInternal()
 	{
 		const Vector3& position = getWorldPosition();
 		

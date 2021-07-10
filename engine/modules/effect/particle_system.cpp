@@ -57,7 +57,7 @@ namespace Echo
         }
     }
 
-    void ParticleSystem::update_self()
+    void ParticleSystem::updateInternal()
     {
         if (isNeedRender())
         {

@@ -54,7 +54,7 @@ namespace Echo
 		return Vector3::ZERO;
 	}
 
-	void PhysxController::update_self()
+	void PhysxController::updateInternal()
 	{
 		const Vector3& shift = PhysxModule::instance()->getShift();
 

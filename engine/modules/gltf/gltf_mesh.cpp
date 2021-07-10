@@ -128,7 +128,7 @@ namespace Echo
 		}
 	}
 
-	void GltfMesh::update_self()
+	void GltfMesh::updateInternal()
 	{
 		if (isNeedRender())
 		{

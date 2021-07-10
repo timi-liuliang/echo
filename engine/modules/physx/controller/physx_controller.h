@@ -36,7 +36,7 @@ namespace Echo
 
 	private:
 		// Update
-		virtual void update_self() override;
+		virtual void updateInternal() override;
 
 	protected:
 		physx::PxController* m_pxController = nullptr;

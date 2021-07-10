@@ -55,7 +55,6 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(Spine, "Anim", Variant::Type::StringOption, "getAnim", "setAnim");
 	}
 
-	// set moc
 	void Spine::setSpin(const ResourcePath& res)
 	{
 		if (m_spinRes.setPath(res.getPath()) && m_attachmentLoader)
@@ -89,7 +88,6 @@ namespace Echo
 		}
 	}
 
-	// set atlas
 	void Spine::setAtlas(const ResourcePath& res)
 	{
 		if (m_atlasRes.setPath(res.getPath()))
@@ -106,7 +104,6 @@ namespace Echo
 		}
 	}
 
-	// play anim
 	void Spine::setAnim(const StringOption& animName)
 	{
 		if (m_animations.setValue(animName.getValue()))
@@ -115,9 +112,10 @@ namespace Echo
 		}
 	}
 
-	// update per frame
-	void Spine::update_self()
+	void Spine::updateInternal()
 	{
+		updateBillboard();
+
 		if (isNeedRender())
 		{
 			float delta = Engine::instance()->getFrameTime();
@@ -134,7 +132,25 @@ namespace Echo
 		}
 	}
 
-	// submit to render
+	void Spine::updateBillboard()
+	{
+		if (m_billboardType != BillboardType::None)
+		{
+			Camera* camera = getCamera();
+			if (camera)
+			{
+				Vector3 faceDir = m_billboardType == BillboardType::LookAt ? getWorldPosition() - camera->getPosition() : camera->getDirection();
+				faceDir.normalize();
+
+				Vector3 hDir(faceDir.x, 0.f, faceDir.z);
+				hDir.normalize();
+
+				Quaternion quat = Quaternion::fromVec3ToVec3(hDir, faceDir) * Quaternion::fromVec3ToVec3(Vector3::UNIT_Z, hDir);
+				setWorldOrientation(quat);
+			}
+		}
+	}
+
 	void Spine::submitToRenderQueue()
 	{
 		m_batch.clear();

@@ -271,7 +271,7 @@ namespace Echo
 		}
 	}
 
-	void Live2dCubism::update_self()
+	void Live2dCubism::updateInternal()
 	{
 		if (isNeedRender())
 		{

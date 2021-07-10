@@ -140,7 +140,7 @@ namespace Echo
         }
     }
     
-    void Terrain::update_self()
+    void Terrain::updateInternal()
     {
         if (isNeedRender())
         {

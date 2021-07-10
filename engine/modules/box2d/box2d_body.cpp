@@ -148,7 +148,7 @@ namespace Echo
         }
     }
 
-	void Box2DBody::update_self()
+	void Box2DBody::updateInternal()
 	{
 		if (m_isEnable && !m_body)
 		{
