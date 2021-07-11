@@ -49,10 +49,13 @@ namespace Echo
 		CLASS_BIND_METHOD(Spine, setAtlas, DEF_METHOD("setAtlas"));
 		CLASS_BIND_METHOD(Spine, setAnim, DEF_METHOD("setAnim"));
 		CLASS_BIND_METHOD(Spine, getAnim, DEF_METHOD("getAnim"));
+		CLASS_BIND_METHOD(Spine, getBillboardType, DEF_METHOD("getBillboardType"));
+		CLASS_BIND_METHOD(Spine, setBillobardType, DEF_METHOD("setBillobardType"));
 
 		CLASS_REGISTER_PROPERTY(Spine, "Spin", Variant::Type::ResourcePath, "getSpin", "setSpin");
 		CLASS_REGISTER_PROPERTY(Spine, "Atlas", Variant::Type::ResourcePath, "getAtlas", "setAtlas");
 		CLASS_REGISTER_PROPERTY(Spine, "Anim", Variant::Type::StringOption, "getAnim", "setAnim");
+		CLASS_REGISTER_PROPERTY(Spine, "Billboard", Variant::Type::StringOption, "getBillboardType", "setBillobardType");
 	}
 
 	void Spine::setSpin(const ResourcePath& res)
@@ -110,6 +113,18 @@ namespace Echo
 		{
 			spAnimationState_setAnimationByName(m_spAnimState, 0, m_animations.getValue().c_str(), true);
 		}
+	}
+
+	StringOption Spine::getBillboardType()
+	{
+		StringOption result;
+		result.fromEnum(m_billboardType);
+
+		return result;
+	}
+	void Spine::setBillobardType(const StringOption& type)
+	{
+		m_billboardType = type.toEnum(BillboardType::None);
 	}
 
 	void Spine::updateInternal()

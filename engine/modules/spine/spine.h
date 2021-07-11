@@ -31,23 +31,21 @@ namespace Echo
 		Spine();
 		virtual ~Spine();
 
-		// set spin
+		// spin
 		void setSpin(const ResourcePath& res);
-
-		// get spin
 		const ResourcePath& getSpin() { return m_spinRes; }
 
-		// set atlas
+		// atlas
 		void setAtlas(const ResourcePath& res);
-
-		// get atlas
 		const ResourcePath& getAtlas() { return m_atlasRes; }
 		
-		// play anim
+		// anim
 		void setAnim(const StringOption& animName);
-
-		// get animations
 		const StringOption& getAnim() { return m_animations; }
+
+		// type
+		StringOption getBillboardType();
+		void setBillobardType(const StringOption& type);
 
 	protected:
 		// update

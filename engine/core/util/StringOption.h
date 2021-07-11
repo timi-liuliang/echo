@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/core/util/StringUtil.h"
+#include "engine/core/util/magic_enum.hpp"
 
 namespace Echo
 {
@@ -41,5 +42,26 @@ namespace Echo
 
 		// is valid
 		bool isValid() const { return m_index < m_options.size(); }
+
+		// enum
+		template <typename T>
+		StringOption fromEnum(T value)
+		{
+			for (T enumValue : magic_enum::enum_values<T>())
+			{
+				m_options.push_back(std::string(magic_enum::enum_name(enumValue)).c_str());
+			}
+
+			std::string valueName(magic_enum::enum_name(value));
+			setValue(valueName.c_str());
+
+			return *this;
+		}
+
+		template<typename T>
+		T toEnum(T defaultValue) const
+		{
+			return magic_enum::enum_cast<T>(getValue().c_str()).value_or(defaultValue);
+		}
 	};
 }
