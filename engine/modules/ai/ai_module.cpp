@@ -5,6 +5,7 @@
 #include "machine_learning/editor/neuron_editor.h"
 #include "machine_learning/editor/neural_layer_editor.h"
 #include "machine_learning/editor/neural_network_editor.h"
+#include "behavior_tree/behaviro_tree.h"
 
 namespace Echo
 {
@@ -27,6 +28,7 @@ namespace Echo
 
 	void AIModule::registerTypes()
 	{
+		Class::registerType<BehaviorTree>();
 		//Class::registerType<Neuron>();
 		//Class::registerType<NeuralLayer>();
 		//Class::registerType<NeuralNetwork>();
