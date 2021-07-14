@@ -5,7 +5,8 @@
 #include "machine_learning/editor/neuron_editor.h"
 #include "machine_learning/editor/neural_layer_editor.h"
 #include "machine_learning/editor/neural_network_editor.h"
-#include "behavior_tree/behaviro_tree.h"
+#include "behavior_tree/behavior_tree.h"
+#include "behavior_tree/editor/behavior_tree_editor.h"
 
 namespace Echo
 {
@@ -33,7 +34,7 @@ namespace Echo
 		//Class::registerType<NeuralLayer>();
 		//Class::registerType<NeuralNetwork>();
 
-		//REGISTER_OBJECT_EDITOR(Neuron, NeuronEditor)
+		CLASS_REGISTER_EDITOR(BehaviorTree, BehaviorTreeEditor)
 		//REGISTER_OBJECT_EDITOR(NeuralLayer, NeuralLayerEditor)
 		//REGISTER_OBJECT_EDITOR(NeuralNetwork, NeuralNetworkEditor)
 	}

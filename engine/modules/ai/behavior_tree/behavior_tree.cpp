@@ -1,4 +1,4 @@
-#include "behaviro_tree.h"
+#include "behavior_tree.h"
 
 namespace Echo
 {
