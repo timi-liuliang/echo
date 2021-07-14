@@ -31,6 +31,10 @@ namespace Echo
 		Spine();
 		virtual ~Spine();
 
+		// type
+		StringOption getBillboardType();
+		void setBillobardType(const StringOption& type);
+
 		// spin
 		void setSpin(const ResourcePath& res);
 		const ResourcePath& getSpin() { return m_spinRes; }
@@ -43,9 +47,8 @@ namespace Echo
 		void setAnim(const StringOption& animName);
 		const StringOption& getAnim() { return m_animations; }
 
-		// type
-		StringOption getBillboardType();
-		void setBillobardType(const StringOption& type);
+		// play
+		void playAnim(const String& animName, bool loop);
 
 	protected:
 		// update
