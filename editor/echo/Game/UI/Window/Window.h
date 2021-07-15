@@ -21,6 +21,9 @@ namespace Game
 		void setAspectRatio(const QSize& size);
 		QSize getAspectRatio() const { return m_ratio; }
 
+		// event
+		virtual bool event(QEvent* e) override;
+
 		// mouse events
 		virtual void mouseMoveEvent( QMouseEvent* e) override;
 		virtual void mousePressEvent( QMouseEvent* e) override;

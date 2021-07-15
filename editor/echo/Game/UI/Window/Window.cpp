@@ -1,6 +1,7 @@
 #include <QtGui>
 #include "Window.h"
 #include <QDateTime>
+#include <QKeyEvent>
 #include "GameMainWindow.h"
 #include <engine/core/main/game_settings.h>
 #include <engine/core/input/input.h>
@@ -67,6 +68,18 @@ namespace Game
 
 	void  Window::resetDevice()
 	{
+	}
+
+	bool Window::event(QEvent* e)
+	{
+		if (e->type() == QEvent::KeyPress)
+		{
+			QKeyEvent* ke = dynamic_cast<QKeyEvent*>(e);
+			if (ke->key() == Qt::Key_Tab)
+				return true;
+		}
+
+		return QWidget::event(e);
 	}
 
 	void Window::wheelEvent(QWheelEvent * e)
