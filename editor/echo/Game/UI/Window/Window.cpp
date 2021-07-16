@@ -76,7 +76,18 @@ namespace Game
 		{
 			QKeyEvent* ke = dynamic_cast<QKeyEvent*>(e);
 			if (ke->key() == Qt::Key_Tab)
-				return true;
+			{
+				Echo::Input::instance()->notifyKeyDown(ke->nativeVirtualKey());
+			}
+		}
+
+		if (e->type() == QEvent::KeyRelease)
+		{
+			QKeyEvent* ke = dynamic_cast<QKeyEvent*>(e);
+			if (ke->key() == Qt::Key_Tab)
+			{
+				Echo::Input::instance()->notifyKeyUp(ke->nativeVirtualKey());
+			}
 		}
 
 		return QWidget::event(e);
