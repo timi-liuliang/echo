@@ -110,7 +110,7 @@ namespace Echo
 
 	void Spine::setAnim(const StringOption& animName)
 	{
-		if (m_animations.getValue() !=animName.getValue() && m_animations.setValue(animName.getValue()))
+		if (m_animations.setValue(animName.getValue()))
 		{
 			spAnimationState_setAnimationByName(m_spAnimState, 0, m_animations.getValue().c_str(), true);
 		}
