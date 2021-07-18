@@ -139,10 +139,10 @@ namespace Echo
 
 	void Spine::updateInternal()
 	{
-		updateBillboard();
-
 		if (isNeedRender())
 		{
+			updateBillboard();
+
 			float delta = Engine::instance()->getFrameTime();
 
 			if (m_spSkeleton && m_spAnimState)

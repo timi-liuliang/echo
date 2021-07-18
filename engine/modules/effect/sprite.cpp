@@ -20,20 +20,39 @@ namespace Echo
 
 	void Sprite::bindMethods()
 	{
+		CLASS_BIND_METHOD(Sprite, getBillboardType, DEF_METHOD("getBillboardType"));
+		CLASS_BIND_METHOD(Sprite, setBillobardType, DEF_METHOD("setBillobardType"));
 		CLASS_BIND_METHOD(Sprite, getWidth,		    DEF_METHOD("getWidth"));
 		CLASS_BIND_METHOD(Sprite, setWidth,		    DEF_METHOD("setWidth"));
 		CLASS_BIND_METHOD(Sprite, getHeight,		DEF_METHOD("getHeight"));
 		CLASS_BIND_METHOD(Sprite, setHeight,		DEF_METHOD("setHeight"));
+		CLASS_BIND_METHOD(Sprite, getOffset,		DEF_METHOD("getOffset"));
+		CLASS_BIND_METHOD(Sprite, setOffset,		DEF_METHOD("setOffset"));
 		CLASS_BIND_METHOD(Sprite, getMaterial,		DEF_METHOD("getMaterial"));
 		CLASS_BIND_METHOD(Sprite, setMaterial,		DEF_METHOD("setMaterial"));
 
-		CLASS_REGISTER_PROPERTY(Sprite, "Width", Variant::Type::Int, "getWidth", "setWidth");
-		CLASS_REGISTER_PROPERTY(Sprite, "Height", Variant::Type::Int, "getHeight", "setHeight");
+		CLASS_REGISTER_PROPERTY(Sprite, "Billboard", Variant::Type::StringOption, "getBillboardType", "setBillobardType");
+		CLASS_REGISTER_PROPERTY(Sprite, "Width", Variant::Type::Real, "getWidth", "setWidth");
+		CLASS_REGISTER_PROPERTY(Sprite, "Height", Variant::Type::Real, "getHeight", "setHeight");
+		CLASS_REGISTER_PROPERTY(Sprite, "Offset", Variant::Type::Vector2, "getOffset", "setOffset");
 		CLASS_REGISTER_PROPERTY(Sprite, "Material", Variant::Type::Object, "getMaterial", "setMaterial");
 		CLASS_REGISTER_PROPERTY_HINT(Sprite, "Material", PropertyHintType::ResourceType, "Material");
 	}
 
-	void Sprite::setWidth(i32 width) 
+	StringOption Sprite::getBillboardType()
+	{
+		StringOption result;
+		result.fromEnum(m_billboardType);
+
+		return result;
+	}
+
+	void Sprite::setBillobardType(const StringOption& type)
+	{
+		m_billboardType = type.toEnum(BillboardType::None);
+	}
+
+	void Sprite::setWidth(float width)
 	{ 
 		if (m_width != width)
 		{
@@ -42,11 +61,20 @@ namespace Echo
 		}
 	}
 
-	void Sprite::setHeight(i32 height) 
+	void Sprite::setHeight(float height)
 	{
 		if (m_height != height)
 		{
 			m_height = height;
+			m_isRenderableDirty = true;
+		}
+	}
+
+	void Sprite::setOffset(const Vector2& offset)
+	{
+		if (m_offset != offset)
+		{
+			m_offset = offset;
 			m_isRenderableDirty = true;
 		}
 	}
@@ -64,7 +92,7 @@ namespace Echo
 		{
 			if (!m_material)
 			{
-				StringArray macros = { "ALPHA_ADJUST" };
+				StringArray macros;
 				ShaderProgramPtr shader = ShaderProgram::getDefault2D(macros);
 
 				m_material = ECHO_CREATE_RES(Material);
@@ -85,10 +113,31 @@ namespace Echo
 	{
 		if (isNeedRender())
 		{
+			updateBillboard();
+
 			buildRenderable();
 			if (m_renderable)
 			{
 				m_renderable->submitToRenderQueue();
+			}
+		}
+	}
+
+	void Sprite::updateBillboard()
+	{
+		if (m_billboardType != BillboardType::None)
+		{
+			Camera* camera = getCamera();
+			if (camera)
+			{
+				Vector3 faceDir = m_billboardType == BillboardType::LookAt ? getWorldPosition() - camera->getPosition() : camera->getDirection();
+				faceDir.normalize();
+
+				Vector3 hDir(faceDir.x, 0.f, faceDir.z);
+				hDir.normalize();
+
+				Quaternion quat = Quaternion::fromVec3ToVec3(hDir, faceDir) * Quaternion::fromVec3ToVec3(Vector3::UNIT_Z, hDir);
+				setWorldOrientation(quat);
 			}
 		}
 	}
@@ -109,12 +158,14 @@ namespace Echo
             float hw = m_width * 0.5f;
             float hh = m_height * 0.5f;
 
+			Vector3 offset(m_offset, 0.f);
+
             // vertices
             VertexArray vertices;
-            vertices.emplace_back(Vector3(-hw, -hh, 0.f), Vector2(0.f, 1.f));
-            vertices.emplace_back(Vector3(-hw,  hh, 0.f), Vector2(0.f, 0.f));
-            vertices.emplace_back(Vector3(hw,   hh, 0.f), Vector2(1.f, 0.f));
-            vertices.emplace_back(Vector3(hw,  -hh, 0.f), Vector2(1.f, 1.f));
+            vertices.emplace_back(Vector3(-hw, -hh, 0.f) + offset, Vector2(0.f, 1.f));
+            vertices.emplace_back(Vector3(-hw,  hh, 0.f) + offset, Vector2(0.f, 0.f));
+            vertices.emplace_back(Vector3(hw,   hh, 0.f) + offset, Vector2(1.f, 0.f));
+            vertices.emplace_back(Vector3(hw,  -hh, 0.f) + offset, Vector2(1.f, 1.f));
 
             // format
             MeshVertexFormat define;

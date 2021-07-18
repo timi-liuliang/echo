@@ -53,6 +53,8 @@ namespace Echo
 	protected:
 		// update
 		virtual void updateInternal() override;
+
+		// update bilboard
 		void updateBillboard();
 
 		// submit to renderqueue
@@ -74,7 +76,7 @@ namespace Echo
 		spAnimationState*	m_spAnimState;
 		spAttachmentLoader*	m_attachmentLoader;
 
-		BillboardType		m_billboardType = BillboardType::LookAt;
+		BillboardType		m_billboardType = BillboardType::None;
 		AttachmentVertices	m_batch;
 		MeshPtr				m_mesh;
         ShaderProgramPtr    m_shader;

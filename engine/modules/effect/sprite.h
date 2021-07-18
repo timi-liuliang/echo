@@ -24,16 +24,32 @@ namespace Echo
 		typedef vector<Word>::type	IndiceArray;
 
 	public:
+		enum BillboardType
+		{
+			None,
+			LookAt,
+			ViewDir,
+		};
+
+	public:
 		Sprite();
 		virtual ~Sprite();
 
-		// width
-		i32 getWidth() const { return m_width; }
-		void setWidth(i32 width);
+		// type
+		StringOption getBillboardType();
+		void setBillobardType(const StringOption& type);
 
 		// width
-		i32 getHeight() const { return m_height; }
-		void setHeight(i32 height);
+		float getWidth() const { return m_width; }
+		void setWidth(float width);
+
+		// width
+		float getHeight() const { return m_height; }
+		void setHeight(float height);
+
+		// center offset
+		const Vector2& getOffset() const { return m_offset; }
+		void setOffset(const Vector2& offset);
 
 		// material
 		Material* getMaterial() const { return m_material; }
@@ -46,13 +62,18 @@ namespace Echo
 		// update
 		virtual void updateInternal() override;
 
+		// update billboard
+		void updateBillboard();
+
 		// update vertex buffer
 		void updateMeshBuffer();
 
 	private:
 		bool                    m_isRenderableDirty = true;
-		i32						m_width = 64;
-		i32						m_height = 64;
+		BillboardType			m_billboardType = BillboardType::None;
+		float					m_width = 64.f;
+		float					m_height = 64.f;
+		Vector2					m_offset = Vector2::ZERO;
 		MeshPtr				    m_mesh;						// Geometry Data for render
 		MaterialPtr				m_material;		            // Material Instance
 		RenderProxyPtr			m_renderable = nullptr;
