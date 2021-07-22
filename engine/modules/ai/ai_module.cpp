@@ -7,6 +7,7 @@
 #include "machine_learning/editor/neural_network_editor.h"
 #include "behavior_tree/behavior_tree.h"
 #include "behavior_tree/editor/behavior_tree_editor.h"
+#include "rvo/rvo_agent.h"
 
 namespace Echo
 {
@@ -33,6 +34,7 @@ namespace Echo
 		//Class::registerType<Neuron>();
 		//Class::registerType<NeuralLayer>();
 		//Class::registerType<NeuralNetwork>();
+		Class::registerType<RvoAgent>();
 
 		CLASS_REGISTER_EDITOR(BehaviorTree, BehaviorTreeEditor)
 		//REGISTER_OBJECT_EDITOR(NeuralLayer, NeuralLayerEditor)
