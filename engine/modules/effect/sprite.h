@@ -75,6 +75,7 @@ namespace Echo
 		float					m_height = 64.f;
 		Vector2					m_offset = Vector2::ZERO;
 		MeshPtr				    m_mesh;						// Geometry Data for render
+		ShaderProgramPtr		m_shaderDefault;
 		MaterialPtr				m_material;		            // Material Instance
 		RenderProxyPtr			m_renderable = nullptr;
 	};

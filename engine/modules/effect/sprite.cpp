@@ -10,6 +10,7 @@ namespace Echo
 	Sprite::Sprite()
         : Render()
 	{
+		m_shaderDefault = ShaderProgram::getDefault2D(StringArray());
 	}
 
 	Sprite::~Sprite()
@@ -92,11 +93,8 @@ namespace Echo
 		{
 			if (!m_material)
 			{
-				StringArray macros;
-				ShaderProgramPtr shader = ShaderProgram::getDefault2D(macros);
-
 				m_material = ECHO_CREATE_RES(Material);
-				m_material->setShaderPath(shader->getPath());
+				m_material->setShaderPath(m_shaderDefault->getPath());
 			}
 
 			// mesh
