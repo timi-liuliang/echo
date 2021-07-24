@@ -51,6 +51,14 @@ namespace Echo
 
 	void Render::setRenderType(const StringOption& type)
 	{
+		if (m_bvhNodeId != -1)
+		{
+			Bvh& bvh = m_renderType.getIdx() == 1 ? NodeTree::instance()->get3dBvh() : NodeTree::instance()->get2dBvh();
+			bvh.destroyProxy(m_bvhNodeId);
+
+			m_bvhNodeId = -1;
+		}
+
 		m_renderType.setValue(type.getValue());
 	}
 

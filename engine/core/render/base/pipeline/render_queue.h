@@ -24,8 +24,13 @@ namespace Echo
 		void setSort(bool isSort) { m_sort = isSort; }
 		bool isSort() const { return m_sort; }
 
+		// filter
+		void setCameraFilter(i32 filter) { m_cameraFilter = filter; }
+		i32 getCameraFilter() const { return m_cameraFilter; }
+
 	protected:
 		bool							m_sort;
+		i32								m_cameraFilter = 0xFFFFFFFF;
 		vector<RenderableID>::type		m_renderables;
 	};
 }
