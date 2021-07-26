@@ -12,5 +12,12 @@ namespace Echo
 		RvoAgent();
 		virtual ~RvoAgent();
 
+	private:
+		// update
+		virtual void updateInternal() override;
+
+	public:
+		i32			m_index = -1;
+		Vector3		m_goal;
 	};
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/core/main/module.h"
+#include "rvo/rvo_simulator.h"
 
 namespace Echo
 {
@@ -10,6 +11,7 @@ namespace Echo
 
 	public:
 		AIModule();
+		virtual ~AIModule();
 
 		// instance
 		static AIModule* instance();
@@ -17,7 +19,14 @@ namespace Echo
 		// register all types of the module
 		virtual void registerTypes() override;
 
-	private:
+		// update physx world
+		virtual void update(float elapsedTime) override;
 
+	public:
+		// Rvo simulator
+		RvoSimulator* getRvoSimulator() { return m_rvoSimulator; }
+
+	private:
+		RvoSimulator*	m_rvoSimulator = nullptr;
 	};
 }

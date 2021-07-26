@@ -15,6 +15,12 @@ namespace Echo
 
 	AIModule::AIModule()
 	{
+		m_rvoSimulator = EchoNew(RvoSimulator);
+	}
+
+	AIModule::~AIModule()
+	{
+		EchoSafeDelete(m_rvoSimulator, RvoSimulator);
 	}
 
 	AIModule* AIModule::instance()
@@ -39,5 +45,13 @@ namespace Echo
 		CLASS_REGISTER_EDITOR(BehaviorTree, BehaviorTreeEditor)
 		//REGISTER_OBJECT_EDITOR(NeuralLayer, NeuralLayerEditor)
 		//REGISTER_OBJECT_EDITOR(NeuralNetwork, NeuralNetworkEditor)
+	}
+
+	void AIModule::update(float elapsedTime)
+	{
+		if (m_rvoSimulator)
+		{
+			m_rvoSimulator->update(elapsedTime);
+		}
 	}
 }

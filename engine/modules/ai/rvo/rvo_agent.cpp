@@ -1,4 +1,5 @@
 #include "rvo_agent.h"
+#include "../ai_module.h"
 
 namespace Echo
 {
@@ -15,5 +16,13 @@ namespace Echo
 	void RvoAgent::bindMethods()
 	{
 
+	}
+
+	void RvoAgent::updateInternal()
+	{
+		if (m_index == -1)
+		{
+			m_index = AIModule::instance()->getRvoSimulator()->addAgent(this);
+		}
 	}
 }

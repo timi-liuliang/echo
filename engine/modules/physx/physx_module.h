@@ -21,7 +21,7 @@ namespace Echo
 		virtual void registerTypes() override;
 
 		// update physx world
-		virtual  void update(float elapsedTime) override;
+		virtual void update(float elapsedTime) override;
 
 		// get pxPhysics
 		physx::PxPhysics* getPxPhysics() { return m_pxPhysics; }
