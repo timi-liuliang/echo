@@ -60,10 +60,10 @@ namespace QT_UI
 		String xText = m_lineEdit->text().toStdString().c_str();	
 		if (inst->execString("__editor_calc_result_x = " + xText))
 		{
-			float x = inst->getGlobalVariableFloat("__editor_calc_result_x");
+			double x = inst->getGlobalVariableDouble("__editor_calc_result_x");
 			inst->execString("__editor_calc_result_x = nil");
 
-			m_propertyModel->setValue(m_propertyName, StringUtil::ToString(Real(x)).c_str());
+			m_propertyModel->setValue(m_propertyName, StringUtil::ToString(x).c_str());
 		}
 	}
 
