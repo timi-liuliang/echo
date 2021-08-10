@@ -17,10 +17,13 @@ namespace Echo
 	{
 		CLASS_BIND_METHOD(RvoAgent, getRadius,	DEF_METHOD("getRadius"));
 		CLASS_BIND_METHOD(RvoAgent, setRadius,	DEF_METHOD("setRadius"));
+		CLASS_BIND_METHOD(RvoAgent, getSpeed,	DEF_METHOD("getSpeed"));
+		CLASS_BIND_METHOD(RvoAgent, setSpeed,	DEF_METHOD("setSpeed"));
 		CLASS_BIND_METHOD(RvoAgent, getGoal,	DEF_METHOD("getGoal"));
 		CLASS_BIND_METHOD(RvoAgent, setGoal,	DEF_METHOD("setGoal"));
 
 		CLASS_REGISTER_PROPERTY(RvoAgent, "Radius", Variant::Type::Real, "getRadius", "setRadius");
+		CLASS_REGISTER_PROPERTY(RvoAgent, "Speed", Variant::Type::Real, "getSpeed", "setSpeed");
 		CLASS_REGISTER_PROPERTY(RvoAgent, "Goal", Variant::Type::Vector3, "getGoal", "setGoal");
 	}
 
@@ -47,7 +50,7 @@ namespace Echo
 			float   goalLen = goalDir.len();
 			if (goalLen > m_radius)
 			{
-				Vector3 dir = goalDir / goalLen;
+				Vector3 dir = m_speed * goalDir / goalLen;
 				m_rvoAgent->setPrefVelocity(RVO::Vector2(dir.x, dir.z));
 			}
 
