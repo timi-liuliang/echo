@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/core/scene/node.h"
+#include "rvo2/RVO.h"
 
 namespace Echo
 {
@@ -12,12 +13,21 @@ namespace Echo
 		RvoAgent();
 		virtual ~RvoAgent();
 
+		// Radius
+		float getRadius() const { return m_radius; }
+		void setRadius(float radius) { m_radius = radius; }
+
+		// Goal
+		const Vector3& getGoal() const { return m_goal; }
+		void setGoal(const Vector3& goal);
+
 	private:
-		// update
+		// Update
 		virtual void updateInternal() override;
 
 	public:
-		i32			m_index = -1;
-		Vector3		m_goal;
+		RVO::Agent* m_rvoAgent = nullptr;
+		float		m_radius = 1.f;
+		Vector3		m_goal = Vector3::ZERO;
 	};
 }

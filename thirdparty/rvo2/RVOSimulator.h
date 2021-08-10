@@ -143,7 +143,7 @@ namespace RVO {
 		 * \return     The number of the agent, or RVO::RVO_ERROR when the agent
 		 *             defaults have not been set.
 		 */
-		size_t addAgent(const Vector2 &position);
+		Agent* addAgent(const Vector2 &position);
 
 		/**
 		 * \brief      Adds a new agent to the simulation.
@@ -516,17 +516,6 @@ namespace RVO {
 		 *                             position.
 		 */
 		void setAgentPosition(size_t agentNo, const Vector2 &position);
-
-		/**
-		 * \brief      Sets the two-dimensional preferred velocity of a
-		 *             specified agent.
-		 * \param      agentNo         The number of the agent whose
-		 *                             two-dimensional preferred velocity is to be
-		 *                             modified.
-		 * \param      prefVelocity    The replacement of the two-dimensional
-		 *                             preferred velocity.
-		 */
-		void setAgentPrefVelocity(size_t agentNo, const Vector2 &prefVelocity);
 
 		/**
 		 * \brief      Sets the radius of a specified agent.

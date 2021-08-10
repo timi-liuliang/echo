@@ -19,16 +19,6 @@ namespace Echo
 
 	}
 
-	i32 RvoSimulator::addAgent(RvoAgent* agent)
-	{
-		return 0;
-	}
-
-	void RvoSimulator::removeAgent(RvoAgent* agent)
-	{
-
-	}
-
 	void RvoSimulator::update(float elapsedTime)
 	{
 		float stepLength = m_rvoSimulator->getTimeStep();

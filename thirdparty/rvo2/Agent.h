@@ -41,12 +41,14 @@
 #include "Definitions.h"
 #include "RVOSimulator.h"
 
-namespace RVO {
+namespace RVO 
+{
 	/**
 	 * \brief      Defines an agent in the simulation.
 	 */
-	class Agent {
-	private:
+	class Agent 
+	{
+	public:
 		/**
 		 * \brief      Constructs an agent instance.
 		 * \param      sim             The simulator instance.
@@ -81,11 +83,20 @@ namespace RVO {
 		void insertObstacleNeighbor(const Obstacle *obstacle, float rangeSq);
 
 		/**
+		 * \brief      Sets the two-dimensional preferred velocity of a
+		 *             this agent.
+		 * \param      prefVelocity    The replacement of the two-dimensional
+		 *                             preferred velocity.
+		 */
+		void setPrefVelocity(const Vector2& prefVelocity) { prefVelocity_ = prefVelocity; }
+
+		/**
 		 * \brief      Updates the two-dimensional position and two-dimensional
 		 *             velocity of this agent.
 		 */
 		void update();
 
+	public:
 		std::vector<std::pair<float, const Agent *> > agentNeighbors_;
 		size_t maxNeighbors_;
 		float maxSpeed_;

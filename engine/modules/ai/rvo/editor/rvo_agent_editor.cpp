@@ -40,7 +40,7 @@ namespace Echo
 		if (agent)
 		{
 			m_gizmo->setRenderType("3d");
-			m_gizmo->drawCircle(agent->getWorldPosition(), Vector3::UNIT_Y, 1.f, Color::WHITE);
+			m_gizmo->drawCircle(agent->getWorldPosition(), Vector3::UNIT_Y, agent->getRadius(), Color::WHITE);
 		}
 
 		m_gizmo->update(Engine::instance()->getFrameTime(), true);

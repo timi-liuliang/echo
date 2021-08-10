@@ -1,7 +1,6 @@
 #pragma once
 
 #include "engine/core/base/object.h"
-#include "rvo2/RVO.h"
 #include "rvo_agent.h"
 
 namespace Echo
@@ -14,12 +13,11 @@ namespace Echo
 		RvoSimulator();
 		virtual ~RvoSimulator();
 
+		// simulator
+		RVO::RVOSimulator* getRvoSimulator() { return m_rvoSimulator; }
+
 		// update
 		void update(float elapsedTime);
-
-		// add agent
-		i32 addAgent(RvoAgent* agent);
-		void removeAgent(RvoAgent* agent);
 
 	private:
 		RVO::RVOSimulator*	m_rvoSimulator = nullptr;
