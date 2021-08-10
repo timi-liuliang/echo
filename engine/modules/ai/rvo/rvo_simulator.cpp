@@ -24,6 +24,11 @@ namespace Echo
 		return 0;
 	}
 
+	void RvoSimulator::removeAgent(RvoAgent* agent)
+	{
+
+	}
+
 	void RvoSimulator::update(float elapsedTime)
 	{
 		float stepLength = m_rvoSimulator->getTimeStep();

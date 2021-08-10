@@ -19,6 +19,7 @@ namespace Echo
 
 		// add agent
 		i32 addAgent(RvoAgent* agent);
+		void removeAgent(RvoAgent* agent);
 
 	private:
 		RVO::RVOSimulator*	m_rvoSimulator = nullptr;

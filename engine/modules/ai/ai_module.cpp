@@ -8,6 +8,7 @@
 #include "behavior_tree/behavior_tree.h"
 #include "behavior_tree/editor/behavior_tree_editor.h"
 #include "rvo/rvo_agent.h"
+#include "rvo/editor/rvo_agent_editor.h"
 
 namespace Echo
 {
@@ -43,8 +44,9 @@ namespace Echo
 		Class::registerType<RvoAgent>();
 
 		CLASS_REGISTER_EDITOR(BehaviorTree, BehaviorTreeEditor)
-		//REGISTER_OBJECT_EDITOR(NeuralLayer, NeuralLayerEditor)
-		//REGISTER_OBJECT_EDITOR(NeuralNetwork, NeuralNetworkEditor)
+		//CLASS_REGISTER_EDITOR(NeuralLayer, NeuralLayerEditor)
+		//CLASS_REGISTER_EDITOR(NeuralNetwork, NeuralNetworkEditor)
+		CLASS_REGISTER_EDITOR(RvoAgent, RvoAgentEditor)
 	}
 
 	void AIModule::update(float elapsedTime)

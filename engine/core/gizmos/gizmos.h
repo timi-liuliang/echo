@@ -67,6 +67,9 @@ namespace Echo
 		// draw triangle
 		void drawTriangle(const Vector3& v0, const Vector3& v1, const Vector3& v2, const Color& color);
 
+		// draw circle
+		void drawCircle(const Vector3& center, const Vector3& up, float radius, const Color& color);
+
 		// draw sprite
 		void drawSprite(const Vector3& position, const Color& color, float pixels, TexturePtr texture, int flags = RenderFlags::FixedPixel);
 

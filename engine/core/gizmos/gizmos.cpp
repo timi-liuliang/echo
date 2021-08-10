@@ -278,6 +278,20 @@ namespace Echo
 		m_localAABB.addPoint(v2);
 	}
 
+	void Gizmos::drawCircle(const Vector3& center, const Vector3& up, float radius, const Color& color)
+	{
+		float segments = 36.f;
+
+		float deltaDegree = 2.f * Math::PI / segments;
+		for (int i = 0; i < segments; i++)
+		{
+			Vector3 v1 = Quaternion::fromAxisAngle(up, i * deltaDegree + Math::PI_DIV4).rotateVec3(Vector3::UNIT_X) * radius;
+			Vector3 v2 = Quaternion::fromAxisAngle(up, (i + 1) * deltaDegree + Math::PI_DIV4).rotateVec3(Vector3::UNIT_X) * radius;
+
+			drawLine(v1 + center, v2 + center, color);
+		}
+	}
+
 	void Gizmos::drawSprite(const Vector3& position, const Color& color, float pixels, TexturePtr texture, int flags)
 	{
 		Camera* camera = getCamera();

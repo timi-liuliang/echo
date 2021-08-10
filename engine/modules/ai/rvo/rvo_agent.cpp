@@ -10,7 +10,7 @@ namespace Echo
 
 	RvoAgent::~RvoAgent()
 	{
-
+		AIModule::instance()->getRvoSimulator()->removeAgent(this);
 	}
 
 	void RvoAgent::bindMethods()
