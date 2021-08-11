@@ -90,6 +90,10 @@ namespace RVO
 		 */
 		void setPrefVelocity(const Vector2& prefVelocity) { prefVelocity_ = prefVelocity; }
 
+		// radius
+		void setRadius(float radius) { m_radius = radius; }
+		float getRadius() const { return m_radius; }
+
 		/**
 		 * \brief      Updates the two-dimensional position and two-dimensional
 		 *             velocity of this agent.
@@ -106,7 +110,7 @@ namespace RVO
 		std::vector<Line> orcaLines_;
 		Vector2 position_;
 		Vector2 prefVelocity_;
-		float radius_;
+		float				m_radius;
 		RVOSimulator *sim_;
 		float timeHorizon_;
 		float timeHorizonObst_;

@@ -324,14 +324,6 @@ namespace RVO {
 		const Vector2 &getAgentPrefVelocity(size_t agentNo) const;
 
 		/**
-		 * \brief      Returns the radius of a specified agent.
-		 * \param      agentNo         The number of the agent whose radius is to
-		 *                             be retrieved.
-		 * \return     The present radius of the agent.
-		 */
-		float getAgentRadius(size_t agentNo) const;
-
-		/**
 		 * \brief      Returns the time horizon of a specified agent.
 		 * \param      agentNo         The number of the agent whose time horizon
 		 *                             is to be retrieved.
@@ -516,15 +508,6 @@ namespace RVO {
 		 *                             position.
 		 */
 		void setAgentPosition(size_t agentNo, const Vector2 &position);
-
-		/**
-		 * \brief      Sets the radius of a specified agent.
-		 * \param      agentNo         The number of the agent whose radius is to
-		 *                             be modified.
-		 * \param      radius          The replacement radius.
-		 *                             Must be non-negative.
-		 */
-		void setAgentRadius(size_t agentNo, float radius);
 
 		/**
 		 * \brief      Sets the time horizon of a specified agent with respect

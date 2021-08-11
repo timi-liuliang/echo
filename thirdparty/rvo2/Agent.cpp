@@ -35,13 +35,25 @@
 #include "KdTree.h"
 #include "Obstacle.h"
 
-namespace RVO {
-	Agent::Agent(RVOSimulator *sim) : maxNeighbors_(0), maxSpeed_(0.0f), neighborDist_(0.0f), radius_(0.0f), sim_(sim), timeHorizon_(0.0f), timeHorizonObst_(0.0f), id_(0) { }
+namespace RVO 
+{
+	Agent::Agent(RVOSimulator *sim) 
+		: maxNeighbors_(0)
+		, maxSpeed_(0.0f)
+		, neighborDist_(0.0f)
+		, m_radius(0.0f)
+		, sim_(sim)
+		, timeHorizon_(0.0f)
+		, timeHorizonObst_(0.0f)
+		, id_(0) 
+	{
+
+	}
 
 	void Agent::computeNeighbors()
 	{
 		obstacleNeighbors_.clear();
-		float rangeSq = sqr(timeHorizonObst_ * maxSpeed_ + radius_);
+		float rangeSq = sqr(timeHorizonObst_ * maxSpeed_ + m_radius);
 		sim_->kdTree_->computeObstacleNeighbors(this, rangeSq);
 
 		agentNeighbors_.clear();
@@ -74,8 +86,10 @@ namespace RVO {
 			 */
 			bool alreadyCovered = false;
 
-			for (size_t j = 0; j < orcaLines_.size(); ++j) {
-				if (det(invTimeHorizonObst * relativePosition1 - orcaLines_[j].point, orcaLines_[j].direction) - invTimeHorizonObst * radius_ >= -RVO_EPSILON && det(invTimeHorizonObst * relativePosition2 - orcaLines_[j].point, orcaLines_[j].direction) - invTimeHorizonObst * radius_ >=  -RVO_EPSILON) {
+			for (size_t j = 0; j < orcaLines_.size(); ++j) 
+			{
+				if (det(invTimeHorizonObst * relativePosition1 - orcaLines_[j].point, orcaLines_[j].direction) - invTimeHorizonObst * m_radius >= -RVO_EPSILON && det(invTimeHorizonObst * relativePosition2 - orcaLines_[j].point, orcaLines_[j].direction) - invTimeHorizonObst * m_radius >=  -RVO_EPSILON)
+				{
 					alreadyCovered = true;
 					break;
 				}
@@ -90,7 +104,7 @@ namespace RVO {
 			const float distSq1 = absSq(relativePosition1);
 			const float distSq2 = absSq(relativePosition2);
 
-			const float radiusSq = sqr(radius_);
+			const float radiusSq = sqr(m_radius);
 
 			const Vector2 obstacleVector = obstacle2->point_ - obstacle1->point_;
 			const float s = (-relativePosition1 * obstacleVector) / absSq(obstacleVector);
@@ -148,8 +162,8 @@ namespace RVO {
 				obstacle2 = obstacle1;
 
 				const float leg1 = std::sqrt(distSq1 - radiusSq);
-				leftLegDirection = Vector2(relativePosition1.x() * leg1 - relativePosition1.y() * radius_, relativePosition1.x() * radius_ + relativePosition1.y() * leg1) / distSq1;
-				rightLegDirection = Vector2(relativePosition1.x() * leg1 + relativePosition1.y() * radius_, -relativePosition1.x() * radius_ + relativePosition1.y() * leg1) / distSq1;
+				leftLegDirection = Vector2(relativePosition1.x() * leg1 - relativePosition1.y() * m_radius, relativePosition1.x() * m_radius + relativePosition1.y() * leg1) / distSq1;
+				rightLegDirection = Vector2(relativePosition1.x() * leg1 + relativePosition1.y() * m_radius, -relativePosition1.x() * m_radius + relativePosition1.y() * leg1) / distSq1;
 			}
 			else if (s > 1.0f && distSqLine <= radiusSq) {
 				/*
@@ -164,14 +178,14 @@ namespace RVO {
 				obstacle1 = obstacle2;
 
 				const float leg2 = std::sqrt(distSq2 - radiusSq);
-				leftLegDirection = Vector2(relativePosition2.x() * leg2 - relativePosition2.y() * radius_, relativePosition2.x() * radius_ + relativePosition2.y() * leg2) / distSq2;
-				rightLegDirection = Vector2(relativePosition2.x() * leg2 + relativePosition2.y() * radius_, -relativePosition2.x() * radius_ + relativePosition2.y() * leg2) / distSq2;
+				leftLegDirection = Vector2(relativePosition2.x() * leg2 - relativePosition2.y() * m_radius, relativePosition2.x() * m_radius + relativePosition2.y() * leg2) / distSq2;
+				rightLegDirection = Vector2(relativePosition2.x() * leg2 + relativePosition2.y() * m_radius, -relativePosition2.x() * m_radius + relativePosition2.y() * leg2) / distSq2;
 			}
 			else {
 				/* Usual situation. */
 				if (obstacle1->isConvex_) {
 					const float leg1 = std::sqrt(distSq1 - radiusSq);
-					leftLegDirection = Vector2(relativePosition1.x() * leg1 - relativePosition1.y() * radius_, relativePosition1.x() * radius_ + relativePosition1.y() * leg1) / distSq1;
+					leftLegDirection = Vector2(relativePosition1.x() * leg1 - relativePosition1.y() * m_radius, relativePosition1.x() * m_radius + relativePosition1.y() * leg1) / distSq1;
 				}
 				else {
 					/* Left vertex non-convex; left leg extends cut-off line. */
@@ -180,7 +194,7 @@ namespace RVO {
 
 				if (obstacle2->isConvex_) {
 					const float leg2 = std::sqrt(distSq2 - radiusSq);
-					rightLegDirection = Vector2(relativePosition2.x() * leg2 + relativePosition2.y() * radius_, -relativePosition2.x() * radius_ + relativePosition2.y() * leg2) / distSq2;
+					rightLegDirection = Vector2(relativePosition2.x() * leg2 + relativePosition2.y() * m_radius, -relativePosition2.x() * m_radius + relativePosition2.y() * leg2) / distSq2;
 				}
 				else {
 					/* Right vertex non-convex; right leg extends cut-off line. */
@@ -228,7 +242,7 @@ namespace RVO {
 				const Vector2 unitW = normalize(velocity_ - leftCutoff);
 
 				line.direction = Vector2(unitW.y(), -unitW.x());
-				line.point = leftCutoff + radius_ * invTimeHorizonObst * unitW;
+				line.point = leftCutoff + m_radius * invTimeHorizonObst * unitW;
 				orcaLines_.push_back(line);
 				continue;
 			}
@@ -237,7 +251,7 @@ namespace RVO {
 				const Vector2 unitW = normalize(velocity_ - rightCutoff);
 
 				line.direction = Vector2(unitW.y(), -unitW.x());
-				line.point = rightCutoff + radius_ * invTimeHorizonObst * unitW;
+				line.point = rightCutoff + m_radius * invTimeHorizonObst * unitW;
 				orcaLines_.push_back(line);
 				continue;
 			}
@@ -253,7 +267,7 @@ namespace RVO {
 			if (distSqCutoff <= distSqLeft && distSqCutoff <= distSqRight) {
 				/* Project on cut-off line. */
 				line.direction = -obstacle1->unitDir_;
-				line.point = leftCutoff + radius_ * invTimeHorizonObst * Vector2(-line.direction.y(), line.direction.x());
+				line.point = leftCutoff + m_radius * invTimeHorizonObst * Vector2(-line.direction.y(), line.direction.x());
 				orcaLines_.push_back(line);
 				continue;
 			}
@@ -264,7 +278,7 @@ namespace RVO {
 				}
 
 				line.direction = leftLegDirection;
-				line.point = leftCutoff + radius_ * invTimeHorizonObst * Vector2(-line.direction.y(), line.direction.x());
+				line.point = leftCutoff + m_radius * invTimeHorizonObst * Vector2(-line.direction.y(), line.direction.x());
 				orcaLines_.push_back(line);
 				continue;
 			}
@@ -275,7 +289,7 @@ namespace RVO {
 				}
 
 				line.direction = -rightLegDirection;
-				line.point = rightCutoff + radius_ * invTimeHorizonObst * Vector2(-line.direction.y(), line.direction.x());
+				line.point = rightCutoff + m_radius * invTimeHorizonObst * Vector2(-line.direction.y(), line.direction.x());
 				orcaLines_.push_back(line);
 				continue;
 			}
@@ -292,7 +306,7 @@ namespace RVO {
 			const Vector2 relativePosition = other->position_ - position_;
 			const Vector2 relativeVelocity = velocity_ - other->velocity_;
 			const float distSq = absSq(relativePosition);
-			const float combinedRadius = radius_ + other->radius_;
+			const float combinedRadius = m_radius + other->m_radius;
 			const float combinedRadiusSq = sqr(combinedRadius);
 
 			Line line;

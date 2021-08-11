@@ -54,7 +54,7 @@ namespace RVO {
 		defaultAgent_->maxNeighbors_ = maxNeighbors;
 		defaultAgent_->maxSpeed_ = maxSpeed;
 		defaultAgent_->neighborDist_ = neighborDist;
-		defaultAgent_->radius_ = radius;
+		defaultAgent_->m_radius = radius;
 		defaultAgent_->timeHorizon_ = timeHorizon;
 		defaultAgent_->timeHorizonObst_ = timeHorizonObst;
 		defaultAgent_->velocity_ = velocity;
@@ -87,7 +87,7 @@ namespace RVO {
 		agent->maxNeighbors_ = defaultAgent_->maxNeighbors_;
 		agent->maxSpeed_ = defaultAgent_->maxSpeed_;
 		agent->neighborDist_ = defaultAgent_->neighborDist_;
-		agent->radius_ = defaultAgent_->radius_;
+		agent->m_radius = defaultAgent_->m_radius;
 		agent->timeHorizon_ = defaultAgent_->timeHorizon_;
 		agent->timeHorizonObst_ = defaultAgent_->timeHorizonObst_;
 		agent->velocity_ = defaultAgent_->velocity_;
@@ -106,7 +106,7 @@ namespace RVO {
 		agent->maxNeighbors_ = maxNeighbors;
 		agent->maxSpeed_ = maxSpeed;
 		agent->neighborDist_ = neighborDist;
-		agent->radius_ = radius;
+		agent->m_radius = radius;
 		agent->timeHorizon_ = timeHorizon;
 		agent->timeHorizonObst_ = timeHorizonObst;
 		agent->velocity_ = velocity;
@@ -234,11 +234,6 @@ namespace RVO {
 		return agents_[agentNo]->prefVelocity_;
 	}
 
-	float RVOSimulator::getAgentRadius(size_t agentNo) const
-	{
-		return agents_[agentNo]->radius_;
-	}
-
 	float RVOSimulator::getAgentTimeHorizon(size_t agentNo) const
 	{
 		return agents_[agentNo]->timeHorizon_;
@@ -308,7 +303,7 @@ namespace RVO {
 		defaultAgent_->maxNeighbors_ = maxNeighbors;
 		defaultAgent_->maxSpeed_ = maxSpeed;
 		defaultAgent_->neighborDist_ = neighborDist;
-		defaultAgent_->radius_ = radius;
+		defaultAgent_->m_radius = radius;
 		defaultAgent_->timeHorizon_ = timeHorizon;
 		defaultAgent_->timeHorizonObst_ = timeHorizonObst;
 		defaultAgent_->velocity_ = velocity;
@@ -332,11 +327,6 @@ namespace RVO {
 	void RVOSimulator::setAgentPosition(size_t agentNo, const Vector2 &position)
 	{
 		agents_[agentNo]->position_ = position;
-	}
-
-	void RVOSimulator::setAgentRadius(size_t agentNo, float radius)
-	{
-		agents_[agentNo]->radius_ = radius;
 	}
 
 	void RVOSimulator::setAgentTimeHorizon(size_t agentNo, float timeHorizon)

@@ -15,7 +15,7 @@ namespace Echo
 
 		// Radius
 		float getRadius() const { return m_radius; }
-		void setRadius(float radius) { m_radius = radius; }
+		void setRadius(float radius);
 
 		// Velocity
 		float getSpeed() const { return m_speed; }

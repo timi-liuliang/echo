@@ -27,6 +27,17 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(RvoAgent, "Goal", Variant::Type::Vector3, "getGoal", "setGoal");
 	}
 
+	void RvoAgent::setRadius(float radius)
+	{
+		if (m_radius != radius)
+		{
+			m_radius = radius;
+
+			if (m_rvoAgent)
+				m_rvoAgent->setRadius(m_radius);
+		}
+	}
+
 	void RvoAgent::setGoal(const Vector3& goal)
 	{
 		if (m_goal != goal)
@@ -41,6 +52,7 @@ namespace Echo
 		{
 			Vector3 wpos = getWorldPosition();
 			m_rvoAgent = AIModule::instance()->getRvoSimulator()->getRvoSimulator()->addAgent(RVO::Vector2(wpos.x, wpos.z));
+			m_rvoAgent->setRadius(m_radius);
 		}
 
 		if (m_rvoAgent && IsGame)
