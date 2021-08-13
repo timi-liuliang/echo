@@ -1,6 +1,7 @@
 #include "rvo_module.h"
 #include "rvo_agent.h"
 #include "editor/rvo_agent_editor.h"
+#include "engine/core/main/engine.h"
 
 namespace Echo
 {
@@ -26,7 +27,10 @@ namespace Echo
 
 	void RvoModule::bindMethods()
 	{
+		CLASS_BIND_METHOD(RvoModule, getDebugDrawOption, DEF_METHOD("getDebugDrawOption"));
+		CLASS_BIND_METHOD(RvoModule, setDebugDrawOption, DEF_METHOD("setDebugDrawOption"));
 
+		CLASS_REGISTER_PROPERTY(RvoModule, "DebugDraw", Variant::Type::StringOption, "getDebugDrawOption", "setDebugDrawOption");
 	}
 
 	void RvoModule::registerTypes()
@@ -34,6 +38,19 @@ namespace Echo
 		Class::registerType<RvoAgent>();
 
 		CLASS_REGISTER_EDITOR(RvoAgent, RvoAgentEditor)
+	}
+
+	StringOption RvoModule::getDebugDrawOption() const
+	{
+		StringOption result;
+		result.fromEnum(m_debugDrawOption);
+
+		return result;
+	}
+
+	void RvoModule::setDebugDrawOption(const StringOption& option)
+	{
+		m_debugDrawOption = option.toEnum(DebugDrawOption::Editor);
 	}
 
 	void RvoModule::update(float elapsedTime)
@@ -46,6 +63,18 @@ namespace Echo
 			m_rvoSimulator->doStep();
 
 			m_accumulator -= stepLength;
+		}
+
+		if ((m_debugDrawOption == DebugDrawOption::All) || 
+			(m_debugDrawOption == DebugDrawOption::Editor && !IsGame) || 
+			(m_debugDrawOption == DebugDrawOption::Game && IsGame))
+		{
+			m_rvoDebugDraw.setEnable(true);
+			m_rvoDebugDraw.update(elapsedTime);
+		}
+		else
+		{
+			m_rvoDebugDraw.setEnable(false);
 		}
 	}
 }

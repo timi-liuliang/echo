@@ -56,7 +56,8 @@ namespace RVO {
 	/**
 	 * \brief      Defines a directed line.
 	 */
-	class Line {
+	class Line 
+	{
 	public:
 		/**
 		 * \brief     A point on the directed line.
@@ -78,7 +79,8 @@ namespace RVO {
 	 *
 	 * The main class of the library that contains all simulation functionality.
 	 */
-	class RVOSimulator {
+	class RVOSimulator 
+	{
 	public:
 		/**
 		 * \brief      Constructs a simulator instance.
@@ -202,6 +204,11 @@ namespace RVO {
 		 *             order.
 		 */
 		size_t addObstacle(const std::vector<Vector2> &vertices);
+
+		/*
+		 * get all agents 
+		 */
+		const std::vector<Agent*>& getAgents() { return agents_; }
 
 		/**
 		 * \brief      Lets the simulator perform a simulation step and updates the
@@ -548,7 +555,7 @@ namespace RVO {
 		void setTimeStep(float timeStep);
 
 	private:
-		std::vector<Agent *> agents_;
+		std::vector<Agent*> agents_;
 		Agent *defaultAgent_;
 		float globalTime_;
 		KdTree *kdTree_;

@@ -11,24 +11,40 @@ namespace Echo
 		ECHO_SINGLETON_CLASS(RvoModule, Module)
 
 	public:
+		// Debug draw option
+		enum DebugDrawOption
+		{
+			None,
+			Editor,
+			Game,
+			All
+		};
+
+	public:
 		RvoModule();
 		virtual ~RvoModule();
 
-		// instance
+		// Instance
 		static RvoModule* instance();
 
-		// register all types of the module
+		// Register all types of the module
 		virtual void registerTypes() override;
 
-		// update physx world
+		// Update physx world
 		virtual void update(float elapsedTime) override;
 
 	public:
 		// Rvo simulator
 		RVO::RVOSimulator* getRvoSimulator() { return m_rvoSimulator; }
 
+		// Debug draw
+		StringOption getDebugDrawOption() const;
+		void setDebugDrawOption(const StringOption& option);
+
 	private:
 		RVO::RVOSimulator*  m_rvoSimulator = nullptr;
 		float				m_accumulator = 0.f;
+		RvoDebugDraw		m_rvoDebugDraw;
+		DebugDrawOption		m_debugDrawOption = DebugDrawOption::Editor;
 	};
 }
