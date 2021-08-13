@@ -52,6 +52,7 @@ namespace Echo
 		{
 			Vector3 wpos = getWorldPosition();
 			m_rvoAgent = RvoModule::instance()->getRvoSimulator()->addAgent(RVO::Vector2(wpos.x, wpos.z));
+			m_rvoAgent->setUserData(this);
 			m_rvoAgent->setRadius(m_radius);
 		}
 

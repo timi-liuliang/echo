@@ -35,10 +35,13 @@ namespace Echo
 		RVO::RVOSimulator* simulator = RvoModule::instance()->getRvoSimulator();
 		if (simulator)
 		{
-			for (RVO::Agent* agent : simulator->getAgents())
+			for (RVO::Agent* rvAgent : simulator->getAgents())
 			{
-				// if (agent)
-				//	m_gizmo->drawCircle(agent->position_(), Vector3::UNIT_Y, agent->getRadius(), Color::WHITE);
+				const RvoAgent* agent = (const RvoAgent*)(rvAgent->getUserData());
+				if (agent)
+				{
+					m_gizmo->drawCircle(agent->getWorldPosition(), Vector3::UNIT_Y, agent->getRadius(), Color::WHITE);
+				}
 			}
 		}
 

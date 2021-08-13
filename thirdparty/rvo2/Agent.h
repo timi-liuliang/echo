@@ -55,6 +55,10 @@ namespace RVO
 		 */
 		explicit Agent(RVOSimulator *sim);
 
+		// User data
+		const void* getUserData() { return m_userData; }
+		void setUserData(void* userData) { m_userData = userData; }
+
 		/**
 		 * \brief      Computes the neighbors of this agent.
 		 */
@@ -117,6 +121,7 @@ namespace RVO
 		Vector2 velocity_;
 
 		size_t id_;
+		void*				m_userData = nullptr;
 
 		friend class KdTree;
 		friend class RVOSimulator;
