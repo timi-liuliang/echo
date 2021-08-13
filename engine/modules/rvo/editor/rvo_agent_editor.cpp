@@ -20,7 +20,7 @@ namespace Echo
 
 	ImagePtr RvoAgentEditor::getThumbnail() const
 	{
-		return Image::loadFromFile(Engine::instance()->getRootPath() + "engine/modules/ai/rvo/editor/icon/rvo-agent.png");
+		return Image::loadFromFile(Engine::instance()->getRootPath() + "engine/modules/rvo/editor/icon/rvo-agent.png");
 	}
 
 	void RvoAgentEditor::onEditorSelectThisNode()

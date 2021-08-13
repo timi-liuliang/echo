@@ -1,5 +1,5 @@
 #include "rvo_agent.h"
-#include "../ai_module.h"
+#include "rvo_module.h"
 #include "engine/core/main/engine.h"
 
 namespace Echo
@@ -51,7 +51,7 @@ namespace Echo
 		if (!m_rvoAgent)
 		{
 			Vector3 wpos = getWorldPosition();
-			m_rvoAgent = AIModule::instance()->getRvoSimulator()->getRvoSimulator()->addAgent(RVO::Vector2(wpos.x, wpos.z));
+			m_rvoAgent = RvoModule::instance()->getRvoSimulator()->addAgent(RVO::Vector2(wpos.x, wpos.z));
 			m_rvoAgent->setRadius(m_radius);
 		}
 
