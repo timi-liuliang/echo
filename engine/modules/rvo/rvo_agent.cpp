@@ -46,6 +46,17 @@ namespace Echo
 		}
 	}
 
+	Vector3 RvoAgent::getVelocity() const
+	{
+		if (m_rvoAgent)
+		{
+			Vector3 velocity(m_rvoAgent->velocity_.x(), 0.f, m_rvoAgent->velocity_.y());
+			return velocity;
+		}
+
+		return Vector3::ZERO;
+	}
+
 	void RvoAgent::updateInternal()
 	{
 		if (!m_rvoAgent)
@@ -64,6 +75,11 @@ namespace Echo
 			if (goalLen > m_radius)
 			{
 				Vector3 dir = m_speed * goalDir / goalLen;
+				m_rvoAgent->setPrefVelocity(RVO::Vector2(dir.x, dir.z));
+			}
+			else
+			{
+				Vector3 dir = m_speed * goalDir;
 				m_rvoAgent->setPrefVelocity(RVO::Vector2(dir.x, dir.z));
 			}
 

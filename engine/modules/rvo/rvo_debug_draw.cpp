@@ -40,7 +40,17 @@ namespace Echo
 				const RvoAgent* agent = (const RvoAgent*)(rvAgent->getUserData());
 				if (agent)
 				{
+					// Draw agent
 					m_gizmo->drawCircle(agent->getWorldPosition(), Vector3::UNIT_Y, agent->getRadius(), Color::WHITE);
+
+					// Darw goal
+					m_gizmo->drawCircle(agent->getGoal(), Vector3::UNIT_Y, agent->getRadius(), Color(0.62745F, 0.62745F, 0.62745F, 0.62745F));
+
+					// Draw connect
+					m_gizmo->drawLine(agent->getWorldPosition(), agent->getGoal(), Color(0.62745F, 0.62745F, 0.62745F, 0.62745F));
+
+					// Draw current move direction
+					m_gizmo->drawLine(agent->getWorldPosition(), agent->getWorldPosition() + agent->getVelocity() * agent->getRadius() * 0.9f, Color::GREEN);
 				}
 			}
 		}

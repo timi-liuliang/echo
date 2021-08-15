@@ -25,6 +25,9 @@ namespace Echo
 		const Vector3& getGoal() const { return m_goal; }
 		void setGoal(const Vector3& goal);
 
+		// velocity
+		Vector3 getVelocity() const;
+
 	private:
 		// Update
 		virtual void updateInternal() override;
