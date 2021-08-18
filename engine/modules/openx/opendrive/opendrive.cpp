@@ -38,8 +38,38 @@ namespace Echo
 		pugi::xml_node openDriveNode = doc.child("OpenDRIVE");
 		for (pugi::xml_node roadNode = openDriveNode.child("road"); roadNode; roadNode = roadNode.next_sibling("road"))
 		{
-			String name = roadNode.attribute("name").as_string();
-			int a = 10;
+			Road road;
+			road.m_name = roadNode.attribute("name").as_string();
+			road.m_length = roadNode.attribute("length").as_double();
+			road.m_id = roadNode.attribute("id").as_int();
+			road.m_junction = roadNode.attribute("junction").as_int();
+
+			// Parse geometry
+			parseGeometry(road, roadNode);
+
+			m_roads.emplace_back(road);
+		}
+	}
+
+	void OpenDrive::parseGeometry(Road& road, pugi::xml_node roadNode)
+	{
+		pugi::xml_node planViewNode = roadNode.child("planView");
+		if (planViewNode)
+		{
+			for (pugi::xml_node geometryNode = planViewNode.child("geometry"); geometryNode; geometryNode = geometryNode.next_sibling())
+			{
+				double s	  = geometryNode.attribute("s").as_double();
+				double x	  = geometryNode.attribute("x").as_double();
+				double y	  =	geometryNode.attribute("y").as_double();
+				double hdg	  =	geometryNode.attribute("hdg").as_double();
+				double length = geometryNode.attribute("length").as_double();
+
+				pugi::xml_node typeNode = geometryNode.last_child();
+				if (StringUtil::Equal(typeNode.name(), "line"))
+				{
+					int a = 10;
+				}
+			}
 		}
 	}
 
