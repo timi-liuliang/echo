@@ -67,7 +67,23 @@ namespace Echo
 				pugi::xml_node typeNode = geometryNode.last_child();
 				if (StringUtil::Equal(typeNode.name(), "line"))
 				{
-					int a = 10;
+					road.m_geometries.push_back(EchoNew(Line(s, x, y, hdg, length)));
+				}
+				else if (StringUtil::Equal(typeNode.name(), "arc"))
+				{
+	
+				}
+				else if (StringUtil::Equal(typeNode.name(), "spiral"))
+				{
+
+				}
+				else if (StringUtil::Equal(typeNode.name(), "poly3"))
+				{
+
+				}
+				else if (StringUtil::Equal(typeNode.name(), "paramPoly3"))
+				{
+
 				}
 			}
 		}
