@@ -33,11 +33,11 @@ namespace Echo
 				Poly3,
 				ParamPoly3,
 			}	   m_type = Unknow;
-			double m_s = 0.0;
-			double m_x = 0.0;
-			double m_y = 0.0;
-			double m_hdg = 0.0;
-			double m_length = 0.0;
+			double m_s = 0.0;		// Start position(s-coordinate)
+			double m_x = 0.0;		// Start position(x inertial)
+			double m_y = 0.0;		// Start position(y inertial)
+			double m_hdg = 0.0;		// Start orientation(inertial heading)
+			double m_length = 0.0;	// length of the element's reference line
 
 			Geometry(double s, double x, double y, double hdg, double length, Type type)
 				: m_s(s)
