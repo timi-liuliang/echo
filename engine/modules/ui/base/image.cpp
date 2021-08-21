@@ -97,7 +97,7 @@ namespace Echo
         }
     }
     
-    void UiImage::updateInternal()
+    void UiImage::updateInternal(float elapsedTime)
     {
         if (isNeedRender())
         {

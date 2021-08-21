@@ -18,7 +18,7 @@ namespace Echo
 
 	protected:
 		// Update self
-		virtual void updateInternal() override;
+		virtual void updateInternal(float elapsedTime) override;
 
 		// Create shape
 		virtual physx::PxShape* createPxShape() { return nullptr; }

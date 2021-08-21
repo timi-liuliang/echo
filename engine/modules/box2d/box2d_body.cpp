@@ -148,7 +148,7 @@ namespace Echo
         }
     }
 
-	void Box2DBody::updateInternal()
+	void Box2DBody::updateInternal(float elapsedTime)
 	{
 		if (m_isEnable && !m_body)
 		{

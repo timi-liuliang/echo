@@ -103,7 +103,7 @@ namespace Echo
         }
     }
 
-	void Box2DShape::updateInternal()
+	void Box2DShape::updateInternal(float elapsedTime)
 	{
 		if (m_isEnable && !m_fixture)
 		{

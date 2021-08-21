@@ -44,7 +44,7 @@ namespace Echo
 		camera->update();
 	}
 
-	void Camera2D::updateInternal()
+	void Camera2D::updateInternal(float elapsedTime)
 	{
 		if (Engine::instance()->getConfig().m_isGame)
 		{

@@ -2,6 +2,7 @@
 
 #include "engine/core/scene/node.h"
 #include "thirdparty/pugixml/pugixml.hpp"
+#include "opendrive_debug_draw.h"
 
 namespace Echo
 {
@@ -11,6 +12,15 @@ namespace Echo
 		ECHO_CLASS(OpenDrive, Node)
 
 	public:
+		// Debug draw option
+		enum DebugDrawOption
+		{
+			None,
+			Editor,
+			Game,
+			All
+		};
+
 		// Geometry
 		struct Geometry
 		{
@@ -95,16 +105,25 @@ namespace Echo
 		void setXodrRes(const ResourcePath& path);
 		const ResourcePath& getXodrRes() { return m_xodrRes; }
 
+		// Debug draw
+		StringOption getDebugDrawOption() const;
+		void setDebugDrawOption(const StringOption& option);
+
+		// Roads
+		vector<Road>::type& getRoads() { return m_roads; }
+
 	private:
 		// Parse
 		void parseXodr(const String& content);
 		void parseGeometry(Road& road, pugi::xml_node roadNode);
 
 		// Update
-		virtual void updateInternal() override;
+		virtual void updateInternal(float elapsedTime) override;
 
 	public:
 		ResourcePath		m_xodrRes = ResourcePath("", ".xodr");
 		vector<Road>::type	m_roads;
+		OpenDriveDebugDraw	m_debugDraw;
+		DebugDrawOption		m_debugDrawOption = DebugDrawOption::Editor;
 	};
 }

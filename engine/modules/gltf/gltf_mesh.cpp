@@ -128,7 +128,7 @@ namespace Echo
 		}
 	}
 
-	void GltfMesh::updateInternal()
+	void GltfMesh::updateInternal(float elapsedTime)
 	{
 		if (isNeedRender())
 		{

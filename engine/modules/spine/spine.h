@@ -52,7 +52,7 @@ namespace Echo
 
 	protected:
 		// update
-		virtual void updateInternal() override;
+		virtual void updateInternal(float elapsedTime) override;
 
 		// update bilboard
 		void updateBillboard();

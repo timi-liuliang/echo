@@ -40,7 +40,7 @@ namespace Echo
 		m_isRenderableDirty = true;
 	}
 
-	void MeshRender::updateInternal()
+	void MeshRender::updateInternal(float elapsedTime)
 	{
 		if (isNeedRender())
 		{

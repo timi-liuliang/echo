@@ -66,7 +66,7 @@ namespace Echo
 
 	protected:
 		// update
-		virtual void updateInternal() override;
+		virtual void updateInternal(float elapsedTime) override;
 
 	protected:
 		bool						m_isInit;

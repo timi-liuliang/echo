@@ -37,7 +37,7 @@ namespace Echo
         void buildRenderable();
 
         // update
-        virtual void updateInternal() override;
+        virtual void updateInternal(float elapsedTime) override;
 
         // update vertex buffer
         void updateMeshBuffer();

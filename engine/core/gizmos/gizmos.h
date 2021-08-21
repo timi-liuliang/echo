@@ -87,7 +87,7 @@ namespace Echo
 
 	protected:
 		// update
-		virtual void updateInternal() override;
+		virtual void updateInternal(float elapsedTime) override;
         
         // get default shader
 		ShaderProgramPtr initDefaultShader(bool enableAlbedoTexture);

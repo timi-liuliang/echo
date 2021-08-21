@@ -30,7 +30,7 @@ namespace Echo
 
 	}
 
-	void PhysxShape::updateInternal()
+	void PhysxShape::updateInternal(float elapsedTime)
 	{
 		if (m_isEnable && !m_pxShape)
 		{

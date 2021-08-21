@@ -54,7 +54,7 @@ namespace Echo
 		return Vector3::ZERO;
 	}
 
-	void PhysxController::updateInternal()
+	void PhysxController::updateInternal(float elapsedTime)
 	{
 		const Vector3& shift = PhysxModule::instance()->getShift();
 

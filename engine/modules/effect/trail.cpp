@@ -104,7 +104,7 @@ namespace Echo
 		}
 	}
 
-	void Trail::updateInternal()
+	void Trail::updateInternal(float elapsedTime)
 	{
 		// update control points
 		updateControlPoints();

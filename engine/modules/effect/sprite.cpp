@@ -107,7 +107,7 @@ namespace Echo
 		}
 	}
 
-	void Sprite::updateInternal()
+	void Sprite::updateInternal(float elapsedTime)
 	{
 		if (isNeedRender())
 		{

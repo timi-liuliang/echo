@@ -169,7 +169,7 @@ namespace Echo
         virtual void start() {}
 
         // update self
-		virtual void updateInternal() {}
+		virtual void updateInternal(float elapsedTime) {}
 
 	protected:
 		String			m_name;

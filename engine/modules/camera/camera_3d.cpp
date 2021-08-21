@@ -36,7 +36,7 @@ namespace Echo
 		camera->setFarClip(m_far);
 	}
 
-	void Camera3D::updateInternal()
+	void Camera3D::updateInternal(float elapsedTime)
 	{
 		if (Engine::instance()->getConfig().m_isGame)
 		{

@@ -3,7 +3,6 @@
 #include "neural_network.h"
 #include "neural_layer.h"
 
-
 namespace Echo
 {
 	NeuralNetwork::NeuralNetwork()
@@ -79,19 +78,16 @@ namespace Echo
 		return 0;
 	}
 
-	// neuron
 	Neuron* NeuralNetwork::getNeuron(i32 layer, i32 idx)
 	{
 		return nullptr;
 	}
 
-	// reset
 	void NeuralNetwork::reset()
 	{
 		m_isInit = false;
 	}
 
-	// organize by node tree structure
 	void NeuralNetwork::organzieStructureBaseOnNodeTree()
 	{
 		// init matrixs
@@ -136,13 +132,11 @@ namespace Echo
 		// sync data to neuron
 	}
 
-	// compute output by layer
 	Matrix NeuralNetwork::computeLayerOutput(i32 layer, MatrixFunction fun)
 	{
 		return m_layerValues[layer].dot(m_weights[layer]).add(m_bias[layer]).applyFunction(fun);
 	}
 
-	// compute output
 	Matrix NeuralNetwork::computeOutput(const Matrix& inputVector)
 	{
 		// set input layer value (row matrix)
@@ -157,7 +151,6 @@ namespace Echo
 		return m_layerValues[layerNumbr];
 	}
 
-	// learn
 	void NeuralNetwork::learn(const Matrix& expectedOutput)
 	{
 		i32 layerNumber = getLayerNumber() - 1;
@@ -184,8 +177,7 @@ namespace Echo
 		}
 	}
 
-	// update
-	void NeuralNetwork::updateInternal()
+	void NeuralNetwork::updateInternal(float elapsedTime)
 	{
 
 	}

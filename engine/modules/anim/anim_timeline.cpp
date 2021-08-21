@@ -102,7 +102,7 @@ namespace Echo
 		m_isAnimDataDirty = true;
 	}
 
-	void Timeline::updateInternal()
+	void Timeline::updateInternal(float elapsedTime)
 	{
 		if (m_animations.isValid() && m_playState == PlayState::Playing)
 		{

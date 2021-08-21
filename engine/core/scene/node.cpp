@@ -397,18 +397,19 @@ namespace Echo
 		}
 	}
 
-	void Node::update(float delta, bool bUpdateChildren)
+	void Node::update(float elapsedTime, bool bUpdateChildren)
 	{
 		if (!m_isEnable)
 			return;
 
-		// update world matrix
+		// Update world matrix
 		getWorldMatrix();
 
-		// script update
+		// Script update
 		m_script.update(this);
 
-		updateInternal();
+		// Update
+		updateInternal(elapsedTime);
 
 #ifdef ECHO_EDITOR_MODE
 		if(m_objectEditor)
@@ -419,7 +420,7 @@ namespace Echo
 		{
 			for (Node* node : m_children)
 			{
-				node->update(delta, bUpdateChildren);
+				node->update(elapsedTime, bUpdateChildren);
 			}
 		}
 	}

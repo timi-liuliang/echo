@@ -363,7 +363,7 @@ namespace Echo
 			batch->clear();
 	}
 
-	void Gizmos::updateInternal()
+	void Gizmos::updateInternal(float elapsedTime)
 	{
 		if (isNeedRender())
 		{

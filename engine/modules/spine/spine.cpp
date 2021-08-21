@@ -137,7 +137,7 @@ namespace Echo
 		m_billboardType = type.toEnum(BillboardType::None);
 	}
 
-	void Spine::updateInternal()
+	void Spine::updateInternal(float elapsedTime)
 	{
 		if (isNeedRender())
 		{

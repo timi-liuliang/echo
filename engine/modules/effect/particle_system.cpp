@@ -57,7 +57,7 @@ namespace Echo
         }
     }
 
-    void ParticleSystem::updateInternal()
+    void ParticleSystem::updateInternal(float elapsedTime)
     {
         if (isNeedRender())
         {

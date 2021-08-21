@@ -89,8 +89,23 @@ namespace Echo
 		}
 	}
 
-	void OpenDrive::updateInternal()
+	void OpenDrive::setDebugDrawOption(const StringOption& option)
 	{
+		m_debugDrawOption = option.toEnum(DebugDrawOption::Editor);
+	}
 
+	void OpenDrive::updateInternal(float elapsedTime)
+	{
+		if ((m_debugDrawOption == DebugDrawOption::All) ||
+			(m_debugDrawOption == DebugDrawOption::Editor && !IsGame) ||
+			(m_debugDrawOption == DebugDrawOption::Game && IsGame))
+		{
+			m_debugDraw.setEnable(true);
+			m_debugDraw.update(elapsedTime, this);
+		}
+		else
+		{
+			m_debugDraw.setEnable(false);
+		}
 	}
 }

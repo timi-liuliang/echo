@@ -115,7 +115,7 @@ namespace Echo
         }
     }
     
-    void UiText::updateInternal()
+    void UiText::updateInternal(float elapsedTime)
     {
         if (isNeedRender())
         {

@@ -140,7 +140,7 @@ namespace Echo
         }
     }
     
-    void Terrain::updateInternal()
+    void Terrain::updateInternal(float elapsedTime)
     {
         if (isNeedRender())
         {

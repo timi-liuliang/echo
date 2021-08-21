@@ -271,7 +271,7 @@ namespace Echo
 		}
 	}
 
-	void Live2dCubism::updateInternal()
+	void Live2dCubism::updateInternal(float elapsedTime)
 	{
 		if (isNeedRender())
 		{

@@ -61,7 +61,7 @@ namespace Echo
         return nullptr;
     }
     
-    void Box2DJoint::updateInternal()
+    void Box2DJoint::updateInternal(float elapsedTime)
     {
         if(m_isEnable && !m_joint && m_dirtyFlag)
         {

@@ -42,7 +42,7 @@ namespace Echo
 
 	protected:
 		// update self
-		virtual void updateInternal() override;
+		virtual void updateInternal(float elapsedTime) override;
 
 		// create shape
 		virtual b2Shape* createb2Shape() { return nullptr; }

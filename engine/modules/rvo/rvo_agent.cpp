@@ -57,7 +57,7 @@ namespace Echo
 		return Vector3::ZERO;
 	}
 
-	void RvoAgent::updateInternal()
+	void RvoAgent::updateInternal(float elapsedTime)
 	{
 		if (!m_rvoAgent)
 		{

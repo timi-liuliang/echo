@@ -26,7 +26,7 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(PhysxBody, "Type", Variant::Type::StringOption, "getType", "setType");
 	}
 
-	void PhysxBody::updateInternal()
+	void PhysxBody::updateInternal(float elapsedTime)
 	{
 		const Vector3& shift = PhysxModule::instance()->getShift();
 		if (m_isEnable && !m_pxBody)

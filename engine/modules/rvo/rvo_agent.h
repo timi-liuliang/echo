@@ -30,7 +30,7 @@ namespace Echo
 
 	private:
 		// Update
-		virtual void updateInternal() override;
+		virtual void updateInternal(float elapsedTime) override;
 
 	public:
 		RVO::Agent* m_rvoAgent = nullptr;
