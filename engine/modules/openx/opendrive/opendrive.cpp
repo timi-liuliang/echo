@@ -84,7 +84,8 @@ namespace Echo
 				}
 				else if (StringUtil::Equal(typeNode.name(), "arc"))
 				{
-	
+					double curvature = typeNode.attribute("curvature").as_double();
+					road.m_geometries.push_back(EchoNew(Arc(s, x, y, hdg, length, curvature)));
 				}
 				else if (StringUtil::Equal(typeNode.name(), "spiral"))
 				{

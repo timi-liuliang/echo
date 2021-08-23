@@ -78,6 +78,10 @@ namespace Echo
 				: Geometry(s, x, y, hdg, length, Geometry::Arc)
 				, m_curvature(curvature)
 			{}
+
+			// Start|End Position
+			virtual Vector3 getStartPosition() const override { return Vector3(m_x, 0.0, m_y) + m_s * getTangent(); }
+			virtual Vector3 getEndPosition() const override { return Vector3(m_x, 0.0, m_y) + (m_s + m_length) * getTangent(); }
 		};
 
 		// Spiral
