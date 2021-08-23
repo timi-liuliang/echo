@@ -33,10 +33,26 @@ namespace Echo
 	{
 		m_gizmo->clear();
 
+		// line width
+		m_gizmo->setLineWidth(2.f);
+
 		// Reference line
 		if (drive)
 		{
-			//m_gizmo->drawLine(agent->getWorldPosition(), agent->getGoal(), Color(0.62745F, 0.62745F, 0.62745F, 0.62745F));
+			for (OpenDrive::Road& road : drive->getRoads())
+			{
+				for (OpenDrive::Geometry* geometry : road.m_geometries)
+				{
+					if (geometry && geometry->m_type == OpenDrive::Geometry::Type::Line)
+					{
+						OpenDrive::Line* line = ECHO_DOWN_CAST<OpenDrive::Line*>(geometry);
+						if (line)
+						{
+							m_gizmo->drawLine(line->getStartPosition(), line->getEndPosition(), Color::fromRGBA( 247, 56, 56, 200));
+						}
+					}
+				}
+			}
 		}
 
 		m_gizmo->update(Engine::instance()->getFrameTime(), true);

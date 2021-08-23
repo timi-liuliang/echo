@@ -12,6 +12,7 @@ namespace Echo
 
 	OpenDrive::~OpenDrive()
 	{
+		reset();
 	}
 
 	void OpenDrive::bindMethods()
@@ -22,10 +23,22 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(OpenDrive, "Xodr", Variant::Type::ResourcePath, "getXodrRes", "setXodrRes");
 	}
 
+	void OpenDrive::reset()
+	{
+		for (Road& road : m_roads)
+		{
+			EchoSafeDeleteContainer(road.m_geometries, Geometry);
+		}
+
+		m_roads.clear();
+	}
+
 	void OpenDrive::setXodrRes(const ResourcePath& path)
 	{
 		if (m_xodrRes.setPath(path.getPath()))
 		{
+			reset();
+
 			parseXodr(IO::instance()->loadFileToString(path.getPath()));
 		}
 	}

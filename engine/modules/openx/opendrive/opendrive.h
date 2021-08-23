@@ -123,6 +123,9 @@ namespace Echo
 		// Roads
 		vector<Road>::type& getRoads() { return m_roads; }
 
+		// Reset
+		void reset();
+
 	private:
 		// Parse
 		void parseXodr(const String& content);
@@ -131,7 +134,7 @@ namespace Echo
 		// Update
 		virtual void updateInternal(float elapsedTime) override;
 
-	public:
+	protected:
 		ResourcePath		m_xodrRes = ResourcePath("", ".xodr");
 		vector<Road>::type	m_roads;
 		OpenDriveDebugDraw	m_debugDraw;
