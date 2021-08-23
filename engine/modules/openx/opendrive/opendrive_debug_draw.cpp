@@ -29,7 +29,7 @@ namespace Echo
 		}
 	}
 
-	void OpenDriveDebugDraw::update(float elapsedTime, OpenDrive* drive)
+	void OpenDriveDebugDraw::onDriveChanged(OpenDrive* drive)
 	{
 		m_gizmo->clear();
 
@@ -48,13 +48,19 @@ namespace Echo
 						OpenDrive::Line* line = ECHO_DOWN_CAST<OpenDrive::Line*>(geometry);
 						if (line)
 						{
-							m_gizmo->drawLine(line->getStartPosition(), line->getEndPosition(), Color::fromRGBA( 247, 56, 56, 200));
+							m_gizmo->drawLine(line->getStartPosition(), line->getEndPosition(), Color::fromRGBA(247, 56, 56, 200));
 						}
 					}
 				}
 			}
 		}
+	}
 
-		m_gizmo->update(Engine::instance()->getFrameTime(), true);
+	void OpenDriveDebugDraw::update(float elapsedTime)
+	{
+		if (m_isEnable)
+		{
+			m_gizmo->update(Engine::instance()->getFrameTime(), true);
+		}
 	}
 }

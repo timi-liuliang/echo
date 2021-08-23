@@ -87,7 +87,18 @@ namespace Echo
 		// Spiral
 		struct Spiral : public Geometry
 		{
+			double	m_curvatureStart = 0.0;
+			double	m_curvatureEnd = 0.0;
 
+			Spiral(double s, double x, double y, double hdg, double length, double curvatureStart, double curvatureEnd)
+				: Geometry(s, x, y, hdg, length, Geometry::Spiral)
+				, m_curvatureStart(curvatureStart)
+				, m_curvatureEnd(curvatureEnd)
+			{}
+
+			// Start|End Position
+			virtual Vector3 getStartPosition() const override { return Vector3(m_x, 0.0, m_y) + m_s * getTangent(); }
+			virtual Vector3 getEndPosition() const override { return Vector3(m_x, 0.0, m_y) + (m_s + m_length) * getTangent(); }
 		};
 
 		// Poly3
@@ -134,6 +145,9 @@ namespace Echo
 		// Parse
 		void parseXodr(const String& content);
 		void parseGeometry(Road& road, pugi::xml_node roadNode);
+
+		// Refresh debug draw
+		void refreshDebugDraw();
 
 		// Update
 		virtual void updateInternal(float elapsedTime) override;

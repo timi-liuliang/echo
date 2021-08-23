@@ -62,6 +62,8 @@ namespace Echo
 
 			m_roads.emplace_back(road);
 		}
+
+		refreshDebugDraw();
 	}
 
 	void OpenDrive::parseGeometry(Road& road, pugi::xml_node roadNode)
@@ -89,7 +91,9 @@ namespace Echo
 				}
 				else if (StringUtil::Equal(typeNode.name(), "spiral"))
 				{
-
+					double curvatureStart = typeNode.attribute("curvStatrt").as_double();
+					double curvatureEnd = typeNode.attribute("curvEnd").as_double();
+					road.m_geometries.push_back(EchoNew(Spiral(s, x, y, hdg, length, curvatureStart, curvatureEnd)));
 				}
 				else if (StringUtil::Equal(typeNode.name(), "poly3"))
 				{
@@ -106,20 +110,27 @@ namespace Echo
 	void OpenDrive::setDebugDrawOption(const StringOption& option)
 	{
 		m_debugDrawOption = option.toEnum(DebugDrawOption::Editor);
+
+		refreshDebugDraw();
 	}
 
-	void OpenDrive::updateInternal(float elapsedTime)
+	void OpenDrive::refreshDebugDraw()
 	{
 		if ((m_debugDrawOption == DebugDrawOption::All) ||
 			(m_debugDrawOption == DebugDrawOption::Editor && !IsGame) ||
 			(m_debugDrawOption == DebugDrawOption::Game && IsGame))
 		{
 			m_debugDraw.setEnable(true);
-			m_debugDraw.update(elapsedTime, this);
+			m_debugDraw.onDriveChanged(this);
 		}
 		else
 		{
 			m_debugDraw.setEnable(false);
 		}
+	}
+
+	void OpenDrive::updateInternal(float elapsedTime)
+	{
+		m_debugDraw.update(elapsedTime);
 	}
 }

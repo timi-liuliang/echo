@@ -11,11 +11,15 @@ namespace Echo
 		OpenDriveDebugDraw();
 		virtual ~OpenDriveDebugDraw();
 
-		// Update
-		void update(float elapsedTime, class OpenDrive* drive);
-
 		// Enable
 		void setEnable(bool isEnable);
+		bool isEnable() const { return m_isEnable; }
+
+		// refresh
+		void onDriveChanged(class OpenDrive* drive);
+
+		// Update
+		void update(float elapsedTime);
 
 	private:
 		Gizmos*		m_gizmo = nullptr;
