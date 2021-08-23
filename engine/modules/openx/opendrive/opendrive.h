@@ -47,6 +47,13 @@ namespace Echo
 				, m_length(length)
 				, m_type(type)
 			{}
+
+			// Tangent
+			Vector3 getTangent() const { return Vector3(cos(m_hdg), 0.0, sin(m_hdg)); }
+
+			// Start|End Position
+			virtual Vector3 getStartPosition() const = 0;
+			virtual Vector3 getEndPosition() const = 0;
 		};
 		typedef vector<Geometry*>::type GeometryArray;
 
@@ -56,6 +63,10 @@ namespace Echo
 			Line(double s, double x, double y, double hdg, double length)
 				: Geometry(s, x, y, hdg, length, Geometry::Line)
 			{}
+
+			// Start|End Position
+			virtual Vector3 getStartPosition() const override { return Vector3(m_x, 0.0, m_y) + m_s * getTangent(); }
+			virtual Vector3 getEndPosition() const override { return Vector3(m_x, 0.0, m_y) + (m_s + m_length) * getTangent(); }
 		};
 
 		// Line
