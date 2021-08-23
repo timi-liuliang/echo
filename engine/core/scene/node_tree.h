@@ -4,7 +4,6 @@
 #include "bvh.h"
 #include "engine/core/gizmos/gizmos.h"
 #include "engine/core/camera/camera.h"
-#include "engine/core/camera/camera_shadow.h"
 
 namespace Echo
 {
@@ -45,9 +44,6 @@ namespace Echo
 	public:
 		void update( float elapsedTime);
 
-		// get shadow camera
-		CameraShadow& getShadowCamera() { EchoAssert( m_shadowCamera);  return *m_shadowCamera; }
-
 	private:
 		NodeTree();
 
@@ -55,7 +51,6 @@ namespace Echo
 		Camera*			    m_3dCamera = nullptr;
 		Camera*				m_2dCamera = nullptr;
 		Camera*				m_uiCamera = nullptr;
-		CameraShadow*		m_shadowCamera = nullptr;
 		Bvh					m_2dBvh;
 		Bvh					m_3dBvh;
         Node*				m_invisibleRoot = nullptr;	// invisible root node

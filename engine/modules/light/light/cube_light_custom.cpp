@@ -1,5 +1,5 @@
 #include "light.h"
-#include "light_module.h"
+#include "engine/modules/light/light_module.h"
 #include "cube_light_custom.h"
 
 namespace Echo

@@ -12,7 +12,6 @@ namespace Echo
 	{
         m_invisibleRoot->queueFree();
         
-        EchoSafeDelete(m_shadowCamera, CameraShadow);
         EchoSafeDelete(m_2dCamera, Camera);
         EchoSafeDelete(m_3dCamera, Camera);
         EchoSafeDelete(m_uiCamera, Camera);
@@ -33,7 +32,6 @@ namespace Echo
 	{
 		// create main camera
 		m_3dCamera = EchoNew(Camera(Camera::ProjMode::PM_PERSPECTIVE));
-		m_shadowCamera = EchoNew(CameraShadow);
 
 		Vector3 vCamPos(0.f, 3.f, 3.f);
 		Vector3 vCamDir = Vector3::ZERO - vCamPos;

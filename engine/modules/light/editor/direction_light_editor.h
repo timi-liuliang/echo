@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../direction_light.h"
+#include "../light/direction_light.h"
 #include "engine/core/gizmos/Gizmos.h"
 
 namespace Echo

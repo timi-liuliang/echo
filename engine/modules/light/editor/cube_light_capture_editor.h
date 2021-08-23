@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../cube_light_capture.h"
+#include "../light/cube_light_capture.h"
 #include "engine/core/gizmos/Gizmos.h"
 
 namespace Echo

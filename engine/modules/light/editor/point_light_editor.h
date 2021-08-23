@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../point_light.h"
+#include "../light/point_light.h"
 #include "engine/core/gizmos/Gizmos.h"
 
 namespace Echo
