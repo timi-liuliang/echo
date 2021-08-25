@@ -48,12 +48,8 @@ namespace Echo
 				, m_type(type)
 			{}
 
-			// Tangent
-			Vector3 getTangent() const { return Vector3(cos(m_hdg), 0.0, sin(m_hdg)); }
-
-			// Start|End Position
-			virtual Vector3 getStartPosition() const = 0;
-			virtual Vector3 getEndPosition() const = 0;
+			// Evaluate
+			virtual void evaluate(double ds, double& x, double& y, double& h) {}
 		};
 		typedef vector<Geometry*>::type GeometryArray;
 
@@ -64,9 +60,8 @@ namespace Echo
 				: Geometry(s, x, y, hdg, length, Geometry::Line)
 			{}
 
-			// Start|End Position
-			virtual Vector3 getStartPosition() const override { return Vector3(m_x, 0.0, m_y) + m_s * getTangent(); }
-			virtual Vector3 getEndPosition() const override { return Vector3(m_x, 0.0, m_y) + (m_s + m_length) * getTangent(); }
+			// Evaluate
+			virtual void evaluate(double ds, double& x, double& y, double& h) override;
 		};
 
 		// Line
@@ -79,9 +74,8 @@ namespace Echo
 				, m_curvature(curvature)
 			{}
 
-			// Start|End Position
-			virtual Vector3 getStartPosition() const override { return Vector3(m_x, 0.0, m_y) + m_s * getTangent(); }
-			virtual Vector3 getEndPosition() const override { return Vector3(m_x, 0.0, m_y) + (m_s + m_length) * getTangent(); }
+			// Evaluate
+			virtual void evaluate(double ds, double& x, double& y, double& h) override;
 		};
 
 		// Spiral
@@ -96,21 +90,22 @@ namespace Echo
 				, m_curvatureEnd(curvatureEnd)
 			{}
 
-			// Start|End Position
-			virtual Vector3 getStartPosition() const override { return Vector3(m_x, 0.0, m_y) + m_s * getTangent(); }
-			virtual Vector3 getEndPosition() const override { return Vector3(m_x, 0.0, m_y) + (m_s + m_length) * getTangent(); }
+			// Evaluate
+			virtual void evaluate(double ds, double& x, double& y, double& h) override;
 		};
 
 		// Poly3
 		struct Poly3 : public Geometry
 		{
-
+			// Evaluate
+			virtual void evaluate(double ds, double& x, double& y, double& h) override;
 		};
 
 		// ParamPoly3
 		struct ParamPoly3 : public Geometry
 		{
-
+			// Evaluate
+			virtual void evaluate(double ds, double& x, double& y, double& h) override;
 		};
 
 		// Road

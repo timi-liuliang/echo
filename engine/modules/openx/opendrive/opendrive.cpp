@@ -5,6 +5,55 @@
 
 namespace Echo
 {
+	void OpenDrive::Line::evaluate(double ds, double& x, double& y, double& h)
+	{
+		h = m_hdg;
+		x = m_x + ds * cos(h);
+		y = m_y + ds * sin(h);
+	}
+
+	void OpenDrive::Arc::evaluate(double ds, double& x, double& y, double& h)
+	{
+		double xLocal = 0;
+		double yLocal = 0;
+
+		// arcLength = angle * radius -> angle = arcLength / radius -> angle = arcLength * curvature
+		double angle = ds * m_curvature;
+		double radius = 1.f / m_curvature;
+
+		if (m_curvature < 0)
+		{
+			// starting from 90 degrees going clockwise
+			xLocal = cos(angle + Math::PI_DIV2);
+			yLocal = sin(angle + Math::PI_DIV2) - 1.f; // -1 transform to y = 0
+		}
+		else
+		{
+			// starting from -90 degrees going counter clockwise
+			xLocal = cos(angle + 3.0 * Math::PI_DIV2);
+			yLocal = sin(angle + 3.0 * Math::PI_DIV2) + 1;  // +1 transform to y = 0
+		}
+
+		x = m_x + radius * (xLocal * cos(m_hdg) - yLocal * sin(m_hdg));
+		y = m_y + radius * (xLocal * sin(m_hdg) + yLocal * cos(m_hdg));
+		h = m_hdg + angle;
+	}
+
+	void OpenDrive::Spiral::evaluate(double ds, double& x, double& y, double& h)
+	{
+
+	}
+
+	void OpenDrive::Poly3::evaluate(double ds, double& x, double& y, double& h)
+	{
+
+	}
+
+	void OpenDrive::ParamPoly3::evaluate(double ds, double& x, double& y, double& h)
+	{
+
+	}
+
 	OpenDrive::OpenDrive()
 	{
 

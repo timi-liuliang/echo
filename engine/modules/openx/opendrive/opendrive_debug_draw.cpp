@@ -48,7 +48,39 @@ namespace Echo
 						OpenDrive::Line* line = ECHO_DOWN_CAST<OpenDrive::Line*>(geometry);
 						if (line)
 						{
-							m_gizmo->drawLine(line->getStartPosition(), line->getEndPosition(), Color::fromRGBA(247, 56, 56, 200));
+							double startX, startY;
+							double endX, endY;
+							double  startCurvature;
+							double  endCurvature;
+
+							line->evaluate(0, startX, startY, startCurvature);
+							line->evaluate(line->m_length, endX, endY, endCurvature);
+
+							m_gizmo->drawLine(Vector3(startX, 0.f, startY), Vector3(endX, 0.f, endY), Color::fromRGBA(247, 56, 56, 200));
+						}
+					}
+					else if (geometry && geometry->m_type == OpenDrive::Geometry::Type::Arc)
+					{
+						OpenDrive::Arc* arc = ECHO_DOWN_CAST<OpenDrive::Arc*>(geometry);
+						if (arc)
+						{
+							i32    stepCount = 10;
+							double stepLength = arc->m_length / stepCount;
+							for (i32 i = 0; i < stepCount - 1; i++)
+							{
+								double ds0 = i * stepLength;
+								double ds1 = ds0 + stepLength;
+
+								double startX, startY;
+								double endX, endY;
+								double  startCurvature;
+								double  endCurvature;
+
+								arc->evaluate(ds0, startX, startY, startCurvature);
+								arc->evaluate(ds1, endX, endY, endCurvature);
+
+								m_gizmo->drawLine(Vector3(startX, 0.f, startY), Vector3(endX, 0.f, endY), Color::fromRGBA(247, 56, 56, 200));
+							}
 						}
 					}
 				}
