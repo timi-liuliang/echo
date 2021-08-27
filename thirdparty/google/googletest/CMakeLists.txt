@@ -29,7 +29,7 @@ ENDIF()
 ADD_LIBRARY(${MODULE_NAME} ${ALL_FILES} CMakeLists.txt)
 
 # set folder
-SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES FOLDER "thirdparty")
+SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES FOLDER "thirdparty/google")
 
 # log
 MESSAGE(STATUS "Configure success!")

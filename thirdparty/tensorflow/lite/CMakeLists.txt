@@ -7,8 +7,8 @@ MESSAGE( STATUS "Configuring module: ${MODULE_NAME} ...")
 # Include Directories
 INCLUDE_DIRECTORIES(${ECHO_SRC_PATH})
 INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty)
-INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/tensorflow/flatbuffers/include)
-INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/tensorflow/gemmlowp)
+INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/google/flatbuffers/include)
+INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/google/gemmlowp)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 
 # Link Directories
