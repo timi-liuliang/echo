@@ -1,5 +1,6 @@
 # google libraries
 
+ADD_SUBDIRECTORY(gemmlowp)
 ADD_SUBDIRECTORY(flatbuffers)
 ADD_SUBDIRECTORY(tensorflow/lite)
 
