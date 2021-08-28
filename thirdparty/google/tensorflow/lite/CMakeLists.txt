@@ -9,6 +9,7 @@ INCLUDE_DIRECTORIES(${ECHO_SRC_PATH})
 INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/google)
 INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/google/flatbuffers/include)
 INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/google/gemmlowp)
+INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/google/ruy)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 
 # Link Directories
