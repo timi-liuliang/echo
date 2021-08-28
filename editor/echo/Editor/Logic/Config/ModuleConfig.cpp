@@ -17,18 +17,19 @@ namespace Echo
 		REGISTER_MODULE(EffectModule)
 		REGISTER_MODULE(UiModule)
 		REGISTER_MODULE(AIModule)
-		REGISTER_MODULE(LightModule);
-		REGISTER_MODULE(ModelModule);
-		REGISTER_MODULE(OpenDriveModule);
-		REGISTER_MODULE(PhysxModule);
-        REGISTER_MODULE(PCGModule);
-		REGISTER_MODULE(RaytracingModule);
-        REGISTER_MODULE(SceneModule);
+		REGISTER_MODULE(LightModule)
+		REGISTER_MODULE(ModelModule)
+		REGISTER_MODULE(OpenDriveModule)
+		REGISTER_MODULE(PhysxModule)
+        REGISTER_MODULE(PCGModule)
+		REGISTER_MODULE(RaytracingModule)
+        REGISTER_MODULE(SceneModule)
+		REGISTER_MODULE(TFLiteModule)
 #ifdef ECHO_PLATFORM_WINDOWS
-		REGISTER_MODULE(VideoModule);
+		REGISTER_MODULE(VideoModule)
 #endif
-        REGISTER_MODULE(BuildModule);
-		REGISTER_MODULE(EditorSettingsModule);
+        REGISTER_MODULE(BuildModule)
+		REGISTER_MODULE(EditorSettingsModule)
 		REGISTER_MODULE(RecastModule)
 		REGISTER_MODULE(HitProxyModule)
 		REGISTER_MODULE(HLodModule)
