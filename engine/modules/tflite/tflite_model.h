@@ -1,7 +1,7 @@
 #pragma once
 
 #include "engine/core/scene/node.h"
-#include "rvo2/RVO.h"
+#include "thirdparty/google/tensorflow/lite/c/c_api.h"
 
 namespace Echo
 {
@@ -13,6 +13,15 @@ namespace Echo
 		TFLiteModel();
 		virtual ~TFLiteModel();
 
+		// model file
+		void setModelRes(const ResourcePath& path);
+		const ResourcePath& getModelRes() { return m_modelRes; }
+
 	public:
+		ResourcePath			m_modelRes = ResourcePath("", ".tflite");
+		TfLiteModel*			m_model = nullptr;
+		TfLiteInterpreter*		m_interpreter = nullptr;
+		vector<TfLiteTensor*>	m_inputs;
+		vector<TfLiteTensor*>	m_outputs;
 	};
 }

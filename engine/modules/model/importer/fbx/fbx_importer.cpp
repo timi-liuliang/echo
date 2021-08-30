@@ -1,7 +1,7 @@
 #include "fbx_importer.h"
 #include "engine/core/editor/editor.h"
 #include "engine/core/util/PathUtil.h"
-#include "engine/core/io/IO.h"
+#include "engine/core/io/io.h"
 #include "engine/core/render/base/mesh/mesh.h"
 
 #ifdef ECHO_EDITOR_MODE
