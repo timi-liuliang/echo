@@ -34,9 +34,9 @@ extern "C" {
 #else  // not definded TFL_STATIC_LIBRARY_BUILD
 #if defined(_WIN32)
 #ifdef TFL_COMPILE_LIBRARY
-#define TFL_CAPI_EXPORT __declspec(dllexport)
+#define TFL_CAPI_EXPORT //__declspec(dllexport)
 #else
-#define TFL_CAPI_EXPORT __declspec(dllimport)
+#define TFL_CAPI_EXPORT //__declspec(dllimport)
 #endif  // TFL_COMPILE_LIBRARY
 #else
 #define TFL_CAPI_EXPORT __attribute__((visibility("default")))

@@ -1,11 +1,7 @@
 #pragma once
 
 #include "engine/core/scene/node.h"
-
-extern "C" 
-{
-	#include "thirdparty/google/tensorflow/lite/c/c_api.h"
-}
+#include "thirdparty/google/tensorflow/lite/c/c_api.h"
 
 namespace Echo
 {
