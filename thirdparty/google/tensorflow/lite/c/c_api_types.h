@@ -39,7 +39,7 @@ extern "C" {
 #define TFL_CAPI_EXPORT //__declspec(dllimport)
 #endif  // TFL_COMPILE_LIBRARY
 #else
-#define TFL_CAPI_EXPORT __attribute__((visibility("default")))
+#define TFL_CAPI_EXPORT //__attribute__((visibility("default")))
 #endif  // _WIN32
 #endif  // SWIG
 
