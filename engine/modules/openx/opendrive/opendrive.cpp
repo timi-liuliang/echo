@@ -5,6 +5,12 @@
 
 namespace Echo
 {
+	void OpenDrive::Geometry::getHeading(double& x, double& y)
+	{
+		x = cos(m_hdg);
+		y = sin(m_hdg);
+	}
+
 	void OpenDrive::Line::evaluate(double sampleLength, double& x, double& y, double& h)
 	{
 		h = m_hdg;

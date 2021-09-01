@@ -54,6 +54,9 @@ namespace Echo
 
 			// Length 
 			double getLength() const { return m_length; }
+
+			// Heading
+			void getHeading(double& x, double& y);
 		};
 		typedef vector<Geometry*>::type GeometryArray;
 
