@@ -21,7 +21,8 @@ namespace Echo
 			All
 		};
 
-		// Geometry
+		// Geometry 
+		// https://gupea.ub.gu.se/bitstream/2077/23047/1/gupea_2077_23047_1.pdf
 		struct Geometry
 		{
 			enum Type
@@ -36,8 +37,8 @@ namespace Echo
 			double m_s = 0.0;		// Start position(s-coordinate)
 			double m_x = 0.0;		// Start position(x inertial)
 			double m_y = 0.0;		// Start position(y inertial)
-			double m_hdg = 0.0;		// Start orientation(inertial heading)
-			double m_length = 0.0;	// length of the element's reference line
+			double m_hdg = 0.0;		// Inital heading
+			double m_length = 0.0;	// Length of the element's reference line
 
 			Geometry(double s, double x, double y, double hdg, double length, Type type)
 				: m_s(s)
@@ -49,7 +50,10 @@ namespace Echo
 			{}
 
 			// Evaluate
-			virtual void evaluate(double ds, double& x, double& y, double& h) {}
+			virtual void evaluate(double sampleLength, double& x, double& y, double& h) {}
+
+			// Length 
+			double getLength() const { return m_length; }
 		};
 		typedef vector<Geometry*>::type GeometryArray;
 
@@ -61,7 +65,7 @@ namespace Echo
 			{}
 
 			// Evaluate
-			virtual void evaluate(double ds, double& x, double& y, double& h) override;
+			virtual void evaluate(double sampleLength, double& x, double& y, double& h) override;
 		};
 
 		// Line
@@ -75,7 +79,13 @@ namespace Echo
 			{}
 
 			// Evaluate
-			virtual void evaluate(double ds, double& x, double& y, double& h) override;
+			virtual void evaluate(double sampleLength, double& x, double& y, double& h) override;
+
+			// Radius
+			double getRadius() const { return 1.0 / std::fabs(m_curvature); }
+
+			// Center
+			void getCenter(double& x, double& y);
 		};
 
 		// Spiral

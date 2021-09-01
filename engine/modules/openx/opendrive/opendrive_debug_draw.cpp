@@ -54,7 +54,7 @@ namespace Echo
 							double  endCurvature;
 
 							line->evaluate(0, startX, startY, startCurvature);
-							line->evaluate(line->m_length, endX, endY, endCurvature);
+							line->evaluate(line->getLength(), endX, endY, endCurvature);
 
 							m_gizmo->drawLine(Vector3(startX, 0.f, startY), Vector3(endX, 0.f, endY), Color::fromRGBA(247, 56, 56, 200));
 						}
@@ -64,23 +64,33 @@ namespace Echo
 						OpenDrive::Arc* arc = ECHO_DOWN_CAST<OpenDrive::Arc*>(geometry);
 						if (arc)
 						{
-							i32    stepCount = 10;
-							double stepLength = arc->m_length / stepCount;
-							for (i32 i = 0; i < stepCount - 1; i++)
+							double startX, startY;
+							double endX, endY;
+							double startCurvature;
+							double endCurvature;
+
+							// Draw arc
+							i32    stepCount = std::max<i32>(i32(arc->getLength() / 0.1), 1);
+							double stepLength = arc->getLength() / stepCount;
+							for (i32 i = 0; i < stepCount; i++)
 							{
 								double ds0 = i * stepLength;
 								double ds1 = ds0 + stepLength;
-
-								double startX, startY;
-								double endX, endY;
-								double  startCurvature;
-								double  endCurvature;
 
 								arc->evaluate(ds0, startX, startY, startCurvature);
 								arc->evaluate(ds1, endX, endY, endCurvature);
 
 								m_gizmo->drawLine(Vector3(startX, 0.f, startY), Vector3(endX, 0.f, endY), Color::fromRGBA(247, 56, 56, 200));
 							}
+
+							// Draw sector edge
+							double centerX, centerY;
+							arc->getCenter(centerX, centerY);
+							arc->evaluate(0.0, startX, startY, startCurvature);
+							arc->evaluate(arc->getLength(), endX, endY, endCurvature);
+
+							m_gizmo->drawLine(Vector3(centerX, 0.f, centerY), Vector3(startX, 0.f, startY), Color(0.62745f, 0.62745f, 0.62745f, 0.16f));
+							m_gizmo->drawLine(Vector3(centerX, 0.f, centerY), Vector3(endX, 0.f, endY), Color(0.62745f, 0.62745f, 0.62745f, 0.16f));
 						}
 					}
 				}

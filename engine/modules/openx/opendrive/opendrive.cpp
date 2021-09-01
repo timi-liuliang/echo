@@ -5,21 +5,21 @@
 
 namespace Echo
 {
-	void OpenDrive::Line::evaluate(double ds, double& x, double& y, double& h)
+	void OpenDrive::Line::evaluate(double sampleLength, double& x, double& y, double& h)
 	{
 		h = m_hdg;
-		x = m_x + ds * cos(h);
-		y = m_y + ds * sin(h);
+		x = m_x + sampleLength * cos(h);
+		y = m_y + sampleLength * sin(h);
 	}
 
-	void OpenDrive::Arc::evaluate(double ds, double& x, double& y, double& h)
+	void OpenDrive::Arc::evaluate(double sampleLength, double& x, double& y, double& h)
 	{
 		double xLocal = 0;
 		double yLocal = 0;
 
 		// arcLength = angle * radius -> angle = arcLength / radius -> angle = arcLength * curvature
-		double angle = ds * m_curvature;
-		double radius = 1.f / m_curvature;
+		double angle = sampleLength * m_curvature;
+		double radius = getRadius();
 
 		if (m_curvature < 0)
 		{
@@ -37,6 +37,43 @@ namespace Echo
 		x = m_x + radius * (xLocal * cos(m_hdg) - yLocal * sin(m_hdg));
 		y = m_y + radius * (xLocal * sin(m_hdg) + yLocal * cos(m_hdg));
 		h = m_hdg + angle;
+
+		//double radius = getRadius();
+
+		//double centerX;
+		//double centerY;
+		//getCenter(centerX, centerY);
+
+		//double centralAngle = sampleLength / radius;
+
+		//if (m_curvature < 0)
+		//{
+		//	x = centerX + cos(m_hdg + Math::PI_DIV2 + centralAngle) * radius;
+		//	y = centerY + sin(m_hdg + Math::PI_DIV2 + centralAngle) * radius;
+		//	h = m_hdg + centralAngle;
+		//}
+		//else
+		//{
+		//	x = centerX + cos(-m_hdg - Math::PI_DIV2 - centralAngle) * radius;
+		//	y = centerY + sin(-m_hdg - Math::PI_DIV2 - centralAngle) * radius;
+		//	h = m_hdg - centralAngle;
+		//}
+	}
+
+	void OpenDrive::Arc::getCenter(double& x, double& y)
+	{
+		double radius = getRadius();
+
+		if (m_curvature < 0)
+		{
+			x = m_x + cos(m_hdg + Math::PI_DIV2 - Math::PI) * radius;
+			y = m_y + sin(m_hdg + Math::PI_DIV2 - Math::PI) * radius;
+		}
+		else
+		{
+			x = m_x + cos(m_hdg - Math::PI_DIV2 - Math::PI) * radius;
+			y = m_y + sin(m_hdg - Math::PI_DIV2 - Math::PI) * radius;
+		}
 	}
 
 	void OpenDrive::Spiral::evaluate(double ds, double& x, double& y, double& h)
