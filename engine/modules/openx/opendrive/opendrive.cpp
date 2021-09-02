@@ -20,65 +20,45 @@ namespace Echo
 
 	void OpenDrive::Arc::evaluate(double sampleLength, double& x, double& y, double& h)
 	{
-		double xLocal = 0;
-		double yLocal = 0;
-
-		// arcLength = angle * radius -> angle = arcLength / radius -> angle = arcLength * curvature
-		double angle = sampleLength * m_curvature;
+		// Reference https://github.com/esmini/esmini/blob/cc6238ca1c0ade9aefb94a1e7f2e48bc143b8e1f/EnvironmentSimulator/Modules/RoadManager/RoadManager.cpp
+		// Esmini's implementation is right too. but i don't understand it...
+		// Finally. I implement it by https://gupea.ub.gu.se/bitstream/2077/23047/1/gupea_2077_23047_1.pdf
 		double radius = getRadius();
+
+		double centerX;
+		double centerY;
+		getCenter(centerX, centerY);
+
+		double centralAngle = sampleLength / radius;
 
 		if (m_curvature < 0)
 		{
-			// starting from 90 degrees going clockwise
-			xLocal = cos(angle + Math::PI_DIV2);
-			yLocal = sin(angle + Math::PI_DIV2) - 1.f; // -1 transform to y = 0
+			x = centerX + cos(m_hdg + Math::PI_DIV2 - centralAngle) * radius;
+			y = centerY + sin(m_hdg + Math::PI_DIV2 - centralAngle) * radius;
+			h = m_hdg + centralAngle;
 		}
 		else
 		{
-			// starting from -90 degrees going counter clockwise
-			xLocal = cos(angle + 3.0 * Math::PI_DIV2);
-			yLocal = sin(angle + 3.0 * Math::PI_DIV2) + 1;  // +1 transform to y = 0
+			x = centerX + cos(m_hdg - Math::PI_DIV2 + centralAngle) * radius;
+			y = centerY + sin(m_hdg - Math::PI_DIV2 + centralAngle) * radius;
+			h = m_hdg - centralAngle;
 		}
-
-		x = m_x + radius * (xLocal * cos(m_hdg) - yLocal * sin(m_hdg));
-		y = m_y + radius * (xLocal * sin(m_hdg) + yLocal * cos(m_hdg));
-		h = m_hdg + angle;
-
-		//double radius = getRadius();
-
-		//double centerX;
-		//double centerY;
-		//getCenter(centerX, centerY);
-
-		//double centralAngle = sampleLength / radius;
-
-		//if (m_curvature < 0)
-		//{
-		//	x = centerX + cos(m_hdg + Math::PI_DIV2 + centralAngle) * radius;
-		//	y = centerY + sin(m_hdg + Math::PI_DIV2 + centralAngle) * radius;
-		//	h = m_hdg + centralAngle;
-		//}
-		//else
-		//{
-		//	x = centerX + cos(-m_hdg - Math::PI_DIV2 - centralAngle) * radius;
-		//	y = centerY + sin(-m_hdg - Math::PI_DIV2 - centralAngle) * radius;
-		//	h = m_hdg - centralAngle;
-		//}
 	}
 
+	// Engine's coordin
 	void OpenDrive::Arc::getCenter(double& x, double& y)
 	{
 		double radius = getRadius();
 
 		if (m_curvature < 0)
 		{
-			x = m_x + cos(m_hdg + Math::PI_DIV2 - Math::PI) * radius;
-			y = m_y + sin(m_hdg + Math::PI_DIV2 - Math::PI) * radius;
+			x = m_x + cos(m_hdg - Math::PI_DIV2) * radius;
+			y = m_y + sin(m_hdg - Math::PI_DIV2) * radius;
 		}
 		else
 		{
-			x = m_x + cos(m_hdg - Math::PI_DIV2 - Math::PI) * radius;
-			y = m_y + sin(m_hdg - Math::PI_DIV2 - Math::PI) * radius;
+			x = m_x + cos(m_hdg + Math::PI_DIV2) * radius;
+			y = m_y + sin(m_hdg + Math::PI_DIV2) * radius;
 		}
 	}
 

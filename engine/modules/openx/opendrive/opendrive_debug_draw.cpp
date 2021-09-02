@@ -94,12 +94,34 @@ namespace Echo
 							m_gizmo->drawLine(Vector3(centerX, 0.f, centerY), Vector3(endX, 0.f, endY), Color(0.62745f, 0.62745f, 0.62745f, 0.16f));
 
 							// Draw heading
-							double headingX, headingY;
-							arc->getHeading(headingX, headingY);
+							{
+								double headingX, headingY;
+								arc->getHeading(headingX, headingY);
 
-							Vector3 startPos(geometry->m_x, 0.f, geometry->m_y);
-							Vector3 headingDir = Vector3(headingX, 0.f, headingY) * arc->getRadius() * 0.1f;
-							m_gizmo->drawLine(startPos, startPos + headingDir, Color(0.62745f, 0.62745f, 0.62745f, 0.16f));
+								Vector3 startPos(geometry->m_x, 0.f, geometry->m_y);
+								Vector3 headingDir = Vector3(headingX, 0.f, headingY) * arc->getRadius() * 0.1f;
+								m_gizmo->drawLine(startPos, startPos + headingDir, Color(0.62745f, 0.62745f, 0.62745f, 0.16f));
+							}
+
+							// Draw dir to center
+							{
+								double dirX;
+								double dirY;
+								if (arc->m_curvature < 0.0)
+								{
+									dirX = cos(arc->m_hdg + Math::PI_DIV2 - Math::PI);
+									dirY = sin(arc->m_hdg + Math::PI_DIV2 - Math::PI);
+								}
+								else
+								{
+									dirX = cos(arc->m_hdg - Math::PI_DIV2 - Math::PI);
+									dirY = sin(arc->m_hdg - Math::PI_DIV2 - Math::PI);
+								}
+
+								Vector3 startPos(geometry->m_x, 0.02f, geometry->m_y);
+								Vector3 headingDir = Vector3(dirX, 0.02f, dirY) * arc->getRadius() * 0.1f;
+								m_gizmo->drawLine(startPos, startPos + headingDir, Color(0.f, 0.62745f, 0.f, 0.36f));
+							}
 						}
 					}
 				}
