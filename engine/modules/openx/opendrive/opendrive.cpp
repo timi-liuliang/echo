@@ -13,6 +13,12 @@ namespace Echo
 		y = sin(m_hdg);
 	}
 
+	void OpenDrive::Geometry::getStart(double& x, double& y)
+	{
+		x = m_x;
+		y = m_y;
+	}
+
 	void OpenDrive::Line::evaluate(double sampleLength, double& x, double& y, double& h)
 	{
 		h = m_hdg;
@@ -127,6 +133,37 @@ namespace Echo
 
 			x = m_x + x2 * cos(m_hdg) - y2 * sin(m_hdg);
 			y = m_y + x2 * sin(m_hdg) + y2 * cos(m_hdg);
+		}
+	}
+
+	void OpenDrive::Spiral::getHeading(double& x, double& y)
+	{
+		if (m_line)
+		{
+			m_line->getHeading(x, y);
+		}
+		else if (m_arc)
+		{
+			m_arc->getHeading(x, y);
+		}
+		else
+		{
+			x = cos(m_h0);
+			y = sin(m_h0);
+		}
+	}
+
+	void OpenDrive::Spiral::getStart(double& x, double& y)
+	{
+		if (m_line || m_arc)
+		{
+			x = m_x;
+			y = m_y;
+		}
+		else
+		{
+			x = m_x0;
+			y = m_y0;
 		}
 	}
 

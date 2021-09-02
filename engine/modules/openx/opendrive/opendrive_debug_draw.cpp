@@ -140,8 +140,8 @@ namespace Echo
 		{
 			double startX, startY;
 			double endX, endY;
-			double startCurvature;
-			double endCurvature;
+			double startH;
+			double endH;
 
 			// Draw arc
 			i32    stepCount = std::max<i32>(i32(spiral->getLength() / 0.1), 1);
@@ -152,22 +152,28 @@ namespace Echo
 				double ds0 = i * stepLength;
 				double ds1 = ds0 + stepLength;
 
-				spiral->evaluate(ds0, startX, startY, startCurvature);
-				spiral->evaluate(ds1, endX, endY, endCurvature);
+				spiral->evaluate(ds0, startX, startY, startH);
+				spiral->evaluate(ds1, endX, endY, endH);
 
 				m_gizmo->drawLine(toVec3(startX, startY), toVec3(endX, endY), arcColor);
-			}
 
-			// Draw heading
-			{
-				double headingX, headingY;
-				spiral->getHeading(headingX, headingY);
-
-				Vector3 startPos = toVec3(spiral->m_x, spiral->m_y);
-				Vector3 headingDir = toVec3(headingX, headingY) * spiral->getLength() * 0.1f;
-				m_gizmo->drawLine(startPos, startPos + headingDir, Color(0.62745f, 0.62745f, 0.62745f, 0.16f));
+				// Arrow
+				if ((i + 1) == stepCount)
+				{
+					drawArrow(endX, endY, endH, arcColor, spiral->getLength()*0.05);
+				}
 			}
 		}
+	}
+
+	void OpenDriveDebugDraw::drawArrow(double endX, double endY, double hdg, Color& color, double length)
+	{
+		Vector3 startPos = toVec3(endX, endY, 0.0);
+		Vector3 dir0 = toVec3(cos(hdg- 3.0 * Math::PI_DIV4), sin(hdg - 3.0 * Math::PI_DIV4), 0.0);
+		Vector3 dir1 = toVec3(cos(hdg + 3.0 * Math::PI_DIV4), sin(hdg + 3.0 * Math::PI_DIV4), 0.0);
+
+		m_gizmo->drawLine(startPos, startPos + dir0, color);
+		m_gizmo->drawLine(startPos, startPos + dir1, color);
 	}
 
 	// Opendrive's coordinate system to Echo's coordinate system

@@ -31,6 +31,7 @@ namespace Echo
 		void drawLine(OpenDrive::Line* line);
 		void drawArc(OpenDrive::Arc* arc);
 		void drawSpiral(OpenDrive::Spiral* spiral);
+		void drawArrow(double endX, double endY, double hdg, Color& color, double length);
 
 	private:
 		Gizmos*		m_gizmo = nullptr;

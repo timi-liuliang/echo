@@ -57,7 +57,10 @@ namespace Echo
 			double getLength() const { return m_length; }
 
 			// Heading
-			void getHeading(double& x, double& y);
+			virtual void getHeading(double& x, double& y);
+
+			// Start position
+			virtual void getStart(double& x, double& y);
 		};
 		typedef vector<Geometry*>::type GeometryArray;
 
@@ -111,6 +114,12 @@ namespace Echo
 
 			// Evaluate
 			virtual void evaluate(double ds, double& x, double& y, double& h) override;
+
+			// Heading
+			virtual void getHeading(double& x, double& y);
+
+			// Start position
+			virtual void getStart(double& x, double& y);
 		};
 
 		// Poly3
