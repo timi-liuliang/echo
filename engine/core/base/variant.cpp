@@ -11,10 +11,16 @@ namespace Echo
 		m_bool = value;
 	}
 
-	Variant::Variant(Real value)
+	Variant::Variant(float value)
 		: m_type(Type::Real)
 	{
-		m_real = value;
+		m_double = value;
+	}
+
+	Variant::Variant(double value)
+		: m_type(Type::Real)
+	{
+		m_double = value;
 	}
 
 	Variant::Variant(int value)
@@ -142,7 +148,7 @@ namespace Echo
 		{
 		case Type::Bool: return StringUtil::ToString(m_bool);
 		case Type::Int: return StringUtil::ToString(m_int);
-		case Type::Real: return StringUtil::ToString(m_real);
+		case Type::Real: return StringUtil::ToString(m_double);
 		case Type::String: return any_cast<String>(m_any);
 		case Type::Vector2: return StringUtil::ToString(any_cast<Vector2>(m_any));
 		case Type::Vector3: return StringUtil::ToString(any_cast<Vector3>(m_any));
@@ -166,7 +172,7 @@ namespace Echo
 		{
 		case Type::Bool: { m_type = Type::Bool; m_bool = StringUtil::ParseBool(str); } return true;
 		case Type::Int: { m_type = Type::Int; m_int = StringUtil::ParseI32(str); } return true;
-		case Type::Real: { m_type = Type::Real; m_real = StringUtil::ParseReal(str); } return true;
+		case Type::Real: { m_type = Type::Real; m_double = StringUtil::ParseDouble(str); } return true;
 		case Type::String: { m_type = Type::String; m_any = str; } return true;
 		case Type::Vector2: { m_type = Type::Vector2; m_any = StringUtil::ParseVec2(str); } return true;
 		case Type::Vector3: { m_type = Type::Vector3; m_any = StringUtil::ParseVec3(str); }return true;

@@ -35,6 +35,11 @@ namespace Echo
 		}
 	}
 
+	void Material::UniformNormalValue::setValue(float value)
+	{
+		setValue(&value);
+	}
+
 	Material::UniformTextureValue::UniformTextureValue(const ShaderProgram::UniformPtr uniform, Material* owner)
 		: m_owner(owner)
 	{
@@ -363,12 +368,12 @@ namespace Echo
 				ShaderParamType uniformType = uniform->m_uniform->m_type;
 				switch (uniformType)
 				{
-				case ShaderParamType::SPT_FLOAT:	uniform->setValue(&(propertyValue.toReal())); break;
+				case ShaderParamType::SPT_FLOAT:	uniform->setValue(propertyValue.toFloat()); break;
 				case ShaderParamType::SPT_VEC2:		uniform->setValue(&(propertyValue.toVector2())); break;
 				case ShaderParamType::SPT_VEC3:		uniform->setValue(&(propertyValue.toVector3())); break;
 				case ShaderParamType::SPT_VEC4:		uniform->setValue(&(propertyValue.toColor())); break;
 				case ShaderParamType::SPT_TEXTURE:  uniform->setTexture(propertyValue.toResPath().getPath()); break;
-				default:							uniform->setValue(&(propertyValue.toReal())); break;
+				default:							uniform->setValue(propertyValue.toFloat()); break;
 				}
 			}
 		}

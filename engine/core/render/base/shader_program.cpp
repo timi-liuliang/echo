@@ -412,12 +412,12 @@ namespace Echo
             {
 				switch (uniform->m_type)
 				{
-				case ShaderParamType::SPT_FLOAT:	uniform->setValueDefault(&(propertyValue.toReal())); break;
+				case ShaderParamType::SPT_FLOAT:	uniform->setValueDefault(propertyValue.toFloat()); break;
                 case ShaderParamType::SPT_VEC2:		uniform->setValueDefault(&(propertyValue.toVector2())); break;
 				case ShaderParamType::SPT_VEC3:		uniform->setValueDefault(&(propertyValue.toVector3())); break;
 				case ShaderParamType::SPT_VEC4:		uniform->setValueDefault(&(propertyValue.toColor())); break;
                 case ShaderParamType::SPT_TEXTURE:  uniform->setTextureDefault(propertyValue.toResPath()); break;
-				default:							uniform->setValueDefault(&(propertyValue.toReal())); break;
+				default:							uniform->setValueDefault(propertyValue.toFloat()); break;
 				}
 
                 return true;

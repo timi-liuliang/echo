@@ -25,6 +25,7 @@ namespace Echo
 			// value
 			virtual const void* getValue() { return nullptr; }
 			virtual void setValue(const void* value) {}
+			virtual void setValue(float value) {}
 
 			// get texture path
 			virtual Texture* getTexture() { return nullptr; }
@@ -48,6 +49,7 @@ namespace Echo
 			// value
 			virtual const void* getValue() override;
 			virtual void setValue(const void* value) override;
+			virtual void setValue(float value) override;
 		};
 
 		struct UniformTextureValue : public UniformValue

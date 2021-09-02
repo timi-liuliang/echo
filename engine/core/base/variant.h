@@ -61,7 +61,8 @@ namespace Echo
 		Variant(bool value);
 		Variant(int value);
 		Variant(ui32 value);
-		Variant(Real value);
+		Variant(float value);
+		Variant(double value);
 		Variant(const String& str);
 		Variant(const Vector2& value);
 		Variant(const Vector3& value);
@@ -89,7 +90,8 @@ namespace Echo
 		operator const bool() const { return m_bool; }
 		operator const int() const { return m_int; }
 		operator const ui32() const { return m_uint; }
-		operator const Real() const { return m_real; }
+		operator const float() const { return m_double; }
+		operator const double() const { return m_double; }
 		operator const Vector2&() const { return any_cast<Vector2>(m_any); }
 		operator const Vector3&() const { return any_cast<Vector3>(m_any); }
 		operator const Vector4&() const { return any_cast<Vector4>(m_any); }
@@ -110,7 +112,8 @@ namespace Echo
 		const bool toBool() const { return m_bool; }
 		const i32  toI32() const { return m_int; }
 		const ui32 toUI32() const { return m_uint; }
-		const Real& toReal() const { return m_real; }
+		const float toFloat() const { return m_double; }
+		const double& toDouble() const { return m_double; }
 		const Vector2& toVector2() const { return any_cast<Vector2>(m_any); }
 		const Vector3& toVector3() const { return any_cast<Vector3>(m_any); }
 		const Vector4& toVector4() const { return any_cast<Vector4>(m_any); }
@@ -139,7 +142,7 @@ namespace Echo
 			bool			m_bool;
 			i32				m_int;
 			ui32			m_uint;
-			float			m_real;
+			double			m_double;
 			mutable Object*	m_obj;
             mutable Signal* m_signal;
 		};

@@ -70,6 +70,7 @@ namespace Echo
 
             // value default
             virtual void setValueDefault(const void* value) {}
+            virtual void setValueDefault(float value) { setValueDefault(&value); }
             virtual vector<Byte>::type& getValueDefault() { static vector<Byte>::type empty; return empty; }
 
             // texture default

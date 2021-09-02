@@ -90,6 +90,11 @@ namespace Echo
 		return (float)lua_tonumber(L, index);
 	}
 
+	template<> INLINE double lua_getvalue<double>(lua_State* L, int index)
+	{
+		return lua_tonumber(L, index);
+	}
+
 	template<> INLINE String lua_getvalue<String>(lua_State* L, int index)
 	{
 		return lua_tostring(L, index);
@@ -281,6 +286,11 @@ namespace Echo
 		lua_pushnumber(state, value);
 	}
 
+	template<> INLINE void lua_pushvalue<double>(lua_State* state, double value)
+	{
+		lua_pushnumber(state, value);
+	}
+
 	template<> INLINE void lua_pushvalue<const Vector2&>(lua_State* state, const Vector2& value)
 	{
 		lua_newtable(state);
@@ -410,7 +420,7 @@ namespace Echo
 		case Variant::Type::Bool:	lua_pushvalue<bool>(state, value->toBool()); break;
 		case Variant::Type::Int:	lua_pushvalue<i32>(state, value->toI32()); break;
 		case Variant::Type::UInt:	lua_pushvalue<ui32>(state, value->toUI32()); break;
-		case Variant::Type::Real:	lua_pushvalue<float>(state, value->toReal()); break;
+		case Variant::Type::Real:	lua_pushvalue<double>(state, value->toDouble()); break;
 		default:					lua_pushnil(state); lua_binder_error("lua stack push value error, unknow c type"); break;
 		}
 	}
