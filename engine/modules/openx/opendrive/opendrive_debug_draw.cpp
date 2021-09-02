@@ -1,7 +1,6 @@
 #include "opendrive_debug_draw.h"
 #include "opendrive_module.h"
 #include "engine/core/main/Engine.h"
-#include "opendrive.h"
 
 namespace Echo
 {
@@ -43,88 +42,130 @@ namespace Echo
 			{
 				for (OpenDrive::Geometry* geometry : road.m_geometries)
 				{
-					if (geometry && geometry->m_type == OpenDrive::Geometry::Type::Line)
+					if (geometry)
 					{
-						OpenDrive::Line* line = ECHO_DOWN_CAST<OpenDrive::Line*>(geometry);
-						if (line)
-						{
-							double startX, startY;
-							double endX, endY;
-							double  startCurvature;
-							double  endCurvature;
-
-							line->evaluate(0, startX, startY, startCurvature);
-							line->evaluate(line->getLength(), endX, endY, endCurvature);
-
-							m_gizmo->drawLine(toVec3(startX, startY), toVec3(endX, endY), Color::fromRGBA(247, 56, 56, 200));
-						}
-					}
-					else if (geometry && geometry->m_type == OpenDrive::Geometry::Type::Arc)
-					{
-						OpenDrive::Arc* arc = ECHO_DOWN_CAST<OpenDrive::Arc*>(geometry);
-						if (arc)
-						{
-							double startX, startY;
-							double endX, endY;
-							double startCurvature;
-							double endCurvature;
-
-							// Draw arc
-							i32    stepCount = std::max<i32>(i32(arc->getLength() / 0.1), 1);
-							double stepLength = arc->getLength() / stepCount;
-							Color  arcColor = arc->m_curvature > 0.0 ? Color::fromRGBA(247, 56, 56, 200) : Color::fromRGBA(247, 56, 56, 200) * 0.75f;
-							for (i32 i = 0; i < stepCount; i++)
-							{
-								double ds0 = i * stepLength;
-								double ds1 = ds0 + stepLength;
-
-								arc->evaluate(ds0, startX, startY, startCurvature);
-								arc->evaluate(ds1, endX, endY, endCurvature);
-
-								m_gizmo->drawLine(toVec3(startX, startY), toVec3(endX, endY), arcColor);
-							}
-
-							// Draw sector edge
-							double centerX, centerY;
-							arc->getCenter(centerX, centerY);
-							arc->evaluate(0.0, startX, startY, startCurvature);
-							arc->evaluate(arc->getLength(), endX, endY, endCurvature);
-
-							m_gizmo->drawLine(toVec3(centerX, centerY), toVec3(startX, startY), Color(0.62745f, 0.62745f, 0.62745f, 0.16f));
-							m_gizmo->drawLine(toVec3(centerX, centerY), toVec3(endX, endY), Color(0.62745f, 0.62745f, 0.62745f, 0.16f));
-
-							// Draw heading
-							{
-								double headingX, headingY;
-								arc->getHeading(headingX, headingY);
-
-								Vector3 startPos = toVec3(geometry->m_x, geometry->m_y);
-								Vector3 headingDir = toVec3(headingX, headingY) * arc->getRadius() * 0.1f;
-								m_gizmo->drawLine(startPos, startPos + headingDir, Color(0.62745f, 0.62745f, 0.62745f, 0.16f));
-							}
-
-							// Draw dir to center
-							{
-								double dirX;
-								double dirY;
-								if (arc->m_curvature < 0.0)
-								{
-									dirX = cos(arc->m_hdg + Math::PI_DIV2 - Math::PI);
-									dirY = sin(arc->m_hdg + Math::PI_DIV2 - Math::PI);
-								}
-								else
-								{
-									dirX = cos(arc->m_hdg - Math::PI_DIV2 - Math::PI);
-									dirY = sin(arc->m_hdg - Math::PI_DIV2 - Math::PI);
-								}
-
-								Vector3 startPos = toVec3(geometry->m_x, geometry->m_y, 0.02f);
-								Vector3 headingDir = toVec3(dirX, dirY, 0.02f) * arc->getRadius() * 0.1f;
-								m_gizmo->drawLine(startPos, startPos + headingDir, Color(0.f, 0.62745f, 0.f, 0.36f));
-							}
-						}
+						if		(geometry->m_type == OpenDrive::Geometry::Type::Line)	drawLine(ECHO_DOWN_CAST<OpenDrive::Line*>(geometry));
+						else if (geometry->m_type == OpenDrive::Geometry::Type::Arc)	drawArc(ECHO_DOWN_CAST<OpenDrive::Arc*>(geometry));
+						else if (geometry->m_type == OpenDrive::Geometry::Type::Spiral)	drawSpiral(ECHO_DOWN_CAST<OpenDrive::Spiral*>(geometry));
 					}
 				}
+			}
+		}
+	}
+
+	void OpenDriveDebugDraw::drawLine(OpenDrive::Line* line)
+	{
+		if (line)
+		{
+			double startX, startY;
+			double endX, endY;
+			double  startCurvature;
+			double  endCurvature;
+
+			line->evaluate(0, startX, startY, startCurvature);
+			line->evaluate(line->getLength(), endX, endY, endCurvature);
+
+			m_gizmo->drawLine(toVec3(startX, startY), toVec3(endX, endY), Color::fromRGBA(202, 81, 0, 200));
+		}
+	}
+
+	void OpenDriveDebugDraw::drawArc(OpenDrive::Arc* arc)
+	{
+		if (arc)
+		{
+			double startX, startY;
+			double endX, endY;
+			double startCurvature;
+			double endCurvature;
+
+			// Draw arc
+			i32    stepCount = std::max<i32>(i32(arc->getLength() / 0.1), 1);
+			double stepLength = arc->getLength() / stepCount;
+			Color  arcColor = arc->m_curvature > 0.0 ? Color::fromRGBA(247, 56, 56, 200) : Color::fromRGBA(247, 56, 56, 200) * 0.75f;
+			for (i32 i = 0; i < stepCount; i++)
+			{
+				double ds0 = i * stepLength;
+				double ds1 = ds0 + stepLength;
+
+				arc->evaluate(ds0, startX, startY, startCurvature);
+				arc->evaluate(ds1, endX, endY, endCurvature);
+
+				m_gizmo->drawLine(toVec3(startX, startY), toVec3(endX, endY), arcColor);
+			}
+
+			// Draw sector edge
+			double centerX, centerY;
+			arc->getCenter(centerX, centerY);
+			arc->evaluate(0.0, startX, startY, startCurvature);
+			arc->evaluate(arc->getLength(), endX, endY, endCurvature);
+
+			m_gizmo->drawLine(toVec3(centerX, centerY), toVec3(startX, startY), Color(0.62745f, 0.62745f, 0.62745f, 0.16f));
+			m_gizmo->drawLine(toVec3(centerX, centerY), toVec3(endX, endY), Color(0.62745f, 0.62745f, 0.62745f, 0.16f));
+
+			// Draw heading
+			{
+				double headingX, headingY;
+				arc->getHeading(headingX, headingY);
+
+				Vector3 startPos = toVec3(arc->m_x, arc->m_y);
+				Vector3 headingDir = toVec3(headingX, headingY) * arc->getRadius() * 0.1f;
+				m_gizmo->drawLine(startPos, startPos + headingDir, Color(0.62745f, 0.62745f, 0.62745f, 0.16f));
+			}
+
+			// Draw dir to center
+			{
+				double dirX;
+				double dirY;
+				if (arc->m_curvature < 0.0)
+				{
+					dirX = cos(arc->m_hdg + Math::PI_DIV2 - Math::PI);
+					dirY = sin(arc->m_hdg + Math::PI_DIV2 - Math::PI);
+				}
+				else
+				{
+					dirX = cos(arc->m_hdg - Math::PI_DIV2 - Math::PI);
+					dirY = sin(arc->m_hdg - Math::PI_DIV2 - Math::PI);
+				}
+
+				Vector3 startPos = toVec3(arc->m_x, arc->m_y, 0.02f);
+				Vector3 headingDir = toVec3(dirX, dirY, 0.02f) * arc->getRadius() * 0.1f;
+				m_gizmo->drawLine(startPos, startPos + headingDir, Color(0.f, 0.62745f, 0.f, 0.36f));
+			}
+		}
+	}
+
+	void OpenDriveDebugDraw::drawSpiral(OpenDrive::Spiral* spiral)
+	{
+		if (spiral)
+		{
+			double startX, startY;
+			double endX, endY;
+			double startCurvature;
+			double endCurvature;
+
+			// Draw arc
+			i32    stepCount = std::max<i32>(i32(spiral->getLength() / 0.1), 1);
+			double stepLength = spiral->getLength() / stepCount;
+			Color  arcColor = spiral->m_curvatureStart + spiral->m_curvatureEnd > 0.0 ? Color::fromRGBA(56, 56, 247, 200) : Color::fromRGBA(56, 56, 247, 200) * 0.75f;
+			for (i32 i = 0; i < stepCount; i++)
+			{
+				double ds0 = i * stepLength;
+				double ds1 = ds0 + stepLength;
+
+				spiral->evaluate(ds0, startX, startY, startCurvature);
+				spiral->evaluate(ds1, endX, endY, endCurvature);
+
+				m_gizmo->drawLine(toVec3(startX, startY), toVec3(endX, endY), arcColor);
+			}
+
+			// Draw heading
+			{
+				double headingX, headingY;
+				spiral->getHeading(headingX, headingY);
+
+				Vector3 startPos = toVec3(spiral->m_x, spiral->m_y);
+				Vector3 headingDir = toVec3(headingX, headingY) * spiral->getLength() * 0.1f;
+				m_gizmo->drawLine(startPos, startPos + headingDir, Color(0.62745f, 0.62745f, 0.62745f, 0.16f));
 			}
 		}
 	}

@@ -1,4 +1,6 @@
 #include "opendrive.h"
+#include "opendrive_spiral.h"
+#include "opendrive_debug_draw.h"
 #include "opendrive_module.h"
 #include "engine/core/io/io.h"
 #include "engine/core/main/engine.h"
@@ -63,9 +65,69 @@ namespace Echo
 		}
 	}
 
+	OpenDrive::Spiral::Spiral(double s, double x, double y, double hdg, double length, double curvatureStart, double curvatureEnd)
+		: Geometry(s, x, y, hdg, length, Geometry::Spiral)
+		, m_curvatureStart(curvatureStart)
+		, m_curvatureEnd(curvatureEnd)
+	{
+		m_cdot = (m_curvatureEnd - m_curvatureStart) / length;
+		if (std::fabs(m_cdot) < FLT_EPSILON)
+		{
+			if (std::fabs(m_curvatureStart < FLT_EPSILON))
+			{
+				// Line
+				m_line = EchoNew(OpenDrive::Line(s, x, y, hdg, length));
+			}
+			else
+			{
+				// Arc
+				m_arc = EchoNew(OpenDrive::Arc(s, x, y, hdg, length, curvatureStart));
+			}
+		}
+		else
+		{
+			// Not starting from zero curvature (straight line)
+			// How long do we need to follow the spiral to reach start curve value
+			m_s0 = m_curvatureStart / m_cdot;
+
+			// Find out x, y, heading of start position
+			odrSpiral(m_s0, m_cdot, &m_x0, &m_y0, &m_h0);
+		}
+	}
+
+	OpenDrive::Spiral::~Spiral()
+	{
+		EchoSafeDelete(m_line, Line);
+		EchoSafeDelete(m_arc, Arc);
+	}
+
 	void OpenDrive::Spiral::evaluate(double ds, double& x, double& y, double& h)
 	{
+		if (m_line)
+		{
+			m_line->evaluate(ds, x, y, h);
+		}
+		else if (m_arc)
+		{
+			m_arc->evaluate(ds, x, y, h);
+		}
+		else
+		{
+			double xTemp, yTemp, hTemp;
+			odrSpiral(m_s0 + ds, m_cdot, &xTemp, &yTemp, &hTemp);
 
+			// heading
+			h = hTemp - m_h0 + m_hdg;
+
+			// location
+			double x1 = xTemp - m_x0;
+			double y1 = yTemp - m_y0;
+			double x2 = x1 * cos(-m_h0) - y1 * sin(-m_h0);
+			double y2 = x1 * sin(-m_h0) + y1 * cos(-m_h0);
+
+			x = m_x + x2 * cos(m_hdg) - y2 * sin(m_hdg);
+			y = m_y + x2 * sin(m_hdg) + y2 * cos(m_hdg);
+		}
 	}
 
 	void OpenDrive::Poly3::evaluate(double ds, double& x, double& y, double& h)
@@ -79,13 +141,16 @@ namespace Echo
 	}
 
 	OpenDrive::OpenDrive()
+		: Node()
 	{
-
+		m_debugDraw = EchoNew(OpenDriveDebugDraw);
 	}
 
 	OpenDrive::~OpenDrive()
 	{
 		reset();
+
+		EchoSafeDelete(m_debugDraw, OpenDriveDebugDraw);
 	}
 
 	void OpenDrive::bindMethods()
@@ -193,17 +258,17 @@ namespace Echo
 			(m_debugDrawOption == DebugDrawOption::Editor && !IsGame) ||
 			(m_debugDrawOption == DebugDrawOption::Game && IsGame))
 		{
-			m_debugDraw.setEnable(true);
-			m_debugDraw.onDriveChanged(this);
+			m_debugDraw->setEnable(true);
+			m_debugDraw->onDriveChanged(this);
 		}
 		else
 		{
-			m_debugDraw.setEnable(false);
+			m_debugDraw->setEnable(false);
 		}
 	}
 
 	void OpenDrive::updateInternal(float elapsedTime)
 	{
-		m_debugDraw.update(elapsedTime);
+		m_debugDraw->update(elapsedTime);
 	}
 }

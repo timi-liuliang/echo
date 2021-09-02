@@ -2,6 +2,7 @@
 
 #include "engine/core/base/object.h"
 #include "engine/core/gizmos/Gizmos.h"
+#include "opendrive.h"
 
 namespace Echo
 {
@@ -24,6 +25,12 @@ namespace Echo
 	public:
 		// Convert
 		Vector3 toVec3(double x, double y, double h=0.0);
+
+	protected:
+		// Draw
+		void drawLine(OpenDrive::Line* line);
+		void drawArc(OpenDrive::Arc* arc);
+		void drawSpiral(OpenDrive::Spiral* spiral);
 
 	private:
 		Gizmos*		m_gizmo = nullptr;

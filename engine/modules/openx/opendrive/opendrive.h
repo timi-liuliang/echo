@@ -2,10 +2,11 @@
 
 #include "engine/core/scene/node.h"
 #include "thirdparty/pugixml/pugixml.hpp"
-#include "opendrive_debug_draw.h"
 
 namespace Echo
 {
+	class OpenDriveDebugDraw;
+
 	// https://www.asam.net/standards/detail/opendrive/
 	class OpenDrive : public Node
 	{
@@ -94,14 +95,19 @@ namespace Echo
 		// Spiral
 		struct Spiral : public Geometry
 		{
-			double	m_curvatureStart = 0.0;
-			double	m_curvatureEnd = 0.0;
+			double m_curvatureStart = 0.0;
+			double m_curvatureEnd = 0.0;
+			double m_cdot = 0.0;
+			double m_x0 = 0.0;
+			double m_y0 = 0.0;
+			double m_h0 = 0.0;
+			double m_s0 = 0.0;
 
-			Spiral(double s, double x, double y, double hdg, double length, double curvatureStart, double curvatureEnd)
-				: Geometry(s, x, y, hdg, length, Geometry::Spiral)
-				, m_curvatureStart(curvatureStart)
-				, m_curvatureEnd(curvatureEnd)
-			{}
+			OpenDrive::Line*  m_line = nullptr;
+			OpenDrive::Arc*   m_arc = nullptr;
+
+			Spiral(double s, double x, double y, double hdg, double length, double curvatureStart, double curvatureEnd);
+			virtual ~Spiral();
 
 			// Evaluate
 			virtual void evaluate(double ds, double& x, double& y, double& h) override;
@@ -163,7 +169,7 @@ namespace Echo
 	protected:
 		ResourcePath		m_xodrRes = ResourcePath("", ".xodr");
 		vector<Road>::type	m_roads;
-		OpenDriveDebugDraw	m_debugDraw;
+		OpenDriveDebugDraw*	m_debugDraw = nullptr;
 		DebugDrawOption		m_debugDrawOption = DebugDrawOption::Editor;
 	};
 }
