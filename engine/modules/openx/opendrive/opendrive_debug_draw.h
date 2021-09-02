@@ -21,8 +21,13 @@ namespace Echo
 		// Update
 		void update(float elapsedTime);
 
+	public:
+		// Convert
+		Vector3 toVec3(double x, double y, double h=0.0);
+
 	private:
 		Gizmos*		m_gizmo = nullptr;
 		bool		m_isEnable = false;
+		bool		m_is2D = false;
 	};
 }

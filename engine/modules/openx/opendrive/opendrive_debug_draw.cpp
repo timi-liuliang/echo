@@ -56,7 +56,7 @@ namespace Echo
 							line->evaluate(0, startX, startY, startCurvature);
 							line->evaluate(line->getLength(), endX, endY, endCurvature);
 
-							m_gizmo->drawLine(Vector3(startX, 0.f, startY), Vector3(endX, 0.f, endY), Color::fromRGBA(247, 56, 56, 200));
+							m_gizmo->drawLine(toVec3(startX, startY), toVec3(endX, endY), Color::fromRGBA(247, 56, 56, 200));
 						}
 					}
 					else if (geometry && geometry->m_type == OpenDrive::Geometry::Type::Arc)
@@ -81,7 +81,7 @@ namespace Echo
 								arc->evaluate(ds0, startX, startY, startCurvature);
 								arc->evaluate(ds1, endX, endY, endCurvature);
 
-								m_gizmo->drawLine(Vector3(startX, 0.f, startY), Vector3(endX, 0.f, endY), arcColor);
+								m_gizmo->drawLine(toVec3(startX, startY), toVec3(endX, endY), arcColor);
 							}
 
 							// Draw sector edge
@@ -90,16 +90,16 @@ namespace Echo
 							arc->evaluate(0.0, startX, startY, startCurvature);
 							arc->evaluate(arc->getLength(), endX, endY, endCurvature);
 
-							m_gizmo->drawLine(Vector3(centerX, 0.f, centerY), Vector3(startX, 0.f, startY), Color(0.62745f, 0.62745f, 0.62745f, 0.16f));
-							m_gizmo->drawLine(Vector3(centerX, 0.f, centerY), Vector3(endX, 0.f, endY), Color(0.62745f, 0.62745f, 0.62745f, 0.16f));
+							m_gizmo->drawLine(toVec3(centerX, centerY), toVec3(startX, startY), Color(0.62745f, 0.62745f, 0.62745f, 0.16f));
+							m_gizmo->drawLine(toVec3(centerX, centerY), toVec3(endX, endY), Color(0.62745f, 0.62745f, 0.62745f, 0.16f));
 
 							// Draw heading
 							{
 								double headingX, headingY;
 								arc->getHeading(headingX, headingY);
 
-								Vector3 startPos(geometry->m_x, 0.f, geometry->m_y);
-								Vector3 headingDir = Vector3(headingX, 0.f, headingY) * arc->getRadius() * 0.1f;
+								Vector3 startPos = toVec3(geometry->m_x, geometry->m_y);
+								Vector3 headingDir = toVec3(headingX, headingY) * arc->getRadius() * 0.1f;
 								m_gizmo->drawLine(startPos, startPos + headingDir, Color(0.62745f, 0.62745f, 0.62745f, 0.16f));
 							}
 
@@ -118,14 +118,29 @@ namespace Echo
 									dirY = sin(arc->m_hdg - Math::PI_DIV2 - Math::PI);
 								}
 
-								Vector3 startPos(geometry->m_x, 0.02f, geometry->m_y);
-								Vector3 headingDir = Vector3(dirX, 0.02f, dirY) * arc->getRadius() * 0.1f;
+								Vector3 startPos = toVec3(geometry->m_x, geometry->m_y, 0.02f);
+								Vector3 headingDir = toVec3(dirX, dirY, 0.02f) * arc->getRadius() * 0.1f;
 								m_gizmo->drawLine(startPos, startPos + headingDir, Color(0.f, 0.62745f, 0.f, 0.36f));
 							}
 						}
 					}
 				}
 			}
+		}
+	}
+
+	// Opendrive's coordinate system to Echo's coordinate system
+	Vector3 OpenDriveDebugDraw::toVec3(double x, double y, double h)
+	{
+		if (m_is2D)
+		{
+			// 2d
+			return Vector3(x, y, h);
+		}
+		else
+		{
+			// 3d
+			return Vector3(x, h, -y);
 		}
 	}
 

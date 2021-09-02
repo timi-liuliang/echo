@@ -45,7 +45,8 @@ namespace Echo
 		}
 	}
 
-	// Engine's coordin
+	// Watch out opendrive's inertial system
+	// https://www.asam.net/index.php?eID=dumpFile&t=f&f=4422&token=e590561f3c39aa2260e5442e29e93f6693d1cccd#top-3e20902e-5698-44b3-8445-6ceb7849021f
 	void OpenDrive::Arc::getCenter(double& x, double& y)
 	{
 		double radius = getRadius();
