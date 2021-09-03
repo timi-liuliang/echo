@@ -51,6 +51,4 @@ TEST(RANDOM, random_1_7)
 		assert(rand >= 1 && rand <= 7);
 		randCount_7[rand-1]++;
 	}
-
-	int a = 10;
 }

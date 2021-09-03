@@ -40,7 +40,7 @@ IF(${ECHO_PLATFORM_WINDOWS})
 ENDIF()
 
 # set module name
-SET(MODULE_NAME Echo)
+SET(MODULE_NAME echo)
 
 # set path
 SET(MODULE_HEADER_PATH   ${ECHO_ROOT_PATH}/editor/echo)
@@ -176,6 +176,9 @@ ENDIF()
 
 # set folder
 SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES FOLDER "editor")
+
+# set name
+SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES OUTPUT_NAME "Echo")
 
 IF(MSVC)
 	# set target properties
