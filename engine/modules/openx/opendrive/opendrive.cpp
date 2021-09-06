@@ -290,7 +290,7 @@ namespace Echo
 				}
 				else if (StringUtil::Equal(typeNode.name(), "spiral"))
 				{
-					double curvatureStart = typeNode.attribute("curvStatrt").as_double();
+					double curvatureStart = typeNode.attribute("curvStart").as_double();
 					double curvatureEnd = typeNode.attribute("curvEnd").as_double();
 					road.m_geometries.push_back(EchoNew(Spiral(s, x, y, hdg, length, curvatureStart, curvatureEnd)));
 				}
