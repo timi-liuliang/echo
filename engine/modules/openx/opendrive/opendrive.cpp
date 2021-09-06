@@ -19,6 +19,27 @@ namespace Echo
 		y = m_y;
 	}
 
+	double OpenDrive::Geometry::getHdg() const
+	{
+		auto getAngleInInterval2PI = [](double angle)
+		{
+			double angle2 = std::fmod(angle, 2 * Math::PI);
+
+			if (angle2 < 0)
+			{
+				angle2 += 2 * Math::PI;
+			}
+			else if (angle2 == -0)
+			{
+				angle2 = 0;
+			}
+
+			return angle2;
+		};
+
+		return getAngleInInterval2PI(m_hdg);
+	}
+
 	void OpenDrive::Line::evaluate(double sampleLength, double& x, double& y, double& h)
 	{
 		h = m_hdg;
@@ -76,10 +97,10 @@ namespace Echo
 		, m_curvatureStart(curvatureStart)
 		, m_curvatureEnd(curvatureEnd)
 	{
-		m_cdot = (m_curvatureEnd - m_curvatureStart) / length;
+		m_cdot = (m_curvatureEnd - m_curvatureStart) / m_length;
 		if (std::fabs(m_cdot) < FLT_EPSILON)
 		{
-			if (std::fabs(m_curvatureStart < FLT_EPSILON))
+			if (std::fabs(m_curvatureStart) < FLT_EPSILON)
 			{
 				// Line
 				m_line = EchoNew(OpenDrive::Line(s, x, y, hdg, length));
@@ -92,12 +113,15 @@ namespace Echo
 		}
 		else
 		{
-			// Not starting from zero curvature (straight line)
-			// How long do we need to follow the spiral to reach start curve value
-			m_s0 = m_curvatureStart / m_cdot;
+			if (std::fabs(m_curvatureStart) > FLT_EPSILON)
+			{
+				// Not starting from zero curvature (straight line)
+				// How long do we need to follow the spiral to reach start curve value
+				m_s0 = m_curvatureStart / m_cdot;
 
-			// Find out x, y, heading of start position
-			odrSpiral(m_s0, m_cdot, &m_x0, &m_y0, &m_h0);
+				// Find out x, y, heading of start position
+				odrSpiral(m_s0, m_cdot, &m_x0, &m_y0, &m_h0);
+			}
 		}
 	}
 
@@ -123,7 +147,7 @@ namespace Echo
 			odrSpiral(m_s0 + ds, m_cdot, &xTemp, &yTemp, &hTemp);
 
 			// heading
-			h = hTemp - m_h0 + m_hdg;
+			h = hTemp - m_h0 + getHdg();
 
 			// location
 			double x1 = xTemp - m_x0;
@@ -131,8 +155,8 @@ namespace Echo
 			double x2 = x1 * cos(-m_h0) - y1 * sin(-m_h0);
 			double y2 = x1 * sin(-m_h0) + y1 * cos(-m_h0);
 
-			x = m_x + x2 * cos(m_hdg) - y2 * sin(m_hdg);
-			y = m_y + x2 * sin(m_hdg) + y2 * cos(m_hdg);
+			x = m_x + x2 * cos(getHdg()) - y2 * sin(getHdg());
+			y = m_y + x2 * sin(getHdg()) + y2 * cos(getHdg());
 		}
 	}
 

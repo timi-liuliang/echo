@@ -61,6 +61,9 @@ namespace Echo
 
 			// Start position
 			virtual void getStart(double& x, double& y);
+
+			// Hdg
+			virtual double getHdg() const;
 		};
 		typedef vector<Geometry*>::type GeometryArray;
 

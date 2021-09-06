@@ -65,7 +65,7 @@ namespace Echo
 			line->evaluate(0, startX, startY, startCurvature);
 			line->evaluate(line->getLength(), endX, endY, endCurvature);
 
-			m_gizmo->drawLine(toVec3(startX, startY), toVec3(endX, endY), Color::fromRGBA(202, 81, 0, 200));
+			m_gizmo->drawLine(toVec3(startX, startY), toVec3(endX, endY), m_lineColor);
 		}
 	}
 
@@ -81,7 +81,7 @@ namespace Echo
 			// Draw arc
 			i32    stepCount = std::max<i32>(i32(arc->getLength() / 0.1), 1);
 			double stepLength = arc->getLength() / stepCount;
-			Color  arcColor = arc->m_curvature > 0.0 ? Color::fromRGBA(247, 56, 56, 200) : Color::fromRGBA(247, 56, 56, 200) * 0.75f;
+			Color  arcColor = arc->m_curvature > 0.0 ? m_arcColor : m_arcColor * 0.75f;
 			for (i32 i = 0; i < stepCount; i++)
 			{
 				double ds0 = i * stepLength;
@@ -146,7 +146,7 @@ namespace Echo
 			// Draw arc
 			i32    stepCount = std::max<i32>(i32(spiral->getLength() / 0.1), 1);
 			double stepLength = spiral->getLength() / stepCount;
-			Color  arcColor = spiral->m_curvatureStart + spiral->m_curvatureEnd > 0.0 ? Color::fromRGBA(56, 56, 247, 200) : Color::fromRGBA(56, 56, 247, 200) * 0.75f;
+			Color  color = spiral->m_curvatureStart + spiral->m_curvatureEnd > 0.0 ? m_spiralColor : m_spiralColor * 0.75f;
 			for (i32 i = 0; i < stepCount; i++)
 			{
 				double ds0 = i * stepLength;
@@ -155,12 +155,12 @@ namespace Echo
 				spiral->evaluate(ds0, startX, startY, startH);
 				spiral->evaluate(ds1, endX, endY, endH);
 
-				m_gizmo->drawLine(toVec3(startX, startY), toVec3(endX, endY), arcColor);
+				m_gizmo->drawLine(toVec3(startX, startY), toVec3(endX, endY), color);
 
 				// Arrow
 				if ((i + 1) == stepCount)
 				{
-					drawArrow(endX, endY, endH, arcColor, spiral->getLength()*0.05);
+					drawArrow(endX, endY, endH, color, Math::Min(spiral->getLength()*0.05, 0.1));
 				}
 			}
 		}
@@ -172,8 +172,8 @@ namespace Echo
 		Vector3 dir0 = toVec3(cos(hdg- 3.0 * Math::PI_DIV4), sin(hdg - 3.0 * Math::PI_DIV4), 0.0);
 		Vector3 dir1 = toVec3(cos(hdg + 3.0 * Math::PI_DIV4), sin(hdg + 3.0 * Math::PI_DIV4), 0.0);
 
-		m_gizmo->drawLine(startPos, startPos + dir0, color);
-		m_gizmo->drawLine(startPos, startPos + dir1, color);
+		m_gizmo->drawLine(startPos, startPos + dir0 * length, color);
+		m_gizmo->drawLine(startPos, startPos + dir1 * length, color);
 	}
 
 	// Opendrive's coordinate system to Echo's coordinate system
