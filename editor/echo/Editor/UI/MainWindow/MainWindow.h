@@ -91,9 +91,6 @@ namespace Studio
 		void setSubEdit(const char* subEditName);
 		void onSubEditChanged(const QString& subeditName);
 
-		// view mode
-		void onViewModeChanged(const QString& subeditName);
-
 		// change theme
 		void onChooseTheme();
 		void onChooseThemeDark();
@@ -172,7 +169,6 @@ namespace Studio
 		DebuggerPanel*		m_debuggerPanel = nullptr;
 		QProcess			m_gameProcess;
 		QComboBox*			m_subEditComboBox = nullptr;
-		QComboBox*			m_viewMode = nullptr;
 		AboutWindow*		m_aboutWindow = nullptr;
 		QMenu*				m_cameraSettingsMenu = nullptr;
 	};

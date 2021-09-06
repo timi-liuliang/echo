@@ -97,14 +97,6 @@ namespace Studio
 		m_toolBar->addAction(m_actionPlayGame);
 		m_toolBar->addAction(m_actionStopGame);
 
-		// Polygon Mode
-		m_viewMode = new QComboBox(m_toolBar);
-		m_viewMode->addItem("Fill");
-		m_viewMode->addItem("WireFrame");
-		m_toolBar->addWidget(m_viewMode);
-
-		QObject::connect(m_viewMode, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(onViewModeChanged(const QString&)));
-
 		// Camera settings
 		//m_toolBar->addAction(m_actionEditorCameraSettings);
 		//QObject::connect(m_actionEditorCameraSettings, SIGNAL(triggered(bool)), this, SLOT(onClickEditorCameraSettings()));
@@ -458,18 +450,6 @@ namespace Studio
 				renderWindow->switchToController3d();
 
 			AStudio::instance()->getConfigMgr()->setValue("main_window_sub_edit_type", subeditName.toStdString().c_str());
-		}
-	}
-
-	void MainWindow::onViewModeChanged(const QString& viewMode)
-	{
-		if (viewMode == "Fill")
-		{
-			Echo::EditorRenderSettings::instance()->setPolygonMode("Fill");
-		}
-		else
-		{
-			Echo::EditorRenderSettings::instance()->setPolygonMode("WireFrame");
 		}
 	}
 
