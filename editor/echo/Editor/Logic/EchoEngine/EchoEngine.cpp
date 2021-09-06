@@ -15,6 +15,7 @@
 #include <engine/core/util/TimeProfiler.h>
 #include <engine/core/util/hash_generator.h>
 #include <engine/core/io/IO.h>
+#include "editor_general_settings.h"
 
 namespace Studio
 {
@@ -189,18 +190,20 @@ namespace Studio
 		int xOffset = centerPos.x;
 		int yOffset = abs(centerPos.y);
 		int zOffset = centerPos.z;
-
-		// calc y alpha scale
-		float startGrayFadeDistance = 10.f;
-		float endGrayFadeDistance = 35.f;
-		float yGrayAlphaScale = 1.f - Echo::Math::Clamp((float)abs(yOffset), startGrayFadeDistance, endGrayFadeDistance) / (endGrayFadeDistance - startGrayFadeDistance);
-
-		float startBlueFadeDistance = 10.f;
-		float endBlueFadeDistance = 200.f;
-		float yBlueAlphaScale = 1.f - Echo::Math::Clamp((float)abs(yOffset), startBlueFadeDistance, endBlueFadeDistance) / (endBlueFadeDistance - startBlueFadeDistance);
 			
+		m_gizmosNodeGrid3d->setVisible(Echo::EditorGeneralSettings::instance()->isShow3dGrid());
+
 		if (xOffset != xOffsetBefore || zOffset != zOffsetBefore)
 		{
+			// calc y alpha scale
+			float startGrayFadeDistance = 10.f;
+			float endGrayFadeDistance = 35.f;
+			float yGrayAlphaScale = 1.f - Echo::Math::Clamp((float)abs(yOffset), startGrayFadeDistance, endGrayFadeDistance) / (endGrayFadeDistance - startGrayFadeDistance);
+
+			float startBlueFadeDistance = 10.f;
+			float endBlueFadeDistance = 200.f;
+			float yBlueAlphaScale = 1.f - Echo::Math::Clamp((float)abs(yOffset), startBlueFadeDistance, endBlueFadeDistance) / (endBlueFadeDistance - startBlueFadeDistance);
+
 			m_gizmosNodeGrid3d->clear();
 			m_gizmosNodeGrid3d->setRenderType("3d");
 

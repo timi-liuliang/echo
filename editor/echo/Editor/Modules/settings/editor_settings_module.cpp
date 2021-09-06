@@ -1,5 +1,6 @@
 #include "editor_settings_module.h"
 #include "editor_settings.h"
+#include "editor_general_settings.h"
 #include "editor_camera_settings.h"
 #include "editor_render_settings.h"
 
@@ -30,6 +31,7 @@ namespace Echo
     void EditorSettingsModule::registerTypes()
     {
         Class::registerType<EditorSettings>();
+		Class::registerType<EditorGeneralSettings>();
         Class::registerType<EditorCameraSettings>();
 		Class::registerType<EditorRenderSettings>();
     }
