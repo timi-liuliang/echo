@@ -125,9 +125,28 @@ namespace Echo
 			virtual void getStart(double& x, double& y);
 		};
 
+		struct Polynomial
+		{
+			double m_a = 0.0;
+			double m_b = 0.0;
+			double m_c = 0.0;
+			double m_d = 0.0;
+			double m_scale = 1.0;
+
+			Polynomial() {}
+			Polynomial(double a, double b, double c, double d, double scale);
+
+			// Set
+			void set(double a, double b, double c, double d, double scale = 1.0);
+		};
+
 		// Poly3
 		struct Poly3 : public Geometry
 		{
+			Polynomial	m_poly3;
+
+			Poly3(double s, double x, double y, double hdg, double length, double a, double b, double c, double d);
+
 			// Evaluate
 			virtual void evaluate(double ds, double& x, double& y, double& h) override;
 		};
@@ -135,6 +154,25 @@ namespace Echo
 		// ParamPoly3
 		struct ParamPoly3 : public Geometry
 		{
+			enum RangeType
+			{
+				Unknown,
+				Normalized,
+				ArcLength,
+			};
+
+			Polynomial	m_poly3U;
+			Polynomial	m_poly3V;
+
+			ParamPoly3( double s, double x, double y, double hdg, double length, RangeType type,
+						double aU, double bU, double cU, double dU,
+						double aV, double bV, double cV, double dV)
+				: Geometry(s, x, y, hdg, length, Geometry::ParamPoly3)
+			{
+				m_poly3U.set(aU, bU, cU, dU, type == RangeType::Normalized ? 1.0 / length : 1.0);
+				m_poly3V.set(aV, bV, cV, dV, type == RangeType::Normalized ? 1.0 / length : 1.0);
+			}
+
 			// Evaluate
 			virtual void evaluate(double ds, double& x, double& y, double& h) override;
 		};

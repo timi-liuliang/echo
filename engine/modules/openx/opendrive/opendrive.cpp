@@ -191,6 +191,31 @@ namespace Echo
 		}
 	}
 
+	OpenDrive::Polynomial::Polynomial(double a, double b, double c, double d, double scale)
+		: m_a(a)
+		, m_b(b)
+		, m_c(c)
+		, m_d(d)
+		, m_scale(scale)
+	{
+
+	}
+
+	void OpenDrive::Polynomial::set(double a, double b, double c, double d, double scale)
+	{
+		m_a = a;
+		m_b = b;
+		m_c = c;
+		m_d = d;
+		m_scale = scale;
+	}
+
+	OpenDrive::Poly3::Poly3(double s, double x, double y, double hdg, double length, double a, double b, double c, double d)
+		: Geometry(s, x, y, hdg, length, Geometry::Poly3)
+	{
+		m_poly3.set(a, b, c, d);
+	}
+
 	void OpenDrive::Poly3::evaluate(double ds, double& x, double& y, double& h)
 	{
 
@@ -296,11 +321,28 @@ namespace Echo
 				}
 				else if (StringUtil::Equal(typeNode.name(), "poly3"))
 				{
-
+					double a = typeNode.attribute("a").as_double();
+					double b = typeNode.attribute("b").as_double();
+					double c = typeNode.attribute("c").as_double();
+					double d = typeNode.attribute("d").as_double();
+					road.m_geometries.push_back(EchoNew(Poly3(s, x, y, hdg, length, a, b, c, d)));
 				}
 				else if (StringUtil::Equal(typeNode.name(), "paramPoly3"))
 				{
+					double aU = typeNode.attribute("aU").as_double();
+					double bU = typeNode.attribute("bU").as_double();
+					double cU = typeNode.attribute("cU").as_double();
+					double dU = typeNode.attribute("dU").as_double();
+					double aV = typeNode.attribute("aV").as_double();
+					double bV = typeNode.attribute("bV").as_double();
+					double cV = typeNode.attribute("cV").as_double();
+					double dV = typeNode.attribute("dV").as_double();
 
+					ParamPoly3::RangeType type = ParamPoly3::RangeType::Normalized;
+					if (strcmp(typeNode.attribute("pRange").as_string(), "arcLength") == 0)
+						type = ParamPoly3::RangeType::ArcLength;
+
+					road.m_geometries.push_back(EchoNew(ParamPoly3(s, x, y, hdg, length, type, aU, bU, cU, dU, aV, bV, cV, dV)));
 				}
 			}
 		}
