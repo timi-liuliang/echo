@@ -210,20 +210,147 @@ namespace Echo
 		m_scale = scale;
 	}
 
+	double OpenDrive::Polynomial::evaluate(double t)
+	{
+		t *= m_scale;
+
+		return (m_a + m_b * t + m_c * t * t + m_d * t * t * t);
+	}
+
+	double OpenDrive::Polynomial::evaluatePrim(double t)
+	{
+		t *= m_scale;
+
+		return (m_b + 2 * m_c * t + 3 * m_d * t * t);
+	}
+
+	double OpenDrive::Polynomial::evaluatePrimPrim(double t)
+	{
+		t *= m_scale;
+
+		return (2 * m_c + 6 * m_d * t);
+	}
+
 	OpenDrive::Poly3::Poly3(double s, double x, double y, double hdg, double length, double a, double b, double c, double d)
 		: Geometry(s, x, y, hdg, length, Geometry::Poly3)
 	{
 		m_poly3.set(a, b, c, d);
+
+		double xTmp = 0.0;
+		double yTmp = 0.0;
+
+		evaluateDsLocal(m_length - FLT_EPSILON, xTmp, yTmp);
+		m_uMax = xTmp;
 	}
 
 	void OpenDrive::Poly3::evaluate(double ds, double& x, double& y, double& h)
 	{
+		double uLocal = 0.0;
+		double vLocal = 0.0;
 
+		evaluateDsLocal(ds, uLocal, vLocal);
+
+		x = m_x + uLocal * cos(getHdg()) - vLocal * sin(getHdg());
+		y = m_y + uLocal * sin(getHdg()) + vLocal * cos(getHdg());
+		h = getHdg() + atan(m_poly3.evaluatePrim(uLocal));
+	}
+
+	void OpenDrive::Poly3::evaluateDsLocal(double ds, double& u, double& v)
+	{
+		double distTmp = 0.0;
+		double stepLen = std::min<double>(10, ds);
+
+		u = v = 0.0;
+
+		if (ds > m_length - FLT_EPSILON)
+		{
+			u = m_uMax;
+			v = m_poly3.evaluate(u);
+		}
+		else if (ds > FLT_EPSILON)
+		{
+			for (double uTmp = 0; uTmp < m_length; uTmp += stepLen)
+			{
+				double vTmp = m_poly3.evaluate(uTmp);
+				double delta = sqrt((uTmp - u) * (uTmp - u) + (vTmp - v) * (vTmp - v));
+
+				if (distTmp + delta > ds)
+				{
+					double w = (distTmp + delta - ds) / std::max<double>(delta, FLT_EPSILON);
+					u = w * u + (1.0 - w) * uTmp;
+					v = m_poly3.evaluate(u);
+
+					break;
+				}
+
+				distTmp += delta;
+				u = uTmp;
+				v = vTmp;
+			}
+		}
+	}
+
+	void OpenDrive::ParamPoly3::calcs2pMap(OpenDrive::ParamPoly3::RangeType type)
+	{
+		double len = 0;
+		double stepLen = 1.0 / double(PARAMPOLY3_STEPS);
+		double p = 0;
+
+		if (type == OpenDrive::ParamPoly3::RangeType::ArcLength)
+		{
+			stepLen = m_length / PARAMPOLY3_STEPS;
+		}
+
+		// Calculate actual arc length of the curve
+		m_s2pMap[0][0] = 0;
+		for (size_t i = 1; i < PARAMPOLY3_STEPS + 1; i++)
+		{
+			p += stepLen;
+
+			double pm = p - 0.5 * stepLen; // midpoint method
+			double integrator = sqrt(
+				pow(3 * m_poly3U.m_d * pm * pm + 2 * m_poly3U.m_c * pm + m_poly3U.m_b, 2) +
+				pow(3 * m_poly3V.m_d * pm * pm + 2 * m_poly3V.m_c * pm + m_poly3V.m_b, 2));
+
+			len += stepLen * integrator;
+			m_s2pMap[i][0] = len;
+		}
+
+		// Map length (ds) to p for each sub-segment, adjust for incorrect length attribute
+		double scaleFactor = m_length / len;
+
+		for (size_t i = 0; i < PARAMPOLY3_STEPS + 1; i++)
+		{
+			m_s2pMap[i][0] *= scaleFactor;
+			m_s2pMap[i][1] = i * m_length / PARAMPOLY3_STEPS;
+		}
+	}
+
+	double OpenDrive::ParamPoly3::s2p(double s)
+	{
+		for (size_t i = 0; i < PARAMPOLY3_STEPS; i++)
+		{
+			if (m_s2pMap[i + 1][0] > s)
+			{
+				double w = (s - m_s2pMap[i][0]) / (m_s2pMap[i + 1][0] - m_s2pMap[i][0]);
+				return m_s2pMap[i][1] + w * (m_s2pMap[i + 1][1] - m_s2pMap[i][1]);
+			}
+		}
+
+		return m_s2pMap[PARAMPOLY3_STEPS][1];
 	}
 
 	void OpenDrive::ParamPoly3::evaluate(double ds, double& x, double& y, double& h)
 	{
+		double p = s2p(ds);
+		double hdg = getHdg();
 
+		double uLocal = m_poly3U.evaluate(p);
+		double vLocal = m_poly3V.evaluate(p);
+
+		x = m_x + uLocal * cos(hdg) - vLocal * sin(hdg);
+		y = m_y + uLocal * sin(hdg) + vLocal * cos(hdg);
+		h = hdg + atan2(m_poly3U.evaluatePrim(p), m_poly3V.evaluatePrim(p));
 	}
 
 	OpenDrive::OpenDrive()

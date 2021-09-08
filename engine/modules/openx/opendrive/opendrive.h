@@ -3,6 +3,8 @@
 #include "engine/core/scene/node.h"
 #include "thirdparty/pugixml/pugixml.hpp"
 
+#define PARAMPOLY3_STEPS 100
+
 namespace Echo
 {
 	class OpenDriveDebugDraw;
@@ -138,17 +140,27 @@ namespace Echo
 
 			// Set
 			void set(double a, double b, double c, double d, double scale = 1.0);
+
+			// Evaluate
+			double evaluate(double t);
+			double evaluatePrim(double t);
+			double evaluatePrimPrim(double t);
 		};
 
 		// Poly3
 		struct Poly3 : public Geometry
 		{
 			Polynomial	m_poly3;
+			double		m_uMax = 0.0;
 
 			Poly3(double s, double x, double y, double hdg, double length, double a, double b, double c, double d);
 
 			// Evaluate
 			virtual void evaluate(double ds, double& x, double& y, double& h) override;
+
+		private:
+			// Evaluate local
+			void evaluateDsLocal(double ds, double& u, double& v);
 		};
 
 		// ParamPoly3
@@ -163,6 +175,7 @@ namespace Echo
 
 			Polynomial	m_poly3U;
 			Polynomial	m_poly3V;
+			double		m_s2pMap[PARAMPOLY3_STEPS + 1][2];
 
 			ParamPoly3( double s, double x, double y, double hdg, double length, RangeType type,
 						double aU, double bU, double cU, double dU,
@@ -171,10 +184,19 @@ namespace Echo
 			{
 				m_poly3U.set(aU, bU, cU, dU, type == RangeType::Normalized ? 1.0 / length : 1.0);
 				m_poly3V.set(aV, bV, cV, dV, type == RangeType::Normalized ? 1.0 / length : 1.0);
+
+				calcs2pMap(type);
 			}
 
 			// Evaluate
 			virtual void evaluate(double ds, double& x, double& y, double& h) override;
+
+			// s2p
+			double s2p(double s);
+
+		private:
+			// Calculate s2p map
+			void calcs2pMap(RangeType type);
 		};
 
 		// Road

@@ -31,6 +31,8 @@ namespace Echo
 		void drawLine(OpenDrive::Line* line);
 		void drawArc(OpenDrive::Arc* arc);
 		void drawSpiral(OpenDrive::Spiral* spiral);
+		void drawPoly3(OpenDrive::Poly3* poly3);
+		void drawParamPoly3(OpenDrive::ParamPoly3* paramPoly3);
 		void drawArrow(double endX, double endY, double hdg, Color& color, double length);
 
 	private:
@@ -40,5 +42,7 @@ namespace Echo
 		Color		m_lineColor = Color::fromRGBA(248, 167, 80);
 		Color		m_spiralColor = Color::fromRGBA(1, 106, 163);
 		Color		m_arcColor = Color::fromRGBA(144, 207, 77);
+		Color		m_poly3Color = Color::fromRGBA(255, 98, 81);
+		Color		m_paramPoly3Color = Color::fromRGBA(186, 135, 243);
 	};
 }

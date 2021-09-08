@@ -44,9 +44,11 @@ namespace Echo
 				{
 					if (geometry)
 					{
-						if		(geometry->m_type == OpenDrive::Geometry::Type::Line)	drawLine(ECHO_DOWN_CAST<OpenDrive::Line*>(geometry));
-						else if (geometry->m_type == OpenDrive::Geometry::Type::Arc)	drawArc(ECHO_DOWN_CAST<OpenDrive::Arc*>(geometry));
-						else if (geometry->m_type == OpenDrive::Geometry::Type::Spiral)	drawSpiral(ECHO_DOWN_CAST<OpenDrive::Spiral*>(geometry));
+						if		(geometry->m_type == OpenDrive::Geometry::Type::Line)		drawLine(ECHO_DOWN_CAST<OpenDrive::Line*>(geometry));
+						else if (geometry->m_type == OpenDrive::Geometry::Type::Arc)		drawArc(ECHO_DOWN_CAST<OpenDrive::Arc*>(geometry));
+						else if (geometry->m_type == OpenDrive::Geometry::Type::Spiral)		drawSpiral(ECHO_DOWN_CAST<OpenDrive::Spiral*>(geometry));
+						else if (geometry->m_type == OpenDrive::Geometry::Type::Poly3)		drawPoly3(ECHO_DOWN_CAST<OpenDrive::Poly3*>(geometry));
+						else if (geometry->m_type == OpenDrive::Geometry::Type::ParamPoly3)	drawParamPoly3(ECHO_DOWN_CAST<OpenDrive::ParamPoly3*>(geometry));
 					}
 				}
 			}
@@ -161,6 +163,70 @@ namespace Echo
 				if ((i + 1) == stepCount)
 				{
 					drawArrow(endX, endY, endH, color, Math::Min(spiral->getLength()*0.05, 0.1));
+				}
+			}
+		}
+	}
+
+	void OpenDriveDebugDraw::drawPoly3(OpenDrive::Poly3* poly3)
+	{
+		if (poly3)
+		{
+			double startX, startY;
+			double endX, endY;
+			double startH;
+			double endH;
+
+			// Draw arc
+			i32    stepCount = std::max<i32>(i32(poly3->getLength() / 0.1), 1);
+			double stepLength = poly3->getLength() / stepCount;
+			Color  color = m_poly3Color;
+			for (i32 i = 0; i < stepCount; i++)
+			{
+				double ds0 = i * stepLength;
+				double ds1 = ds0 + stepLength;
+
+				poly3->evaluate(ds0, startX, startY, startH);
+				poly3->evaluate(ds1, endX, endY, endH);
+
+				m_gizmo->drawLine(toVec3(startX, startY), toVec3(endX, endY), color);
+
+				// Arrow
+				if ((i + 1) == stepCount)
+				{
+					drawArrow(endX, endY, endH, color, Math::Min(poly3->getLength() * 0.05, 0.1));
+				}
+			}
+		}
+	}
+
+	void OpenDriveDebugDraw::drawParamPoly3(OpenDrive::ParamPoly3* paramPoly3)
+	{
+		if (paramPoly3)
+		{
+			double startX, startY;
+			double endX, endY;
+			double startH;
+			double endH;
+
+			// Draw arc
+			i32    stepCount = std::max<i32>(i32(paramPoly3->getLength() / 0.1), 1);
+			double stepLength = paramPoly3->getLength() / stepCount;
+			Color  color = m_paramPoly3Color;
+			for (i32 i = 0; i < stepCount; i++)
+			{
+				double ds0 = i * stepLength;
+				double ds1 = ds0 + stepLength;
+
+				paramPoly3->evaluate(ds0, startX, startY, startH);
+				paramPoly3->evaluate(ds1, endX, endY, endH);
+
+				m_gizmo->drawLine(toVec3(startX, startY), toVec3(endX, endY), color);
+
+				// Arrow
+				if ((i + 1) == stepCount)
+				{
+					drawArrow(endX, endY, endH, color, Math::Min(paramPoly3->getLength() * 0.05, 0.1));
 				}
 			}
 		}
