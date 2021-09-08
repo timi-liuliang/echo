@@ -142,9 +142,9 @@ namespace Echo
 			void set(double a, double b, double c, double d, double scale = 1.0);
 
 			// Evaluate
-			double evaluate(double t);
-			double evaluatePrim(double t);
-			double evaluatePrimPrim(double t);
+			double evaluate(double p);
+			double evaluatePrim(double p);
+			double evaluatePrimPrim(double p);
 		};
 
 		// Poly3

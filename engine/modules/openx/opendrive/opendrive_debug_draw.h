@@ -39,6 +39,7 @@ namespace Echo
 		Gizmos*		m_gizmo = nullptr;
 		bool		m_isEnable = false;
 		bool		m_is2D = false;
+		bool		m_isDrawArrow = true;
 		Color		m_lineColor = Color::fromRGBA(248, 167, 80);
 		Color		m_spiralColor = Color::fromRGBA(1, 106, 163);
 		Color		m_arcColor = Color::fromRGBA(144, 207, 77);

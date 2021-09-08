@@ -47,7 +47,7 @@ namespace Echo
 		y = m_y + sampleLength * sin(h);
 	}
 
-	void OpenDrive::Arc::evaluate(double sampleLength, double& x, double& y, double& h)
+	void OpenDrive::Arc::evaluate(double ds, double& x, double& y, double& h)
 	{
 		// Reference https://github.com/esmini/esmini/blob/cc6238ca1c0ade9aefb94a1e7f2e48bc143b8e1f/EnvironmentSimulator/Modules/RoadManager/RoadManager.cpp
 		// Esmini's implementation is right too. but i don't understand it...
@@ -58,20 +58,20 @@ namespace Echo
 		double centerY;
 		getCenter(centerX, centerY);
 
-		double centralAngle = sampleLength / radius;
+		double centralAngle = ds / radius;
 
 		if (m_curvature < 0)
 		{
 			x = centerX + cos(m_hdg + Math::PI_DIV2 - centralAngle) * radius;
 			y = centerY + sin(m_hdg + Math::PI_DIV2 - centralAngle) * radius;
-			h = m_hdg + centralAngle;
 		}
 		else
 		{
 			x = centerX + cos(m_hdg - Math::PI_DIV2 + centralAngle) * radius;
 			y = centerY + sin(m_hdg - Math::PI_DIV2 + centralAngle) * radius;
-			h = m_hdg - centralAngle;
 		}
+
+		h = getHdg() + ds * m_curvature;
 	}
 
 	// Watch out opendrive's inertial system
@@ -210,25 +210,25 @@ namespace Echo
 		m_scale = scale;
 	}
 
-	double OpenDrive::Polynomial::evaluate(double t)
+	double OpenDrive::Polynomial::evaluate(double p)
 	{
-		t *= m_scale;
+		p *= m_scale;
 
-		return (m_a + m_b * t + m_c * t * t + m_d * t * t * t);
+		return (m_a + m_b * p + m_c * p * p + m_d * p * p * p);
 	}
 
-	double OpenDrive::Polynomial::evaluatePrim(double t)
+	double OpenDrive::Polynomial::evaluatePrim(double p)
 	{
-		t *= m_scale;
+		p *= m_scale;
 
-		return (m_b + 2 * m_c * t + 3 * m_d * t * t);
+		return (m_b + 2 * m_c * p + 3 * m_d * p * p);
 	}
 
-	double OpenDrive::Polynomial::evaluatePrimPrim(double t)
+	double OpenDrive::Polynomial::evaluatePrimPrim(double p)
 	{
-		t *= m_scale;
+		p *= m_scale;
 
-		return (2 * m_c + 6 * m_d * t);
+		return (2 * m_c + 6 * m_d * p);
 	}
 
 	OpenDrive::Poly3::Poly3(double s, double x, double y, double hdg, double length, double a, double b, double c, double d)
@@ -350,7 +350,7 @@ namespace Echo
 
 		x = m_x + uLocal * cos(hdg) - vLocal * sin(hdg);
 		y = m_y + uLocal * sin(hdg) + vLocal * cos(hdg);
-		h = hdg + atan2(m_poly3U.evaluatePrim(p), m_poly3V.evaluatePrim(p));
+		h = hdg + atan2(m_poly3V.evaluatePrim(p), m_poly3U.evaluatePrim(p));
 	}
 
 	OpenDrive::OpenDrive()

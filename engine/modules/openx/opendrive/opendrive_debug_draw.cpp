@@ -61,13 +61,15 @@ namespace Echo
 		{
 			double startX, startY;
 			double endX, endY;
-			double  startCurvature;
-			double  endCurvature;
+			double  startH;
+			double  endH;
 
-			line->evaluate(0, startX, startY, startCurvature);
-			line->evaluate(line->getLength(), endX, endY, endCurvature);
+			line->evaluate(0, startX, startY, startH);
+			line->evaluate(line->getLength(), endX, endY, endH);
 
 			m_gizmo->drawLine(toVec3(startX, startY), toVec3(endX, endY), m_lineColor);
+
+			drawArrow(endX, endY, endH, m_lineColor, Math::Min(line->getLength() * 0.05, 0.1));
 		}
 	}
 
@@ -77,29 +79,34 @@ namespace Echo
 		{
 			double startX, startY;
 			double endX, endY;
-			double startCurvature;
-			double endCurvature;
+			double startH;
+			double endH;
 
 			// Draw arc
 			i32    stepCount = std::max<i32>(i32(arc->getLength() / 0.1), 1);
 			double stepLength = arc->getLength() / stepCount;
-			Color  arcColor = arc->m_curvature > 0.0 ? m_arcColor : m_arcColor * 0.75f;
+			Color  color = arc->m_curvature > 0.0 ? m_arcColor : m_arcColor * 0.75f;
 			for (i32 i = 0; i < stepCount; i++)
 			{
 				double ds0 = i * stepLength;
 				double ds1 = ds0 + stepLength;
 
-				arc->evaluate(ds0, startX, startY, startCurvature);
-				arc->evaluate(ds1, endX, endY, endCurvature);
+				arc->evaluate(ds0, startX, startY, startH);
+				arc->evaluate(ds1, endX, endY, endH);
 
-				m_gizmo->drawLine(toVec3(startX, startY), toVec3(endX, endY), arcColor);
+				m_gizmo->drawLine(toVec3(startX, startY), toVec3(endX, endY), color);
+
+				if ((i + 1) == stepCount)
+				{
+					drawArrow(endX, endY, endH, color, Math::Min(arc->getLength() * 0.05, 0.1));
+				}
 			}
 
 			// Draw sector edge
 			double centerX, centerY;
 			arc->getCenter(centerX, centerY);
-			arc->evaluate(0.0, startX, startY, startCurvature);
-			arc->evaluate(arc->getLength(), endX, endY, endCurvature);
+			arc->evaluate(0.0, startX, startY, startH);
+			arc->evaluate(arc->getLength(), endX, endY, endH);
 
 			m_gizmo->drawLine(toVec3(centerX, centerY), toVec3(startX, startY), Color(0.62745f, 0.62745f, 0.62745f, 0.16f));
 			m_gizmo->drawLine(toVec3(centerX, centerY), toVec3(endX, endY), Color(0.62745f, 0.62745f, 0.62745f, 0.16f));
@@ -234,12 +241,15 @@ namespace Echo
 
 	void OpenDriveDebugDraw::drawArrow(double endX, double endY, double hdg, Color& color, double length)
 	{
-		Vector3 startPos = toVec3(endX, endY, 0.0);
-		Vector3 dir0 = toVec3(cos(hdg- 3.0 * Math::PI_DIV4), sin(hdg - 3.0 * Math::PI_DIV4), 0.0);
-		Vector3 dir1 = toVec3(cos(hdg + 3.0 * Math::PI_DIV4), sin(hdg + 3.0 * Math::PI_DIV4), 0.0);
+		if (m_isDrawArrow)
+		{
+			Vector3 startPos = toVec3(endX, endY, 0.0);
+			Vector3 dir0 = toVec3(cos(hdg - 3.0 * Math::PI_DIV4), sin(hdg - 3.0 * Math::PI_DIV4), 0.0);
+			Vector3 dir1 = toVec3(cos(hdg + 3.0 * Math::PI_DIV4), sin(hdg + 3.0 * Math::PI_DIV4), 0.0);
 
-		m_gizmo->drawLine(startPos, startPos + dir0 * length, color);
-		m_gizmo->drawLine(startPos, startPos + dir1 * length, color);
+			m_gizmo->drawLine(startPos, startPos + dir0 * length, color);
+			m_gizmo->drawLine(startPos, startPos + dir1 * length, color);
+		}
 	}
 
 	// Opendrive's coordinate system to Echo's coordinate system
