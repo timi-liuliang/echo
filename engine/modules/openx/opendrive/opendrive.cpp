@@ -3,6 +3,7 @@
 #include "opendrive_debug_draw.h"
 #include "opendrive_module.h"
 #include "engine/core/io/io.h"
+#include "engine/core/log/Log.h"
 #include "engine/core/main/engine.h"
 
 namespace Echo
@@ -410,6 +411,7 @@ namespace Echo
 
 			// Parse geometry
 			parseGeometry(road, roadNode);
+			parseRoadLink(road, roadNode);
 
 			m_roads.emplace_back(road);
 		}
@@ -472,6 +474,51 @@ namespace Echo
 					road.m_geometries.push_back(EchoNew(ParamPoly3(s, x, y, hdg, length, type, aU, bU, cU, dU, aV, bV, cV, dV)));
 				}
 			}
+		}
+	}
+
+	void OpenDrive::parseRoadLink(Road& road, pugi::xml_node roadNode)
+	{
+		auto setLinkData = [](RoadLink& roadLink, pugi::xml_node xmlNode)
+		{
+			roadLink.m_elementId = xmlNode.attribute("elementId").as_int(-1);
+
+			String elementType = xmlNode.attribute("elementType").as_string();
+			String contactPointType = xmlNode.attribute("contactPoint").as_string();
+
+			if (elementType == "road")
+			{
+				roadLink.m_elementType = RoadLink::ElementType::Road;
+
+				if (contactPointType == "start")
+				{
+					roadLink.m_contactPointType = RoadLink::ContactPointType::Start;
+				}
+				else if (contactPointType == "end")
+				{
+					roadLink.m_contactPointType = RoadLink::ContactPointType::End;
+				}
+				else
+				{
+					EchoLogError("Opendrive : Unknown road link contact point type.")
+				}
+			}
+			else if(elementType== "junction")
+			{
+				roadLink.m_elementType = RoadLink::ElementType::Junction;
+				roadLink.m_contactPointType = RoadLink::ContactPointType::None;
+			}
+			else
+			{
+				EchoLogError("Opendrive : Unknown road link elment type.")
+			}
+		};
+
+		pugi::xml_node linkNode = roadNode.child("link");
+		if (linkNode)
+		{
+			setLinkData(road.m_predecessor, linkNode.child("predecessor"));
+			setLinkData(road.m_successor, linkNode.child("successor"));
 		}
 	}
 

@@ -468,7 +468,7 @@ namespace Echo
 			return perp;
 		}
 
-		// 角度转方向
+		// convert from horizonal angle
 		void fromHVAngle(float horizonAngle, float verticalAngle)
 		{
 			float tScale = Math::Abs(sin(verticalAngle));
@@ -477,7 +477,7 @@ namespace Echo
 			z = tScale * sin(horizonAngle);
 		}
 
-		// 方向转角度
+		// to hv angle
 		void toHVAngle(float& oHorizonAngle, float& oVerticalAngle) const;
 
 		Quaternion getRotationTo(const Vector3& dest, const Vector3& fallbackAxis = Vector3::ZERO) const;

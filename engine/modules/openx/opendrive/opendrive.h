@@ -199,6 +199,25 @@ namespace Echo
 			void calcs2pMap(RangeType type);
 		};
 
+		// Road link
+		struct RoadLink
+		{
+			enum class ElementType
+			{
+				Unknow,
+				Road,
+				Junction,
+			}						m_elementType = ElementType::Unknow;
+			i32						m_elementId = -1;
+			enum class ContactPointType
+			{
+				Unknow,
+				Start,
+				End,
+				None,
+			}						m_contactPointType = ContactPointType::Unknow;
+		};
+
 		// Road
 		struct Road
 		{
@@ -207,6 +226,8 @@ namespace Echo
 			i32				m_id = -1;
 			i32				m_junction = -1;
 			GeometryArray	m_geometries;
+			RoadLink		m_predecessor;
+			RoadLink		m_successor;
 		};
 
 	public:
@@ -231,6 +252,7 @@ namespace Echo
 		// Parse
 		void parseXodr(const String& content);
 		void parseGeometry(Road& road, pugi::xml_node roadNode);
+		void parseRoadLink(Road& road, pugi::xml_node roadNode);
 
 		// Refresh debug draw
 		void refreshDebugDraw();
