@@ -218,16 +218,77 @@ namespace Echo
 			}						m_contactPointType = ContactPointType::Unknow;
 		};
 
+		struct Elevation
+		{
+			Polynomial	m_poly3;
+			double		m_s = 0.0;
+			double		m_length = 0.0;
+
+			Elevation(double s, double a, double b, double c, double d)
+				: m_s(s)
+			{
+				m_poly3.set(a, b, c, d);
+			}
+		};
+		typedef vector<Elevation>::type ElevationArray;
+
+		enum class LaneType
+		{
+			None    		= 1 << 0,	// Describes the space on the outermost edge of the road and does not have actual content Its only purpose is 
+										// for applications to register that OpenDRIVE is still present in case the (human) driver leaves the road.
+			Shoulder		= 1 << 1,	// Describes a soft border at the edge of the road.
+			Border			= 1 << 2,	// Describes a hard border at the edge of the road. It has the same height as the drivable lane.
+			Driving			= 1 << 3,	// Describes a "normal" drivable road that is not one of the other types.
+			Stop			= 1 << 4,	// Hard shoulder on motorways for emergency stops
+			Restricted		= 1 << 5,	// Describes a lane on which cars should not drive. The lane has the same height as drivable lanes. Typically, 
+										// the lane is separated with lines and often contains dotted lines as well.
+			Parking			= 1 << 6,	// Describes a lane with parking spaces.
+			Median			= 1 << 7,	// Describes a lane that sits between driving lanes that lead in opposite directions. It is typically used to 
+										// separate traffic in towns on large roads.
+			Biking			= 1 << 8,	// Describes a lane that is reserved for cyclists.
+			Sidewalk		= 1 << 9,	// Describes a lane on which pedestrians can walk.
+			Curb			= 1 << 10,	// Describes curb stones. Curb stones have a different height than the adjacent drivable lanes.
+			Exit			= 1 << 11,	// Describes a lane that is used for sections that are parallel to the main road. It is mainly used for deceleration lanes.
+			Entry			= 1 << 12,	// Describes a lane that is used for sections that are parallel to the main road. It is mainly used for deceleration lanes.
+			OnRamp			= 1 << 13,	// A ramp leading to a motorway from rural or urban roads.
+			OffRamp			= 1 << 14,	// A ramp leading away from a motorway and onto rural urban roads.
+			ConnectingRamp	= 1 << 15,	// A ramp that connects two motorways, for example, motorway junctions.
+			
+			AnyDriving		= Driving | Entry | Exit | OffRamp | OnRamp | Parking,
+			AnyRoad			= AnyDriving | Restricted | Stop,
+			Any				= 0xFFFFFFFF,
+		};
+
+		struct Lane
+		{
+			i32			m_id = -1;
+			i32			m_globalId;					// Unique id for osi
+			LaneType	m_type = LaneType::None;
+		};
+
+		// Each lane section contains a fixed number of lanes. Every time the number of lanes changes, a new lane section is required
+		struct LaneSection
+		{
+			double			m_s=0.0;				// s-coordinate of start position
+			bool			m_singleSide = false;
+			double			m_length = 0.0;
+			vector<Lane>	m_lanes;
+		};
+		typedef vector<LaneSection> LaneSectionArray;
+
 		// Road
 		struct Road
 		{
-			String			m_name;
-			double			m_length = 0;
-			i32				m_id = -1;
-			i32				m_junction = -1;
-			GeometryArray	m_geometries;
-			RoadLink		m_predecessor;
-			RoadLink		m_successor;
+			String				m_name;
+			double				m_length = 0;
+			i32					m_id = -1;
+			i32					m_junction = -1;
+			GeometryArray		m_geometries;
+			RoadLink			m_predecessor;
+			RoadLink			m_successor;
+			ElevationArray		m_elevationProfile;
+			ElevationArray		m_superElevationProfile;
+			LaneSectionArray	m_laneSections;
 		};
 
 	public:
