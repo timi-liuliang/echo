@@ -256,7 +256,7 @@ namespace Echo
 			
 			AnyDriving		= Driving | Entry | Exit | OffRamp | OnRamp | Parking,
 			AnyRoad			= AnyDriving | Restricted | Stop,
-			Any				= 0xFFFFFFFF,
+			Any				= 0xFFFFFFF,
 		};
 
 		struct Lane
@@ -265,6 +265,7 @@ namespace Echo
 			i32			m_globalId;					// Unique id for osi
 			LaneType	m_type = LaneType::None;
 		};
+		typedef vector<Lane>::type LaneArray;
 
 		// Each lane section contains a fixed number of lanes. Every time the number of lanes changes, a new lane section is required
 		struct LaneSection
@@ -272,9 +273,9 @@ namespace Echo
 			double			m_s=0.0;				// s-coordinate of start position
 			bool			m_singleSide = false;
 			double			m_length = 0.0;
-			vector<Lane>	m_lanes;
+			LaneArray		m_lanes;
 		};
-		typedef vector<LaneSection> LaneSectionArray;
+		typedef vector<LaneSection>::type LaneSectionArray;
 
 		// Road
 		struct Road
@@ -314,6 +315,7 @@ namespace Echo
 		void parseXodr(const String& content);
 		void parseGeometry(Road& road, pugi::xml_node roadNode);
 		void parseRoadLink(Road& road, pugi::xml_node roadNode);
+		void parseLanes(Road& road, pugi::xml_node roadNode);
 
 		// Refresh debug draw
 		void refreshDebugDraw();

@@ -412,6 +412,7 @@ namespace Echo
 			// Parse geometry
 			parseGeometry(road, roadNode);
 			parseRoadLink(road, roadNode);
+			parseLanes(road, roadNode);
 
 			m_roads.emplace_back(road);
 		}
@@ -519,6 +520,56 @@ namespace Echo
 		{
 			setLinkData(road.m_predecessor, linkNode.child("predecessor"));
 			setLinkData(road.m_successor, linkNode.child("successor"));
+		}
+	}
+
+	void OpenDrive::parseLanes(Road& road, pugi::xml_node roadNode)
+	{
+		auto mappingLaneType = [](const char* name) -> LaneType
+		{
+			if		(stricmp(name, "shoulder"))			return LaneType::Shoulder;
+			else if (stricmp(name, "border"))			return LaneType::Border;
+			else if (stricmp(name, "driving"))			return LaneType::Driving;
+			else if (stricmp(name, "stop"))				return LaneType::Stop;
+			else if (stricmp(name, "restricted"))		return LaneType::Restricted;
+			else if (stricmp(name, "parking"))			return LaneType::Parking;
+			else if (stricmp(name, "median"))			return LaneType::Median;
+			else if (stricmp(name, "biking"))			return LaneType::Biking;
+			else if (stricmp(name, "sidewalk"))			return LaneType::Sidewalk;
+			else if (stricmp(name, "curb"))				return LaneType::Curb;
+			else if (stricmp(name, "exit"))				return LaneType::Exit;
+			else if (stricmp(name, "entry"))			return LaneType::Entry;
+			else if (stricmp(name, "onramp"))			return LaneType::OnRamp;
+			else if (stricmp(name, "offramp"))			return LaneType::OffRamp;
+			else if (stricmp(name, "connectingramp"))	return LaneType::ConnectingRamp;
+			else										return LaneType::None;
+		};
+
+		auto parseLane = [mappingLaneType](LaneSection& laneSection, pugi::xml_node laneParentNode)
+		{
+			for (pugi::xml_node laneNode = laneParentNode.child("lane"); laneNode; laneNode = laneNode.next_sibling())
+			{
+				Lane lane;
+				lane.m_id = laneNode.attribute("id").as_int();
+				lane.m_type = mappingLaneType(laneNode.attribute("type").as_string());
+
+				laneSection.m_lanes.emplace_back(lane);
+			}
+		};
+
+		pugi::xml_node lanesNode = roadNode.child("lanes");
+		if (lanesNode)
+		{
+			for (pugi::xml_node laneSectionNode = lanesNode.child("laneSection"); laneSectionNode; laneSectionNode = laneSectionNode.next_sibling())
+			{
+				LaneSection laneSection;
+
+				parseLane(laneSection, laneSectionNode.child("left"));
+				parseLane(laneSection, laneSectionNode.child("center"));
+				parseLane(laneSection, laneSectionNode.child("right"));
+
+				road.m_laneSections.emplace_back(laneSection);
+			}
 		}
 	}
 
