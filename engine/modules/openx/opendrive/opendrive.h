@@ -259,11 +259,77 @@ namespace Echo
 			Any				= 0xFFFFFFF,
 		};
 
+		struct LaneWidth
+		{
+			double		m_offset = 0.0;
+			Polynomial	m_poly3;
+
+			LaneWidth(double offset, double a, double b, double c, double d)
+				: m_offset(offset)
+			{
+				m_poly3.set(a, b, c, d);
+			}
+		};
+		typedef vector<LaneWidth>::type LaneWidthArray;
+
+		struct LaneRoadMark
+		{
+			double		m_offset = 0.0;
+			double		m_width = 0.0;
+			double		m_height = 0.0;
+
+			enum class MarkType
+			{
+				None = 1,
+				Solid,
+				Broken,
+				SolidSolid,
+				SolidBroken,
+				BrokenSolid,
+				BrokenBroken,
+				BottsDots,
+				Grass,
+				Curb,
+			}			m_type = MarkType::None;
+
+			enum class MarkWeight
+			{
+				Standard,
+				Bold,
+			}			m_weight = MarkWeight::Standard;
+
+			enum class MarkColor
+			{
+				Standard,		// Equivalent to white
+				Blue,
+				Green,
+				Red,
+				White,
+				Yellow,
+			}			m_color = MarkColor::Standard;
+
+			enum class MarkMaterial
+			{
+				Standard,
+			}			m_material = MarkMaterial::Standard;
+
+			enum class MarkLaneChange
+			{
+				Increase,
+				Decrease,
+				Both,
+				None,
+			}			m_laneChange = MarkLaneChange::None;
+		};
+		typedef vector<LaneRoadMark>::type LaneRoadMarkArray;
+
 		struct Lane
 		{
-			i32			m_id = -1;
-			i32			m_globalId;					// Unique id for osi
-			LaneType	m_type = LaneType::None;
+			i32					m_id = -1;
+			i32					m_globalId = -1;					// Unique id for osi
+			LaneType			m_type = LaneType::None;
+			LaneWidthArray		m_widthes;
+			LaneRoadMarkArray	m_roadMarks;
 		};
 		typedef vector<Lane>::type LaneArray;
 
@@ -273,7 +339,9 @@ namespace Echo
 			double			m_s=0.0;				// s-coordinate of start position
 			bool			m_singleSide = false;
 			double			m_length = 0.0;
-			LaneArray		m_lanes;
+			LaneArray		m_leftLanes;
+			LaneArray		m_centerLanes;
+			LaneArray		m_rightLanes;
 		};
 		typedef vector<LaneSection>::type LaneSectionArray;
 

@@ -527,25 +527,63 @@ namespace Echo
 	{
 		auto mappingLaneType = [](const char* name) -> LaneType
 		{
-			if		(stricmp(name, "shoulder"))			return LaneType::Shoulder;
-			else if (stricmp(name, "border"))			return LaneType::Border;
-			else if (stricmp(name, "driving"))			return LaneType::Driving;
-			else if (stricmp(name, "stop"))				return LaneType::Stop;
-			else if (stricmp(name, "restricted"))		return LaneType::Restricted;
-			else if (stricmp(name, "parking"))			return LaneType::Parking;
-			else if (stricmp(name, "median"))			return LaneType::Median;
-			else if (stricmp(name, "biking"))			return LaneType::Biking;
-			else if (stricmp(name, "sidewalk"))			return LaneType::Sidewalk;
-			else if (stricmp(name, "curb"))				return LaneType::Curb;
-			else if (stricmp(name, "exit"))				return LaneType::Exit;
-			else if (stricmp(name, "entry"))			return LaneType::Entry;
-			else if (stricmp(name, "onramp"))			return LaneType::OnRamp;
-			else if (stricmp(name, "offramp"))			return LaneType::OffRamp;
-			else if (stricmp(name, "connectingramp"))	return LaneType::ConnectingRamp;
-			else										return LaneType::None;
+			if		(stricmp(name, "shoulder") == 0)		return LaneType::Shoulder;
+			else if (stricmp(name, "border") == 0)			return LaneType::Border;
+			else if (stricmp(name, "driving") == 0)			return LaneType::Driving;
+			else if (stricmp(name, "stop") == 0)			return LaneType::Stop;
+			else if (stricmp(name, "restricted") == 0)		return LaneType::Restricted;
+			else if (stricmp(name, "parking") == 0)			return LaneType::Parking;
+			else if (stricmp(name, "median") == 0)			return LaneType::Median;
+			else if (stricmp(name, "biking") == 0)			return LaneType::Biking;
+			else if (stricmp(name, "sidewalk") == 0)		return LaneType::Sidewalk;
+			else if (stricmp(name, "curb") == 0)			return LaneType::Curb;
+			else if (stricmp(name, "exit") == 0)			return LaneType::Exit;
+			else if (stricmp(name, "entry") == 0)			return LaneType::Entry;
+			else if (stricmp(name, "onramp") == 0)			return LaneType::OnRamp;
+			else if (stricmp(name, "offramp") == 0)			return LaneType::OffRamp;
+			else if (stricmp(name, "connectingramp") == 0)	return LaneType::ConnectingRamp;
+			else											return LaneType::None;
 		};
 
-		auto parseLane = [mappingLaneType](LaneSection& laneSection, pugi::xml_node laneParentNode)
+		auto mappingRoadMarkType = [](const char* name) -> LaneRoadMark::MarkType
+		{
+			if		(stricmp(name, "solid") == 0)			return LaneRoadMark::MarkType::Solid;
+			else if (stricmp(name, "broken") == 0)			return LaneRoadMark::MarkType::Broken;
+			else if (stricmp(name, "solid solid") == 0)		return LaneRoadMark::MarkType::SolidSolid;
+			else if (stricmp(name, "solid broken") == 0)	return LaneRoadMark::MarkType::SolidBroken;
+			else if (stricmp(name, "broken solid") == 0)	return LaneRoadMark::MarkType::BrokenSolid;
+			else if (stricmp(name, "broken broken") == 0)	return LaneRoadMark::MarkType::BrokenBroken;
+			else if (stricmp(name, "botts dots") == 0)		return LaneRoadMark::MarkType::BottsDots;
+			else if (stricmp(name, "grass") == 0)			return LaneRoadMark::MarkType::Grass;
+			else if (stricmp(name, "curb") == 0)			return LaneRoadMark::MarkType::Curb;
+			else											return LaneRoadMark::MarkType::None;
+		};
+
+		auto mappingRoadMarkWeight = [](const char* name) -> LaneRoadMark::MarkWeight
+		{
+			if (stricmp(name, "bold") == 0)			return LaneRoadMark::MarkWeight::Standard;
+			else									return LaneRoadMark::MarkWeight::Bold;
+		};
+
+		auto mappingRoadMarkColor = [](const char* name) -> LaneRoadMark::MarkColor
+		{
+			if (stricmp(name, "blue") == 0)				return LaneRoadMark::MarkColor::Blue;
+			else if (stricmp(name, "green") == 0)		return LaneRoadMark::MarkColor::Green;
+			else if (stricmp(name, "red") == 0)			return LaneRoadMark::MarkColor::Red;
+			else if (stricmp(name, "white") == 0)		return LaneRoadMark::MarkColor::White;
+			else if (stricmp(name, "yellow") == 0)		return LaneRoadMark::MarkColor::Yellow;
+			else										return LaneRoadMark::MarkColor::Standard;
+		};
+
+		auto mappingRoadMarkLaneChange = [](const char* name) -> LaneRoadMark::MarkLaneChange
+		{
+			if		(stricmp(name, "increase") == 0)	return LaneRoadMark::MarkLaneChange::Increase;
+			else if (stricmp(name, "decrease") == 0)	return LaneRoadMark::MarkLaneChange::Decrease;
+			else if (stricmp(name, "both") == 0)		return LaneRoadMark::MarkLaneChange::Both;
+			else										return LaneRoadMark::MarkLaneChange::None;
+		};
+
+		auto parseLane = [&](LaneArray& lanes, pugi::xml_node laneParentNode)
 		{
 			for (pugi::xml_node laneNode = laneParentNode.child("lane"); laneNode; laneNode = laneNode.next_sibling())
 			{
@@ -553,7 +591,35 @@ namespace Echo
 				lane.m_id = laneNode.attribute("id").as_int();
 				lane.m_type = mappingLaneType(laneNode.attribute("type").as_string());
 
-				laneSection.m_lanes.emplace_back(lane);
+				for (pugi::xml_node widthNode = laneNode.child("width"); widthNode; widthNode = widthNode.next_sibling())
+				{
+					double offset = widthNode.attribute("sOffset").as_double();
+					double		a = widthNode.attribute("a").as_double();
+					double		b = widthNode.attribute("b").as_double();
+					double		c = widthNode.attribute("c").as_double();
+					double		d = widthNode.attribute("d").as_double();
+
+					lane.m_widthes.emplace_back(LaneWidth(offset, a, b, c, d));
+				}
+
+				for (pugi::xml_node roadMarkNode = laneNode.child("roadMark"); roadMarkNode; roadMarkNode = roadMarkNode.next_sibling())
+				{
+					LaneRoadMark roadMark;
+					roadMark.m_offset = roadMarkNode.attribute("sOffset").as_double();
+					roadMark.m_width = roadMarkNode.attribute("width").as_double();
+					roadMark.m_height = roadMarkNode.attribute("height").as_double();
+					roadMark.m_type = mappingRoadMarkType(roadMarkNode.attribute("type").as_string());
+					roadMark.m_weight = mappingRoadMarkWeight(roadMarkNode.attribute("weight").as_string());
+					roadMark.m_color = mappingRoadMarkColor(roadMarkNode.attribute("color").as_string());
+					roadMark.m_laneChange = mappingRoadMarkLaneChange(roadMarkNode.attribute("laneChange").as_string());
+					roadMark.m_material = LaneRoadMark::MarkMaterial::Standard;
+
+					// Sub type
+
+					lane.m_roadMarks.emplace_back(roadMark);
+				}
+
+				lanes.emplace_back(lane);
 			}
 		};
 
@@ -564,9 +630,9 @@ namespace Echo
 			{
 				LaneSection laneSection;
 
-				parseLane(laneSection, laneSectionNode.child("left"));
-				parseLane(laneSection, laneSectionNode.child("center"));
-				parseLane(laneSection, laneSectionNode.child("right"));
+				parseLane(laneSection.m_leftLanes, laneSectionNode.child("left"));
+				parseLane(laneSection.m_centerLanes, laneSectionNode.child("center"));
+				parseLane(laneSection.m_rightLanes, laneSectionNode.child("right"));
 
 				road.m_laneSections.emplace_back(laneSection);
 			}
