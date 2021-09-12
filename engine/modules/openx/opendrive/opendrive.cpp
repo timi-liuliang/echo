@@ -354,6 +354,151 @@ namespace Echo
 		h = hdg + atan2(m_poly3V.evaluatePrim(p), m_poly3U.evaluatePrim(p));
 	}
 
+	OpenDrive::LaneWidth* OpenDrive::Lane::getWidth(double s)
+	{
+		if (!m_widthes.empty())
+		{
+			for (int i = 0; i + 1 < int(m_widthes.size()); i++)
+			{
+				if (s < m_widthes[i].m_offset)
+					return &m_widthes[i];
+			}
+
+			return &m_widthes.back();
+		}
+
+		return nullptr;
+	}
+
+	OpenDrive::Lane* OpenDrive::LaneSection::getLaneById(i32 laneId)
+	{
+		for (Lane& lane : m_leftLanes)
+		{
+			if (lane.m_id == laneId)
+				return &lane;
+		}
+
+		for (Lane& lane : m_centerLanes)
+		{
+			if (lane.m_id == laneId)
+				return &lane;
+		}
+
+		for (Lane& lane : m_rightLanes)
+		{
+			if (lane.m_id == laneId)
+				return &lane;
+		}
+
+		return nullptr;
+	}
+
+	double OpenDrive::LaneSection::getLaneWidth(double s, int laneId)
+	{
+		// Reference lane has no width
+		if (laneId == 0)
+			return 0.0;
+
+		// Make sure s in secton range
+		s = std::clamp<double>(s, m_s, m_s + m_length);
+
+		Lane* lane = getLaneById(laneId);
+		if (!lane)
+			return 0.0;
+
+		LaneWidth* laneWidth = lane->getWidth(s - m_s);
+		if (!laneWidth)
+			return 0.0;
+
+		double ds = s - (m_s + laneWidth->m_offset);
+		return laneWidth->m_poly3.evaluate(ds);
+	}
+
+	double OpenDrive::LaneSection::getLaneInnerOffset(double s, int laneId)
+	{
+		if (laneId == 0)
+			return 0.0;
+
+		int step = laneId < 0 ? +1 : -1;
+		return getLaneOuterOffset(s, laneId+step);
+	}
+
+	double OpenDrive::LaneSection::getLaneCenterOffset(double s, int laneId)
+	{
+		if (laneId == 0)
+			return 0.0;
+
+		double outerOffset = getLaneOuterOffset(s, laneId);
+		double width = getLaneWidth(s, laneId);
+
+		return outerOffset - width / 2.0;
+	}
+
+	double OpenDrive::LaneSection::getLaneOuterOffset(double s, int laneId)
+	{
+		if (laneId == 0)
+			return 0.0;
+
+		double width = getLaneWidth(s, laneId);
+		if (std::abs(laneId) == 1)
+		{
+			// this lane is next to reference line.
+			return width;
+		}
+		else
+		{
+			int innerLaneId = laneId + (laneId < 0 ? +1 : -1);
+			return (width + getLaneOuterOffset(s, innerLaneId));
+		}
+	}
+
+	double OpenDrive::LaneSection::getLaneInnerOffsetHeading(double s, int laneId)
+	{
+		if (laneId == 0)
+			return 0.0;
+
+		int step = laneId < 0 ? +1 : -1;
+		return getLaneOuterOffsetHeading(s, laneId + step);
+	}
+
+	double OpenDrive::LaneSection::getLaneCenterOffsetHeading(double s, int laneId)
+	{
+		if (laneId == 0)
+			return 0.0;
+
+		double innerHeading = getLaneInnerOffsetHeading(s, laneId);
+		double outerHeading = getLaneCenterOffsetHeading(s, laneId);
+
+		return (innerHeading + outerHeading) * 0.5;
+	}
+
+	double OpenDrive::LaneSection::getLaneOuterOffsetHeading(double s, int laneId)
+	{
+		if (laneId == 0)
+			return 0.0;
+
+		Lane* lane = getLaneById(laneId);
+		if (!lane)
+			return 0.0;
+
+		LaneWidth* laneWidth = lane->getWidth(s - m_s);
+		if (!laneWidth)
+			return 0.0;
+
+		double ds = s - (m_s + laneWidth->m_offset);
+		double heading = laneWidth->m_poly3.evaluatePrim(ds);
+
+		if (std::abs(laneId) == 1)
+		{
+			return heading;
+		}
+		else
+		{
+			int innerLaneId = laneId + (laneId < 0 ? +1 : -1);
+			return (heading + getLaneOuterOffsetHeading(s, innerLaneId));
+		}
+	}
+
 	OpenDrive::OpenDrive()
 		: Node()
 	{
@@ -482,36 +627,39 @@ namespace Echo
 	{
 		auto setLinkData = [](RoadLink& roadLink, pugi::xml_node xmlNode)
 		{
-			roadLink.m_elementId = xmlNode.attribute("elementId").as_int(-1);
-
-			String elementType = xmlNode.attribute("elementType").as_string();
-			String contactPointType = xmlNode.attribute("contactPoint").as_string();
-
-			if (elementType == "road")
+			if (xmlNode)
 			{
-				roadLink.m_elementType = RoadLink::ElementType::Road;
+				roadLink.m_elementId = xmlNode.attribute("elementId").as_int(-1);
 
-				if (contactPointType == "start")
+				String elementType = xmlNode.attribute("elementType").as_string();
+				String contactPointType = xmlNode.attribute("contactPoint").as_string();
+
+				if (elementType == "road")
 				{
-					roadLink.m_contactPointType = RoadLink::ContactPointType::Start;
+					roadLink.m_elementType = RoadLink::ElementType::Road;
+
+					if (contactPointType == "start")
+					{
+						roadLink.m_contactPointType = RoadLink::ContactPointType::Start;
+					}
+					else if (contactPointType == "end")
+					{
+						roadLink.m_contactPointType = RoadLink::ContactPointType::End;
+					}
+					else
+					{
+						EchoLogError("Opendrive : Unknown road link contact point type.")
+					}
 				}
-				else if (contactPointType == "end")
+				else if (elementType == "junction")
 				{
-					roadLink.m_contactPointType = RoadLink::ContactPointType::End;
+					roadLink.m_elementType = RoadLink::ElementType::Junction;
+					roadLink.m_contactPointType = RoadLink::ContactPointType::None;
 				}
 				else
 				{
-					EchoLogError("Opendrive : Unknown road link contact point type.")
+					EchoLogError("Opendrive : Unknown road link elment type.")
 				}
-			}
-			else if(elementType== "junction")
-			{
-				roadLink.m_elementType = RoadLink::ElementType::Junction;
-				roadLink.m_contactPointType = RoadLink::ContactPointType::None;
-			}
-			else
-			{
-				EchoLogError("Opendrive : Unknown road link elment type.")
 			}
 		};
 
@@ -608,6 +756,7 @@ namespace Echo
 				Lane lane;
 				lane.m_id = laneNode.attribute("id").as_int();
 				lane.m_type = mappingLaneType(laneNode.attribute("type").as_string());
+				lane.m_level = laneNode.attribute("level").as_int();
 
 				parseLaneLink(lane, laneNode);
 
@@ -643,18 +792,32 @@ namespace Echo
 			}
 		};
 
+		auto addLaneSection = [&](LaneSection& laneSection)
+		{
+			if (!road.m_laneSections.empty())
+			{
+				LaneSection& preLaneSection = road.m_laneSections.back();
+				preLaneSection.m_length = laneSection.m_s - preLaneSection.m_s;
+			}
+
+			laneSection.m_length = road.m_length - laneSection.m_s;
+
+			road.m_laneSections.emplace_back(laneSection);
+		};
+
 		pugi::xml_node lanesNode = roadNode.child("lanes");
 		if (lanesNode)
 		{
 			for (pugi::xml_node laneSectionNode = lanesNode.child("laneSection"); laneSectionNode; laneSectionNode = laneSectionNode.next_sibling())
 			{
 				LaneSection laneSection;
+				laneSection.m_s = laneSectionNode.attribute("s").as_double();
 
 				parseLane(laneSection.m_leftLanes, laneSectionNode.child("left"));
 				parseLane(laneSection.m_centerLanes, laneSectionNode.child("center"));
 				parseLane(laneSection.m_rightLanes, laneSectionNode.child("right"));
 
-				road.m_laneSections.emplace_back(laneSection);
+				addLaneSection(laneSection);
 			}
 		}
 	}

@@ -333,10 +333,14 @@ namespace Echo
 			i32					m_id = -1;
 			i32					m_globalId = -1;					// Unique id for osi
 			LaneType			m_type = LaneType::None;
+			i32					m_level = 0;						// Boolean, ture means keep lane on level
 			LaneLink			m_predecessor;
 			LaneLink			m_successor;
 			LaneWidthArray		m_widthes;
 			LaneRoadMarkArray	m_roadMarks;
+
+			// Get width
+			LaneWidth* getWidth(double s);
 		};
 		typedef vector<Lane>::type LaneArray;
 
@@ -349,6 +353,20 @@ namespace Echo
 			LaneArray		m_leftLanes;
 			LaneArray		m_centerLanes;
 			LaneArray		m_rightLanes;
+
+			// Get lane
+			Lane* getLaneById(i32 laneId);
+
+			// Get lane inner|center|outer line info
+			double getLaneWidth(double s, int laneId);
+			double getLaneInnerOffset(double s, int laneId);
+			double getLaneCenterOffset(double s, int laneId);
+			double getLaneOuterOffset(double s, int laneId);
+
+			// Get lane heading
+			double getLaneInnerOffsetHeading(double s, int laneId);
+			double getLaneCenterOffsetHeading(double s, int laneId);
+			double getLaneOuterOffsetHeading(double s, int laneId);
 		};
 		typedef vector<LaneSection>::type LaneSectionArray;
 
