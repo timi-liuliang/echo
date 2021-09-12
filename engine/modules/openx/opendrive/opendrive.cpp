@@ -523,6 +523,24 @@ namespace Echo
 		}
 	}
 
+	void OpenDrive::parseLaneLink(Lane& lane, pugi::xml_node laneNode)
+	{
+		auto setLinkData = [](LaneLink& laneLink, pugi::xml_node xmlNode)
+		{
+			if (xmlNode)
+			{
+				laneLink.m_id = xmlNode.attribute("id").as_int(0);
+			}
+		};
+
+		pugi::xml_node linkNode = laneNode.child("link");
+		if (linkNode)
+		{
+			setLinkData(lane.m_predecessor, linkNode.child("predecessor"));
+			setLinkData(lane.m_successor, linkNode.child("successor"));
+		}
+	}
+
 	void OpenDrive::parseLanes(Road& road, pugi::xml_node roadNode)
 	{
 		auto mappingLaneType = [](const char* name) -> LaneType
@@ -590,6 +608,8 @@ namespace Echo
 				Lane lane;
 				lane.m_id = laneNode.attribute("id").as_int();
 				lane.m_type = mappingLaneType(laneNode.attribute("type").as_string());
+
+				parseLaneLink(lane, laneNode);
 
 				for (pugi::xml_node widthNode = laneNode.child("width"); widthNode; widthNode = widthNode.next_sibling())
 				{

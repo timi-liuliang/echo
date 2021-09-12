@@ -323,11 +323,18 @@ namespace Echo
 		};
 		typedef vector<LaneRoadMark>::type LaneRoadMarkArray;
 
+		struct LaneLink
+		{
+			i32		m_id = 0;
+		};
+
 		struct Lane
 		{
 			i32					m_id = -1;
 			i32					m_globalId = -1;					// Unique id for osi
 			LaneType			m_type = LaneType::None;
+			LaneLink			m_predecessor;
+			LaneLink			m_successor;
 			LaneWidthArray		m_widthes;
 			LaneRoadMarkArray	m_roadMarks;
 		};
@@ -384,6 +391,7 @@ namespace Echo
 		void parseGeometry(Road& road, pugi::xml_node roadNode);
 		void parseRoadLink(Road& road, pugi::xml_node roadNode);
 		void parseLanes(Road& road, pugi::xml_node roadNode);
+		void parseLaneLink(Lane& lane, pugi::xml_node laneNode);
 
 		// Refresh debug draw
 		void refreshDebugDraw();
