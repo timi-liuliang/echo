@@ -24,16 +24,20 @@ namespace Echo
 
 	public:
 		// Convert
+		Vector3 toDir3(double radian, double h=0.0);
 		Vector3 toVec3(double x, double y, double h=0.0);
 
 	protected:
-		// Draw
+		// Draw reference line
 		void drawLine(OpenDrive::Line* line);
 		void drawArc(OpenDrive::Arc* arc);
 		void drawSpiral(OpenDrive::Spiral* spiral);
 		void drawPoly3(OpenDrive::Poly3* poly3);
 		void drawParamPoly3(OpenDrive::ParamPoly3* paramPoly3);
 		void drawArrow(double endX, double endY, double hdg, Color& color, double length);
+		
+		// Draw Lane Outer
+		void drawLaneOuterBorder(OpenDrive::Road& road, OpenDrive::LaneSection& laneSection);
 
 	private:
 		Gizmos*		m_gizmo = nullptr;
@@ -45,5 +49,6 @@ namespace Echo
 		Color		m_arcColor = Color::fromRGBA(144, 207, 77);
 		Color		m_poly3Color = Color::fromRGBA(255, 98, 81);
 		Color		m_paramPoly3Color = Color::fromRGBA(186, 135, 243);
+		Color		m_laneBorderColor = Color::fromRGBA(160, 160, 160);
 	};
 }

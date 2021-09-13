@@ -372,19 +372,7 @@ namespace Echo
 
 	OpenDrive::Lane* OpenDrive::LaneSection::getLaneById(i32 laneId)
 	{
-		for (Lane& lane : m_leftLanes)
-		{
-			if (lane.m_id == laneId)
-				return &lane;
-		}
-
-		for (Lane& lane : m_centerLanes)
-		{
-			if (lane.m_id == laneId)
-				return &lane;
-		}
-
-		for (Lane& lane : m_rightLanes)
+		for (Lane& lane : m_lanes)
 		{
 			if (lane.m_id == laneId)
 				return &lane;
@@ -499,6 +487,49 @@ namespace Echo
 		}
 	}
 
+	OpenDrive::Geometry* OpenDrive::Road::getGeometryByS(double ds)
+	{
+		if (!m_geometries.empty())
+		{
+			for (int i = 0; i + 1 < int(m_geometries.size()); i++)
+			{
+				if (ds < m_geometries[i]->m_s)
+					return m_geometries[i];
+			}
+
+			if(ds<=m_length)
+				return m_geometries.back();
+		}
+
+		return nullptr;
+	}
+
+	OpenDrive::LaneSection* OpenDrive::Road::getLaneSectionByS(double ds)
+	{
+		if (!m_laneSections.empty())
+		{
+			for (int i = 0; i + 1 < int(m_laneSections.size()); i++)
+			{
+				if (ds < m_laneSections[i].m_s)
+					return &m_laneSections[i];
+			}
+
+			if (ds <= m_length)
+				return &m_laneSections.back();
+		}
+
+		return nullptr;
+	}
+
+	void OpenDrive::Road::evaluate(double ds, double& x, double& y, double& h)
+	{
+		OpenDrive::Geometry* geometry = getGeometryByS(ds);
+		if (geometry)
+		{
+			geometry->evaluate(ds, x, y, h);
+		}
+	}
+
 	OpenDrive::OpenDrive()
 		: Node()
 	{
@@ -570,7 +601,7 @@ namespace Echo
 		pugi::xml_node planViewNode = roadNode.child("planView");
 		if (planViewNode)
 		{
-			for (pugi::xml_node geometryNode = planViewNode.child("geometry"); geometryNode; geometryNode = geometryNode.next_sibling())
+			for (pugi::xml_node geometryNode = planViewNode.child("geometry"); geometryNode; geometryNode = geometryNode.next_sibling("geometry"))
 			{
 				double s	  = geometryNode.attribute("s").as_double();
 				double x	  = geometryNode.attribute("x").as_double();
@@ -751,7 +782,7 @@ namespace Echo
 
 		auto parseLane = [&](LaneArray& lanes, pugi::xml_node laneParentNode)
 		{
-			for (pugi::xml_node laneNode = laneParentNode.child("lane"); laneNode; laneNode = laneNode.next_sibling())
+			for (pugi::xml_node laneNode = laneParentNode.child("lane"); laneNode; laneNode = laneNode.next_sibling("lane"))
 			{
 				Lane lane;
 				lane.m_id = laneNode.attribute("id").as_int();
@@ -760,7 +791,7 @@ namespace Echo
 
 				parseLaneLink(lane, laneNode);
 
-				for (pugi::xml_node widthNode = laneNode.child("width"); widthNode; widthNode = widthNode.next_sibling())
+				for (pugi::xml_node widthNode = laneNode.child("width"); widthNode; widthNode = widthNode.next_sibling("width"))
 				{
 					double offset = widthNode.attribute("sOffset").as_double();
 					double		a = widthNode.attribute("a").as_double();
@@ -771,7 +802,7 @@ namespace Echo
 					lane.m_widthes.emplace_back(LaneWidth(offset, a, b, c, d));
 				}
 
-				for (pugi::xml_node roadMarkNode = laneNode.child("roadMark"); roadMarkNode; roadMarkNode = roadMarkNode.next_sibling())
+				for (pugi::xml_node roadMarkNode = laneNode.child("roadMark"); roadMarkNode; roadMarkNode = roadMarkNode.next_sibling("roadMark"))
 				{
 					LaneRoadMark roadMark;
 					roadMark.m_offset = roadMarkNode.attribute("sOffset").as_double();
@@ -808,14 +839,14 @@ namespace Echo
 		pugi::xml_node lanesNode = roadNode.child("lanes");
 		if (lanesNode)
 		{
-			for (pugi::xml_node laneSectionNode = lanesNode.child("laneSection"); laneSectionNode; laneSectionNode = laneSectionNode.next_sibling())
+			for (pugi::xml_node laneSectionNode = lanesNode.child("laneSection"); laneSectionNode; laneSectionNode = laneSectionNode.next_sibling("laneSection"))
 			{
 				LaneSection laneSection;
 				laneSection.m_s = laneSectionNode.attribute("s").as_double();
 
-				parseLane(laneSection.m_leftLanes, laneSectionNode.child("left"));
-				parseLane(laneSection.m_centerLanes, laneSectionNode.child("center"));
-				parseLane(laneSection.m_rightLanes, laneSectionNode.child("right"));
+				parseLane(laneSection.m_lanes, laneSectionNode.child("left"));
+				parseLane(laneSection.m_lanes, laneSectionNode.child("center"));
+				parseLane(laneSection.m_lanes, laneSectionNode.child("right"));
 
 				addLaneSection(laneSection);
 			}

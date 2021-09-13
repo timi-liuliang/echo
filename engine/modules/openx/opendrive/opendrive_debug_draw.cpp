@@ -51,6 +51,11 @@ namespace Echo
 						else if (geometry->m_type == OpenDrive::Geometry::Type::ParamPoly3)	drawParamPoly3(ECHO_DOWN_CAST<OpenDrive::ParamPoly3*>(geometry));
 					}
 				}
+
+				for (OpenDrive::LaneSection& laneSection : road.m_laneSections)
+				{
+					drawLaneOuterBorder(road, laneSection);
+				}
 			}
 		}
 	}
@@ -249,6 +254,57 @@ namespace Echo
 
 			m_gizmo->drawLine(startPos, startPos + dir0 * length, color);
 			m_gizmo->drawLine(startPos, startPos + dir1 * length, color);
+		}
+	}
+
+	void OpenDriveDebugDraw::drawLaneOuterBorder(OpenDrive::Road& road, OpenDrive::LaneSection& laneSection)
+	{
+		double startX, startY, startH;
+		double endX, endY, endH;
+
+		i32    stepCount = std::max<i32>(i32(laneSection.getLength() / 0.1), 1);
+		double stepLength = laneSection.getLength() / stepCount;
+
+		for (i32 i = 0; i < stepCount; i++)
+		{
+			double ds0 = i * stepLength + laneSection.m_s;
+			double ds1 = ds0 + stepLength + laneSection.m_s;
+
+			road.evaluate(ds0, startX, startY, startH);
+			road.evaluate(ds1, endX, endY, endH);
+
+			Vector3 center0 = toVec3(startX, startY);
+			Vector3 center1 = toVec3(endX, endY);
+
+			for (OpenDrive::Lane& lane : laneSection.m_lanes)
+			{
+				if (lane.m_id != 0)
+				{
+					double width0 = laneSection.getLaneOuterOffset(ds0, lane.m_id);
+					double width1 = laneSection.getLaneOuterOffset(ds1, lane.m_id);
+
+					double offsetH = lane.m_id > 0 ? -Math::PI_DIV2 : Math::PI_DIV2;
+
+					Vector3 dir0 = toDir3(startH + offsetH);
+					Vector3 dir1 = toDir3(endH + offsetH);
+
+					m_gizmo->drawLine(center0 + dir0 * width0, center1 + dir1 * width1, m_laneBorderColor);
+				}
+			}
+		}
+	}
+
+	Vector3 OpenDriveDebugDraw::toDir3(double radian, double h)
+	{
+		if (m_is2D)
+		{
+			// 2d
+			return Vector3(cos(radian), sin(radian), h);
+		}
+		else
+		{
+			// 3d
+			return Vector3(cos(radian), h, -sin(radian));
 		}
 	}
 

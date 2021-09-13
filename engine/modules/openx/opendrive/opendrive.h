@@ -332,7 +332,7 @@ namespace Echo
 		{
 			i32					m_id = -1;
 			i32					m_globalId = -1;					// Unique id for osi
-			LaneType			m_type = LaneType::None;
+			LaneType			m_type = LaneType::None;	
 			i32					m_level = 0;						// Boolean, ture means keep lane on level
 			LaneLink			m_predecessor;
 			LaneLink			m_successor;
@@ -350,9 +350,10 @@ namespace Echo
 			double			m_s=0.0;				// s-coordinate of start position
 			bool			m_singleSide = false;
 			double			m_length = 0.0;
-			LaneArray		m_leftLanes;
-			LaneArray		m_centerLanes;
-			LaneArray		m_rightLanes;
+			LaneArray		m_lanes;
+
+			// Length
+			double getLength() const { return m_length; }
 
 			// Get lane
 			Lane* getLaneById(i32 laneId);
@@ -383,6 +384,13 @@ namespace Echo
 			ElevationArray		m_elevationProfile;
 			ElevationArray		m_superElevationProfile;
 			LaneSectionArray	m_laneSections;
+
+			// Get by s
+			Geometry* getGeometryByS(double ds);
+			LaneSection* getLaneSectionByS(double ds);
+
+			// Evaluate reference line
+			void evaluate(double ds, double& x, double& y, double& h);
 		};
 
 	public:
