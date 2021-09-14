@@ -399,8 +399,8 @@ namespace Echo
 		const ResourcePath& getXodrRes() { return m_xodrRes; }
 
 		// Debug draw
-		StringOption getDebugDrawOption() const;
-		void setDebugDrawOption(const StringOption& option);
+		OpenDriveDebugDraw* getDebugDraw() { return m_debugDraw; }
+		void setDebugDraw(Object* debugDraw);
 
 		// Roads
 		vector<Road>::type& getRoads() { return m_roads; }
@@ -426,6 +426,5 @@ namespace Echo
 		ResourcePath		m_xodrRes = ResourcePath("", ".xodr");
 		vector<Road>::type	m_roads;
 		OpenDriveDebugDraw*	m_debugDraw = nullptr;
-		DebugDrawOption		m_debugDrawOption = DebugDrawOption::Editor;
 	};
 }

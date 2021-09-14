@@ -544,8 +544,11 @@ namespace Echo
 	{
 		CLASS_BIND_METHOD(OpenDrive, getXodrRes, DEF_METHOD("getXodrRes"));
 		CLASS_BIND_METHOD(OpenDrive, setXodrRes, DEF_METHOD("setXodrRes"));
+		CLASS_BIND_METHOD(OpenDrive, getDebugDraw, DEF_METHOD("getDebugDraw"));
+		CLASS_BIND_METHOD(OpenDrive, setDebugDraw, DEF_METHOD("setDebugDraw"));
 
 		CLASS_REGISTER_PROPERTY(OpenDrive, "Xodr", Variant::Type::ResourcePath, "getXodrRes", "setXodrRes");
+		CLASS_REGISTER_PROPERTY(OpenDrive, "DebugDraw", Variant::Type::Object, "getDebugDraw", "setDebugDraw");
 	}
 
 	void OpenDrive::reset()
@@ -850,30 +853,26 @@ namespace Echo
 		}
 	}
 
-	void OpenDrive::setDebugDrawOption(const StringOption& option)
+	void OpenDrive::setDebugDraw(Object* debugDraw)
 	{
-		m_debugDrawOption = option.toEnum(DebugDrawOption::Editor);
+		EchoSafeDelete(m_debugDraw, OpenDriveDebugDraw);
+		m_debugDraw = (OpenDriveDebugDraw*)debugDraw;
 
 		refreshDebugDraw();
 	}
 
 	void OpenDrive::refreshDebugDraw()
 	{
-		if ((m_debugDrawOption == DebugDrawOption::All) ||
-			(m_debugDrawOption == DebugDrawOption::Editor && !IsGame) ||
-			(m_debugDrawOption == DebugDrawOption::Game && IsGame))
+		if (m_debugDraw)
 		{
 			m_debugDraw->setEnable(true);
 			m_debugDraw->onDriveChanged(this);
-		}
-		else
-		{
-			m_debugDraw->setEnable(false);
 		}
 	}
 
 	void OpenDrive::updateInternal(float elapsedTime)
 	{
-		m_debugDraw->update(elapsedTime);
+		if(m_debugDraw)
+			m_debugDraw->update(elapsedTime);
 	}
 }

@@ -1,5 +1,6 @@
 #include "opendrive_module.h"
 #include "opendrive.h"
+#include "opendrive_debug_draw.h"
 #include "editor/opendrive_editor.h"
 
 namespace Echo
@@ -24,6 +25,7 @@ namespace Echo
 	void OpenDriveModule::registerTypes()
 	{
 		Class::registerType<OpenDrive>();
+		Class::registerType<OpenDriveDebugDraw>();
 
 		CLASS_REGISTER_EDITOR(OpenDrive, OpenDriveEditor)
 	}

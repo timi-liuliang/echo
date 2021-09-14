@@ -16,6 +16,11 @@ namespace Echo
 		EchoSafeDelete(m_gizmo, Gizmos);
 	}
 
+	void OpenDriveDebugDraw::bindMethods()
+	{
+
+	}
+
 	void OpenDriveDebugDraw::setEnable(bool isEnable)
 	{
 		if (m_isEnable != isEnable)

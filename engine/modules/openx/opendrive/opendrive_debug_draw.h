@@ -6,8 +6,10 @@
 
 namespace Echo
 {
-	class OpenDriveDebugDraw
+	class OpenDriveDebugDraw : public Object
 	{
+		ECHO_CLASS(OpenDriveDebugDraw, Object)
+
 	public:
 		OpenDriveDebugDraw();
 		virtual ~OpenDriveDebugDraw();
