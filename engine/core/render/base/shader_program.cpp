@@ -260,7 +260,7 @@ namespace Echo
         CLASS_REGISTER_PROPERTY(ShaderProgram, "CullMode", Variant::Type::StringOption, "getCullMode", "setCullMode");
         CLASS_REGISTER_PROPERTY(ShaderProgram, "BlendMode", Variant::Type::StringOption, "getBlendMode", "setBlendMode");
 		CLASS_REGISTER_PROPERTY(ShaderProgram, "DepthStencilState", Variant::Type::Object, "getDepthStencilState", "setDepthStencilState");
-		CLASS_REGISTER_PROPERTY_HINT(ShaderProgram, "DepthStencilState", PropertyHintType::ResourceType, "DepthStencilState");
+		CLASS_REGISTER_PROPERTY_HINT(ShaderProgram, "DepthStencilState", PropertyHintType::ObjectType, "DepthStencilState");
 
         CLASS_REGISTER_PROPERTY_HINT(ShaderProgram, "CullMode", PropertyHintType::Category, "RasterizerState");
         CLASS_REGISTER_PROPERTY_HINT(ShaderProgram, "BlendMode", PropertyHintType::Category, "BlendState");

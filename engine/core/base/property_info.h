@@ -15,7 +15,7 @@ namespace Echo
 		None,
 		Range,				// variable range
         Category,           // property category
-		ResourceType,		// resource object type
+		ObjectType,
 		ResourceBehavior,	// load|save
 		ReadOnly,
 		Language,

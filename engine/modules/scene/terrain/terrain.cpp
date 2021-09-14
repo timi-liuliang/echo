@@ -35,7 +35,7 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(Terrain, "HeightRange", Variant::Type::Real, "getHeightRange", "setHeightRange");
 		CLASS_REGISTER_PROPERTY(Terrain, "GridSpacing", Variant::Type::Int, "getGridSpacing", "setGridSpacing");
         CLASS_REGISTER_PROPERTY(Terrain, "Material", Variant::Type::Object, "getMaterial", "setMaterial");
-        CLASS_REGISTER_PROPERTY_HINT(Terrain, "Material", PropertyHintType::ResourceType, "Material");
+        CLASS_REGISTER_PROPERTY_HINT(Terrain, "Material", PropertyHintType::ObjectType, "Material");
     }
     
     void Terrain::setDataPath(const ResourcePath& path)

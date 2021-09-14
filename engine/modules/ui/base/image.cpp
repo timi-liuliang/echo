@@ -32,7 +32,7 @@ namespace Echo
         CLASS_REGISTER_PROPERTY(UiImage, "Height", Variant::Type::Int, "getHeight", "setHeight");
         CLASS_REGISTER_PROPERTY(UiImage, "Texture", Variant::Type::ResourcePath, "getTextureRes", "setTextureRes");
         CLASS_REGISTER_PROPERTY(UiImage, "Material", Variant::Type::Object, "getMaterial", "setMaterial");
-        CLASS_REGISTER_PROPERTY_HINT(UiImage, "Material", PropertyHintType::ResourceType, "Material");
+        CLASS_REGISTER_PROPERTY_HINT(UiImage, "Material", PropertyHintType::ObjectType, "Material");
     }
     
     void UiImage::setTextureRes(const ResourcePath& path)

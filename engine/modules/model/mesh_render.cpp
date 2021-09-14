@@ -21,9 +21,9 @@ namespace Echo
 		CLASS_BIND_METHOD(MeshRender, setMaterial, DEF_METHOD("setMaterial"));
 
 		CLASS_REGISTER_PROPERTY(MeshRender, "Mesh", Variant::Type::Object, "getMesh", "setMesh");
-		CLASS_REGISTER_PROPERTY_HINT(MeshRender, "Mesh", PropertyHintType::ResourceType, "Mesh");
+		CLASS_REGISTER_PROPERTY_HINT(MeshRender, "Mesh", PropertyHintType::ObjectType, "Mesh");
 		CLASS_REGISTER_PROPERTY(MeshRender, "Material", Variant::Type::Object, "getMaterial", "setMaterial");
-		CLASS_REGISTER_PROPERTY_HINT(MeshRender, "Material", PropertyHintType::ResourceType, "Material");
+		CLASS_REGISTER_PROPERTY_HINT(MeshRender, "Material", PropertyHintType::ObjectType, "Material");
 	}
 
 	void MeshRender::setMesh(Object* mesh)

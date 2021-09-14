@@ -45,7 +45,7 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(GltfMesh, "Mesh", Variant::Type::Int, "getMeshIdx", "setMeshIdx");
 		CLASS_REGISTER_PROPERTY(GltfMesh, "Primitive", Variant::Type::Int, "getPrimitiveIdx", "setPrimitiveIdx");
 		CLASS_REGISTER_PROPERTY(GltfMesh, "Material", Variant::Type::Object, "getMaterial", "setMaterial");
-        CLASS_REGISTER_PROPERTY_HINT(GltfMesh, "Material", PropertyHintType::ResourceType, "Material");
+        CLASS_REGISTER_PROPERTY_HINT(GltfMesh, "Material", PropertyHintType::ObjectType, "Material");
         CLASS_REGISTER_PROPERTY(GltfMesh, "Skeleton", Variant::Type::NodePath, "getSkeletonPath", "setSkeletonPath");
 	}
 

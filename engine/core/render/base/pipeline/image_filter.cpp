@@ -14,7 +14,7 @@ namespace Echo
 		CLASS_BIND_METHOD(ImageFilter, setMaterial, DEF_METHOD("setMaterial"));
 
 		CLASS_REGISTER_PROPERTY(ImageFilter, "Material", Variant::Type::Object, "getMaterial", "setMaterial");
-		CLASS_REGISTER_PROPERTY_HINT(ImageFilter, "Material", PropertyHintType::ResourceType, "Material");
+		CLASS_REGISTER_PROPERTY_HINT(ImageFilter, "Material", PropertyHintType::ObjectType, "Material");
 	}
 
 	void ImageFilter::setMaterial(Object* material)

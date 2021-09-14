@@ -37,7 +37,7 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(Sprite, "Height", Variant::Type::Real, "getHeight", "setHeight");
 		CLASS_REGISTER_PROPERTY(Sprite, "Offset", Variant::Type::Vector2, "getOffset", "setOffset");
 		CLASS_REGISTER_PROPERTY(Sprite, "Material", Variant::Type::Object, "getMaterial", "setMaterial");
-		CLASS_REGISTER_PROPERTY_HINT(Sprite, "Material", PropertyHintType::ResourceType, "Material");
+		CLASS_REGISTER_PROPERTY_HINT(Sprite, "Material", PropertyHintType::ObjectType, "Material");
 	}
 
 	StringOption Sprite::getBillboardType()

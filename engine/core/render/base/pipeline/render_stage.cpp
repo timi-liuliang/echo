@@ -33,7 +33,7 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(RenderStage, "EditorOnly", Variant::Type::Bool, "isEditorOnly", "setEditorOnly");
 		CLASS_REGISTER_PROPERTY(RenderStage, "FrameBuffer", Variant::Type::Object, "getFrameBuffer", "setFrameBuffer");
 
-		CLASS_REGISTER_PROPERTY_HINT(RenderStage, "FrameBuffer", PropertyHintType::ResourceType, "FrameBufferOffScreen|FrameBufferWindow");
+		CLASS_REGISTER_PROPERTY_HINT(RenderStage, "FrameBuffer", PropertyHintType::ObjectType, "FrameBufferOffScreen|FrameBufferWindow");
 	}
 
 	void RenderStage::addRenderQueue(IRenderQueue* queue, ui32 position)

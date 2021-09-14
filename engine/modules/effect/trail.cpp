@@ -29,7 +29,7 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(Trail, "FaceTime", Variant::Type::Real, "getFadeTime", "setFadeTime");
 		CLASS_REGISTER_PROPERTY(Trail, "StepLength", Variant::Type::Real, "getStepLength", "setStepLength");
 		CLASS_REGISTER_PROPERTY(Trail, "Material", Variant::Type::Object, "getMaterial", "setMaterial");
-		CLASS_REGISTER_PROPERTY_HINT(Trail, "Material", PropertyHintType::ResourceType, "Material");
+		CLASS_REGISTER_PROPERTY_HINT(Trail, "Material", PropertyHintType::ObjectType, "Material");
 	}
 
 	void Trail::reset()

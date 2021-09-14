@@ -1034,7 +1034,7 @@ namespace Studio
 			if (!customFactory)
 			{
 				Echo::String extraData = Echo::StringUtil::Format("%d:%s", object->getId(), propertyName.c_str());
-				Echo::String resourceHint = propInfo->getHint(Echo::PropertyHintType::ResourceType);
+				Echo::String resourceHint = propInfo->getHint(Echo::PropertyHintType::ObjectType);
 
 				switch (var.getType())
 				{

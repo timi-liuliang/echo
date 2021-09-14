@@ -549,6 +549,7 @@ namespace Echo
 
 		CLASS_REGISTER_PROPERTY(OpenDrive, "Xodr", Variant::Type::ResourcePath, "getXodrRes", "setXodrRes");
 		CLASS_REGISTER_PROPERTY(OpenDrive, "DebugDraw", Variant::Type::Object, "getDebugDraw", "setDebugDraw");
+		CLASS_REGISTER_PROPERTY_HINT(OpenDrive, "DebugDraw", PropertyHintType::ObjectType, "OpenDriveDebugDraw");
 	}
 
 	void OpenDrive::reset()
