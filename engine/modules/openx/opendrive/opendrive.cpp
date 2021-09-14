@@ -14,12 +14,6 @@ namespace Echo
 		y = sin(m_hdg);
 	}
 
-	void OpenDrive::Geometry::getStart(double& x, double& y)
-	{
-		x = m_x;
-		y = m_y;
-	}
-
 	double OpenDrive::Geometry::getHdg() const
 	{
 		auto getAngleInInterval2PI = [](double angle)
@@ -491,14 +485,14 @@ namespace Echo
 	{
 		if (!m_geometries.empty())
 		{
-			for (int i = 0; i + 1 < int(m_geometries.size()); i++)
+			for (int i = 0; i < int(m_geometries.size()); i++)
 			{
-				if (ds < m_geometries[i]->m_s)
+				double rangeBegin = m_geometries[i]->m_s;
+				double rangeEnd = rangeBegin + m_geometries[i]->m_length;
+
+				if (ds >= rangeBegin && ds <= rangeEnd)
 					return m_geometries[i];
 			}
-
-			if(ds<=m_length)
-				return m_geometries.back();
 		}
 
 		return nullptr;
@@ -508,9 +502,12 @@ namespace Echo
 	{
 		if (!m_laneSections.empty())
 		{
-			for (int i = 0; i + 1 < int(m_laneSections.size()); i++)
+			for (int i = 0; i < int(m_laneSections.size()); i++)
 			{
-				if (ds < m_laneSections[i].m_s)
+				double rangeBegin = m_laneSections[i].m_s;
+				double rangeEnd = rangeBegin + m_laneSections[i].m_length;
+
+				if (ds >= rangeBegin && ds <= rangeEnd)
 					return &m_laneSections[i];
 			}
 
@@ -521,12 +518,12 @@ namespace Echo
 		return nullptr;
 	}
 
-	void OpenDrive::Road::evaluate(double ds, double& x, double& y, double& h)
+	void OpenDrive::Road::evaluate(double s, double& x, double& y, double& h)
 	{
-		OpenDrive::Geometry* geometry = getGeometryByS(ds);
+		OpenDrive::Geometry* geometry = getGeometryByS(s);
 		if (geometry)
 		{
-			geometry->evaluate(ds, x, y, h);
+			geometry->evaluate(s - geometry->m_s, x, y, h);
 		}
 	}
 

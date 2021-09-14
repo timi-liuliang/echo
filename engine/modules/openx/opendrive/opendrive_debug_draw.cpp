@@ -288,7 +288,7 @@ namespace Echo
 					Vector3 dir0 = toDir3(startH + offsetH);
 					Vector3 dir1 = toDir3(endH + offsetH);
 
-					m_gizmo->drawLine(center0 + dir0 * width0, center1 + dir1 * width1, m_laneBorderColor);
+					m_gizmo->drawLine(center0 + dir0 * width0, center1 + dir1 * width1, lane.m_id > 0 ? m_laneBorderColor : m_laneBorderColor * 0.75f);
 				}
 			}
 		}

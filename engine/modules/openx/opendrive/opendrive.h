@@ -61,9 +61,6 @@ namespace Echo
 			// Heading
 			virtual void getHeading(double& x, double& y);
 
-			// Start position
-			virtual void getStart(double& x, double& y);
-
 			// Hdg
 			virtual double getHdg() const;
 		};
@@ -390,7 +387,7 @@ namespace Echo
 			LaneSection* getLaneSectionByS(double ds);
 
 			// Evaluate reference line
-			void evaluate(double ds, double& x, double& y, double& h);
+			void evaluate(double s, double& x, double& y, double& h);
 		};
 
 	public:
