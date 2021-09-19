@@ -273,7 +273,7 @@ namespace Echo
 		for (i32 i = 0; i < stepCount; i++)
 		{
 			double ds0 = i * stepLength + laneSection.m_s;
-			double ds1 = ds0 + stepLength + laneSection.m_s;
+			double ds1 = ds0 + stepLength;
 
 			road.evaluate(ds0, startX, startY, startH);
 			road.evaluate(ds1, endX, endY, endH);
@@ -288,7 +288,7 @@ namespace Echo
 					double width0 = laneSection.getLaneOuterOffset(ds0, lane.m_id);
 					double width1 = laneSection.getLaneOuterOffset(ds1, lane.m_id);
 
-					double offsetH = lane.m_id > 0 ? -Math::PI_DIV2 : Math::PI_DIV2;
+					double offsetH = lane.m_id > 0 ? Math::PI_DIV2 : -Math::PI_DIV2;
 
 					Vector3 dir0 = toDir3(startH + offsetH);
 					Vector3 dir1 = toDir3(endH + offsetH);
