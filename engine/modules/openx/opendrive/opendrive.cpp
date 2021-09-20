@@ -1,6 +1,7 @@
 #include "opendrive.h"
 #include "opendrive_spiral.h"
 #include "opendrive_debug_draw.h"
+#include "opendrive_dynamic_mesh.h"
 #include "opendrive_module.h"
 #include "engine/core/io/io.h"
 #include "engine/core/log/Log.h"
@@ -595,6 +596,7 @@ namespace Echo
 		}
 
 		refreshDebugDraw();
+		refreshDynamicMeshes();
 	}
 
 	void OpenDrive::parseGeometry(Road& road, pugi::xml_node roadNode)
@@ -875,5 +877,103 @@ namespace Echo
 	{
 		if(m_debugDraw)
 			m_debugDraw->update(elapsedTime);
+
+		for (OpenDriveDynamicMesh* laneMesh : m_laneMeshes)
+			laneMesh->update(elapsedTime, false);
+	}
+
+	void OpenDrive::refreshDynamicMeshes()
+	{
+		EchoSafeDeleteContainer(m_laneMeshes, OpenDriveDynamicMesh);
+
+		for (OpenDrive::Road& road : getRoads())
+		{
+			for (OpenDrive::LaneSection& laneSection : road.m_laneSections)
+			{
+				drawLane(road, laneSection);
+			}
+		}
+	}
+
+	OpenDriveDynamicMesh* OpenDrive::getLaneMesh(Lane& lane)
+	{
+		String laneType = std::string(magic_enum::enum_name(lane.m_type)).c_str();
+		for (OpenDriveDynamicMesh* laneMesh : m_laneMeshes)
+		{
+			if (laneMesh->getName() == laneType)
+				return laneMesh;
+		}
+
+		OpenDriveDynamicMesh* newMesh = EchoNew(OpenDriveDynamicMesh);
+		newMesh->setName(laneType);
+
+		m_laneMeshes.emplace_back(newMesh);
+
+		return newMesh;
+	}
+
+	void OpenDrive::drawLane(OpenDrive::Road& road, OpenDrive::LaneSection& laneSection)
+	{
+		double startX, startY, startH;
+		double endX, endY, endH;
+
+		i32    stepCount = std::max<i32>(i32(laneSection.getLength() / 1), 1);
+		double stepLength = laneSection.getLength() / stepCount;
+
+		for (i32 i = 0; i <= stepCount; i++)
+		{
+			double ds0 = i * stepLength + laneSection.m_s;
+			road.evaluate(ds0, startX, startY, startH);
+
+			Vector3 center0 = toVec3(startX, startY);
+
+			for (OpenDrive::Lane& lane : laneSection.m_lanes)
+			{
+				if (lane.m_id != 0)
+				{
+					double laneCenterOffset0 = laneSection.getLaneCenterOffset(ds0, lane.m_id);
+					double laneWidth = laneSection.getLaneWidth(ds0, lane.m_id);
+					double offsetH = lane.m_id > 0 ? Math::PI_DIV2 : -Math::PI_DIV2;
+
+					Vector3 forward = toDir3(startH);
+					Vector3 leftDir0 = toDir3(startH + offsetH);
+					Vector3 laneCenter0 = center0 + leftDir0 * laneCenterOffset0;
+
+					OpenDriveDynamicMesh* laneMesh = getLaneMesh(lane);
+					if (laneMesh && lane.m_type==LaneType::Driving)
+						laneMesh->add(laneCenter0, forward, Vector3::UNIT_Y, laneWidth, Echo::Color::GREEN, i==0 ? true : false);
+				}
+			}
+		}
+	}
+
+
+	Vector3 OpenDrive::toDir3(double radian, double h)
+	{
+		//if (m_is2D)
+		//{
+		//	// 2d
+		//	return Vector3(cos(radian), sin(radian), h);
+		//}
+		//else
+		{
+			// 3d
+			return Vector3(cos(radian), h, -sin(radian));
+		}
+	}
+
+	// Opendrive's coordinate system to Echo's coordinate system
+	Vector3 OpenDrive::toVec3(double x, double y, double h)
+	{
+		//if (m_is2D)
+		//{
+		//	// 2d
+		//	return Vector3(x, y, h);
+		//}
+		//else
+		{
+			// 3d
+			return Vector3(x, h, -y);
+		}
 	}
 }

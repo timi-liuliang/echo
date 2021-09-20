@@ -8,6 +8,7 @@
 namespace Echo
 {
 	class OpenDriveDebugDraw;
+	class OpenDriveDynamicMesh;
 
 	// https://www.asam.net/standards/detail/opendrive/
 	class OpenDrive : public Node
@@ -408,6 +409,11 @@ namespace Echo
 		// Reset
 		void reset();
 
+	public:
+		// Convert
+		static Vector3 toDir3(double radian, double h = 0.0);
+		static Vector3 toVec3(double x, double y, double h = 0.0);
+
 	private:
 		// Parse
 		void parseXodr(const String& content);
@@ -418,13 +424,21 @@ namespace Echo
 
 		// Refresh debug draw
 		void refreshDebugDraw();
+		void refreshDynamicMeshes();
+
+		// Draw lane
+		void drawLane(OpenDrive::Road& road, LaneSection& laneSection);
+
+		// Get lane mesh
+		OpenDriveDynamicMesh* getLaneMesh(Lane& lane);
 
 		// Update
 		virtual void updateInternal(float elapsedTime) override;
 
 	protected:
-		ResourcePath		m_xodrRes = ResourcePath("", ".xodr");
-		vector<Road>::type	m_roads;
-		OpenDriveDebugDraw*	m_debugDraw = nullptr;
+		ResourcePath						m_xodrRes = ResourcePath("", ".xodr");
+		vector<Road>::type					m_roads;
+		OpenDriveDebugDraw*					m_debugDraw = nullptr;
+		vector<OpenDriveDynamicMesh*>::type	m_laneMeshes;
 	};
 }

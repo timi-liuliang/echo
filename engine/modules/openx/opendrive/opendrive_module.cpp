@@ -1,6 +1,7 @@
 #include "opendrive_module.h"
 #include "opendrive.h"
 #include "opendrive_debug_draw.h"
+#include "opendrive_dynamic_mesh.h"
 #include "editor/opendrive_editor.h"
 
 namespace Echo
@@ -26,6 +27,7 @@ namespace Echo
 	{
 		Class::registerType<OpenDrive>();
 		Class::registerType<OpenDriveDebugDraw>();
+		Class::registerType<OpenDriveDynamicMesh>();
 
 		CLASS_REGISTER_EDITOR(OpenDrive, OpenDriveEditor)
 	}

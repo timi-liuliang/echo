@@ -77,7 +77,7 @@ namespace Echo
 			line->evaluate(0, startX, startY, startH);
 			line->evaluate(line->getLength(), endX, endY, endH);
 
-			m_gizmo->drawLine(toVec3(startX, startY), toVec3(endX, endY), m_lineColor);
+			m_gizmo->drawLine(OpenDrive::toVec3(startX, startY), OpenDrive::toVec3(endX, endY), m_lineColor);
 
 			drawArrow(endX, endY, endH, m_lineColor, Math::Min(line->getLength() * 0.05, 0.1));
 		}
@@ -104,7 +104,7 @@ namespace Echo
 				arc->evaluate(ds0, startX, startY, startH);
 				arc->evaluate(ds1, endX, endY, endH);
 
-				m_gizmo->drawLine(toVec3(startX, startY), toVec3(endX, endY), color);
+				m_gizmo->drawLine(OpenDrive::toVec3(startX, startY), OpenDrive::toVec3(endX, endY), color);
 
 				if ((i + 1) == stepCount)
 				{
@@ -118,16 +118,16 @@ namespace Echo
 			arc->evaluate(0.0, startX, startY, startH);
 			arc->evaluate(arc->getLength(), endX, endY, endH);
 
-			m_gizmo->drawLine(toVec3(centerX, centerY), toVec3(startX, startY), Color(0.62745f, 0.62745f, 0.62745f, 0.16f));
-			m_gizmo->drawLine(toVec3(centerX, centerY), toVec3(endX, endY), Color(0.62745f, 0.62745f, 0.62745f, 0.16f));
+			m_gizmo->drawLine(OpenDrive::toVec3(centerX, centerY), OpenDrive::toVec3(startX, startY), Color(0.62745f, 0.62745f, 0.62745f, 0.16f));
+			m_gizmo->drawLine(OpenDrive::toVec3(centerX, centerY), OpenDrive::toVec3(endX, endY), Color(0.62745f, 0.62745f, 0.62745f, 0.16f));
 
 			// Draw heading
 			{
 				double headingX, headingY;
 				arc->getHeading(headingX, headingY);
 
-				Vector3 startPos = toVec3(arc->m_x, arc->m_y);
-				Vector3 headingDir = toVec3(headingX, headingY) * arc->getRadius() * 0.1f;
+				Vector3 startPos = OpenDrive::toVec3(arc->m_x, arc->m_y);
+				Vector3 headingDir = OpenDrive::toVec3(headingX, headingY) * arc->getRadius() * 0.1f;
 				m_gizmo->drawLine(startPos, startPos + headingDir, Color(0.62745f, 0.62745f, 0.62745f, 0.16f));
 			}
 
@@ -146,8 +146,8 @@ namespace Echo
 					dirY = sin(arc->m_hdg - Math::PI_DIV2 - Math::PI);
 				}
 
-				Vector3 startPos = toVec3(arc->m_x, arc->m_y, 0.02f);
-				Vector3 headingDir = toVec3(dirX, dirY, 0.02f) * arc->getRadius() * 0.1f;
+				Vector3 startPos = OpenDrive::toVec3(arc->m_x, arc->m_y, 0.02f);
+				Vector3 headingDir = OpenDrive::toVec3(dirX, dirY, 0.02f) * arc->getRadius() * 0.1f;
 				m_gizmo->drawLine(startPos, startPos + headingDir, Color(0.f, 0.62745f, 0.f, 0.36f));
 			}
 		}
@@ -174,7 +174,7 @@ namespace Echo
 				spiral->evaluate(ds0, startX, startY, startH);
 				spiral->evaluate(ds1, endX, endY, endH);
 
-				m_gizmo->drawLine(toVec3(startX, startY), toVec3(endX, endY), color);
+				m_gizmo->drawLine(OpenDrive::toVec3(startX, startY), OpenDrive::toVec3(endX, endY), color);
 
 				// Arrow
 				if ((i + 1) == stepCount)
@@ -206,7 +206,7 @@ namespace Echo
 				poly3->evaluate(ds0, startX, startY, startH);
 				poly3->evaluate(ds1, endX, endY, endH);
 
-				m_gizmo->drawLine(toVec3(startX, startY), toVec3(endX, endY), color);
+				m_gizmo->drawLine(OpenDrive::toVec3(startX, startY), OpenDrive::toVec3(endX, endY), color);
 
 				// Arrow
 				if ((i + 1) == stepCount)
@@ -238,7 +238,7 @@ namespace Echo
 				paramPoly3->evaluate(ds0, startX, startY, startH);
 				paramPoly3->evaluate(ds1, endX, endY, endH);
 
-				m_gizmo->drawLine(toVec3(startX, startY), toVec3(endX, endY), color);
+				m_gizmo->drawLine(OpenDrive::toVec3(startX, startY), OpenDrive::toVec3(endX, endY), color);
 
 				// Arrow
 				if ((i + 1) == stepCount)
@@ -253,9 +253,9 @@ namespace Echo
 	{
 		if (m_isDrawArrow)
 		{
-			Vector3 startPos = toVec3(endX, endY, 0.0);
-			Vector3 dir0 = toVec3(cos(hdg - 3.0 * Math::PI_DIV4), sin(hdg - 3.0 * Math::PI_DIV4), 0.0);
-			Vector3 dir1 = toVec3(cos(hdg + 3.0 * Math::PI_DIV4), sin(hdg + 3.0 * Math::PI_DIV4), 0.0);
+			Vector3 startPos = OpenDrive::toVec3(endX, endY, 0.0);
+			Vector3 dir0 = OpenDrive::toVec3(cos(hdg - 3.0 * Math::PI_DIV4), sin(hdg - 3.0 * Math::PI_DIV4), 0.0);
+			Vector3 dir1 = OpenDrive::toVec3(cos(hdg + 3.0 * Math::PI_DIV4), sin(hdg + 3.0 * Math::PI_DIV4), 0.0);
 
 			m_gizmo->drawLine(startPos, startPos + dir0 * length, color);
 			m_gizmo->drawLine(startPos, startPos + dir1 * length, color);
@@ -278,8 +278,8 @@ namespace Echo
 			road.evaluate(ds0, startX, startY, startH);
 			road.evaluate(ds1, endX, endY, endH);
 
-			Vector3 center0 = toVec3(startX, startY);
-			Vector3 center1 = toVec3(endX, endY);
+			Vector3 center0 = OpenDrive::toVec3(startX, startY);
+			Vector3 center1 = OpenDrive::toVec3(endX, endY);
 
 			for (OpenDrive::Lane& lane : laneSection.m_lanes)
 			{
@@ -290,41 +290,12 @@ namespace Echo
 
 					double offsetH = lane.m_id > 0 ? Math::PI_DIV2 : -Math::PI_DIV2;
 
-					Vector3 dir0 = toDir3(startH + offsetH);
-					Vector3 dir1 = toDir3(endH + offsetH);
+					Vector3 dir0 = OpenDrive::toDir3(startH + offsetH);
+					Vector3 dir1 = OpenDrive::toDir3(endH + offsetH);
 
 					m_gizmo->drawLine(center0 + dir0 * width0, center1 + dir1 * width1, lane.m_id > 0 ? m_laneBorderColor : m_laneBorderColor * 0.75f);
 				}
 			}
-		}
-	}
-
-	Vector3 OpenDriveDebugDraw::toDir3(double radian, double h)
-	{
-		if (m_is2D)
-		{
-			// 2d
-			return Vector3(cos(radian), sin(radian), h);
-		}
-		else
-		{
-			// 3d
-			return Vector3(cos(radian), h, -sin(radian));
-		}
-	}
-
-	// Opendrive's coordinate system to Echo's coordinate system
-	Vector3 OpenDriveDebugDraw::toVec3(double x, double y, double h)
-	{
-		if (m_is2D)
-		{
-			// 2d
-			return Vector3(x, y, h);
-		}
-		else
-		{
-			// 3d
-			return Vector3(x, h, -y);
 		}
 	}
 

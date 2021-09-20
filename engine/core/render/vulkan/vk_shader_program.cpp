@@ -177,7 +177,7 @@ namespace Echo
                 {
                     i32 textureIdx = *(i32*)(it.second->getValue().data());
                     VKTexture* texture = VKRenderer::instance()->getTexture(textureIdx);
-                    if (texture->getVkDescriptorImageInfo())
+                    if (texture && texture->getVkDescriptorImageInfo())
                     {
 						VkWriteDescriptorSet writeDescriptorSet;
 						writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
