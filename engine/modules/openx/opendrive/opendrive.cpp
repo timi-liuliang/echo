@@ -920,17 +920,17 @@ namespace Echo
 		i32    stepCount = std::max<i32>(i32(laneSection.getLength() / 1), 1);
 		double stepLength = laneSection.getLength() / stepCount;
 
-		for (i32 i = 0; i <= stepCount; i++)
+		for (OpenDrive::Lane& lane : laneSection.m_lanes)
 		{
-			double ds0 = i * stepLength + laneSection.m_s;
-			road.evaluate(ds0, startX, startY, startH);
-
-			Vector3 center0 = toVec3(startX, startY);
-
-			for (OpenDrive::Lane& lane : laneSection.m_lanes)
+			if (lane.m_id != 0)
 			{
-				if (lane.m_id != 0)
+				for (i32 i = 0; i <= stepCount; i++)
 				{
+					double ds0 = i * stepLength + laneSection.m_s;
+					road.evaluate(ds0, startX, startY, startH);
+
+					Vector3 center0 = toVec3(startX, startY);
+
 					double laneCenterOffset0 = laneSection.getLaneCenterOffset(ds0, lane.m_id);
 					double laneWidth = laneSection.getLaneWidth(ds0, lane.m_id);
 					double offsetH = lane.m_id > 0 ? Math::PI_DIV2 : -Math::PI_DIV2;
@@ -940,8 +940,11 @@ namespace Echo
 					Vector3 laneCenter0 = center0 + leftDir0 * laneCenterOffset0;
 
 					OpenDriveDynamicMesh* laneMesh = getLaneMesh(lane);
-					if (laneMesh && lane.m_type==LaneType::Driving)
-						laneMesh->add(laneCenter0, forward, Vector3::UNIT_Y, laneWidth, Echo::Color::GREEN, i==0 ? true : false);
+					if (laneMesh)
+					{
+						if(lane.m_type == LaneType::Driving)
+							laneMesh->add(laneCenter0, forward, Vector3::UNIT_Y, laneWidth, Echo::Color::GREEN, i == 0 ? true : false);
+					}
 				}
 			}
 		}

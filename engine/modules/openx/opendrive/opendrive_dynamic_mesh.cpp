@@ -151,8 +151,8 @@ namespace Echo
 					indices.push_back(base + 2);
 
 					indices.push_back(base);
-					indices.push_back(base + 3);
 					indices.push_back(base + 1);
+					indices.push_back(base + 3);
 				}
 			}
 
