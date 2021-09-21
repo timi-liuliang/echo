@@ -25,7 +25,6 @@ namespace Echo
 		CLASS_BIND_METHOD(OpenDriveDynamicMesh, getMaterial, DEF_METHOD("getMaterial"));
 		CLASS_BIND_METHOD(OpenDriveDynamicMesh, setMaterial, DEF_METHOD("setMaterial"));
 
-		CLASS_REGISTER_PROPERTY(OpenDriveDynamicMesh, "FaceTime", Variant::Type::Real, "getFadeTime", "setFadeTime");
 		CLASS_REGISTER_PROPERTY(OpenDriveDynamicMesh, "StepLength", Variant::Type::Real, "getStepLength", "setStepLength");
 		CLASS_REGISTER_PROPERTY(OpenDriveDynamicMesh, "Material", Variant::Type::Object, "getMaterial", "setMaterial");
 		CLASS_REGISTER_PROPERTY_HINT(OpenDriveDynamicMesh, "Material", PropertyHintType::ObjectType, "Material");

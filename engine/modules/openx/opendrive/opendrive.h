@@ -437,8 +437,8 @@ namespace Echo
 
 	protected:
 		ResourcePath						m_xodrRes = ResourcePath("", ".xodr");
+		bool								m_xodrDirty = true;
 		vector<Road>::type					m_roads;
 		OpenDriveDebugDraw*					m_debugDraw = nullptr;
-		vector<OpenDriveDynamicMesh*>::type	m_laneMeshes;
 	};
 }

@@ -567,9 +567,7 @@ namespace Echo
 	{
 		if (m_xodrRes.setPath(path.getPath()))
 		{
-			reset();
-
-			parseXodr(IO::instance()->loadFileToString(path.getPath()));
+			m_xodrDirty = true;
 		}
 	}
 
@@ -875,16 +873,28 @@ namespace Echo
 
 	void OpenDrive::updateInternal(float elapsedTime)
 	{
+		if (m_xodrDirty)
+		{
+			reset();
+			parseXodr(IO::instance()->loadFileToString(m_xodrRes.getPath()));
+
+			m_xodrDirty = false;
+		}
+
 		if(m_debugDraw)
 			m_debugDraw->update(elapsedTime);
-
-		for (OpenDriveDynamicMesh* laneMesh : m_laneMeshes)
-			laneMesh->update(elapsedTime, false);
 	}
 
 	void OpenDrive::refreshDynamicMeshes()
 	{
-		EchoSafeDeleteContainer(m_laneMeshes, OpenDriveDynamicMesh);
+		for (Node* child : m_children)
+		{
+			OpenDriveDynamicMesh* driveMesh = dynamic_cast<OpenDriveDynamicMesh*>(child);
+			if (driveMesh)
+			{
+				driveMesh->reset();
+			}
+		}
 
 		for (OpenDrive::Road& road : getRoads())
 		{
@@ -897,17 +907,19 @@ namespace Echo
 
 	OpenDriveDynamicMesh* OpenDrive::getLaneMesh(Lane& lane)
 	{
-		String laneType = std::string(magic_enum::enum_name(lane.m_type)).c_str();
-		for (OpenDriveDynamicMesh* laneMesh : m_laneMeshes)
+		String laneName = ("Lane" + std::string(magic_enum::enum_name(lane.m_type))).c_str();
+		for (Node* child : m_children)
 		{
-			if (laneMesh->getName() == laneType)
+			OpenDriveDynamicMesh* laneMesh = dynamic_cast<OpenDriveDynamicMesh*>(child);
+			if (laneMesh && laneMesh->getName() == laneName)
+			{
 				return laneMesh;
+			}
 		}
 
 		OpenDriveDynamicMesh* newMesh = EchoNew(OpenDriveDynamicMesh);
-		newMesh->setName(laneType);
-
-		m_laneMeshes.emplace_back(newMesh);
+		newMesh->setName(laneName);
+		newMesh->setParent(this);
 
 		return newMesh;
 	}
@@ -942,8 +954,7 @@ namespace Echo
 					OpenDriveDynamicMesh* laneMesh = getLaneMesh(lane);
 					if (laneMesh)
 					{
-						if(lane.m_type == LaneType::Driving)
-							laneMesh->add(laneCenter0, forward, Vector3::UNIT_Y, laneWidth, Echo::Color::GREEN, i == 0 ? true : false);
+						laneMesh->add(laneCenter0, forward, Vector3::UNIT_Y, laneWidth, Echo::Color::GREEN, i == 0 ? true : false);
 					}
 				}
 			}
