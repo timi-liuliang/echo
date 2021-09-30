@@ -2,6 +2,7 @@
 #include "frame_buffer.h"
 #include "engine/core/log/Log.h"
 #include "view_port.h"
+#include "ray_tracer.h"
 #include "image/pixel_format.h"
 #include "proxy/render_proxy.h"
 #include "../metal/mt.h"
@@ -99,6 +100,7 @@ namespace Echo
 		Class::registerType<RenderState>();
 		Class::registerType<DepthStencilState>();
 		Class::registerType<RasterizerState>();
+		Class::registerType<RayTracer>();
 
 	#ifdef ECHO_EDITOR_MODE
 		Class::registerType<ShaderNode>();
