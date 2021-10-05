@@ -4,6 +4,7 @@
 #include "vk_render_base.h"
 #include "vk_validation.h"
 #include "vk_framebuffer.h"
+#include "vk_ray_tracer.h"
 
 namespace Echo
 {
@@ -117,13 +118,13 @@ namespace Echo
         VkCommandBuffer createVkCommandBuffer();
         void flushVkCommandBuffer(VkCommandBuffer commandBuffer, VkQueue queue, bool free);
 
+    public:
+        // Ray tracing
+        void initRayTracer();
+
 	private:
 		// create vk instance
 		void createVkInstance();
-
-		// vk extensions
-		void enumerateVkExtensions();
-		void prepareVkExtensions(vector<const char*>::type& extensions);
 
         // choose a physical device
         void pickVkPhysicalDevice();
@@ -147,9 +148,8 @@ namespace Echo
     private:
 		ui32				m_screenWidth = 800;
 		ui32				m_screenHeight = 600;
-		Extensions			m_enabledExtensions;
+		Extensions			m_vkInstanceExtensions;
 		VkInstance			m_vkInstance;
-		ExtensionProperties	m_vkExtensions;
         VkPhysicalDevice    m_vkPhysicalDevice = nullptr;
         QueueFamilies       m_vkQueueFamilies;
         VkDevice            m_vkDevice = nullptr;
@@ -157,6 +157,7 @@ namespace Echo
         VkQueue             m_vkGraphicsQueue = nullptr;
 		VkCommandPool		m_vkCommandPool;
         VkDescriptorPool    m_vkDescriptorPool = VK_NULL_HANDLE;
+        VKRayTracer*        m_rayTracer = nullptr;
         array<Texture*, 32> m_currentTextures = { nullptr };
 	};
 }

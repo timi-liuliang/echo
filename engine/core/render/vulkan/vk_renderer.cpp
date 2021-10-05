@@ -1,6 +1,7 @@
 #include "base/mesh/mesh.h"
 #include "base/pipeline/render_pipeline.h"
 #include "vk_renderer.h"
+#include "vk_ray_tracer.h"
 #include "vk_render_proxy.h"
 #include "vk_compute_proxy.h"
 #include "vk_shader_program.h"
@@ -21,6 +22,7 @@ namespace Echo
     VKRenderer::VKRenderer()
     {
         g_inst = this;
+		m_rayTracer = EchoNew(VKRayTracer);
     }
 
     VKRenderer::~VKRenderer()
@@ -55,6 +57,8 @@ namespace Echo
 		createVkCommandPool();
 
 		createVkDescriptorPool();
+
+		initRayTracer();
 
         return true;
     }
@@ -171,36 +175,26 @@ namespace Echo
         return EchoNew(VKSamplerState);
     }
 
-	void VKRenderer::enumerateVkExtensions()
-	{
-#if FALSE
-		ui32 extensionCount = 0;
-		vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
-		m_vkExtensions.resize(extensionCount);
-		vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, m_vkExtensions.data());
-#endif
-	}
-
-	void VKRenderer::prepareVkExtensions(vector<const char*>::type& extensions)
-	{
-		extensions = { VK_KHR_SURFACE_EXTENSION_NAME };
-	#if defined(_WIN32)
-		extensions.emplace_back(VK_KHR_WIN32_SURFACE_EXTENSION_NAME);
-	#elif defined(__ANDROID__)
-		extensions.emplace_back(VK_KHR_ANDROID_SURFACE_EXTENSION_NAME);
-	#elif defined(__linux__)
-		extensions.emplace_back(VK_KHR_SURFACE_EXTENSION_NAME);
-	#endif
-
-	#if defined(ECHO_EDITOR_MODE)
-		extensions.emplace_back(VK_EXT_DEBUG_REPORT_EXTENSION_NAME);
-	#endif
-	}
-
 	void VKRenderer::createVkInstance()
 	{
-		enumerateVkExtensions();
-		prepareVkExtensions(m_enabledExtensions);
+		// Enumerate vulkan instance extensions
+		ui32 extensionCount = 0;
+		vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
+		ExtensionProperties vkInstanceExtensions(extensionCount);
+		vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, vkInstanceExtensions.data());
+
+		m_vkInstanceExtensions = { VK_KHR_SURFACE_EXTENSION_NAME };
+#if defined(_WIN32)
+		m_vkInstanceExtensions.emplace_back(VK_KHR_WIN32_SURFACE_EXTENSION_NAME);
+#elif defined(__ANDROID__)
+		m_vkInstanceExtensions.emplace_back(VK_KHR_ANDROID_SURFACE_EXTENSION_NAME);
+#elif defined(__linux__)
+		m_vkInstanceExtensions.emplace_back(VK_KHR_SURFACE_EXTENSION_NAME);
+#endif
+
+#if defined(ECHO_EDITOR_MODE)
+		m_vkInstanceExtensions.emplace_back(VK_EXT_DEBUG_REPORT_EXTENSION_NAME);
+#endif
 
 		vector<const char*>::type validationLayers;
 		m_validation.prepareVkValidationLayers(validationLayers);
@@ -219,8 +213,8 @@ namespace Echo
 		createInfo.pNext = nullptr;
 		createInfo.flags = 0;
 		createInfo.pApplicationInfo = &appInfo;
-		createInfo.enabledExtensionCount = m_enabledExtensions.size();
-		createInfo.ppEnabledExtensionNames = m_enabledExtensions.data();
+		createInfo.enabledExtensionCount = m_vkInstanceExtensions.size();
+		createInfo.ppEnabledExtensionNames = m_vkInstanceExtensions.data();
 		createInfo.enabledLayerCount = validationLayers.size();
 		createInfo.ppEnabledLayerNames = validationLayers.data();
 
@@ -319,8 +313,21 @@ namespace Echo
 
 	void VKRenderer::createVkLogicalDevice()
 	{
+		ui32 extensionCount = 0;
+		vkEnumerateDeviceExtensionProperties(m_vkPhysicalDevice, nullptr, &extensionCount, nullptr);
+		ExtensionProperties	vkDeviceExtensions(extensionCount);
+		vkEnumerateDeviceExtensionProperties(m_vkPhysicalDevice, nullptr, &extensionCount, vkDeviceExtensions.data());
+
 		// device extensions
-		vector<const char*>::type deviceExtensionNames = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
+		vector<const char*>::type deviceExtensionNames = 
+		{ 
+			VK_KHR_SWAPCHAIN_EXTENSION_NAME,
+		#ifdef ECHO_RAY_TRACING
+			VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME,
+			VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME,
+			VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME,
+		#endif
+		};
 
 		// priorities
 		float queuePrioritys[2] = { 1.f, 1.f};
@@ -422,6 +429,21 @@ namespace Echo
 		VKDebug(vkAllocateCommandBuffers(VKRenderer::instance()->getVkDevice(), &createInfo, &vkCommandBuffer));
 		
 		return vkCommandBuffer;
+	}
+
+	void VKRenderer::initRayTracer()
+	{
+#ifdef ECHO_RAY_TRACING
+		VkPhysicalDeviceRayTracingPipelinePropertiesKHR raytracingPipelineProperties = {};
+		raytracingPipelineProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_PROPERTIES_KHR;
+
+		VkPhysicalDeviceProperties2 physicalDeviceProperties2;
+		physicalDeviceProperties2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
+		physicalDeviceProperties2.pNext = &raytracingPipelineProperties;
+		vkGetPhysicalDeviceProperties2(m_vkPhysicalDevice, &physicalDeviceProperties2);
+
+		m_rayTracer->init();
+#endif
 	}
 
 	void VKRenderer::flushVkCommandBuffer(VkCommandBuffer commandBuffer, VkQueue queue, bool free)

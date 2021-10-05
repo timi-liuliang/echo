@@ -11,4 +11,9 @@ namespace Echo
 	{
 
 	}
+
+	void VKRayTracer::init()
+	{
+
+	}
 }
