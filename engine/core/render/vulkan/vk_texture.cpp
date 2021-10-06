@@ -180,24 +180,12 @@ namespace Echo
 			}
 
 			// setup image memory barrier transfer image to shader read layout
-			VkCommandBuffer copyCmd = VKRenderer::instance()->createVkCommandBuffer();
-
-			VkCommandBufferBeginInfo commandBufferBeginInfo = {};
-			commandBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-			commandBufferBeginInfo.pNext = nullptr;
-			commandBufferBeginInfo.flags = 0;
-			commandBufferBeginInfo.pInheritanceInfo = nullptr;
-
-			if (VK_SUCCESS == vkBeginCommandBuffer(copyCmd, &commandBufferBeginInfo))
-			{
-				setImageLayout(copyCmd, m_vkImage, VK_IMAGE_LAYOUT_PREINITIALIZED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-				vkCmdCopyBufferToImage(copyCmd, stagingBuffer, m_vkImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, static_cast<uint32_t>(bufferCopyRegions.size()), bufferCopyRegions.data());
-				setImageLayout(copyCmd, m_vkImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-
-				VKDebug(vkEndCommandBuffer(copyCmd));
-			}
-
-			VKRenderer::instance()->flushVkCommandBuffer(copyCmd, VKRenderer::instance()->getVkGraphicsQueue(), true);
+			VKRenderer::instance()->submitSingleTimeCommands([&](VkCommandBuffer copyCmd)
+				{
+					setImageLayout(copyCmd, m_vkImage, VK_IMAGE_LAYOUT_PREINITIALIZED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+					vkCmdCopyBufferToImage(copyCmd, stagingBuffer, m_vkImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, static_cast<uint32_t>(bufferCopyRegions.size()), bufferCopyRegions.data());
+					setImageLayout(copyCmd, m_vkImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+				});
 
 			// Clean up staging resources
 			vkFreeMemory(VKRenderer::instance()->getVkDevice(), stagingMemory, nullptr);
@@ -212,22 +200,10 @@ namespace Echo
 				vkUnmapMemory(VKRenderer::instance()->getVkDevice(), m_vkImageMemory);
 
 				// setup image memory barrier transfer image to shader read layout
-				VkCommandBuffer copyCmd = VKRenderer::instance()->createVkCommandBuffer();
-
-				VkCommandBufferBeginInfo commandBufferBeginInfo = {};
-				commandBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-				commandBufferBeginInfo.pNext = nullptr;
-				commandBufferBeginInfo.flags = 0;
-				commandBufferBeginInfo.pInheritanceInfo = nullptr;
-
-				if (VK_SUCCESS == vkBeginCommandBuffer(copyCmd, &commandBufferBeginInfo))
-				{
-					setImageLayout(copyCmd, m_vkImage, VK_IMAGE_LAYOUT_PREINITIALIZED, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-
-					VKDebug(vkEndCommandBuffer(copyCmd));
-				}
-
-				VKRenderer::instance()->flushVkCommandBuffer(copyCmd, VKRenderer::instance()->getVkGraphicsQueue(), true);
+				VKRenderer::instance()->submitSingleTimeCommands([&](VkCommandBuffer copyCmd)
+					{
+						setImageLayout(copyCmd, m_vkImage, VK_IMAGE_LAYOUT_PREINITIALIZED, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+					});
 			}
 			else
 			{

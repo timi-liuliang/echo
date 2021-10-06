@@ -1,6 +1,8 @@
 #pragma once
 
 #include "base/ray_tracer.h"
+#include "base/mesh/mesh.h"
+#include "vk_render_base.h"
 
 namespace Echo
 {
@@ -16,6 +18,9 @@ namespace Echo
 			{
 
 			}
+
+			// Build bottom level acceleration structure
+			void createBottomLevelStructure(MeshPtr mesh);
 		};
 
 	public:
@@ -23,6 +28,14 @@ namespace Echo
 		virtual ~VKRayTracer();
 
 		// Initialize
-		void init();
+		void init(VkPhysicalDevice vkPhysicalDevice);
+
+	public:
+
+
+	private:
+		VkPhysicalDeviceRayTracingPipelinePropertiesKHR m_vkRaytracingPipelineProperties = {};
+		VkPhysicalDeviceProperties2						m_vkPhysicalDeviceProperties2;
+		AccelerationStructureBuilder					m_accelerationStructureBuilder;
 	};
 }

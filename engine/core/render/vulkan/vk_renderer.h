@@ -114,9 +114,12 @@ namespace Echo
         ui32 findVkMemoryType(ui32 typeBits, VkMemoryPropertyFlags properties);
 
     public:
-        // vulkan command buffer
+        // Vulkan command buffer
         VkCommandBuffer createVkCommandBuffer();
         void flushVkCommandBuffer(VkCommandBuffer commandBuffer, VkQueue queue, bool free);
+
+        // Submit single time commands
+        void submitSingleTimeCommands(const std::function<void(VkCommandBuffer)>& action);
 
     public:
         // Ray tracing

@@ -433,17 +433,7 @@ namespace Echo
 
 	void VKRenderer::initRayTracer()
 	{
-#ifdef ECHO_RAY_TRACING
-		VkPhysicalDeviceRayTracingPipelinePropertiesKHR raytracingPipelineProperties = {};
-		raytracingPipelineProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_PROPERTIES_KHR;
-
-		VkPhysicalDeviceProperties2 physicalDeviceProperties2;
-		physicalDeviceProperties2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
-		physicalDeviceProperties2.pNext = &raytracingPipelineProperties;
-		vkGetPhysicalDeviceProperties2(m_vkPhysicalDevice, &physicalDeviceProperties2);
-
-		m_rayTracer->init();
-#endif
+		m_rayTracer->init(m_vkPhysicalDevice);
 	}
 
 	void VKRenderer::flushVkCommandBuffer(VkCommandBuffer commandBuffer, VkQueue queue, bool free)
@@ -474,6 +464,26 @@ namespace Echo
 			if (free)
 				vkFreeCommandBuffers(getVkDevice(), getVkCommandPool(), 1, &commandBuffer);
 		}
+	}
+
+	void VKRenderer::submitSingleTimeCommands(const std::function<void(VkCommandBuffer)>& action)
+	{
+		VkCommandBuffer vkCmdBuffer = createVkCommandBuffer();
+
+		VkCommandBufferBeginInfo commandBufferBeginInfo = {};
+		commandBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+		commandBufferBeginInfo.pNext = nullptr;
+		commandBufferBeginInfo.flags = 0;
+		commandBufferBeginInfo.pInheritanceInfo = nullptr;
+
+		if (VK_SUCCESS == vkBeginCommandBuffer(vkCmdBuffer, &commandBufferBeginInfo))
+		{
+			action(vkCmdBuffer);
+
+			vkEndCommandBuffer(vkCmdBuffer);
+		}
+
+		flushVkCommandBuffer(vkCmdBuffer, getVkGraphicsQueue(), true);
 	}
 
     void VKRenderer::onSize(int width, int height)
