@@ -10,32 +10,17 @@ namespace Echo
 	class VKRayTracer : public RayTracer
 	{
 	public:
-		// 
-		struct AccelerationStructureBuilder
-		{
-			// Initialize
-			void init()
-			{
-
-			}
-
-			// Build bottom level acceleration structure
-			void createBottomLevelStructure(MeshPtr mesh);
-		};
-
-	public:
 		VKRayTracer();
 		virtual ~VKRayTracer();
 
 		// Initialize
 		void init(VkPhysicalDevice vkPhysicalDevice);
 
-	public:
-
+		// Build bottom level acceleration structure
+		void createBottomLevelStructure(MeshPtr mesh);
 
 	private:
 		VkPhysicalDeviceRayTracingPipelinePropertiesKHR m_vkRaytracingPipelineProperties = {};
 		VkPhysicalDeviceProperties2						m_vkPhysicalDeviceProperties2;
-		AccelerationStructureBuilder					m_accelerationStructureBuilder;
 	};
 }

@@ -6,11 +6,11 @@
 
 namespace Echo
 {
-	class VKRenderable : public RenderProxy
+	class VKRenderProxy : public RenderProxy
 	{
 	public:
-		VKRenderable(int identifier);
-        virtual ~VKRenderable() {}
+		VKRenderProxy(int identifier);
+        virtual ~VKRenderProxy() {}
 
         // bind shader uniforms
 		void bindRenderState();

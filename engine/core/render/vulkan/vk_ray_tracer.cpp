@@ -2,12 +2,6 @@
 
 namespace Echo
 {
-	void VKRayTracer::AccelerationStructureBuilder::createBottomLevelStructure(MeshPtr mesh)
-	{
-		ui32 vertexCount = mesh->getVertexCount();
-		ui32 indexCount = mesh->getIndexCount();
-	}
-
 	VKRayTracer::VKRayTracer()
 	{
 
@@ -27,5 +21,11 @@ namespace Echo
 		m_vkPhysicalDeviceProperties2.pNext = &m_vkRaytracingPipelineProperties;
 		vkGetPhysicalDeviceProperties2(vkPhysicalDevice, &m_vkPhysicalDeviceProperties2);
 #endif
+	}
+
+	void VKRayTracer::createBottomLevelStructure(MeshPtr mesh)
+	{
+		ui32 vertexCount = mesh->getVertexCount();
+		ui32 indexCount = mesh->getIndexCount();
 	}
 }

@@ -22,7 +22,6 @@ namespace Echo
     VKRenderer::VKRenderer()
     {
         g_inst = this;
-		m_rayTracer = EchoNew(VKRayTracer);
     }
 
     VKRenderer::~VKRenderer()
@@ -96,7 +95,7 @@ namespace Echo
     RenderProxy* VKRenderer::createRenderProxy()
     {
         static ui32 id = 0; id++;
-        RenderProxy* renderable = EchoNew(VKRenderable(id));
+        RenderProxy* renderable = EchoNew(VKRenderProxy(id));
         m_renderProxies[id] = renderable;
 
         return renderable;
@@ -433,6 +432,7 @@ namespace Echo
 
 	void VKRenderer::initRayTracer()
 	{
+		m_rayTracer = EchoNew(VKRayTracer);
 		m_rayTracer->init(m_vkPhysicalDevice);
 	}
 
@@ -500,7 +500,7 @@ namespace Echo
 		VKFramebuffer* currentFrameBuffer = ECHO_DOWN_CAST<VKFramebuffer*>(frameBuffer.ptr());
 		if (currentFrameBuffer)
 		{
-			VKRenderable* vkRenderable = ECHO_DOWN_CAST<VKRenderable*>(renderable);
+			VKRenderProxy* vkRenderable = ECHO_DOWN_CAST<VKRenderProxy*>(renderable);
 			if (vkRenderable->createVkPipeline(currentFrameBuffer))
 			{
 				ShaderProgram* shaderProgram = renderable->getMaterial()->getShader();

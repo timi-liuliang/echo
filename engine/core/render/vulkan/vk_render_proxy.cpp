@@ -8,17 +8,19 @@
 
 namespace Echo
 {
-    VKRenderable::VKRenderable(int identifier)
+    VKRenderProxy::VKRenderProxy(int identifier)
         : RenderProxy( identifier)
     {
     }
 
-    void VKRenderable::setMesh(MeshPtr mesh)
+    void VKRenderProxy::setMesh(MeshPtr mesh)
     {
         m_mesh = mesh;
+
+        VKRenderer::instance()->getRayTracer()->createBottomLevelStructure(m_mesh);
     }
 
-    bool VKRenderable::createVkPipeline(VKFramebuffer* vkFrameBuffer)
+    bool VKRenderProxy::createVkPipeline(VKFramebuffer* vkFrameBuffer)
     {
         if (m_vkPipelineInfo.renderPass != vkFrameBuffer->getVkRenderPass() || isVkStateDirty())
         {
@@ -83,7 +85,7 @@ namespace Echo
         return m_vkPipeline ? true : false;
     }
 
-    void VKRenderable::destroyVkPipeline()
+    void VKRenderProxy::destroyVkPipeline()
     {
         if (m_vkPipeline)
         {
@@ -92,7 +94,7 @@ namespace Echo
         }
     }
 
-    bool VKRenderable::getVkVertexAttributeBySemantic(VertexSemantic semantic, spirv_cross::Resource& oResource)
+    bool VKRenderProxy::getVkVertexAttributeBySemantic(VertexSemantic semantic, spirv_cross::Resource& oResource)
     {
         String attributeName = VKMapping::mapVertexSemanticString(semantic);
         VKShaderProgram* vkShaderProgram = ECHO_DOWN_CAST<VKShaderProgram*>(m_material->getShader());
@@ -112,7 +114,7 @@ namespace Echo
         return false;
     }
 
-    void VKRenderable::buildVkVertexInputAttributeDescriptions(VKShaderProgram* vkShaderProgram, const VertexElementList& vertElements, vector<VkVertexInputAttributeDescription>::type& viAttributeDescriptions)
+    void VKRenderProxy::buildVkVertexInputAttributeDescriptions(VKShaderProgram* vkShaderProgram, const VertexElementList& vertElements, vector<VkVertexInputAttributeDescription>::type& viAttributeDescriptions)
     {
         if (!vertElements.empty())
         {
@@ -138,12 +140,12 @@ namespace Echo
         }
     }
 
-    void VKRenderable::bindRenderState()
+    void VKRenderProxy::bindRenderState()
     {
 
     }
 
-    void VKRenderable::bindShaderParams(VkCommandBuffer& vkCommandbuffer)
+    void VKRenderProxy::bindShaderParams(VkCommandBuffer& vkCommandbuffer)
     {
 		VKShaderProgram* vkShaderProgram = ECHO_DOWN_CAST<VKShaderProgram*>(m_material->getShader());
 		if (vkShaderProgram)
@@ -178,7 +180,7 @@ namespace Echo
 		}
     }
 
-    void VKRenderable::bindGeometry(VkCommandBuffer& vkCommandbuffer)
+    void VKRenderProxy::bindGeometry(VkCommandBuffer& vkCommandbuffer)
     {
         VKBuffer* vertexBuffer = ECHO_DOWN_CAST<VKBuffer*>(m_mesh->getVertexBuffer());
         if (vertexBuffer)
@@ -200,7 +202,7 @@ namespace Echo
         }
     }
 
-    bool VKRenderable::isVkStateDirty()
+    bool VKRenderProxy::isVkStateDirty()
     {
         if (m_material)
         {
@@ -224,25 +226,25 @@ namespace Echo
         return false;
     }
 
-    const VkPipelineColorBlendStateCreateInfo* VKRenderable::getVkColorBlendStateCreateInfo()
+    const VkPipelineColorBlendStateCreateInfo* VKRenderProxy::getVkColorBlendStateCreateInfo()
     {
         VKBlendState* vkState = ECHO_DOWN_CAST<VKBlendState*>( m_material->getShader()->getBlendState());
         return vkState->getVkCreateInfo();
     }
 
-    const VkPipelineRasterizationStateCreateInfo* VKRenderable::getVkRasterizationStateCreateInfo()
+    const VkPipelineRasterizationStateCreateInfo* VKRenderProxy::getVkRasterizationStateCreateInfo()
     {
         VKRasterizerState* vkState = ECHO_DOWN_CAST<VKRasterizerState*>(m_material->getRasterizerState());
         return vkState->getVkCreateInfo();
     }
 
-    const VkPipelineDepthStencilStateCreateInfo* VKRenderable::getVkDepthStencilStateCrateInfo()
+    const VkPipelineDepthStencilStateCreateInfo* VKRenderProxy::getVkDepthStencilStateCrateInfo()
     {
         VKDepthStencilState* vkState = ECHO_DOWN_CAST<VKDepthStencilState*>(m_material->getShader()->getDepthStencilState());
         return vkState->getVkCreateInfo();
     }
 
-    const VkPipelineMultisampleStateCreateInfo* VKRenderable::getVkMultiSampleStateCreateInfo()
+    const VkPipelineMultisampleStateCreateInfo* VKRenderProxy::getVkMultiSampleStateCreateInfo()
     {
         VKMultisampleState* vkState = ECHO_DOWN_CAST<VKMultisampleState*>(m_material->getShader()->getMultisampleState());
         return vkState->getVkCreateInfo();

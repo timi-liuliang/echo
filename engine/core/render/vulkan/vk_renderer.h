@@ -123,6 +123,7 @@ namespace Echo
 
     public:
         // Ray tracing
+        VKRayTracer* getRayTracer() { return m_rayTracer; }
         void initRayTracer();
 
 	private:
