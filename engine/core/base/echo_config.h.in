@@ -2,4 +2,4 @@
 #cmakedefine ECHO_PROFILER
 #cmakedefine ECHO_RENDER_THREAD
 #cmakedefine ECHO_ARCHIVE_SUPPORT_7ZIP
-#cmakedefine ECHO_RAY_TRACING
+#cmakedefine ECHO_RAYTRACING

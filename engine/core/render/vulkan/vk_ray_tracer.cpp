@@ -14,7 +14,7 @@ namespace Echo
 
 	void VKRayTracer::init(VkPhysicalDevice vkPhysicalDevice)
 	{
-#ifdef ECHO_RAY_TRACING	
+#ifdef ECHO_RAYTRACING	
 		m_vkRaytracingPipelineProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_PROPERTIES_KHR;
 
 		m_vkPhysicalDeviceProperties2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
