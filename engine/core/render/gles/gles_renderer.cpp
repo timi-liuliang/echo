@@ -207,7 +207,7 @@ namespace Echo
 			if (mesh->getTopologyType() == Mesh::TT_TRIANGLELIST && mesh->getIndexBuffer())
 			{
 				vector<i32>::type newIndices;
-				for (i32 i = 0; i < mesh->getFaceCount(); i++)
+				for (i32 i = 0; i < mesh->getPrimitiveCount(); i++)
 				{
 					i32 v0, v1, v2;
 					if (mesh->getIndexStride() == sizeof(Dword))

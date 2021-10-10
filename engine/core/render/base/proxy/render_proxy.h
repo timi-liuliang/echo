@@ -18,26 +18,30 @@ namespace Echo
 		friend class Renderer;
 
 	public:
-		// identifier
+		// Identifier
 		ui32 getIdentifier() const { return m_identifier; }
 
-		// create method
-		static RenderProxy* create(MeshPtr mesh, Material* matInst, Render* node);
+		// Create method
+		static RenderProxy* create(MeshPtr mesh, Material* matInst, Render* node, bool raytracing);
 
-		// release
+		// Release
 		virtual void subRefCount() override;
 
-		// set mesh
+		// Set mesh
 		MeshPtr getMesh() { return m_mesh; }
 		virtual void setMesh(MeshPtr mesh) = 0;
 
-		// set material
+		// Set material
 		virtual void setMaterial(Material* material) { m_material = material; }
 		Material* getMaterial() { return m_material; }
 
-		// node(owner)
+		// Node(owner)
 		void setNode( Render* node) { m_node = node; }
 		Render* getNode() { return m_node; }
+
+		// Is a part of raytracing
+		bool IsRaytracing() const { return m_raytracing; }
+		void setRaytracing(bool raytracing) { m_raytracing = raytracing; }
 
 		// submit to renderqueue
 		void submitToRenderQueue();
@@ -51,6 +55,7 @@ namespace Echo
 		Render*			m_node = nullptr;
 		MeshPtr			m_mesh;
 		MaterialPtr		m_material;
+		bool			m_raytracing = false;
 	};
 	typedef ResRef<RenderProxy> RenderProxyPtr;
 }

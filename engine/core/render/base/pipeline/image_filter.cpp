@@ -67,7 +67,7 @@ namespace Echo
 			updateMeshBuffer();
 
 			// create render able
-			m_renderable = RenderProxy::create(m_mesh, m_material, nullptr);
+			m_renderable = RenderProxy::create(m_mesh, m_material, nullptr, false);
 
 			m_isRenderableDirty = false;
 		}

@@ -207,4 +207,11 @@ namespace Echo
         }
         }
     }
+
+    VkIndexType VKMapping::mapIndexType(ui32 indexStride)
+    {
+        if (indexStride == sizeof(ui32))		return VK_INDEX_TYPE_UINT32;
+        else if (indexStride == sizeof(Word))   return VK_INDEX_TYPE_UINT16;
+        else									return VK_INDEX_TYPE_UINT8_EXT;
+    }
 }

@@ -28,15 +28,16 @@ namespace Echo
 		}
 	}
 
-	RenderProxy* RenderProxy::create(MeshPtr mesh, Material* material, Render* node)
+	RenderProxy* RenderProxy::create(MeshPtr mesh, Material* material, Render* node, bool raytracing)
 	{
 		// bind shader param
-		RenderProxy* renderable = Renderer::instance()->createRenderProxy();
-		renderable->setMaterial(material);
-		renderable->setNode(node);
-		renderable->setMesh(mesh);
+		RenderProxy* renderProxy = Renderer::instance()->createRenderProxy();
+		renderProxy->setRaytracing(raytracing);
+		renderProxy->setMaterial(material);
+		renderProxy->setNode(node);
+		renderProxy->setMesh(mesh);
 
-		return renderable;
+		return renderProxy;
 	}
 
 	void RenderProxy::submitToRenderQueue()

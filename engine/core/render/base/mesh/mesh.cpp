@@ -43,7 +43,7 @@ namespace Echo
 
 	void Mesh::buildTangentData()
 	{
-		ui32 faceCount = getFaceCount();
+		ui32 faceCount = getPrimitiveCount();
 
 		// build tangent data by position and uv
 		vector<Vector3>::type tangentDatas;  tangentDatas.resize(m_vertData.getVertexCount(), Vector3::ZERO);
@@ -109,7 +109,7 @@ namespace Echo
 		return m_idxCount;
 	}
 
-	ui32 Mesh::getFaceCount() const
+	ui32 Mesh::getPrimitiveCount() const
 	{
 		ui32 count = m_indexBuffer ? m_idxCount : getVertexCount();
 		switch (m_topologyType)

@@ -17,7 +17,10 @@ namespace Echo
     {
         m_mesh = mesh;
 
-        VKRenderer::instance()->getRayTracer()->createBottomLevelStructure(m_mesh);
+        if (m_mesh && m_raytracing)
+        {
+            VKRenderer::instance()->getRayTracer()->createBottomLevelStructure(m_mesh);
+        }
     }
 
     bool VKRenderProxy::createVkPipeline(VKFramebuffer* vkFrameBuffer)
@@ -193,11 +196,7 @@ namespace Echo
         VKBuffer* indexBuffer = ECHO_DOWN_CAST<VKBuffer*>(m_mesh->getIndexBuffer());
         if (indexBuffer)
         {
-            VkIndexType idxType;
-			if (m_mesh->getIndexStride() == sizeof(ui32))		idxType = VK_INDEX_TYPE_UINT32;
-			else if (m_mesh->getIndexStride() == sizeof(Word))  idxType = VK_INDEX_TYPE_UINT16;
-			else											    idxType = VK_INDEX_TYPE_UINT8_EXT;
-
+            VkIndexType idxType = VKMapping::mapIndexType(m_mesh->getIndexStride());
             vkCmdBindIndexBuffer(vkCommandbuffer, indexBuffer->getVkBuffer(), 0, idxType);
         }
     }

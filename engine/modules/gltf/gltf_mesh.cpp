@@ -100,7 +100,6 @@ namespace Echo
 		m_renderableDirty = true;
 	}
 
-	// build drawable
 	void GltfMesh::buildRenderable()
 	{
 		if ( m_renderableDirty && m_asset && m_meshIdx!=-1 && m_primitiveIdx!=-1)
@@ -111,7 +110,7 @@ namespace Echo
 				clearRenderable();
 
 				MeshPtr mesh = m_asset->m_meshes[m_meshIdx].m_primitives[m_primitiveIdx].m_mesh;
-				m_renderable = RenderProxy::create(mesh, material, this);
+				m_renderable = RenderProxy::create(mesh, material, this, true);
 
 				m_localAABB = mesh->getLocalBox();
 

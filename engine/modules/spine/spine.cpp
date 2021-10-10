@@ -270,7 +270,7 @@ namespace Echo
 
 			m_material->setUniformTexture("BaseColor", m_batch.m_texture);
 
-			m_renderable = RenderProxy::create(m_mesh, m_material, this);
+			m_renderable = RenderProxy::create(m_mesh, m_material, this, false);
 		}
 		else
 		{

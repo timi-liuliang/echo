@@ -59,7 +59,7 @@ namespace Echo
 		GPUBuffer* getIndexBuffer() const;
 
 		// get face count
-		ui32 getFaceCount() const;
+		ui32 getPrimitiveCount() const;
 
 		// get index count
 		ui32 getIndexCount() const;
@@ -77,7 +77,7 @@ namespace Echo
 		Word* getIndices() const;
 
 		// is valid
-		bool isValid() const { return getFaceCount() > 0; }
+		bool isValid() const { return getPrimitiveCount() > 0; }
 
 		// is have bone data
 		bool isSkin() const { return isVertexUsage(VS_BLENDINDICES); }

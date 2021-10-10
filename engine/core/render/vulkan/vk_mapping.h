@@ -42,5 +42,8 @@ namespace Echo
 
         // mapping cull mode
         static VkCullModeFlagBits mapCullMode(RasterizerState::CullMode cullMode);
+
+        // mapping index type
+        static VkIndexType mapIndexType(ui32 indexStride);
     };
 }
