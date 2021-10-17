@@ -7,11 +7,6 @@
 
 namespace Echo
 {
-	RenderStage::RenderStage(RenderPipeline* pipeline)
-		: m_pipeline(pipeline)
-	{
-	}
-
 	RenderStage::~RenderStage()
 	{
         EchoSafeDeleteContainer(m_renderQueues, IRenderQueue);

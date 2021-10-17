@@ -13,11 +13,10 @@ namespace Echo
 
 	public:
 		RenderStage() {}
-		RenderStage(RenderPipeline* pipeline);
 		~RenderStage();
 
 		// name
-		void setName(const String& name) { m_name = name; }
+		virtual void setName(const String& name) { m_name = name; }
 		const String& getName() const { return m_name; }
 		
 		// enable

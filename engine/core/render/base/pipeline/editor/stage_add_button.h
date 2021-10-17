@@ -45,6 +45,7 @@ namespace Pipeline
 		QGraphicsScene*				m_graphicsScene = nullptr;
 		Echo::ui32					m_stagePosition;
 		QGraphicsPixmapItemCustom*	m_nextArrow = nullptr;
+		QMenu*						m_addMenu = nullptr;
 		bool						m_nextArrowHighlight = false;
 		QColor						m_stageDropRegionDefaultColor = QColor(83, 83, 83);
 		QColor						m_stageDropRegionHighlightColor = QColor(255, 214, 98, 125); //Qt::green;

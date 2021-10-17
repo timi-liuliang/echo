@@ -42,45 +42,50 @@ namespace QT_UI
 	bool QChannelEditor::ItemDelegatePaintExpression(QPainter *painter, const QRect& rect, const string& val, bool isRenderExpressionOnly)
 	{
 		Echo::StringArray	dataArray = Echo::StringUtil::Split(val.c_str(), "#");
-		Echo::String		expression = dataArray[0];
-		Echo::String		value = dataArray[1];
-		Echo::Variant::Type type = Echo::Variant::Type(Echo::StringUtil::ParseI32(dataArray[2]));
-
-		// color rect
-		QRect tRect = QRect(rect.left() + 1, rect.top() + 1, rect.width() - 2, rect.height() - 2);
-		painter->setBrush(QColor(70, 140, 70));
-		painter->drawRect(tRect);
-		painter->setPen(QColor(0, 0, 0));
-		painter->drawRect(QRect(rect.left(), rect.top(), rect.width() - 1, rect.height() - 1));
-
-		if (!isRenderExpressionOnly)
+		if (dataArray.size() == 3)
 		{
-			if (type == Echo::Variant::Type::Bool)
+			Echo::String		expression = dataArray[0];
+			Echo::String		value = dataArray[1];
+			Echo::Variant::Type type = Echo::Variant::Type(Echo::StringUtil::ParseI32(dataArray[2]));
+
+			// color rect
+			QRect tRect = QRect(rect.left() + 1, rect.top() + 1, rect.width() - 2, rect.height() - 2);
+			painter->setBrush(QColor(70, 140, 70));
+			painter->drawRect(tRect);
+			painter->setPen(QColor(0, 0, 0));
+			painter->drawRect(QRect(rect.left(), rect.top(), rect.width() - 1, rect.height() - 1));
+
+			if (!isRenderExpressionOnly)
 			{
-				QCheckBoxEditor::ItemDelegatePaint(painter, rect, value);
+				if (type == Echo::Variant::Type::Bool)
+				{
+					QCheckBoxEditor::ItemDelegatePaint(painter, rect, value);
+				}
+				else
+				{
+					Echo::String text = value;
+					QRect textRect(rect.left() + 6, rect.top() + 3, rect.width() - 6, rect.height() - 6);
+					QFont font = painter->font(); font.setBold(false);
+					painter->setFont(font);
+					painter->setPen(QColor(232, 232, 232));
+					painter->drawText(textRect, Qt::AlignLeft, text.c_str());
+				}
 			}
 			else
 			{
-				Echo::String text = value;
+				// text
+				Echo::String text = expression.c_str();
 				QRect textRect(rect.left() + 6, rect.top() + 3, rect.width() - 6, rect.height() - 6);
 				QFont font = painter->font(); font.setBold(false);
 				painter->setFont(font);
 				painter->setPen(QColor(232, 232, 232));
 				painter->drawText(textRect, Qt::AlignLeft, text.c_str());
 			}
-		}
-		else
-		{
-			// text
-			Echo::String text = expression.c_str();
-			QRect textRect(rect.left() + 6, rect.top() + 3, rect.width() - 6, rect.height() - 6);
-			QFont font = painter->font(); font.setBold(false);
-			painter->setFont(font);
-			painter->setPen(QColor(232, 232, 232));
-			painter->drawText(textRect, Qt::AlignLeft, text.c_str());
+
+			return true;
 		}
 
-		return true;
+		return false;
 	}
 
 	QSize QChannelEditor::sizeHint() const

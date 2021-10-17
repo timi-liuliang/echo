@@ -43,6 +43,10 @@ namespace Echo
 		bool IsRaytracing() const { return m_raytracing; }
 		void setRaytracing(bool raytracing) { m_raytracing = raytracing; }
 
+		// Cast shadow
+		bool IsCastShadow() const { return m_castShadow; }
+		void SetCastShadow(bool castShadow) { m_castShadow = castShadow; }
+
 		// submit to renderqueue
 		void submitToRenderQueue();
 
@@ -56,6 +60,7 @@ namespace Echo
 		MeshPtr			m_mesh;
 		MaterialPtr		m_material;
 		bool			m_raytracing = false;
+		bool			m_castShadow = false;
 	};
 	typedef ResRef<RenderProxy> RenderProxyPtr;
 }

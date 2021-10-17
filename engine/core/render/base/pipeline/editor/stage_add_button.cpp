@@ -139,17 +139,39 @@ namespace Pipeline
 
 	void StatgeAddButton::showAddStageMenu()
 	{
-		addNewStage();
+		if (!m_addMenu)
+		{
+			m_addMenu = EchoNew(QMenu(m_graphicsView));
+
+			Echo::StringArray childClasses = { "RenderStage"};
+			Echo::Class::getChildClasses(childClasses, "RenderStage", true);
+			for (const Echo::String& className : childClasses)
+			{
+				QAction* addRenderStageAction = new QAction(className.c_str());
+				m_addMenu->addAction(addRenderStageAction);
+
+				EditorApi.qConnectAction(addRenderStageAction, QSIGNAL(triggered()), this, Echo::createMethodBind(&StatgeAddButton::addNewStage));
+			}
+		}
+
+		m_addMenu->exec(QCursor::pos());
 	}
 
 	void StatgeAddButton::addNewStage()
 	{
 		if (m_pipeline)
 		{
-			Echo::RenderStage* stage = EchoNew(Echo::RenderStage(m_pipeline));
-			stage->setName("New Stage");
+			QAction* action = qobject_cast<QAction*>(EditorApi.qSender());
+			if (action)
+			{
+				Echo::String text = action->text().toStdString().c_str();
 
-			m_pipeline->addStage(stage, m_stagePosition);
+				Echo::RenderStage* stage = dynamic_cast<Echo::RenderStage*>(Echo::Class::create(text));
+				stage->setPipeline(m_pipeline);
+				stage->setName("New Stage");
+
+				m_pipeline->addStage(stage, m_stagePosition);
+			}
 		}
 	}
 
