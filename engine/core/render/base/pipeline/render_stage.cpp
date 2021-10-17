@@ -59,6 +59,8 @@ namespace Echo
 
 	void RenderStage::parseXml(void* pugiNode)
 	{
+		EchoSafeDeleteContainer(m_renderQueues, IRenderQueue);
+
 		pugi::xml_node* stageNode = (pugi::xml_node*)pugiNode;
 		if (stageNode)
 		{

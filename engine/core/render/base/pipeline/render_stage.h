@@ -38,7 +38,7 @@ namespace Echo
 		void onSize(ui32 width, ui32 height);
 
 		// process
-		void render();
+		virtual void render();
 
 	public:
 		// get pipeline

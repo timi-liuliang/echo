@@ -14,5 +14,8 @@ namespace Echo
 
 		// Name
 		virtual void setName(const String& name) override { m_name = "Shadow Depth"; }
+
+		// Process
+		virtual void render() override;
 	};
 }
