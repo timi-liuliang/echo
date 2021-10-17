@@ -2,7 +2,6 @@
 #include "raytracing_mesh.h"
 #include "raytracing_camera.h"
 #include "raytracing_world.h"
-#include "raytracing_queue.h"
 
 namespace Echo
 {
@@ -32,7 +31,6 @@ namespace Echo
 	{
 		Class::registerType<RaytracingMesh>();
         Class::registerType<RaytracingWorld>();
-		Class::registerType<RaytracingQueue>();
 	}
 
 	void RaytracingModule::update(float elapsedTime)

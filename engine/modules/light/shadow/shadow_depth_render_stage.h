@@ -13,6 +13,6 @@ namespace Echo
 		virtual ~ShadowDepthRenderStage();
 
 		// Name
-		virtual void setName(const String& name) override { m_name = "ShadowDepth"; }
+		virtual void setName(const String& name) override { m_name = "Shadow Depth"; }
 	};
 }
