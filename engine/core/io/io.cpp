@@ -16,6 +16,7 @@ namespace Echo
 
 	IO::~IO()
 	{
+        EchoSafeDeleteContainer(m_engineFileSystems, FileSystem);
 		EchoSafeDelete(m_resFileSystem, FileSystem);
 		EchoSafeDelete(m_userFileSystem, FileSystem);
 		EchoSafeDelete(m_externalFileSystem, FileSystem);
@@ -32,6 +33,28 @@ namespace Echo
         CLASS_BIND_METHOD(IO, isExist,          "isExist");
         CLASS_BIND_METHOD(IO, loadFileToString, "loadFileToString");
         CLASS_BIND_METHOD(IO, saveStringToFile, "saveStringToFile");
+    }
+
+    void IO::addEnginePath(const String& prefix, const String& enginePath)
+    {
+        if (StringUtil::StartWith(prefix, "Engine://"))
+        {
+            for (FileSystem* fileSystem : m_engineFileSystems)
+            {
+                if (StringUtil::Equal(prefix, fileSystem->getPrefix()))
+                    return;
+            }
+        }
+
+        FileSystem* newFileSystem = EchoNew(FileSystem);
+        newFileSystem->setPath(enginePath, prefix);
+
+        m_engineFileSystems.emplace_back(newFileSystem);
+    }
+
+    const vector<FileSystem*>::type& IO::getEnginePath()
+    {
+        return m_engineFileSystems;
     }
 
 	void IO::setResPath(const String& resPath)
@@ -72,7 +95,17 @@ namespace Echo
 
 	DataStream* IO::open(const String& resourceName, ui32 accessMode)
 	{
-		if (StringUtil::StartWith(resourceName, "Res://"))
+        if (StringUtil::StartWith(resourceName, "Engine://"))
+        {
+            for (FileSystem* fileSystem : m_engineFileSystems)
+            {
+                if (StringUtil::StartWith(resourceName, fileSystem->getPrefix()))
+                {
+                    return fileSystem->open(resourceName, accessMode);
+                }
+            }
+        }
+		else if (StringUtil::StartWith(resourceName, "Res://"))
         {
             DataStream* stream = m_resFileSystem->open(resourceName, accessMode);
             if(stream)  return stream;

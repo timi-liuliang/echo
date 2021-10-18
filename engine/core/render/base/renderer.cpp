@@ -183,11 +183,7 @@ namespace Echo
 
 	Renderer::~Renderer()
 	{
-		for (std::map<ui32, RenderProxy*>::iterator it = m_renderProxies.begin(); it != m_renderProxies.end(); ++it)
-		{
-			EchoSafeDelete(it->second, RenderProxy);
-		}
-		m_renderProxies.clear();
+		EchoSafeDeleteMap(m_renderProxies, RenderProxy);
 	}
 
 	bool Renderer::isFullscreen() const
