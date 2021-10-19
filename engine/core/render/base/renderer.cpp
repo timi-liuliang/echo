@@ -1,6 +1,7 @@
 #include "renderer.h"
 #include "frame_buffer.h"
 #include "engine/core/log/Log.h"
+#include "engine/core/io/io.h"
 #include "view_port.h"
 #include "ray_tracer.h"
 #include "image/pixel_format.h"
@@ -184,6 +185,17 @@ namespace Echo
 	Renderer::~Renderer()
 	{
 		EchoSafeDeleteMap(m_renderProxies, RenderProxy);
+	}
+
+	bool Renderer::initialize(const Settings& settings)
+	{
+		m_settings = settings;
+
+#ifdef ECHO_EDITOR_MODE
+		IO::instance()->addEnginePath("Engine://Render/Pipeline", Engine::instance()->getRootPath() + "engine/core/render/base/pipeline/resource");
+#endif
+
+		return true;
 	}
 
 	bool Renderer::isFullscreen() const

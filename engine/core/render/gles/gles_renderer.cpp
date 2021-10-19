@@ -60,7 +60,7 @@ namespace Echo
 
 	bool GLESRenderer::initialize(const Settings& config)
 	{
-		m_settings = config;
+		Renderer::initialize(config);
 
 		if (!initializeImpl(config))
 			return false;

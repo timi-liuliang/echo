@@ -50,7 +50,7 @@ namespace Echo
         virtual Type getType() = 0;
 
 		// initialize
-		virtual bool initialize(const Settings& config)=0;
+		virtual bool initialize(const Settings& config);
 
 		// set texture
 		virtual void setTexture(ui32 index, Texture* texture, bool needUpdate = false) = 0;

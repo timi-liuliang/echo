@@ -40,7 +40,7 @@ namespace Echo
 
     bool VKRenderer::initialize(const Settings& settings)
     {
-		m_settings = settings;
+		Renderer::initialize(settings);
 
 		// initialize vulkan loader
 		loader_initialize();
