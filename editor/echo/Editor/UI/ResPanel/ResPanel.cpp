@@ -66,13 +66,18 @@ namespace Studio
 	{
 		m_dirModel->clear();
 
-		QT_UI::QDirectoryModel::RootPathArray rootPaths =
+		QT_UI::QDirectoryModel::RootPathArray rootPathes =
 		{
-			{"Res://", Echo::Engine::instance()->getResPath().c_str()},
-			{"User://", Echo::Engine::instance()->getUserPath().c_str()}
+			{"Res://", Echo::IO::instance()->getResPath().c_str()},
+			{"User://", Echo::IO::instance()->getUserPath().c_str()}
 		};
 
-		m_dirModel->setRootPath( rootPaths, "none", m_resDirView, NULL);
+		for (Echo::FileSystem* fileSystem : Echo::IO::instance()->getEnginePathes())
+		{
+			rootPathes.push_back({ fileSystem->getPrefix(), fileSystem->getPath()});
+		}
+
+		m_dirModel->setRootPath( rootPathes, "none", m_resDirView, NULL);
 		m_dirModel->Refresh();
 
 		onSelectDir(Echo::Engine::instance()->getResPath().c_str());

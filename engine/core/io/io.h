@@ -22,7 +22,7 @@ namespace Echo
 
 		// Engine path
 		void addEnginePath(const String& prefix, const String& enginePath);
-		const vector<FileSystem*>::type& getEnginePath();
+		const vector<FileSystem*>::type& getEnginePathes();
 
 		// Res path
 		void setResPath(const String& resPath);

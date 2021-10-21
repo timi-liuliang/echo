@@ -52,7 +52,7 @@ namespace Echo
         m_engineFileSystems.emplace_back(newFileSystem);
     }
 
-    const vector<FileSystem*>::type& IO::getEnginePath()
+    const vector<FileSystem*>::type& IO::getEnginePathes()
     {
         return m_engineFileSystems;
     }
