@@ -192,7 +192,7 @@ namespace Echo
 		m_settings = settings;
 
 #ifdef ECHO_EDITOR_MODE
-		IO::instance()->addEnginePath("Engine://", Engine::instance()->getRootPath() + "engine/resources");
+		IO::instance()->setEnginePath(Engine::instance()->getRootPath() + "engine/resources");
 #endif
 
 		return true;

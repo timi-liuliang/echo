@@ -112,7 +112,8 @@ namespace QT_UI
 				RecursiveDir(root.m_path, rootItem, interrupt);
 
 				// expand root index
-				m_treeView->expand(rootItem->index());
+				if(root.m_expand)
+					m_treeView->expand(rootItem->index());
 			}
 		}
 	}

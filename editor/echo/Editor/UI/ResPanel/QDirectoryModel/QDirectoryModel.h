@@ -26,6 +26,7 @@ namespace QT_UI
 		{
 			string		m_display;
 			string		m_path;
+			bool		m_expand;
 		};
 		typedef std::vector<RootPath> RootPathArray;
 

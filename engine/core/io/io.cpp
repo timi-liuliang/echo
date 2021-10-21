@@ -9,17 +9,10 @@ namespace Echo
 {
 	IO::IO()
 	{
-		m_resFileSystem = EchoNew(FileSystem);
-		m_userFileSystem = EchoNew(FileSystem);
-		m_externalFileSystem = EchoNew(FileSystem);
 	}
 
 	IO::~IO()
 	{
-        EchoSafeDeleteContainer(m_engineFileSystems, FileSystem);
-		EchoSafeDelete(m_resFileSystem, FileSystem);
-		EchoSafeDelete(m_userFileSystem, FileSystem);
-		EchoSafeDelete(m_externalFileSystem, FileSystem);
 	}
 
 	IO* IO::instance()
@@ -35,44 +28,32 @@ namespace Echo
         CLASS_BIND_METHOD(IO, saveStringToFile, "saveStringToFile");
     }
 
-    void IO::addEnginePath(const String& prefix, const String& enginePath)
+    void IO::setEnginePath(const String& enginePath)
     {
-        if (StringUtil::StartWith(prefix, "Engine://"))
-        {
-            for (FileSystem* fileSystem : m_engineFileSystems)
-            {
-                if (StringUtil::Equal(prefix, fileSystem->getPrefix()))
-                    return;
-            }
-        }
-
-        FileSystem* newFileSystem = EchoNew(FileSystem);
-        newFileSystem->setPath(enginePath, prefix);
-
-        m_engineFileSystems.emplace_back(newFileSystem);
+        m_engineFileSystem.setPath(enginePath, "Engine://");
     }
 
-    const vector<FileSystem*>::type& IO::getEnginePathes()
+    const String& IO::getEnginePath()
     {
-        return m_engineFileSystems;
+        return m_engineFileSystem.getPath();
     }
 
 	void IO::setResPath(const String& resPath)
 	{
-		m_resFileSystem->setPath(resPath, "Res://");
+		m_resFileSystem.setPath(resPath, "Res://");
         
         loadPackages();
 	}
 
     const String& IO::getResPath()
     {
-        return m_resFileSystem->getPath();
+        return m_resFileSystem.getPath();
     }
 
     void IO::loadPackages()
     {
         StringArray packages;
-        PathUtil::EnumFilesInDir(packages, m_resFileSystem->getPath(), false, false, true);
+        PathUtil::EnumFilesInDir(packages, m_resFileSystem.getPath(), false, false, true);
         for(const String& package : packages)
         {
             if(PathUtil::GetFileExt(package, true)==".pkg")
@@ -85,29 +66,19 @@ namespace Echo
 
 	void IO::setUserPath(const String& userPath)
 	{
-		m_userFileSystem->setPath(userPath, "User://");
+		m_userFileSystem.setPath(userPath, "User://");
 	}
 
     const String& IO::getUserPath()
     {
-        return m_userFileSystem->getPath();
+        return m_userFileSystem.getPath();
     }
 
 	DataStream* IO::open(const String& resourceName, ui32 accessMode)
 	{
-        if (StringUtil::StartWith(resourceName, "Engine://"))
+		if (StringUtil::StartWith(resourceName, "Res://"))
         {
-            for (FileSystem* fileSystem : m_engineFileSystems)
-            {
-                if (StringUtil::StartWith(resourceName, fileSystem->getPrefix()))
-                {
-                    return fileSystem->open(resourceName, accessMode);
-                }
-            }
-        }
-		else if (StringUtil::StartWith(resourceName, "Res://"))
-        {
-            DataStream* stream = m_resFileSystem->open(resourceName, accessMode);
+            DataStream* stream = m_resFileSystem.open(resourceName, accessMode);
             if(stream)  return stream;
             
             for(FilePackage* package : m_resFilePackages)
@@ -118,11 +89,15 @@ namespace Echo
         }
 		else if (StringUtil::StartWith(resourceName, "User://"))
         {
-            return m_userFileSystem->open(resourceName, accessMode);
+            return m_userFileSystem.open(resourceName, accessMode);
+        }
+        else if (StringUtil::StartWith(resourceName, "Engine://"))
+        {
+            return m_engineFileSystem.open(resourceName, accessMode);
         }
 		else
         {
-            return m_externalFileSystem->open(resourceName, accessMode);
+            return m_externalFileSystem.open(resourceName, accessMode);
         }
 
 		EchoLogError("Cannot locate a resource [%s] ResourceGroupManager::openResource", resourceName.c_str());
@@ -135,7 +110,7 @@ namespace Echo
 
 		if (StringUtil::StartWith(resourceName, "Res://"))
 		{
-            if(m_resFileSystem->isExist(resourceName))
+            if(m_resFileSystem.isExist(resourceName))
                 return true;
                 
 			for(FilePackage* package : m_resFilePackages)
@@ -148,7 +123,7 @@ namespace Echo
 		}
 		else if (StringUtil::StartWith(resourceName, "User://"))
 		{
-            return m_userFileSystem->isExist(resourceName);
+            return m_userFileSystem.isExist(resourceName);
 		}
 
 		return PathUtil::IsFileExist(resourceName);
@@ -160,12 +135,16 @@ namespace Echo
 
 		if (StringUtil::StartWith(filename, "Res://"))
 		{
-			return m_resFileSystem->getFullPath(filename);
+			return m_resFileSystem.getFullPath(filename);
 		}
 		else if (StringUtil::StartWith(filename, "User://"))
 		{
-            return m_userFileSystem->getFullPath(filename);
+            return m_userFileSystem.getFullPath(filename);
 		}
+        else if (StringUtil::StartWith(filename, "Engine://"))
+        {
+            return m_engineFileSystem.getFullPath(filename);
+        }
 
 		EchoLogError("getFileLocation [%s] failed", filename.c_str());
 
@@ -174,15 +153,22 @@ namespace Echo
 
 	bool IO::convertFullPathToResPath(const String& fullPath, String& resPath)
 	{
-		String result = StringUtil::Replace(fullPath, m_resFileSystem->getPath(), m_resFileSystem->getPrefix());
+		String result = StringUtil::Replace(fullPath, m_resFileSystem.getPath(), m_resFileSystem.getPrefix());
 		if (StringUtil::StartWith(result, "Res://"))
 		{
 			resPath = result;
 			return true;
 		}
 
-        result = StringUtil::Replace(fullPath, m_userFileSystem->getPath(), m_userFileSystem->getPrefix());
+        result = StringUtil::Replace(fullPath, m_userFileSystem.getPath(), m_userFileSystem.getPrefix());
         if (StringUtil::StartWith(result, "User://"))
+        {
+            resPath = result;
+            return true;
+        }
+
+        result = StringUtil::Replace(fullPath, m_engineFileSystem.getPath(), m_engineFileSystem.getPrefix());
+        if (StringUtil::StartWith(result, "Engine://"))
         {
             resPath = result;
             return true;
