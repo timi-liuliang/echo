@@ -192,7 +192,7 @@ namespace Echo
 		m_settings = settings;
 
 #ifdef ECHO_EDITOR_MODE
-		IO::instance()->addEnginePath("Engine://Render/Pipeline", Engine::instance()->getRootPath() + "engine/core/render/base/pipeline/resource");
+		IO::instance()->addEnginePath("Engine://", Engine::instance()->getRootPath() + "engine/resources");
 #endif
 
 		return true;
