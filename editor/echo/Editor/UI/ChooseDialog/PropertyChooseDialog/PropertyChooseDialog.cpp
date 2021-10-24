@@ -101,7 +101,6 @@ namespace Studio
 		}
 	}
 
-	// on current item changed
 	void PropertyChooseDialog::currentItemChanged()
 	{
 		QTreeWidgetItem* item = m_treeWidget->currentItem();

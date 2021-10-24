@@ -12,12 +12,8 @@ namespace Echo
 		ECHO_RES(RenderPipeline, Res, ".pipeline", Res::create<RenderPipeline>, RenderPipeline::load);
 
 	public:
-		// template
-		enum Template
-		{
-			Empty,
-			Default,
-		};
+		// Default path name
+		static const ResourcePath DefaultPipeline;
 
 	public:
 		RenderPipeline();
@@ -38,8 +34,7 @@ namespace Echo
 		static ResRef<RenderPipeline> current();
 		static void setCurrent(const ResourcePath& path);
 
-		// set src
-		void setSrc(Template type);
+		// Set src
 		void setSrc(const String& src);
 
 	public:

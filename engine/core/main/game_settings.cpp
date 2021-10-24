@@ -159,6 +159,11 @@ namespace Echo
 	void GameSettings::setRenderPipeline(const ResourcePath& path)
 	{ 
 		m_renderPipelinePath.setPath(path.getPath());
-		RenderPipeline::setCurrent(m_renderPipelinePath);
+		RenderPipeline::setCurrent(getRenderPipeline());
+	}
+
+	const ResourcePath& GameSettings::getRenderPipeline() const 
+	{ 
+		return m_renderPipelinePath.isEmpty() ? RenderPipeline::DefaultPipeline : m_renderPipelinePath; 
 	}
 }

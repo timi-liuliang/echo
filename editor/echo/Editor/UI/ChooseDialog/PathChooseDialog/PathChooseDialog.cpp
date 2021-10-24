@@ -3,6 +3,7 @@
 #include <QPushButton>
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/main/Engine.h>
+#include <engine/core/io/io.h>
 
 namespace Studio
 {
@@ -98,8 +99,9 @@ namespace Studio
 		// Set root paths
 		QT_UI::QDirectoryModel::RootPathArray rootPaths =
 		{
-			{"Res://", Echo::Engine::instance()->getResPath().c_str()},
-			{"User://", Echo::Engine::instance()->getUserPath().c_str()}
+			{"Res://", Echo::IO::instance()->getResPath().c_str()},
+			{"User://", Echo::IO::instance()->getUserPath().c_str()},
+			{"Engine://", Echo::IO::instance()->getEnginePath().c_str()}
 		};
 
 		m_dirModel->setRootPath(rootPaths, "none", m_resDirView, NULL);

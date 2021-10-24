@@ -30,7 +30,10 @@ namespace Echo
 
     void IO::setEnginePath(const String& enginePath)
     {
-        m_engineFileSystem.setPath(enginePath, "Engine://");
+        String formatPath = enginePath;
+        PathUtil::FormatPathAbsolut(formatPath);
+
+        m_engineFileSystem.setPath(formatPath, "Engine://");
     }
 
     const String& IO::getEnginePath()

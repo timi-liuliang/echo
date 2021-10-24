@@ -5,20 +5,9 @@
 #include "render_stage.h"
 #include <thirdparty/pugixml/pugixml.hpp>
 
-static const char* defaultPipelineTemplate = R"(<?xml version="1.0"?>
-<pipeline>
-	<stage class="RenderStage" Name="GBuffer">
-		<property name="FrameBuffer">
-			<obj class="FrameBufferWindow" IsClearColor="true" IsClearDepth="true" />
-		</property>
-		<queue class="RenderQueue" Name="Opaque" Enable="true" Sort="false" />
-		<queue class="RenderQueue" Name="Transparent" Enable="true" Sort="true" />
-	</stage>
-</pipeline>
-)";
-
 namespace Echo
 {
+	const ResourcePath RenderPipeline::DefaultPipeline = ResourcePath("Engine://Render/Pipeline/DeferredShading.pipeline");
 	static RenderPipelinePtr g_current;
 
 	RenderPipeline::RenderPipeline()
@@ -38,24 +27,11 @@ namespace Echo
 	{
 	}
 
-	void RenderPipeline::setSrc(Template type)
-	{
-		if (type == Empty)
-		{
-			setSrc(StringUtil::BLANK);
-		}
-		else if (type == Template::Default)
-		{
-			setSrc(defaultPipelineTemplate);
-		}
-	}
-
 	RenderPipelinePtr RenderPipeline::current()
 	{
 		if (!g_current)
 		{
-			g_current = EchoNew( RenderPipeline);
-			g_current->setSrc(defaultPipelineTemplate);
+			setCurrent(DefaultPipeline);
 		}
 
 		return g_current;

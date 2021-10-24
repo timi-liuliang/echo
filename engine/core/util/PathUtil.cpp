@@ -53,9 +53,6 @@ namespace Echo
 			bool bLan = false;
 			bLan = IsLanFile(file);
 			file = StringUtil::Replace(file, BACKSLASH, SEPERATOR);
-			//while(StringUtil::ReplaceRet(file, "//", "/"))
-			//	continue;
-
 			if(bLan)
 				file = SLASH + file;
 
@@ -70,15 +67,14 @@ namespace Echo
 	void PathUtil::FormatPathAbsolut(String& path, bool bLower /* = false */)
 	{
 		if (path.empty())
-		{
 			return;
-		}
 
 		path = StringUtil::Replace(path, BACKSLASH, SEPERATOR);
 		StringArray pathArray = StringUtil::Split(path, "/");
 		size_t size = pathArray.size();
 		if (size == 0)
 			return;
+
 		int backTraceNum = 0;
 		for (int i = int(size - 1); i >= 0; --i)
 		{

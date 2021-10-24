@@ -59,7 +59,7 @@ namespace Echo
 
 		// render pipeline
 		void setRenderPipeline(const ResourcePath& path);
-		const ResourcePath& getRenderPipeline() const { return m_renderPipelinePath; }
+		const ResourcePath& getRenderPipeline() const;
 
 		// on size
 		void onSize(ui32 windowWidth, ui32 windowHeight);

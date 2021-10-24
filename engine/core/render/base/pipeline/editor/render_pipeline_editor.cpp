@@ -2,9 +2,23 @@
 #include "engine/core/editor/editor.h"
 #include "engine/core/main/Engine.h"
 
+#ifdef ECHO_EDITOR_MODE
+
+const char* defaultPipelineTemplate =
+R"(<?xml version="1.0"?>
+<pipeline>
+	<stage class="RenderStage" Name="GBuffer">
+		<property name="FrameBuffer">
+			<obj class="FrameBufferWindow" IsClearColor="true" IsClearDepth="true" />
+		</property>
+		<queue class="RenderQueue" Name="Opaque" Enable="true" Sort="false" />
+		<queue class="RenderQueue" Name="Transparent" Enable="true" Sort="true" />
+	</stage>
+</pipeline>
+)";
+
 namespace Echo
 {
-#ifdef ECHO_EDITOR_MODE
     RenderPipelineEditor::RenderPipelineEditor(Object* object)
     : ObjectEditor(object)
     {
@@ -31,7 +45,7 @@ namespace Echo
 		RenderPipeline* pipeline = ECHO_DOWN_CAST<RenderPipeline*>(m_object);
 		if (pipeline)
 		{
-			pipeline->setSrc(RenderPipeline::Default);
+			pipeline->setSrc(defaultPipelineTemplate);
 		}
 	}
 
@@ -42,6 +56,6 @@ namespace Echo
 			m_panel->update();
 		}
 	}
-#endif
 }
 
+#endif
