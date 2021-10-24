@@ -141,27 +141,27 @@ namespace Echo
 		return *this;
 	}
 
-	// to string
 	Echo::String Variant::toString() const
 	{
 		switch (m_type)
 		{
-		case Type::Bool: return StringUtil::ToString(m_bool);
-		case Type::Int: return StringUtil::ToString(m_int);
-		case Type::Real: return StringUtil::ToString(m_double);
-		case Type::String: return any_cast<String>(m_any);
-		case Type::Vector2: return StringUtil::ToString(any_cast<Vector2>(m_any));
-		case Type::Vector3: return StringUtil::ToString(any_cast<Vector3>(m_any));
-		case Type::Vector4: return StringUtil::ToString(any_cast<Vector4>(m_any));
-		case Type::Quaternion: return StringUtil::ToString(toQuaternion());
-		case Type::Color:	return StringUtil::ToString(any_cast<Color>(m_any));
-		case Type::ResourcePath: return (any_cast<ResourcePath>(m_any)).getPath();
-		case Type::NodePath:	 return (any_cast<NodePath>(m_any)).getPath();
-		case Type::StringOption: return (any_cast<StringOption>(m_any)).getValue();
-		case Type::VectorN:   return StringUtil::ToString(any_cast<RealVector>(m_any));
-		case Type::Base64String: return (any_cast<Base64String>(m_any)).getData();
-		case Type::Object:		 return StringUtil::ToString(toObj() ? toObj()->getId():-1);
-        default:                 return StringUtil::BLANK;
+		case Type::Bool:			return StringUtil::ToString(m_bool);
+		case Type::Int:				return StringUtil::ToString(m_int);
+		case Type::UInt:			return StringUtil::ToString(m_uint);
+		case Type::Real:			return StringUtil::ToString(m_double);
+		case Type::Vector2:			return StringUtil::ToString(any_cast<Vector2>(m_any));
+		case Type::Vector3:			return StringUtil::ToString(any_cast<Vector3>(m_any));
+		case Type::Vector4:			return StringUtil::ToString(any_cast<Vector4>(m_any));
+		case Type::Quaternion:		return StringUtil::ToString(toQuaternion());
+		case Type::VectorN:			return StringUtil::ToString(any_cast<RealVector>(m_any));
+		case Type::Color:			return StringUtil::ToString(any_cast<Color>(m_any));
+		case Type::String:			return any_cast<String>(m_any);
+		case Type::ResourcePath:	return (any_cast<ResourcePath>(m_any)).getPath();
+		case Type::NodePath:		return (any_cast<NodePath>(m_any)).getPath();
+		case Type::Base64String:	return (any_cast<Base64String>(m_any)).getData();
+		case Type::StringOption:	return (any_cast<StringOption>(m_any)).getValue();
+		case Type::Object:			return StringUtil::ToString(toObj() ? toObj()->getId():-1);
+        default:					return StringUtil::BLANK;
 		}
 	}
 
