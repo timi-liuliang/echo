@@ -11,12 +11,6 @@ namespace QT_UI
 	{
 	}
 
-	void QDirectoryModel::setRootPath(const char* rootPath, const char* extFilter, QTreeView* treeView, QSortFilterProxyModel* proxy, const char* rootPathText)
-	{
-		RootPathArray rootPaths = { { rootPathText, rootPath } };
-		setRootPath(rootPaths, extFilter, treeView, proxy);
-	}
-
 	void QDirectoryModel::setRootPath(const RootPathArray& rootPaths, const char* extFilter, QTreeView* treeView, QSortFilterProxyModel* proxy)
 	{
 		m_rootPaths = rootPaths;

@@ -50,7 +50,14 @@ namespace Studio
 		titleLable << "Res://";
 		m_dirModel->setHorizontalHeaderLabels(titleLable);
 
-		m_dirModel->setRootPath(Echo::Engine::instance()->getResPath().c_str(), "none", m_resDirView, NULL);
+		QT_UI::QDirectoryModel::RootPathArray rootPathes =
+		{
+			{"Res://", Echo::IO::instance()->getResPath().c_str(), true},
+			{"User://", Echo::IO::instance()->getUserPath().c_str(), true},
+			{"Engine://", Echo::IO::instance()->getEnginePath().c_str(), false},
+		};
+
+		m_dirModel->setRootPath(rootPathes, "none", m_resDirView, NULL);
 		m_dirModel->Refresh();
 
 		if(!g_lastSelectDir.empty())

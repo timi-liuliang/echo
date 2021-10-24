@@ -35,7 +35,6 @@ namespace QT_UI
 		QDirectoryModel();
 
 		// 设置主目录, 文件类型过滤
-		void setRootPath( const char* rootPath, const char* extFilter, QTreeView* treeView, QSortFilterProxyModel* proxy, const char* rootPathText="Res://");
 		void setRootPath(const RootPathArray& rootPaths, const char* extFilter, QTreeView* treeView, QSortFilterProxyModel* proxy);
 
 		// 是否支持文件类型
