@@ -35,12 +35,12 @@ namespace Echo
 
 	void FrameBufferOffScreen::bindMethods()
 	{
-		CLASS_BIND_METHOD(FrameBufferOffScreen, getColor0, DEF_METHOD("getColor0"));
-		CLASS_BIND_METHOD(FrameBufferOffScreen, setColor0, DEF_METHOD("setColor0"));
+		CLASS_BIND_METHOD(FrameBufferOffScreen, getColorA, DEF_METHOD("getColorA"));
+		CLASS_BIND_METHOD(FrameBufferOffScreen, setColorA, DEF_METHOD("setColorA"));
 		CLASS_BIND_METHOD(FrameBufferOffScreen, getDepth,  DEF_METHOD("getDepth"));
 		CLASS_BIND_METHOD(FrameBufferOffScreen, setDepth,  DEF_METHOD("setDepth"));
 
-		CLASS_REGISTER_PROPERTY(FrameBufferOffScreen, "Color0", Variant::Type::ResourcePath, "getColor0", "setColor0");
+		CLASS_REGISTER_PROPERTY(FrameBufferOffScreen, "ColorA", Variant::Type::ResourcePath, "getColorA", "setColorA");
 		CLASS_REGISTER_PROPERTY(FrameBufferOffScreen, "DepthStencil", Variant::Type::ResourcePath, "getDepth", "setDepth");
 	}
 
@@ -49,12 +49,12 @@ namespace Echo
 		return Renderer::instance()->createFrameBufferOffScreen(Renderer::instance()->getWindowWidth(), Renderer::instance()->getWindowHeight());
 	}
 
-	ResourcePath FrameBufferOffScreen::getColor0()
+	ResourcePath FrameBufferOffScreen::getColorA()
 	{
 		return m_views[0] ? ResourcePath(m_views[0]->getPath(), ".rt") : ResourcePath("", ".rt");
 	}
 
-	void FrameBufferOffScreen::setColor0(const ResourcePath& path)
+	void FrameBufferOffScreen::setColorA(const ResourcePath& path)
 	{
 		m_views[0] = ECHO_DOWN_CAST<TextureRender*>(Res::get(path));
 	}

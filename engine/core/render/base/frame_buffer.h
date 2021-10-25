@@ -16,14 +16,14 @@ namespace Echo
 		// Type
 		enum Attachment : ui8
 		{
-			Color0 = 0,
-			Color1,
-			Color2,
-			Color3,
-			Color4,
-			Color5,
-			Color6,
-			Color7,
+			ColorA = 0,
+			ColorB,
+			ColorC,
+			ColorD,
+			ColorE,
+			ColorF,
+			ColorG,
+			ColorH,
 			DepthStencil
 		};
 
@@ -92,15 +92,15 @@ namespace Echo
 
     public:
         // attachment color0
-        ResourcePath getColor0();
-        void setColor0(const ResourcePath& path);
+        ResourcePath getColorA();
+        void setColorA(const ResourcePath& path);
 
         // attachment depth
         ResourcePath getDepth();
         void setDepth(const ResourcePath& path);
 
         // has depth attachment | color
-        bool hasColorAttachment() { return m_views[int(Attachment::Color0)]; }
+        bool hasColorAttachment() { return m_views[int(Attachment::ColorA)]; }
         bool hasDepthAttachment() { return m_views[int(Attachment::DepthStencil)]; }
 
 	protected:

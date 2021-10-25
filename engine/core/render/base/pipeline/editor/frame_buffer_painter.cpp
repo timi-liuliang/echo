@@ -44,7 +44,7 @@ namespace Pipeline
 		reset();
 
 		Echo::Vector2 pos = Echo::Vector2::ZERO;
-		for (Echo::i32 i = Echo::FrameBuffer::Color0; i <= Echo::FrameBuffer::DepthStencil; i++)
+		for (Echo::i32 i = Echo::FrameBuffer::ColorA; i <= Echo::FrameBuffer::DepthStencil; i++)
 		{
 			Echo::FrameBuffer::Pixels pixels;
 			if (fb->readPixels(Echo::FrameBuffer::Attachment(i), pixels))

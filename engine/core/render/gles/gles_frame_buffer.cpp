@@ -30,7 +30,7 @@ namespace Echo
 		height = m_views[i32(Attachment::DepthStencil)]->getHeight();
 		if (!width || !height) return false;
 
-		for (i32 i = i32(Attachment::Color0); i <= i32(Attachment::DepthStencil); i++)
+		for (i32 i = i32(Attachment::ColorA); i <= i32(Attachment::DepthStencil); i++)
 		{
 			if (m_views[i])
 			{
@@ -52,7 +52,7 @@ namespace Echo
 
     void GLESFrameBufferOffScreen::attach()
     {
-		for (i32 i = i32(Attachment::Color0); i <= i32(Attachment::DepthStencil); i++)
+		for (i32 i = i32(Attachment::ColorA); i <= i32(Attachment::DepthStencil); i++)
 		{
 			GLESTextureRender* texture = dynamic_cast<GLESTextureRender*>(m_views[i].ptr());
 			GLuint esTexture = texture ? texture->getGlesTexture() : 0;
@@ -197,7 +197,7 @@ namespace Echo
 
 	bool GLESFramebufferWindow::readPixels(Attachment attach, Pixels& pixels)
 	{
-		if (attach == Attachment::Color0)
+		if (attach == Attachment::ColorA)
 		{
 			pixels.set(Renderer::instance()->getWindowWidth(), Renderer::instance()->getWindowHeight(), PixelFormat::PF_RGBA8_UNORM);
 
