@@ -22,6 +22,7 @@
 #include "base/editor/shader/node/input/shader_node_layer_blend.h"
 #include "base/editor/shader/node/input/shader_node_shared.h"
 #include "base/editor/shader/node/input/shader_node_vertex_attribute.h"
+#include "base/editor/shader/node/input/shader_node_frame_buffer.h"
 #include "base/editor/shader/node/uniform/shader_node_uniform.h"
 #include "base/editor/shader/node/uniform/shader_node_float.h"
 #include "base/editor/shader/node/uniform/shader_node_vector2.h"
@@ -123,6 +124,7 @@ namespace Echo
 		Class::registerType<ShaderNodeLayerBlend>();
 		Class::registerType<ShaderNodeShared>();
 		Class::registerType<ShaderNodeVertexAttribute>();
+		Class::registerType<ShaderNodeFrameBuffer>();
 
 		// math
 		Class::registerType<ShaderNodeAbs>();
