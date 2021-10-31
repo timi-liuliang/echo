@@ -27,10 +27,6 @@ namespace Studio
 		void Start();
 		void Close();
 
-		// app path
-		void setAppPath( const char* appPath);
-		const char* getAppPath() const { return m_appPath.c_str(); }
-
 		// config manager
 		EditorConfig* getConfigMgr() { return m_projectCfg; }
 	

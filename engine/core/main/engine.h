@@ -15,6 +15,8 @@ namespace Echo
 		{
 			String			m_projectFile;
             String          m_userPath;
+			String			m_rootPath;
+			String			m_engineResPath;
 			bool			m_isGame;
 
 			Config()

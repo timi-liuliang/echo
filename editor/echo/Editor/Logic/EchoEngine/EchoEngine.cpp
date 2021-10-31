@@ -40,6 +40,25 @@ namespace Studio
 
 	bool EchoEngine::Initialize(size_t hwnd)
 	{
+		auto calcEngineRootPath = []()
+		{
+			Echo::String appPath = Echo::PathUtil::GetCurrentDir();
+			Echo::PathUtil::FormatPath(appPath, false);
+
+			// calculate root path
+#ifdef ECHO_PLATFORM_WINDOWS
+			Echo::String rootPath = appPath + "../../../../";
+#elif defined ECHO_PLATFORM_MAC
+			Echo::String rootPath = appPath + "../echo/";
+#else
+			Echo::String rootPath = appPath + "../../../../";
+#endif
+			Echo::PathUtil::FormatPath(rootPath, false);
+			Echo::PathUtil::FormatPathAbsolut(rootPath, false);
+
+			return rootPath;
+		};
+
         // init
         Echo::initRender( hwnd);
 
@@ -47,6 +66,8 @@ namespace Studio
 		rootcfg.m_projectFile = m_projectFile;
 		rootcfg.m_isGame = false;
 		rootcfg.m_userPath = Echo::PathUtil::GetCurrentDir() + "/user/" + Echo::StringUtil::Format("u%d/", Echo::BKDRHash(m_projectFile.c_str()));
+		rootcfg.m_rootPath = calcEngineRootPath();
+		rootcfg.m_engineResPath = rootcfg.m_rootPath + "engine/resources/";
 		Echo::PathUtil::FormatPath(rootcfg.m_userPath);
 		Echo::Engine::instance()->initialize(rootcfg);
 

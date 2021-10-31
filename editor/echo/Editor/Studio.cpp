@@ -105,7 +105,7 @@ namespace Studio
 
 	bool AStudio::isThumbnailExists(const Echo::String& name)
 	{
-		Echo::String appPath = AStudio::instance()->getAppPath();
+		Echo::String appPath = Echo::PathUtil::GetCurrentDir();
 		Echo::String fileFullName = Echo::StringUtil::Format("%sCache/thumbnail/%s.bmp", appPath.c_str(), name.c_str());
 
 		return Echo::PathUtil::IsFileExist(fileFullName);
@@ -175,23 +175,6 @@ namespace Studio
 
 		// output time profiler
 		TIME_PROFILE_OUTPUT
-	}
-
-	void AStudio::setAppPath(const char* appPath)
-	{
-		m_appPath = appPath;
-		Echo::PathUtil::FormatPath(m_appPath, false);
-
-		// calculate root path
-#ifdef ECHO_PLATFORM_WINDOWS
-		Echo::String rootPath = m_appPath + "../../../../";
-#elif defined ECHO_PLATFORM_MAC
-        Echo::String rootPath = m_appPath + "../echo/";
-#else
-		Echo::String rootPath = m_appPath + "../../../../";
-#endif
-
-		Echo::Engine::instance()->setRootPath(rootPath);
 	}
 
 	void AStudio::showBottomPanel(Echo::EditorDockPanel* bottomPanel)

@@ -21,8 +21,8 @@ namespace Echo
 		static IO* instance();
 
 		// Engine path
-		void setEnginePath(const String& enginePath);
-		const String& getEnginePath();
+		void setEngineResPath(const String& enginePath);
+		const String& getEngineResPath();
 
 		// Res path
 		void setResPath(const String& resPath);

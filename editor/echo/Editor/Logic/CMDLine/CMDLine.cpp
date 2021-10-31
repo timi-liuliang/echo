@@ -70,7 +70,6 @@ namespace Echo
 
 		// new astudio
         g_astudio = Studio::AStudio::instance();
-        g_astudio->setAppPath(QDir::currentPath().toStdString().c_str());
 
 		// load editor config
 		TIME_PROFILE
@@ -162,7 +161,6 @@ namespace Echo
 		TIME_PROFILE
 		(
 			g_astudio = Studio::AStudio::instance();
-			g_astudio->setAppPath(QDir::currentPath().toStdString().c_str());
 		)
 
 		TIME_PROFILE

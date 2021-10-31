@@ -101,7 +101,7 @@ namespace Studio
 		{
 			{"Res://", Echo::IO::instance()->getResPath().c_str()},
 			{"User://", Echo::IO::instance()->getUserPath().c_str()},
-			{"Engine://", Echo::IO::instance()->getEnginePath().c_str()}
+			{"Engine://", Echo::IO::instance()->getEngineResPath().c_str()}
 		};
 
 		m_dirModel->setRootPath(rootPaths, "none", m_resDirView, NULL);

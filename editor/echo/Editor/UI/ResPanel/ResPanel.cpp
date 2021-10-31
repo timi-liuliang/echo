@@ -70,7 +70,7 @@ namespace Studio
 		{
 			{"Res://", Echo::IO::instance()->getResPath().c_str(), true},
 			{"User://", Echo::IO::instance()->getUserPath().c_str(), true},
-			{"Engine://", Echo::IO::instance()->getEnginePath().c_str(), false},
+			{"Engine://", Echo::IO::instance()->getEngineResPath().c_str(), false},
 		};
 
 		m_dirModel->setRootPath( rootPathes, "none", m_resDirView, NULL);

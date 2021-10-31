@@ -28,7 +28,7 @@ namespace Echo
         CLASS_BIND_METHOD(IO, saveStringToFile, "saveStringToFile");
     }
 
-    void IO::setEnginePath(const String& enginePath)
+    void IO::setEngineResPath(const String& enginePath)
     {
         String formatPath = enginePath;
         PathUtil::FormatPathAbsolut(formatPath);
@@ -36,7 +36,7 @@ namespace Echo
         m_engineFileSystem.setPath(formatPath, "Engine://");
     }
 
-    const String& IO::getEnginePath()
+    const String& IO::getEngineResPath()
     {
         return m_engineFileSystem.getPath();
     }

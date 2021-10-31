@@ -192,11 +192,6 @@ namespace Echo
 	bool Renderer::initialize(const Settings& settings)
 	{
 		m_settings = settings;
-
-#ifdef ECHO_EDITOR_MODE
-		IO::instance()->setEnginePath(Engine::instance()->getRootPath() + "engine/resources");
-#endif
-
 		return true;
 	}
 

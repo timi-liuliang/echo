@@ -69,6 +69,9 @@ namespace Echo
 
         ImageCodecMgr::instance();
         IO::instance();
+
+		// Engine root path
+		setRootPath(m_config.m_rootPath);
         
 		// check root path
 		setlocale(LC_ALL, "zh_CN.UTF-8");
@@ -84,6 +87,7 @@ namespace Echo
         }
 
         IO::instance()->setUserPath( m_config.m_userPath);
+		IO::instance()->setEngineResPath(m_config.m_engineResPath);
 
 		// lua script
 		{
