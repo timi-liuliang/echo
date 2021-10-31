@@ -11,12 +11,13 @@
 	</stage>
 	<stage class="RenderStage" Name="Lighting" Enable="true" EditorOnly="false">
 		<queue class="ImageFilter" Name="Shadow Mask" Enable="true" />
+		<queue class="RenderQueue" Name="Pbr Lighting" Enable="true" Sort="true" CameraFilter="-1" />
 	</stage>
 	<stage class="RenderStage" Name="Post Processing" Enable="true" EditorOnly="false">
 		<queue class="ImageFilter" Name="Fog" Enable="true" />
 		<queue class="ImageFilter" Name="Antialiasing" Enable="true" />
 	</stage>
-	<stage class="RenderStage" Name="Window" Enable="true" EditorOnly="false">
+	<stage class="RenderStage" Name="Screen Window" Enable="true" EditorOnly="false">
 		<property name="FrameBuffer" path="Engine://Render/Pipeline/Framebuffer/ScreenWindow.fbws" />
 		<queue class="ImageFilter" Name="3D" Enable="true">
 			<property name="Material">
