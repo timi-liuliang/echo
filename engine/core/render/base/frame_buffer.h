@@ -91,11 +91,15 @@ namespace Echo
 		static Res* create();
 
     public:
-        // attachment color0
+        // Attachment colorA
         ResourcePath getColorA();
         void setColorA(const ResourcePath& path);
 
-        // attachment depth
+		// Attachment colorB
+		ResourcePath getColorB();
+		void setColorB(const ResourcePath& path);
+
+        // Attachment depth
         ResourcePath getDepth();
         void setDepth(const ResourcePath& path);
 
