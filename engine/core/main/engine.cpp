@@ -231,14 +231,12 @@ namespace Echo
 		{
 			if (Echo::Class::isSingleton(className))
 			{
-				pugi::xml_node classNode = root.append_child(className.c_str());
-				if (classNode)
+				Object* obj = Echo::Class::create(className);
+				if (obj)
 				{
-					Object* obj = Echo::Class::create(className);
-					if (obj)
-					{
+					pugi::xml_node classNode = root.append_child(className.c_str());
+					if (classNode)
 						Object::savePropertyRecursive(&classNode, obj, obj->getClassName());
-					}
 				}
 			}
 		}
