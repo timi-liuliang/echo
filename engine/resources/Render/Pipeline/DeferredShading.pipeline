@@ -30,4 +30,7 @@
 		<queue class="RenderQueue" Name="2D" Enable="true" Sort="true" CameraFilter="-1" />
 		<queue class="ImageFilter" Name="Ui" Enable="true" />
 	</stage>
+	<stage class="RenderStage" Name="Debug" Enable="true" EditorOnly="false">
+		<property name="FrameBuffer" path="Engine://Render/Pipeline/Framebuffer/ScreenWindowDebug.fbws" />
+	</stage>
 </pipeline>
