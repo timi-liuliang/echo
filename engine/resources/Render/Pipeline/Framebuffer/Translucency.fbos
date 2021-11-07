@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<res class="FrameBufferOffScreen" path="Engine://Render/Pipeline/Framebuffer/Translucency.fbos" IsClearColor="false" ClearColor="0.298 0.298 0.322 1 " IsClearDepth="false" ColorA="Engine://Render/Pipeline/Framebuffer/GBufferColorA.rt" DepthStencil="Engine://Render/Pipeline/Framebuffer/GBufferDepth.rt" />

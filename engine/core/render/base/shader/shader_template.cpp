@@ -26,9 +26,7 @@ namespace Echo
         CLASS_REGISTER_PROPERTY(ShaderTemplate, "VertexShader", Variant::Type::String, "getVsCode", "setVsCode");
         CLASS_REGISTER_PROPERTY(ShaderTemplate, "FragmentShader", Variant::Type::String, "getPsCode", "setPsCode");
 
-        CLASS_REGISTER_PROPERTY_HINT(ShaderTemplate, "VertexShader", PropertyHintType::ReadOnly, "true");
         CLASS_REGISTER_PROPERTY_HINT(ShaderTemplate, "VertexShader", PropertyHintType::Language, "glsl");
-        CLASS_REGISTER_PROPERTY_HINT(ShaderTemplate, "FragmentShader", PropertyHintType::ReadOnly, "true");
         CLASS_REGISTER_PROPERTY_HINT(ShaderTemplate, "FragmentShader", PropertyHintType::Language, "glsl");
 	}
     
