@@ -1,9 +1,9 @@
 #include "AttachmentLoader.h"
 #include <spine/extension.h>
 #include "engine/core/log/Log.h"
-#include "engine/core/render/base/texture.h"
+#include "engine/core/render/base/texture/texture.h"
 #include "engine/core/render/base/mesh/mesh.h"
-#include "engine/core/render/base/material.h"
+#include "engine/core/render/base/shader/material.h"
 
 using namespace Echo;
 

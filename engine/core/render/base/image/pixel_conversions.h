@@ -198,6 +198,14 @@ namespace Echo
 		}
 	};
 
+	struct R32FLOAT_TO_RGBA8UNORM : public PixelConverter <PF_R32_FLOAT, PF_RGBA8_UNORM>
+	{
+		inline static void PixelConvert(const SrcType& src, DstType& dst)
+		{
+			dst.r = dst.g = dst.b = dst.a = (ui8)(src.r * 255.f);
+		}
+	};
+
 	struct RGB8UNORM_TO_BGR8UNORM: public PixelConverter <PF_RGB8_UNORM, PF_BGR8_UNORM>
 	{
 		inline static void PixelConvert(const SrcType &src, DstType &dst)
@@ -276,6 +284,7 @@ namespace Echo
 		CASECONVERTER(R8UNORM_TO_RGBA8UNORM);
 		CASECONVERTER(R8UNORM_TO_R16UNORM);
 		CASECONVERTER(R16UNORM_TO_R8UNORM);
+		CASECONVERTER(R32FLOAT_TO_RGBA8UNORM);
 		CASECONVERTER(RGB8UNORM_TO_BGR8UNORM);
 		CASECONVERTER(RGB8UNORM_TO_RGBA8UNORM);
 		CASECONVERTER(RGB8UNORM_TO_BGRA8UNORM);

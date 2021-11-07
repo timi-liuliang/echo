@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/frame_buffer.h"
+#include "base/buffer/frame_buffer.h"
 #include "vk_render_base.h"
 #include "vk_texture.h"
 

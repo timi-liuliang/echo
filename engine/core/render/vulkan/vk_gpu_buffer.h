@@ -1,6 +1,6 @@
 #pragma once
 
-#include <engine/core/render/base/gpu_buffer.h>
+#include <base/buffer/gpu_buffer.h>
 #include "vk_render_base.h"
 
 namespace Echo

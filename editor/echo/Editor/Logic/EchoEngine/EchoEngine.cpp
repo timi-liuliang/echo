@@ -3,7 +3,7 @@
 #include <QString>
 #include <array>
 #include <engine/core/main/Engine.h>
-#include <base/frame_buffer.h>
+#include <base/buffer/frame_buffer.h>
 #include "engine/core/thread/Threading.h"
 #include "Studio.h"
 #include "RenderWindow.h"

@@ -3,7 +3,7 @@
 #include "engine/core/util/StringOption.h"
 #include "engine/core/scene/render_node.h"
 #include "engine/core/render/base/mesh/mesh.h"
-#include "engine/core/render/base/material.h"
+#include "engine/core/render/base/shader/material.h"
 #include "engine/core/render/base/proxy/render_proxy.h"
 #include "AttachmentLoader.h"
 

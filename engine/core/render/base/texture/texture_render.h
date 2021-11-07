@@ -1,7 +1,7 @@
 #pragma once
 
 #include "engine/core/render/base/image/pixel_format.h"
-#include "engine/core/render/base/texture.h"
+#include "texture.h"
 #include "engine/core/util/magic_enum.hpp"
 
 namespace Echo

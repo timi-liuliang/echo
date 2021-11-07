@@ -2,7 +2,7 @@
 
 #include "render_queue.h"
 #include "image_filter.h"
-#include "../frame_buffer.h"
+#include "base/buffer/frame_buffer.h"
 
 namespace Echo
 {

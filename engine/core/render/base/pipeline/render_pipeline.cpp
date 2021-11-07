@@ -1,6 +1,6 @@
 #include "render_pipeline.h"
-#include "../renderer.h"
-#include "../frame_buffer.h"
+#include "base/renderer.h"
+#include "base/buffer/frame_buffer.h"
 #include "engine/core/io/IO.h"
 #include "render_stage.h"
 #include <thirdparty/pugixml/pugixml.hpp>

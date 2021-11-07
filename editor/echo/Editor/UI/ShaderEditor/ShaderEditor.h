@@ -6,10 +6,10 @@
 #include <QGraphicsView>
 #include <nodeeditor/NodeDataModel>
 #include <engine/core/util/StringUtil.h>
-#include <engine/core/render/base/shader_program.h>
+#include <engine/core/render/base/shader/shader_program.h>
 #include "Scene/ShaderScene.h"
 #include "Scene/ShaderView.h"
-#include <engine/core/render/base/editor/shader/compiler/shader_compiler.h>
+#include <engine/core/render/base/shader/editor/compiler/shader_compiler.h>
 #include "ui_ShaderEditor.h"
 
 namespace Studio

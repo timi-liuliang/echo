@@ -1,7 +1,7 @@
 #pragma once
 
 #include "engine/core/render/base/mesh/mesh.h"
-#include "engine/core/render/base/material.h"
+#include "engine/core/render/base/shader/material.h"
 #include "engine/core/render/base/proxy/render_proxy.h"
 #include "../render/vertex_format.h"
 #include "render.h"

@@ -5,7 +5,7 @@
 #include <nodeeditor/FlowView>
 #include <nodeeditor/DataModelRegistry>
 #include <nodeeditor/TypeConverter>
-#include <engine/core/render/base/editor/shader/node/shader_node.h>
+#include <engine/core/render/base/shader/editor/node/shader_node.h>
 #include "ShaderScene.h"
 #include "ShaderView.h"
 #include "engine/core/io/IO.h"

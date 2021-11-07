@@ -1,10 +1,9 @@
 #pragma once
 
 #include <engine/core/util/Array.hpp>
-#include "base/shader_program.h"
-#include "base/texture.h"
+#include "base/shader/shader_program.h"
 #include "base/render_state.h"
-#include "base/material.h"
+#include "base/shader/material.h"
 #include "base/mesh/mesh.h"
 
 namespace Echo

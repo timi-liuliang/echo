@@ -1,7 +1,7 @@
 #pragma once
 
 #include "engine/core/base/object.h"
-#include "../frame_buffer.h"
+#include "base/buffer/frame_buffer.h"
 
 namespace Echo
 {

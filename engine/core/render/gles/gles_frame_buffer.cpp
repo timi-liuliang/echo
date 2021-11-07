@@ -140,7 +140,7 @@ namespace Echo
 		{
 			if (attach != Attachment::DepthStencil)
 			{
-				PixelFormat pixFmt = PixelFormat::PF_RGBA8_UNORM;// m_views[attach]->getPixelFormat();
+				PixelFormat pixFmt = PixelFormat::PF_RGBA8_UNORM;
 				GLenum glFmt = GLESMapping::MapInternalFormat(pixFmt);
 				GLenum glType = GLESMapping::MapDataType(pixFmt);
 				pixels.set(m_views[attach]->getWidth(), m_views[attach]->getHeight(), pixFmt);
@@ -150,10 +150,10 @@ namespace Echo
 			}
 			else
 			{
-				pixels.set(Renderer::instance()->getWindowWidth(), Renderer::instance()->getWindowHeight(), PixelFormat::PF_RGBA8_UNORM);
+				pixels.set(Renderer::instance()->getWindowWidth(), Renderer::instance()->getWindowHeight(), PixelFormat::PF_R32_FLOAT);
 
-				//OGLESDebug(glReadBuffer(GL_DEPTH_ATTACHMENT));
-				//OGLESDebug(glReadPixels(0, 0, pixels.m_width, pixels.m_height, GL_RED, GL_FLOAT, pixels.m_data.data()));
+				OGLESDebug(glReadBuffer(GL_DEPTH_ATTACHMENT));
+				OGLESDebug(glReadPixels(0, 0, pixels.m_width, pixels.m_height, GL_DEPTH_COMPONENT, GL_FLOAT, pixels.m_data.data()));
 			}
 
 			return true;
@@ -209,10 +209,10 @@ namespace Echo
 		}
 		else if (attach == Attachment::DepthStencil)
 		{
-			pixels.set(Renderer::instance()->getWindowWidth(), Renderer::instance()->getWindowHeight(), PixelFormat::PF_RGBA8_UNORM);
+			pixels.set(Renderer::instance()->getWindowWidth(), Renderer::instance()->getWindowHeight(), PixelFormat::PF_R32_FLOAT);
 
-			//OGLESDebug(glReadBuffer(GL_DEPTH_ATTACHMENT));
-			//OGLESDebug(glReadPixels(0, 0, pixels.m_width, pixels.m_height, GL_RED, GL_FLOAT, pixels.m_data.data()));
+			OGLESDebug(glReadBuffer(GL_DEPTH_ATTACHMENT));
+			OGLESDebug(glReadPixels(0, 0, pixels.m_width, pixels.m_height, GL_RED, GL_FLOAT, pixels.m_data.data()));
 
 			return true;
 		}

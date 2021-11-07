@@ -1,8 +1,8 @@
 #pragma once
 
-#include <base/texture.h>
-#include <base/shader_program.h>
-#include "engine/core/render/base/gpu_buffer.h"
+#include <base/texture/texture.h>
+#include <base/shader/shader_program.h>
+#include "engine/core/render/base/buffer/gpu_buffer.h"
 #include "engine/core/render/base/mesh/mesh.h"
 #include "gles_render_state.h"
 

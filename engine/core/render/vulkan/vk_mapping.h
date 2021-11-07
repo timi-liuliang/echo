@@ -1,8 +1,8 @@
 #pragma once
 
 #include "base/mesh/mesh.h"
-#include "base/shader_program.h"
-#include "base/gpu_buffer.h"
+#include "base/shader/shader_program.h"
+#include "base/buffer/gpu_buffer.h"
 #include "vk_render_base.h"
 
 namespace Echo

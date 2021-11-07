@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/gpu_buffer.h"
+#include "base/buffer/gpu_buffer.h"
 
 namespace Echo
 {

@@ -1,9 +1,9 @@
 #include "engine/core/log/Log.h"
 #include "compute_proxy.h"
-#include "base/shader_program.h"
+#include "base/shader/shader_program.h"
 #include "base/renderer.h"
 #include "base/pipeline/render_pipeline.h"
-#include "base/material.h"
+#include "base/shader/material.h"
 #include "base/mesh/mesh.h"
 #include "engine/core/scene/render_node.h"
 

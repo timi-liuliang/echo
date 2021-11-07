@@ -9,7 +9,7 @@
 #include "engine/core/io/IO.h"
 #include "engine/core/main/Engine.h"
 #include "engine/core/render/base/image/image.h"
-#include "engine/core/render/base/atla/texture_atlas.h"
+#include "engine/core/render/base/texture/texture_atlas.h"
 
 namespace Echo
 {

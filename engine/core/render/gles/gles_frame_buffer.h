@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/frame_buffer.h"
+#include "base/buffer/frame_buffer.h"
 #include "gles_render_base.h"
 
 namespace Echo

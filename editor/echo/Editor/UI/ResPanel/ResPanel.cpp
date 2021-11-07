@@ -11,7 +11,7 @@
 #include "engine/core/main/Engine.h"
 #include <engine/core/io/IO.h>
 #include <engine/core/resource/Res.h>
-#include <engine/core/render/base/material.h>
+#include <engine/core/render/base/shader/material.h>
 #include <engine/core/editor/importer.h>
 
 namespace Studio

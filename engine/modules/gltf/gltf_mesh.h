@@ -3,7 +3,7 @@
 #include "engine/core/scene/render_node.h"
 #include "engine/core/scene/node_path.h"
 #include "engine/core/render/base/mesh/mesh.h"
-#include "engine/core/render/base/material.h"
+#include "engine/core/render/base/shader/material.h"
 #include "engine/core/render/base/proxy/render_proxy.h"
 #include "gltf_res.h"
 #include "gltf_skeleton.h"

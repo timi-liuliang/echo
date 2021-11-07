@@ -1,7 +1,7 @@
 #pragma once
 
 #include <engine/core/util/Array.hpp>
-#include "base/shader_program.h"
+#include "base/shader/shader_program.h"
 #include "base/proxy/render_proxy.h"
 #include "base/mesh/mesh.h"
 #include "gles_shader.h"

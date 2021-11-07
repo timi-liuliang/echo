@@ -2,7 +2,7 @@
 
 #include <radeon_rays.h>
 #include "engine/core/render/base/texture/texture_render.h"
-#include "engine/core/render/base/material.h"
+#include "engine/core/render/base/shader/material.h"
 
 namespace Echo
 {

@@ -1,6 +1,6 @@
 #include "ShaderScene.h"
 #include "ShaderEditor.h"
-#include <engine/core/render/base/editor/shader/node/template/shader_node_template.h>
+#include <engine/core/render/base/shader/editor/node/template/shader_node_template.h>
 #include "nodeeditor/internal/node/Node.hpp"
 
 namespace DataFlowProgramming

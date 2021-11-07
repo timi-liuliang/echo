@@ -2,12 +2,11 @@
 
 #include "device_features.h"
 #include "render_state.h"
-#include "texture.h"
 #include "texture/texture_cube.h"
 #include "base/proxy/render_proxy.h"
 #include "base/proxy/compute_proxy.h"
-#include "frame_buffer.h"
-#include "gpu_buffer.h"
+#include "base/buffer/frame_buffer.h"
+#include "base/buffer/gpu_buffer.h"
 #include "view_port.h"
 
 namespace Echo
