@@ -20,10 +20,10 @@ namespace Echo
 	{
 		m_textureAtlas = ECHO_DOWN_CAST<TextureAtlas*>(obj);
 
-		m_ui = (QDockWidget*)EditorApi.qLoadUi("engine/core/render/base/editor/atlas/TextureAtlasPanel.ui");
+		m_ui = (QDockWidget*)EditorApi.qLoadUi("engine/core/render/base/texture/editor/atlas/TextureAtlasPanel.ui");
 		m_nodeTreeWidget = m_ui->findChild<QTreeWidget*>("m_nodeTreeWidget");
 
-		m_splitDialog = (QDialog*)EditorApi.qLoadUi("engine/core/render/base/editor/atlas/TextureAtlasSplitDialog.ui");
+		m_splitDialog = (QDialog*)EditorApi.qLoadUi("engine/core/render/base/texture/editor/atlas/TextureAtlasSplitDialog.ui");
 
 		QSplitter* splitter = m_ui->findChild<QSplitter*>("m_splitter");
 		if (splitter)
@@ -36,7 +36,7 @@ namespace Echo
 		QToolButton* importButton = m_ui->findChild<QToolButton*>("m_import");
 		if (importButton)
 		{
-			importButton->setIcon(QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/editor/icon/import.png").c_str()));
+			importButton->setIcon(QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/texture/editor/icon/import.png").c_str()));
 		}
 
 		// connect signal slots
