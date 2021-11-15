@@ -149,6 +149,12 @@ namespace Echo
         return EchoNew(VKShaderProgram);
     }
 
+	FrameBufferWindow* VKRenderer::createFrameBufferWindow() 
+	{
+		static VKFramebufferWindow* frameBufferWindow = EchoNew(VKFramebufferWindow);
+		return frameBufferWindow;
+	}
+
     RasterizerState* VKRenderer::createRasterizerState()
     {
         return EchoNew(VKRasterizerState);

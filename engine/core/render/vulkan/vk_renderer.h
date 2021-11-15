@@ -39,7 +39,7 @@ namespace Echo
 
         // create views
         virtual FrameBufferOffScreen* createFrameBufferOffScreen(ui32 width, ui32 height) override { return EchoNew(VKFramebufferOffscreen(width, height));}
-        virtual FrameBufferWindow* createFrameBufferWindow() override { return EchoNew(VKFramebufferWindow); }
+        virtual FrameBufferWindow* createFrameBufferWindow() override;
 
         // create states
         virtual RasterizerState* createRasterizerState() override;

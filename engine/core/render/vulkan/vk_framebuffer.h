@@ -61,6 +61,9 @@ namespace Echo
     protected:
         // create vk frame buffer
         void createVkFramebuffers();
+
+        // create render pass
+        virtual void createVkRenderPass() override;
     };
 
     class VKFramebufferWindow : public FrameBufferWindow, public VKFramebuffer
