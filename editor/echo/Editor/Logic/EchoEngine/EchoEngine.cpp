@@ -10,7 +10,7 @@
 #include <base/renderer.h>
 #include <string>
 #include "Studio.h"
-#include "base/render_state.h"
+#include "base/state/render_state.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/util/TimeProfiler.h>
 #include <engine/core/util/hash_generator.h>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/ray_tracer.h"
+#include "base/misc/ray_tracer.h"
 #include "base/mesh/mesh.h"
 #include "vk_render_base.h"
 #include "vk_gpu_buffer.h"
