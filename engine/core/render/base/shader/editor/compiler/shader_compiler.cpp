@@ -141,6 +141,7 @@ layout(location = 4) in vec3 v_NormalLocal;
 #ifdef HAS_TANGENTS
 	layout(location = 5) in mat3 v_TBN;
 #endif
+layout(location=1) out vec4 o_FragNormal;
 #endif
 
 #ifdef ENABLE_VERTEX_COLOR
@@ -331,6 +332,8 @@ ${FS_SHADER_CODE}
 
 #ifdef ENABLE_LIGHTING_CALCULATION
 	__BaseColor = PbrLighting(v_Position.world, __BaseColor, __Normal, __Metalic, __PerceptualRoughness, fs_ubo.u_CameraPosition);
+
+	o_FragNormal.xyz = __Normal;
 #endif
 
 #ifdef ENABLE_OCCLUSION
