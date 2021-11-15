@@ -18,16 +18,24 @@ LINK_DIRECTORIES(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 
 # Base Files
 SET(TFLITE_BASE_FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/create_op_resolver.h
+	${CMAKE_CURRENT_SOURCE_DIR}/create_op_resolver_with_builtin_ops.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/external_cpu_backend_context.h
 	${CMAKE_CURRENT_SOURCE_DIR}/external_cpu_backend_context.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/interpreter.h
 	${CMAKE_CURRENT_SOURCE_DIR}/interpreter.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/interpreter_builder.h
 	${CMAKE_CURRENT_SOURCE_DIR}/interpreter_builder.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/interpreter_experimental.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/minimal_logging.h
 	${CMAKE_CURRENT_SOURCE_DIR}/minimal_logging.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/minimal_logging_default.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/model_builder.h
+	${CMAKE_CURRENT_SOURCE_DIR}/model_builder.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/mutable_op_resolver.h
 	${CMAKE_CURRENT_SOURCE_DIR}/mutable_op_resolver.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/signature_runner.h
+	${CMAKE_CURRENT_SOURCE_DIR}/signature_runner.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/stderr_reporter.h
 	${CMAKE_CURRENT_SOURCE_DIR}/stderr_reporter.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/util.h
@@ -56,6 +64,7 @@ SET(TFLITE_CORE_FILES
 SET(TFLITE_DELEGATES_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/delegates/interpreter_utils.h
 	${CMAKE_CURRENT_SOURCE_DIR}/delegates/interpreter_utils.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/delegates/nnapi/nnapi_delegate_disabled.cc
 )
 
 # Kernels files
