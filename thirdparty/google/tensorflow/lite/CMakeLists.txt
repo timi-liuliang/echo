@@ -13,11 +13,15 @@ INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/google/gemmlowp)
 INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/google/ruy)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 
-# Link Directories
+# Link Directories 
 LINK_DIRECTORIES(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 
 # Base Files
 SET(TFLITE_BASE_FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/allocation.h
+	${CMAKE_CURRENT_SOURCE_DIR}/allocation.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/arena_planner.h
+	${CMAKE_CURRENT_SOURCE_DIR}/arena_planner.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/create_op_resolver.h
 	${CMAKE_CURRENT_SOURCE_DIR}/create_op_resolver_with_builtin_ops.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/external_cpu_backend_context.h
@@ -32,6 +36,7 @@ SET(TFLITE_BASE_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/minimal_logging_default.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/model_builder.h
 	${CMAKE_CURRENT_SOURCE_DIR}/model_builder.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/mmap_allocation_disabled.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/mutable_op_resolver.h
 	${CMAKE_CURRENT_SOURCE_DIR}/mutable_op_resolver.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/signature_runner.h
@@ -58,6 +63,10 @@ SET(TFLITE_CORE_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/core/subgraph.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/core/api/error_reporter.h
 	${CMAKE_CURRENT_SOURCE_DIR}/core/api/error_reporter.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/core/api/flatbuffer_conversions.h
+	${CMAKE_CURRENT_SOURCE_DIR}/core/api/flatbuffer_conversions.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/core/api/op_resolver.h
+	${CMAKE_CURRENT_SOURCE_DIR}/core/api/op_resolver.cc
 )
 
 # Delegate files
@@ -67,9 +76,29 @@ SET(TFLITE_DELEGATES_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/delegates/nnapi/nnapi_delegate_disabled.cc
 )
 
+# Profiling files
+SET(TFLITE_PROFILING_FILES
+	#${CMAKE_CURRENT_SOURCE_DIR}/profiling/platform_profiler.h
+	#${CMAKE_CURRENT_SOURCE_DIR}/profiling/platform_profiler.cc
+)
+
 # Kernels files
 SET(TFLITE_KENELS_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/activations.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/cpu_backend_context.h
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/cpu_backend_context.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/kernel_util.h
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/kernel_util.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/register.h
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/register.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/internal/quantization_util.h
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/internal/quantization_util.cc
+)
+
+# Schema files
+SET(TFLITE_SCHEMA_FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/schema/schema_utils.h
+	${CMAKE_CURRENT_SOURCE_DIR}/schema/schema_utils.cc
 )
 
 # All Files
@@ -78,7 +107,9 @@ SET(ALL_FILES
 	${TFLITE_C_FILES}
 	${TFLITE_CORE_FILES}
 	${TFLITE_DELEGATES_FILES}
+	${TFLITE_PROFILING_FILES}
 	${TFLITE_KENELS_FILES}
+	${TFLITE_SCHEMA_FILES}
 )
 
 # Group
@@ -86,7 +117,7 @@ GROUP_FILES(ALL_FILES ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Definition
 IF(WIN32)
-	ADD_DEFINITIONS(-DNOMINMAX -DWIN64 -DWIN32_LEAN_AND_MEAN -DNOGDI)
+	ADD_DEFINITIONS(-DNOMINMAX -DWIN64 -DWIN32_LEAN_AND_MEAN -DNOGDI -DTFL_STATIC_LIBRARY_BUILD -D_WINDOWS)
 ENDIF()
 
 # Add library
