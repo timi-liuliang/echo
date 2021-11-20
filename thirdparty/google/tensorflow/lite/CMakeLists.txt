@@ -91,6 +91,9 @@ SET(TFLITE_KENELS_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/kernel_util.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/register.h
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/register.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/unidirectional_sequence_gru.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/unidirectional_sequence_lstm.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/unidirectional_sequence_rnn.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/internal/quantization_util.h
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/internal/quantization_util.cc
 )

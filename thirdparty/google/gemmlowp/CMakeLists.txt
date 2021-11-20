@@ -30,9 +30,6 @@ IF(WIN32)
     ENDIF()
 ENDIF()
 
-# CXX Statndard
-SET(CMAKE_CXX_STANDARD 11)
-
 # generate module library
 ADD_LIBRARY(${MODULE_NAME} ${ALL_FILES} CMakeLists.txt)
 

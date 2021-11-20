@@ -57,7 +57,7 @@ inline void set_fpu_state(const struct fpu_state state) {
     (defined(_M_IX86_FP) && _M_IX86_FP >= 1)
   _mm_setcsr(static_cast<unsigned int>(state.mxcsr));
 #elif defined(_MSC_VER) && defined(_M_ARM)
-  _MoveToCoprocessor(static_cast<int>(state.fpscr), 10, 7, 1, 0, 0);
+  _MoveToCoprocessor(static_cast<int>(state.fpscr, 10, 7, 1, 0, 0));
 #elif defined(_MSC_VER) && defined(_M_ARM64)
   _WriteStatusReg(0x5A20, static_cast<__int64>(state.fpcr));
 #elif defined(__GNUC__) && defined(__arm__) && defined(__ARM_FP) && \
