@@ -11,6 +11,7 @@ INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/google/eigen)
 INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/google/flatbuffers/include)
 INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/google/gemmlowp)
 INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/google/ruy)
+INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/google/farmhash/src)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 
 # Link Directories 
@@ -26,6 +27,7 @@ SET(TFLITE_BASE_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/create_op_resolver_with_builtin_ops.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/external_cpu_backend_context.h
 	${CMAKE_CURRENT_SOURCE_DIR}/external_cpu_backend_context.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/graph_info.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/interpreter.h
 	${CMAKE_CURRENT_SOURCE_DIR}/interpreter.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/interpreter_builder.h
@@ -41,6 +43,7 @@ SET(TFLITE_BASE_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/mutable_op_resolver.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/signature_runner.h
 	${CMAKE_CURRENT_SOURCE_DIR}/signature_runner.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/simple_memory_arena.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/stderr_reporter.h
 	${CMAKE_CURRENT_SOURCE_DIR}/stderr_reporter.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/util.h
@@ -67,6 +70,7 @@ SET(TFLITE_CORE_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/core/api/flatbuffer_conversions.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/core/api/op_resolver.h
 	${CMAKE_CURRENT_SOURCE_DIR}/core/api/op_resolver.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/core/api/tensor_utils.cc
 )
 
 # Delegate files
@@ -78,24 +82,84 @@ SET(TFLITE_DELEGATES_FILES
 
 # Profiling files
 SET(TFLITE_PROFILING_FILES
-	#${CMAKE_CURRENT_SOURCE_DIR}/profiling/platform_profiler.h
-	#${CMAKE_CURRENT_SOURCE_DIR}/profiling/platform_profiler.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/profiling/platform_profiler.h
+	${CMAKE_CURRENT_SOURCE_DIR}/profiling/platform_profiler.cc
 )
 
 # Kernels files
 SET(TFLITE_KENELS_FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/add.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/add_n.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/activations.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/arg_min_max.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/assign_variable.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/batch_matmul.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/batch_to_space_nd.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/bidirectional_sequence_lstm.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/bidirectional_sequence_rnn.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/broadcast_args.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/broadcast_to.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/call_once.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/cast.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/ceil.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/comparisons.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/complex_support.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/concatenation.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/conv.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/conv3d.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/conv3d_transpose.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/cpu_backend_context.h
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/cpu_backend_context.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/cpu_backend_gemm_eigen.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/internal/optimized/cpu_check.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/cumsum.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/depth_to_space.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/densify.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/deprecated_backends.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/depthwise_conv.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/dequantize.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/detection_postprocess.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/div.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/elementwise.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/embedding_lookup.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/embedding_lookup_sparse.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/exp.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/expand_dims.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/fake_quant.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/fill.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/floor.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/floor_div.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/floor_mod.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/fully_connected.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/gather.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/gather_nd.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/gru_cell.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/hashtable.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/hashtable_find.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/hashtable_import.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/hashtable_lookup.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/hashtable_size.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/if.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/irfft2d.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/kernel_util.h
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/kernel_util.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/l2norm.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/local_response_norm.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/logical.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/lsh_projection.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/lstm.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/lstm_eval.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/pooling.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/register.h
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/register.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/register_ref.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/reduce.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/unidirectional_sequence_gru.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/unidirectional_sequence_lstm.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/unidirectional_sequence_rnn.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/internal/quantization_util.h
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/internal/quantization_util.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/internal/kernel_utils.cc
 )
 
 # Schema files
@@ -110,13 +174,13 @@ SET(ALL_FILES
 	${TFLITE_C_FILES}
 	${TFLITE_CORE_FILES}
 	${TFLITE_DELEGATES_FILES}
-	${TFLITE_PROFILING_FILES}
 	${TFLITE_KENELS_FILES}
 	${TFLITE_SCHEMA_FILES}
+	${TFLITE_PROFILING_FILES}
 )
 
 # Group
-GROUP_FILES(ALL_FILES ${CMAKE_CURRENT_SOURCE_DIR})
+#GROUP_FILES(ALL_FILES ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Definition
 IF(WIN32)

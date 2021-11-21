@@ -22,8 +22,8 @@ LIST(FILTER ALL_FILES EXCLUDE REGEX ".*(_test)\\.(c|cc|h)$")
 LIST(FILTER ALL_FILES EXCLUDE REGEX ".*/(benchmark|example|test_.*)\.cc$")
 LIST(FILTER ALL_FILES EXCLUDE REGEX ".*/gtest_wrapper\\.h$")
 
-# group files by folder
-GROUP_FILES(ALL_FILES ${CMAKE_CURRENT_SOURCE_DIR})
+# Group files by folder (Disabled for ruy)
+#GROUP_FILES(ALL_FILES ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Definition
 IF(WIN32)
