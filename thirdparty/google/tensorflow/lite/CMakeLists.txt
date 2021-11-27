@@ -12,6 +12,7 @@ INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/google/flatbuffers/include)
 INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/google/gemmlowp)
 INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/google/ruy)
 INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/google/farmhash/src)
+INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/google/fp16/include)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 
 # Link Directories 
@@ -41,6 +42,7 @@ SET(TFLITE_BASE_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/mmap_allocation_disabled.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/mutable_op_resolver.h
 	${CMAKE_CURRENT_SOURCE_DIR}/mutable_op_resolver.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/optional_debug_tools.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/signature_runner.h
 	${CMAKE_CURRENT_SOURCE_DIR}/signature_runner.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/simple_memory_arena.cc
@@ -78,6 +80,8 @@ SET(TFLITE_DELEGATES_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/delegates/interpreter_utils.h
 	${CMAKE_CURRENT_SOURCE_DIR}/delegates/interpreter_utils.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/delegates/nnapi/nnapi_delegate_disabled.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/nnapi/nnapi_implementation_disabled.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/delegates/xnnpack/quantization_util.cc
 )
 
 # Profiling files
@@ -149,16 +153,47 @@ SET(TFLITE_KENELS_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/lsh_projection.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/lstm.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/lstm_eval.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/matrix_diag.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/matrix_set_diag.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/maximum_minimum.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/mfcc.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/internal/mfcc.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/internal/mfcc_dct.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/internal/mfcc_mel_filterbank.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/mirror_pad.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/mul.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/multinomial.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/neg.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/one_hot.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/internal/optimized/neon_tensor_utils.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/non_max_suppression.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/numeric_verify.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/pack.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/pad.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/pooling.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/pooling3d.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/internal/reference/portable_tensor_utils.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/pow.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/internal/quantization_util.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/quantize.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/range.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/rank.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/read_variable.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/reduce.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/register.h
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/register.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/register_ref.cc
-	${CMAKE_CURRENT_SOURCE_DIR}/kernels/reduce.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/reshape.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/resize_bilinear.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/resize_nearest_neighbor.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/reverse.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/reverse_sequence.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/rfft2d.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/roll.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/round.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/unidirectional_sequence_gru.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/unidirectional_sequence_lstm.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/unidirectional_sequence_rnn.cc
-	${CMAKE_CURRENT_SOURCE_DIR}/kernels/internal/quantization_util.h
-	${CMAKE_CURRENT_SOURCE_DIR}/kernels/internal/quantization_util.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/internal/kernel_utils.cc
 )
 
