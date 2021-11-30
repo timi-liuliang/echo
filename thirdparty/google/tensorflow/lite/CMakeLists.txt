@@ -46,8 +46,11 @@ SET(TFLITE_BASE_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/signature_runner.h
 	${CMAKE_CURRENT_SOURCE_DIR}/signature_runner.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/simple_memory_arena.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/simple_memory_arena_debug_dump.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/simple_planner.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/stderr_reporter.h
 	${CMAKE_CURRENT_SOURCE_DIR}/stderr_reporter.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/string_util.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/util.h
 	${CMAKE_CURRENT_SOURCE_DIR}/util.cc
 )
@@ -82,6 +85,9 @@ SET(TFLITE_DELEGATES_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/delegates/nnapi/nnapi_delegate_disabled.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/nnapi/nnapi_implementation_disabled.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/delegates/xnnpack/quantization_util.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/delegates/serialization.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/delegates/telemetry.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/delegates/utils.cc
 )
 
 # Profiling files
@@ -97,6 +103,7 @@ SET(TFLITE_KENELS_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/activations.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/arg_min_max.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/assign_variable.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/basic_rnn.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/batch_matmul.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/batch_to_space_nd.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/bidirectional_sequence_lstm.cc
@@ -191,10 +198,43 @@ SET(TFLITE_KENELS_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/rfft2d.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/roll.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/round.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/scatter_nd.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/segment_sum.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/select.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/shape.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/sign.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/skip_gram.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/slice.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/space_to_batch_nd.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/space_to_depth.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/sparse_to_dense.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/internal/utils/sparsity_format_converter.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/internal/spectrogram.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/split.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/split_v.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/squared_difference.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/squeeze.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/internal/optimized/sse_tensor_utils.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/strided_slice.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/sub.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/svdf.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/table.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/internal/tensor_utils.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/tile.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/topk_v2.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/transpose.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/transpose_conv.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/internal/transpose_utils.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/unidirectional_sequence_gru.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/unidirectional_sequence_lstm.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/unidirectional_sequence_rnn.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/unique.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/unpack.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/internal/kernel_utils.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/var_handle.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/where.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/while.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/zeros_like.cc
 )
 
 # Schema files
