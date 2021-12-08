@@ -31,16 +31,16 @@ namespace Echo
 
 	void Texture::bindMethods()
 	{
-		CLASS_BIND_METHOD(Texture, isMipmapEnable, DEF_METHOD("isMipmapEnable"));
-		CLASS_BIND_METHOD(Texture, setMipmapEnable, DEF_METHOD("setMipmapEnable"));
-		CLASS_BIND_METHOD(Texture, getWidth, DEF_METHOD("getWidth"));
-		CLASS_BIND_METHOD(Texture, setWidth, DEF_METHOD("setWidth"));
-		CLASS_BIND_METHOD(Texture, getHeight, DEF_METHOD("getHeight"));
-		CLASS_BIND_METHOD(Texture, setHeight, DEF_METHOD("setHeight"));
+		CLASS_BIND_METHOD(Texture, isMipmapEnable);
+		CLASS_BIND_METHOD(Texture, setMipmapEnable);
+		CLASS_BIND_METHOD(Texture, getWidth);
+		CLASS_BIND_METHOD(Texture, setWidth);
+		CLASS_BIND_METHOD(Texture, getHeight);
+		CLASS_BIND_METHOD(Texture, setHeight);
 
-		CLASS_REGISTER_PROPERTY(Texture, "MipMap", Variant::Type::Bool, "isMipmapEnable", "setMipmapEnable");
-		CLASS_REGISTER_PROPERTY(Texture, "Width",  Variant::Type::Int, "getWidth", "setWidth");
-		CLASS_REGISTER_PROPERTY(Texture, "Height", Variant::Type::Int, "getHeight", "setHeight");
+		CLASS_REGISTER_PROPERTY(Texture, "MipMap", Variant::Type::Bool, isMipmapEnable, setMipmapEnable);
+		CLASS_REGISTER_PROPERTY(Texture, "Width",  Variant::Type::Int, getWidth, setWidth);
+		CLASS_REGISTER_PROPERTY(Texture, "Height", Variant::Type::Int, getHeight, setHeight);
 	}
 
 	Res* Texture::load(const ResourcePath& path)

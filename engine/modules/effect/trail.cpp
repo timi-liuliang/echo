@@ -19,16 +19,16 @@ namespace Echo
 
 	void Trail::bindMethods()
 	{
-		CLASS_BIND_METHOD(Trail, getFadeTime, DEF_METHOD("getFadeTime"));
-		CLASS_BIND_METHOD(Trail, setFadeTime, DEF_METHOD("setFadeTime"));
-		CLASS_BIND_METHOD(Trail, getStepLength, DEF_METHOD("getStepLength"));
-		CLASS_BIND_METHOD(Trail, setStepLength, DEF_METHOD("setStepLength"));
-		CLASS_BIND_METHOD(Trail, getMaterial, DEF_METHOD("getMaterial"));
-		CLASS_BIND_METHOD(Trail, setMaterial, DEF_METHOD("setMaterial"));
+		CLASS_BIND_METHOD(Trail, getFadeTime);
+		CLASS_BIND_METHOD(Trail, setFadeTime);
+		CLASS_BIND_METHOD(Trail, getStepLength);
+		CLASS_BIND_METHOD(Trail, setStepLength);
+		CLASS_BIND_METHOD(Trail, getMaterial);
+		CLASS_BIND_METHOD(Trail, setMaterial);
 
-		CLASS_REGISTER_PROPERTY(Trail, "FadeTime", Variant::Type::Real, "getFadeTime", "setFadeTime");
-		CLASS_REGISTER_PROPERTY(Trail, "StepLength", Variant::Type::Real, "getStepLength", "setStepLength");
-		CLASS_REGISTER_PROPERTY(Trail, "Material", Variant::Type::Object, "getMaterial", "setMaterial");
+		CLASS_REGISTER_PROPERTY(Trail, "FadeTime", Variant::Type::Real, getFadeTime, setFadeTime);
+		CLASS_REGISTER_PROPERTY(Trail, "StepLength", Variant::Type::Real, getStepLength, setStepLength);
+		CLASS_REGISTER_PROPERTY(Trail, "Material", Variant::Type::Object, getMaterial, setMaterial);
 		CLASS_REGISTER_PROPERTY_HINT(Trail, "Material", PropertyHintType::ObjectType, "Material");
 	}
 

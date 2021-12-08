@@ -78,8 +78,8 @@ namespace Echo
 
 	void Renderer::bindMethods()
 	{
-		CLASS_BIND_METHOD(Renderer, getWindowWidth,  DEF_METHOD("getWindowWidth"));
-		CLASS_BIND_METHOD(Renderer, getWindowHeight, DEF_METHOD("getWindowHeight"));
+		CLASS_BIND_METHOD(Renderer, getWindowWidth);
+		CLASS_BIND_METHOD(Renderer, getWindowHeight);
 	}
 
 	void Renderer::registerClassTypes()

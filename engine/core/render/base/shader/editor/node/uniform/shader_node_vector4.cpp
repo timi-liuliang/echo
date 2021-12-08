@@ -14,10 +14,10 @@ namespace Echo
 
 	void ShaderNodeVector4::bindMethods()
 	{
-		CLASS_BIND_METHOD(ShaderNodeVector4, getValue, DEF_METHOD("getValue"));
-		CLASS_BIND_METHOD(ShaderNodeVector4, setValue, DEF_METHOD("setValue"));
+		CLASS_BIND_METHOD(ShaderNodeVector4, getValue);
+		CLASS_BIND_METHOD(ShaderNodeVector4, setValue);
 
-		CLASS_REGISTER_PROPERTY(ShaderNodeVector4, "Value", Variant::Type::Vector4, "getValue", "setValue");
+		CLASS_REGISTER_PROPERTY(ShaderNodeVector4, "Value", Variant::Type::Vector4, getValue, setValue);
 	}
 
 	void ShaderNodeVector4::setVariableName(const String& variableName)

@@ -238,28 +238,28 @@ namespace Echo
 
 	void ShaderProgram::bindMethods()
 	{
-        CLASS_BIND_METHOD(ShaderProgram, getType, DEF_METHOD("getType"));
-        CLASS_BIND_METHOD(ShaderProgram, setType, DEF_METHOD("setType"));
-        CLASS_BIND_METHOD(ShaderProgram, getVsCode, DEF_METHOD("getVsCode"));
-        CLASS_BIND_METHOD(ShaderProgram, setVsCode, DEF_METHOD("setVsCode"));
-        CLASS_BIND_METHOD(ShaderProgram, getPsCode, DEF_METHOD("getPsCode"));
-        CLASS_BIND_METHOD(ShaderProgram, setPsCode, DEF_METHOD("setPsCode"));
-        CLASS_BIND_METHOD(ShaderProgram, getGraph, DEF_METHOD("getGraph"));
-        CLASS_BIND_METHOD(ShaderProgram, setGraph, DEF_METHOD("setGraph"));
-        CLASS_BIND_METHOD(ShaderProgram, getCullMode, DEF_METHOD("getCullMode"));
-		CLASS_BIND_METHOD(ShaderProgram, setCullMode, DEF_METHOD("setCullMode"));
-		CLASS_BIND_METHOD(ShaderProgram, getBlendMode, DEF_METHOD("getBlendMode"));
-		CLASS_BIND_METHOD(ShaderProgram, setBlendMode, DEF_METHOD("setBlendMode"));
-		CLASS_BIND_METHOD(ShaderProgram, getDepthStencilState, DEF_METHOD("getDepthStencilState"));
-		CLASS_BIND_METHOD(ShaderProgram, setDepthStencilState, DEF_METHOD("setDepthStencilState"));
+        CLASS_BIND_METHOD(ShaderProgram, getType);
+        CLASS_BIND_METHOD(ShaderProgram, setType);
+        CLASS_BIND_METHOD(ShaderProgram, getVsCode);
+        CLASS_BIND_METHOD(ShaderProgram, setVsCode);
+        CLASS_BIND_METHOD(ShaderProgram, getPsCode);
+        CLASS_BIND_METHOD(ShaderProgram, setPsCode);
+        CLASS_BIND_METHOD(ShaderProgram, getGraph);
+        CLASS_BIND_METHOD(ShaderProgram, setGraph);
+        CLASS_BIND_METHOD(ShaderProgram, getCullMode);
+		CLASS_BIND_METHOD(ShaderProgram, setCullMode);
+		CLASS_BIND_METHOD(ShaderProgram, getBlendMode);
+		CLASS_BIND_METHOD(ShaderProgram, setBlendMode);
+		CLASS_BIND_METHOD(ShaderProgram, getDepthStencilState);
+		CLASS_BIND_METHOD(ShaderProgram, setDepthStencilState);
 
-        CLASS_REGISTER_PROPERTY(ShaderProgram, "Type", Variant::Type::String, "getType", "setType");
-        CLASS_REGISTER_PROPERTY(ShaderProgram, "VertexShader", Variant::Type::String, "getVsCode", "setVsCode");
-        CLASS_REGISTER_PROPERTY(ShaderProgram, "FragmentShader", Variant::Type::String, "getPsCode", "setPsCode");
-        CLASS_REGISTER_PROPERTY(ShaderProgram, "Graph", Variant::Type::String, "getGraph", "setGraph");
-        CLASS_REGISTER_PROPERTY(ShaderProgram, "CullMode", Variant::Type::StringOption, "getCullMode", "setCullMode");
-        CLASS_REGISTER_PROPERTY(ShaderProgram, "BlendMode", Variant::Type::StringOption, "getBlendMode", "setBlendMode");
-		CLASS_REGISTER_PROPERTY(ShaderProgram, "DepthStencilState", Variant::Type::Object, "getDepthStencilState", "setDepthStencilState");
+        CLASS_REGISTER_PROPERTY(ShaderProgram, "Type", Variant::Type::String, getType, setType);
+        CLASS_REGISTER_PROPERTY(ShaderProgram, "VertexShader", Variant::Type::String, getVsCode, setVsCode);
+        CLASS_REGISTER_PROPERTY(ShaderProgram, "FragmentShader", Variant::Type::String, getPsCode, setPsCode);
+        CLASS_REGISTER_PROPERTY(ShaderProgram, "Graph", Variant::Type::String, getGraph, setGraph);
+        CLASS_REGISTER_PROPERTY(ShaderProgram, "CullMode", Variant::Type::StringOption, getCullMode, setCullMode);
+        CLASS_REGISTER_PROPERTY(ShaderProgram, "BlendMode", Variant::Type::StringOption, getBlendMode, setBlendMode);
+		CLASS_REGISTER_PROPERTY(ShaderProgram, "DepthStencilState", Variant::Type::Object, getDepthStencilState, setDepthStencilState);
 		CLASS_REGISTER_PROPERTY_HINT(ShaderProgram, "DepthStencilState", PropertyHintType::ObjectType, "DepthStencilState");
 
         CLASS_REGISTER_PROPERTY_HINT(ShaderProgram, "CullMode", PropertyHintType::Category, "RasterizerState");

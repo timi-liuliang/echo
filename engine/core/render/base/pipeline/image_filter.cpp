@@ -10,10 +10,10 @@ namespace Echo
 
 	void ImageFilter::bindMethods()
 	{
-		CLASS_BIND_METHOD(ImageFilter, getMaterial, DEF_METHOD("getMaterial"));
-		CLASS_BIND_METHOD(ImageFilter, setMaterial, DEF_METHOD("setMaterial"));
+		CLASS_BIND_METHOD(ImageFilter, getMaterial);
+		CLASS_BIND_METHOD(ImageFilter, setMaterial);
 
-		CLASS_REGISTER_PROPERTY(ImageFilter, "Material", Variant::Type::Object, "getMaterial", "setMaterial");
+		CLASS_REGISTER_PROPERTY(ImageFilter, "Material", Variant::Type::Object, getMaterial, setMaterial);
 		CLASS_REGISTER_PROPERTY_HINT(ImageFilter, "Material", PropertyHintType::ObjectType, "Material");
 	}
 

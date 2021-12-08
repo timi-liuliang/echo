@@ -17,7 +17,7 @@ namespace Echo
 
     void FrameState::bindMethods()
     {
-        CLASS_BIND_METHOD(FrameState, getFps, "getFps");
+        CLASS_BIND_METHOD(FrameState, getFps);
     }
 
     void FrameState::reset()

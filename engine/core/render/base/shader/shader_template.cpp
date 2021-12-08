@@ -18,13 +18,13 @@ namespace Echo
 
 	void ShaderTemplate::bindMethods()
 	{
-        CLASS_BIND_METHOD(ShaderTemplate, getVsCode, DEF_METHOD("getVsCode"));
-        CLASS_BIND_METHOD(ShaderTemplate, setVsCode, DEF_METHOD("setVsCode"));
-        CLASS_BIND_METHOD(ShaderTemplate, getPsCode, DEF_METHOD("getPsCode"));
-        CLASS_BIND_METHOD(ShaderTemplate, setPsCode, DEF_METHOD("setPsCode"));
+        CLASS_BIND_METHOD(ShaderTemplate, getVsCode);
+        CLASS_BIND_METHOD(ShaderTemplate, setVsCode);
+        CLASS_BIND_METHOD(ShaderTemplate, getPsCode);
+        CLASS_BIND_METHOD(ShaderTemplate, setPsCode);
 
-        CLASS_REGISTER_PROPERTY(ShaderTemplate, "VertexShader", Variant::Type::String, "getVsCode", "setVsCode");
-        CLASS_REGISTER_PROPERTY(ShaderTemplate, "FragmentShader", Variant::Type::String, "getPsCode", "setPsCode");
+        CLASS_REGISTER_PROPERTY(ShaderTemplate, "VertexShader", Variant::Type::String, getVsCode, setVsCode);
+        CLASS_REGISTER_PROPERTY(ShaderTemplate, "FragmentShader", Variant::Type::String, getPsCode, setPsCode);
 
         CLASS_REGISTER_PROPERTY_HINT(ShaderTemplate, "VertexShader", PropertyHintType::Language, "glsl");
         CLASS_REGISTER_PROPERTY_HINT(ShaderTemplate, "FragmentShader", PropertyHintType::Language, "glsl");

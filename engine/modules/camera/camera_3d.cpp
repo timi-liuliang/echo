@@ -18,13 +18,13 @@ namespace Echo
 
 	void Camera3D::bindMethods()
 	{
-		CLASS_BIND_METHOD(Camera3D, getNear, DEF_METHOD("getNear"));
-		CLASS_BIND_METHOD(Camera3D, setNear, DEF_METHOD("setNear"));
-		CLASS_BIND_METHOD(Camera3D, getFar,  DEF_METHOD("getFar"));
-		CLASS_BIND_METHOD(Camera3D, setFar,  DEF_METHOD("setFar"));
+		CLASS_BIND_METHOD(Camera3D, getNear);
+		CLASS_BIND_METHOD(Camera3D, setNear);
+		CLASS_BIND_METHOD(Camera3D, getFar);
+		CLASS_BIND_METHOD(Camera3D, setFar);
 
-		CLASS_REGISTER_PROPERTY(Camera3D, "Near", Variant::Type::Real, "getNear", "setNear");
-		CLASS_REGISTER_PROPERTY(Camera3D, "Far", Variant::Type::Real, "getFar", "setFar");
+		CLASS_REGISTER_PROPERTY(Camera3D, "Near", Variant::Type::Real, getNear, setNear);
+		CLASS_REGISTER_PROPERTY(Camera3D, "Far", Variant::Type::Real, getFar, setFar);
 	}
 
 	void Camera3D::syncDataToCamera(Camera* camera)

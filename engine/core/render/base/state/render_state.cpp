@@ -58,13 +58,13 @@ namespace Echo
 
 	void DepthStencilState::bindMethods()
 	{
-		CLASS_BIND_METHOD(DepthStencilState, isDepthEnable, DEF_METHOD("isDepthEnable"));
-		CLASS_BIND_METHOD(DepthStencilState, setDepthEnable, DEF_METHOD("setDepthEnable"));
-		CLASS_BIND_METHOD(DepthStencilState, isWriteDepth, DEF_METHOD("isWriteDepth"));
-		CLASS_BIND_METHOD(DepthStencilState, setWriteDepth, DEF_METHOD("setWriteDepth"));
+		CLASS_BIND_METHOD(DepthStencilState, isDepthEnable);
+		CLASS_BIND_METHOD(DepthStencilState, setDepthEnable);
+		CLASS_BIND_METHOD(DepthStencilState, isWriteDepth);
+		CLASS_BIND_METHOD(DepthStencilState, setWriteDepth);
 
-		CLASS_REGISTER_PROPERTY(DepthStencilState, "DepthEnable", Variant::Type::Bool, "isDepthEnable", "setDepthEnable");
-		CLASS_REGISTER_PROPERTY(DepthStencilState, "WriteDepth", Variant::Type::Bool, "isWriteDepth", "setWriteDepth");
+		CLASS_REGISTER_PROPERTY(DepthStencilState, "DepthEnable", Variant::Type::Bool, isDepthEnable, setDepthEnable);
+		CLASS_REGISTER_PROPERTY(DepthStencilState, "WriteDepth", Variant::Type::Bool, isWriteDepth, setWriteDepth);
 	}
 
 	Res* DepthStencilState::create()

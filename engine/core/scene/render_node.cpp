@@ -22,13 +22,13 @@ namespace Echo
 
 	void Render::bindMethods()
 	{
-		CLASS_BIND_METHOD(Render, setRenderType,DEF_METHOD("setRenderType"));
-		CLASS_BIND_METHOD(Render, getRenderType,DEF_METHOD("getRenderType"));
-		CLASS_BIND_METHOD(Render, setVisible,	DEF_METHOD("setVisible"));
-		CLASS_BIND_METHOD(Render, isVisible,	DEF_METHOD("isVisible"));
+		CLASS_BIND_METHOD(Render, setRenderType);
+		CLASS_BIND_METHOD(Render, getRenderType);
+		CLASS_BIND_METHOD(Render, setVisible);
+		CLASS_BIND_METHOD(Render, isVisible);
 
-		CLASS_REGISTER_PROPERTY(Render, "RenderType", Variant::Type::StringOption, "getRenderType", "setRenderType");
-		CLASS_REGISTER_PROPERTY(Render, "Visible", Variant::Type::Bool, "isVisible", "setVisible");
+		CLASS_REGISTER_PROPERTY(Render, "RenderType", Variant::Type::StringOption, getRenderType, setRenderType);
+		CLASS_REGISTER_PROPERTY(Render, "Visible", Variant::Type::Bool, isVisible, setVisible);
 	}
 
 	bool Render::isNeedRender() const

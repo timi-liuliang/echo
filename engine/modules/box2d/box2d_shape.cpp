@@ -28,25 +28,25 @@ namespace Echo
 
 	void Box2DShape::bindMethods()
 	{
-		CLASS_BIND_METHOD(Box2DShape, getRestitution, DEF_METHOD("getRestitution"));
-		CLASS_BIND_METHOD(Box2DShape, setRestitution, DEF_METHOD("setRestitution"));
-		CLASS_BIND_METHOD(Box2DShape, getDensity, DEF_METHOD("getDensity"));
-		CLASS_BIND_METHOD(Box2DShape, setDensity, DEF_METHOD("setDensity"));
-		CLASS_BIND_METHOD(Box2DShape, getFriction, DEF_METHOD("getFriction"));
-		CLASS_BIND_METHOD(Box2DShape, setFriction, DEF_METHOD("setFriction"));
-		CLASS_BIND_METHOD(Box2DShape, getCategoryBits, DEF_METHOD("getCategoryBits"));
-		CLASS_BIND_METHOD(Box2DShape, setCategoryBits, DEF_METHOD("setCategoryBits"));
-		CLASS_BIND_METHOD(Box2DShape, getMaskBits, DEF_METHOD("getMaskBits"));
-		CLASS_BIND_METHOD(Box2DShape, setMaskBits, DEF_METHOD("setMaskBits"));
-        CLASS_BIND_METHOD(Box2DShape, isSensor, DEF_METHOD("isSensor"));
-        CLASS_BIND_METHOD(Box2DShape, setSensor, DEF_METHOD("setSensor"));
+		CLASS_BIND_METHOD(Box2DShape, getRestitution);
+		CLASS_BIND_METHOD(Box2DShape, setRestitution);
+		CLASS_BIND_METHOD(Box2DShape, getDensity);
+		CLASS_BIND_METHOD(Box2DShape, setDensity);
+		CLASS_BIND_METHOD(Box2DShape, getFriction);
+		CLASS_BIND_METHOD(Box2DShape, setFriction);
+		CLASS_BIND_METHOD(Box2DShape, getCategoryBits);
+		CLASS_BIND_METHOD(Box2DShape, setCategoryBits);
+		CLASS_BIND_METHOD(Box2DShape, getMaskBits);
+		CLASS_BIND_METHOD(Box2DShape, setMaskBits);
+        CLASS_BIND_METHOD(Box2DShape, isSensor);
+        CLASS_BIND_METHOD(Box2DShape, setSensor);
 
-		CLASS_REGISTER_PROPERTY(Box2DShape, "Density", Variant::Type::Real, "getDensity", "setDensity");
-		CLASS_REGISTER_PROPERTY(Box2DShape, "Friction", Variant::Type::Real, "getFriction", "getFriction");
-		CLASS_REGISTER_PROPERTY(Box2DShape, "Restitution", Variant::Type::Real, "getRestitution", "setRestitution");
-		CLASS_REGISTER_PROPERTY(Box2DShape, "CategoryBits", Variant::Type::Int, "getCategoryBits", "setCategoryBits");
-		CLASS_REGISTER_PROPERTY(Box2DShape, "MaskBits", Variant::Type::Int, "getMaskBits", "setMaskBits");
-        CLASS_REGISTER_PROPERTY(Box2DShape, "IsSensor", Variant::Type::Bool, "isSensor", "setSensor");
+		CLASS_REGISTER_PROPERTY(Box2DShape, "Density", Variant::Type::Real, getDensity, setDensity);
+		CLASS_REGISTER_PROPERTY(Box2DShape, "Friction", Variant::Type::Real, getFriction, getFriction);
+		CLASS_REGISTER_PROPERTY(Box2DShape, "Restitution", Variant::Type::Real, getRestitution, setRestitution);
+		CLASS_REGISTER_PROPERTY(Box2DShape, "CategoryBits", Variant::Type::Int, getCategoryBits, setCategoryBits);
+		CLASS_REGISTER_PROPERTY(Box2DShape, "MaskBits", Variant::Type::Int, getMaskBits, setMaskBits);
+        CLASS_REGISTER_PROPERTY(Box2DShape, "IsSensor", Variant::Type::Bool, isSensor, setSensor);
 	}
 
 	void Box2DShape::setRestitution(float restitution)

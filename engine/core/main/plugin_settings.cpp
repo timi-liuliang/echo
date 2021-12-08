@@ -27,9 +27,9 @@ namespace Echo
 	// bind methods to script
 	void PluginSettings::bindMethods()
 	{
-		CLASS_BIND_METHOD(PluginSettings, getSearchPath, DEF_METHOD("getSearchPath"));
-		CLASS_BIND_METHOD(PluginSettings, setSearchPath, DEF_METHOD("setSearchPath"));
+		CLASS_BIND_METHOD(PluginSettings, getSearchPath);
+		CLASS_BIND_METHOD(PluginSettings, setSearchPath);
 
-		CLASS_REGISTER_PROPERTY(PluginSettings, "SearchPath", Variant::Type::String, "getSearchPath", "setSearchPath");
+		CLASS_REGISTER_PROPERTY(PluginSettings, "SearchPath", Variant::Type::String, getSearchPath, setSearchPath);
 	}
 }

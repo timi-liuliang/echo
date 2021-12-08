@@ -30,7 +30,7 @@ namespace Echo
 			MemoryReader memReader(path.getPath());
 			if (memReader.getSize())
 			{
-				m_model = TfLiteModelCreate(memReader.getData<const char*>(), memReader.getSize());
+				//m_model = TfLiteModelCreate(memReader.getData<const char*>(), memReader.getSize());
 				if (m_model)
 				{
 

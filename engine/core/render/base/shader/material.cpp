@@ -119,11 +119,11 @@ namespace Echo
 
 	void Material::bindMethods()
 	{
-		CLASS_BIND_METHOD(Material, getShaderPath, DEF_METHOD("getShaderPath"));
-		CLASS_BIND_METHOD(Material, setShaderPath, DEF_METHOD("setShaderPath"));
-		CLASS_BIND_METHOD(Material, getRenderStage, DEF_METHOD("getRenderStage"));
+		CLASS_BIND_METHOD(Material, getShaderPath);
+		CLASS_BIND_METHOD(Material, setShaderPath);
+		CLASS_BIND_METHOD(Material, getRenderStage);
 
-		CLASS_REGISTER_PROPERTY(Material, "Shader", Variant::Type::ResourcePath, "getShaderPath", "setShaderPath");
+		CLASS_REGISTER_PROPERTY(Material, "Shader", Variant::Type::ResourcePath, getShaderPath, setShaderPath);
 	}
 
 	void Material::setMacros(const String& macros) 

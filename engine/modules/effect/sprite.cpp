@@ -21,22 +21,22 @@ namespace Echo
 
 	void Sprite::bindMethods()
 	{
-		CLASS_BIND_METHOD(Sprite, getBillboardType, DEF_METHOD("getBillboardType"));
-		CLASS_BIND_METHOD(Sprite, setBillobardType, DEF_METHOD("setBillobardType"));
-		CLASS_BIND_METHOD(Sprite, getWidth,		    DEF_METHOD("getWidth"));
-		CLASS_BIND_METHOD(Sprite, setWidth,		    DEF_METHOD("setWidth"));
-		CLASS_BIND_METHOD(Sprite, getHeight,		DEF_METHOD("getHeight"));
-		CLASS_BIND_METHOD(Sprite, setHeight,		DEF_METHOD("setHeight"));
-		CLASS_BIND_METHOD(Sprite, getOffset,		DEF_METHOD("getOffset"));
-		CLASS_BIND_METHOD(Sprite, setOffset,		DEF_METHOD("setOffset"));
-		CLASS_BIND_METHOD(Sprite, getMaterial,		DEF_METHOD("getMaterial"));
-		CLASS_BIND_METHOD(Sprite, setMaterial,		DEF_METHOD("setMaterial"));
+		CLASS_BIND_METHOD(Sprite, getBillboardType);
+		CLASS_BIND_METHOD(Sprite, setBillobardType);
+		CLASS_BIND_METHOD(Sprite, getWidth);
+		CLASS_BIND_METHOD(Sprite, setWidth);
+		CLASS_BIND_METHOD(Sprite, getHeight);
+		CLASS_BIND_METHOD(Sprite, setHeight);
+		CLASS_BIND_METHOD(Sprite, getOffset);
+		CLASS_BIND_METHOD(Sprite, setOffset);
+		CLASS_BIND_METHOD(Sprite, getMaterial);
+		CLASS_BIND_METHOD(Sprite, setMaterial);
 
-		CLASS_REGISTER_PROPERTY(Sprite, "Billboard", Variant::Type::StringOption, "getBillboardType", "setBillobardType");
-		CLASS_REGISTER_PROPERTY(Sprite, "Width", Variant::Type::Real, "getWidth", "setWidth");
-		CLASS_REGISTER_PROPERTY(Sprite, "Height", Variant::Type::Real, "getHeight", "setHeight");
-		CLASS_REGISTER_PROPERTY(Sprite, "Offset", Variant::Type::Vector2, "getOffset", "setOffset");
-		CLASS_REGISTER_PROPERTY(Sprite, "Material", Variant::Type::Object, "getMaterial", "setMaterial");
+		CLASS_REGISTER_PROPERTY(Sprite, "Billboard", Variant::Type::StringOption, getBillboardType, setBillobardType);
+		CLASS_REGISTER_PROPERTY(Sprite, "Width", Variant::Type::Real, getWidth, setWidth);
+		CLASS_REGISTER_PROPERTY(Sprite, "Height", Variant::Type::Real, getHeight, setHeight);
+		CLASS_REGISTER_PROPERTY(Sprite, "Offset", Variant::Type::Vector2, getOffset, setOffset);
+		CLASS_REGISTER_PROPERTY(Sprite, "Material", Variant::Type::Object, getMaterial, setMaterial);
 		CLASS_REGISTER_PROPERTY_HINT(Sprite, "Material", PropertyHintType::ObjectType, "Material");
 	}
 

@@ -33,31 +33,31 @@ namespace Echo
 
 	void GameSettings::bindMethods() 
 	{
-        CLASS_BIND_METHOD(GameSettings, isFullScreen,   DEF_METHOD("isFullScreen"));
-        CLASS_BIND_METHOD(GameSettings, setFullScreen,  DEF_METHOD("setFullScreen"));
-		CLASS_BIND_METHOD(GameSettings, getDesignWidth, DEF_METHOD("getDesignWidth"));
-		CLASS_BIND_METHOD(GameSettings, setDesignWidth, DEF_METHOD("setDesignWidth"));
-		CLASS_BIND_METHOD(GameSettings, getDesignHeight, DEF_METHOD("getDesignHeight"));
-		CLASS_BIND_METHOD(GameSettings, setDesignHeight, DEF_METHOD("setDesignHeight"));
-		CLASS_BIND_METHOD(GameSettings, getWindowWidth, DEF_METHOD("getWindowWidth"));
-		CLASS_BIND_METHOD(GameSettings, setWindowWidth, DEF_METHOD("setWindowWidth"));
-		CLASS_BIND_METHOD(GameSettings, getWindowHeight, DEF_METHOD("getWindowHeight"));
-		CLASS_BIND_METHOD(GameSettings, setWindowHeight, DEF_METHOD("setWindowHeight"));
-		CLASS_BIND_METHOD(GameSettings, getAspect, DEF_METHOD("getAspect"));
-		CLASS_BIND_METHOD(GameSettings, setAspect, DEF_METHOD("setAspect"));
-		CLASS_BIND_METHOD(GameSettings, getRenderPipeline, DEF_METHOD("getRenderPipeline"));
-		CLASS_BIND_METHOD(GameSettings, setRenderPipeline, DEF_METHOD("setRenderPipeline"));
-		CLASS_BIND_METHOD(GameSettings, getLaunchScene, DEF_METHOD("getLaunchScene"));
-		CLASS_BIND_METHOD(GameSettings, setLaunchScene, DEF_METHOD("setLaunchScene"));
+        CLASS_BIND_METHOD(GameSettings, isFullScreen);
+        CLASS_BIND_METHOD(GameSettings, setFullScreen);
+		CLASS_BIND_METHOD(GameSettings, getDesignWidth);
+		CLASS_BIND_METHOD(GameSettings, setDesignWidth);
+		CLASS_BIND_METHOD(GameSettings, getDesignHeight);
+		CLASS_BIND_METHOD(GameSettings, setDesignHeight);
+		CLASS_BIND_METHOD(GameSettings, getWindowWidth);
+		CLASS_BIND_METHOD(GameSettings, setWindowWidth);
+		CLASS_BIND_METHOD(GameSettings, getWindowHeight);
+		CLASS_BIND_METHOD(GameSettings, setWindowHeight);
+		CLASS_BIND_METHOD(GameSettings, getAspect);
+		CLASS_BIND_METHOD(GameSettings, setAspect);
+		CLASS_BIND_METHOD(GameSettings, getRenderPipeline);
+		CLASS_BIND_METHOD(GameSettings, setRenderPipeline);
+		CLASS_BIND_METHOD(GameSettings, getLaunchScene);
+		CLASS_BIND_METHOD(GameSettings, setLaunchScene);
 
-        CLASS_REGISTER_PROPERTY(GameSettings, "FullScreen", Variant::Type::Int, "isFullScreen", "setFullScreen");
-		CLASS_REGISTER_PROPERTY(GameSettings, "DesignWidth", Variant::Type::Int, "getDesignWidth", "setDesignWidth");
-		CLASS_REGISTER_PROPERTY(GameSettings, "DesignHeight", Variant::Type::Int, "getDesignHeight", "setDesignHeight");
-		CLASS_REGISTER_PROPERTY(GameSettings, "WindowWidth", Variant::Type::Int, "getWindowWidth", "setWindowWidth");
-		CLASS_REGISTER_PROPERTY(GameSettings, "WindowHeight", Variant::Type::Int, "getWindowHeight", "setWindowHeight");
-		CLASS_REGISTER_PROPERTY(GameSettings, "Aspect", Variant::Type::StringOption, "getAspect", "setAspect");
-		CLASS_REGISTER_PROPERTY(GameSettings, "RenderPipeline", Variant::Type::ResourcePath, "getRenderPipeline", "setRenderPipeline");
-		CLASS_REGISTER_PROPERTY(GameSettings, "LaunchScene", Variant::Type::ResourcePath, "getLaunchScene", "setLaunchScene");
+        CLASS_REGISTER_PROPERTY(GameSettings, "FullScreen", Variant::Type::Int, isFullScreen, setFullScreen);
+		CLASS_REGISTER_PROPERTY(GameSettings, "DesignWidth", Variant::Type::Int, getDesignWidth, setDesignWidth);
+		CLASS_REGISTER_PROPERTY(GameSettings, "DesignHeight", Variant::Type::Int, getDesignHeight, setDesignHeight);
+		CLASS_REGISTER_PROPERTY(GameSettings, "WindowWidth", Variant::Type::Int, getWindowWidth, setWindowWidth);
+		CLASS_REGISTER_PROPERTY(GameSettings, "WindowHeight", Variant::Type::Int, getWindowHeight, setWindowHeight);
+		CLASS_REGISTER_PROPERTY(GameSettings, "Aspect", Variant::Type::StringOption, getAspect, setAspect);
+		CLASS_REGISTER_PROPERTY(GameSettings, "RenderPipeline", Variant::Type::ResourcePath, getRenderPipeline, setRenderPipeline);
+		CLASS_REGISTER_PROPERTY(GameSettings, "LaunchScene", Variant::Type::ResourcePath, getLaunchScene, setLaunchScene);
 	}
 
     void GameSettings::setFullScreen(bool fullScreen)

@@ -9,10 +9,10 @@ namespace Echo
 
 	void Module::bindMethods()
 	{
-		CLASS_BIND_METHOD(Module, setEnable, DEF_METHOD("setEnable"));
-		CLASS_BIND_METHOD(Module, isEnable, DEF_METHOD("isEnable"));
+		CLASS_BIND_METHOD(Module, setEnable);
+		CLASS_BIND_METHOD(Module, isEnable);
 
-		CLASS_REGISTER_PROPERTY(Module, "Enable", Variant::Type::Bool, "isEnable", "setEnable");
+		CLASS_REGISTER_PROPERTY(Module, "Enable", Variant::Type::Bool, isEnable, setEnable);
 	}
 
 	vector<Module*>::type* Module::getAllModules()

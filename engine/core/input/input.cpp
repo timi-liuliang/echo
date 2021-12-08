@@ -20,10 +20,10 @@ namespace Echo
 
 	void Input::bindMethods()
 	{
-		CLASS_BIND_METHOD(Input, isMouseButtonDown, "isMouseButtonDown");
-		CLASS_BIND_METHOD(Input, isMouseButtonUp,	"isMouseButtonUp");
-		CLASS_BIND_METHOD(Input, getMousePosition,	"getMousePosition");
-		CLASS_BIND_METHOD(Input, isKeyDown,			"isKeyDown");
+		CLASS_BIND_METHOD(Input, isMouseButtonDown);
+		CLASS_BIND_METHOD(Input, isMouseButtonUp);
+		CLASS_BIND_METHOD(Input, getMousePosition);
+		CLASS_BIND_METHOD(Input, isKeyDown);
 
 		CLASS_REGISTER_SIGNAL(Input, onMouseButtonDown);
 		CLASS_REGISTER_SIGNAL(Input, onMouseButtonUp);

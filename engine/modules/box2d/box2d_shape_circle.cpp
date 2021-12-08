@@ -13,10 +13,10 @@ namespace Echo
 
 	void Box2DShapeCircle::bindMethods()
 	{
-		CLASS_BIND_METHOD(Box2DShapeCircle, getRadius, DEF_METHOD("getRadius"));
-		CLASS_BIND_METHOD(Box2DShapeCircle, setRadius, DEF_METHOD("setRadius"));
+		CLASS_BIND_METHOD(Box2DShapeCircle, getRadius);
+		CLASS_BIND_METHOD(Box2DShapeCircle, setRadius);
 
-		CLASS_REGISTER_PROPERTY(Box2DShapeCircle, "Radius", Variant::Type::Real, "getRadius", "setRadius");
+		CLASS_REGISTER_PROPERTY(Box2DShapeCircle, "Radius", Variant::Type::Real, getRadius, setRadius);
 	}
 
 	float Box2DShapeCircle::getRadius() const

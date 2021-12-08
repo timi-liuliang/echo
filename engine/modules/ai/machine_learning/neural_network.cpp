@@ -19,13 +19,13 @@ namespace Echo
 
 	void NeuralNetwork::bindMethods()
 	{
-		CLASS_BIND_METHOD(NeuralNetwork, train,			  DEF_METHOD("train"));
-		CLASS_BIND_METHOD(NeuralNetwork, computeOutput,   DEF_METHOD("computeOutput"));
-		CLASS_BIND_METHOD(NeuralNetwork, getLearningRate, DEF_METHOD("getLearningRate"));
-		CLASS_BIND_METHOD(NeuralNetwork, setLearningRate, DEF_METHOD("setLearningRate"));
-		CLASS_BIND_METHOD(NeuralNetwork, reset,			  DEF_METHOD("reset"));
+		CLASS_BIND_METHOD(NeuralNetwork, train);
+		CLASS_BIND_METHOD(NeuralNetwork, computeOutput);
+		CLASS_BIND_METHOD(NeuralNetwork, getLearningRate);
+		CLASS_BIND_METHOD(NeuralNetwork, setLearningRate);
+		CLASS_BIND_METHOD(NeuralNetwork, reset);
 
-		CLASS_REGISTER_PROPERTY(NeuralNetwork, "LearningRate", Variant::Type::Real, "getLearningRate", "setLearningRate");
+		CLASS_REGISTER_PROPERTY(NeuralNetwork, "LearningRate", Variant::Type::Real, getLearningRate, setLearningRate);
 	}
 
 	// train

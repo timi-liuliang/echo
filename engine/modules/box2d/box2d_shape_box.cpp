@@ -16,13 +16,13 @@ namespace Echo
 
 	void Box2DShapeBox::bindMethods()
 	{
-		CLASS_BIND_METHOD(Box2DShapeBox, getWidth, DEF_METHOD("getWidth"));
-		CLASS_BIND_METHOD(Box2DShapeBox, setWidth, DEF_METHOD("setWidth"));
-		CLASS_BIND_METHOD(Box2DShapeBox, getHeight, DEF_METHOD("getHeight"));
-		CLASS_BIND_METHOD(Box2DShapeBox, setHeight, DEF_METHOD("setHeight"));
+		CLASS_BIND_METHOD(Box2DShapeBox, getWidth);
+		CLASS_BIND_METHOD(Box2DShapeBox, setWidth);
+		CLASS_BIND_METHOD(Box2DShapeBox, getHeight);
+		CLASS_BIND_METHOD(Box2DShapeBox, setHeight);
 
-		CLASS_REGISTER_PROPERTY(Box2DShapeBox, "Width", Variant::Type::Real, "getWidth", "setWidth");
-		CLASS_REGISTER_PROPERTY(Box2DShapeBox, "Height", Variant::Type::Real, "getHeight", "setHeight");
+		CLASS_REGISTER_PROPERTY(Box2DShapeBox, "Width", Variant::Type::Real, getWidth, setWidth);
+		CLASS_REGISTER_PROPERTY(Box2DShapeBox, "Height", Variant::Type::Real, getHeight, setHeight);
 	}
 
 	void Box2DShapeBox::setWidth(float width)

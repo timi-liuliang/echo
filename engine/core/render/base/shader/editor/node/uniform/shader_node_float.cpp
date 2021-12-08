@@ -20,10 +20,10 @@ namespace Echo
 
 	void ShaderNodeFloat::bindMethods()
 	{
-		CLASS_BIND_METHOD(ShaderNodeFloat, getValue, DEF_METHOD("getValue"));
-		CLASS_BIND_METHOD(ShaderNodeFloat, setValue, DEF_METHOD("setValue"));
+		CLASS_BIND_METHOD(ShaderNodeFloat, getValue);
+		CLASS_BIND_METHOD(ShaderNodeFloat, setValue);
 
-		CLASS_REGISTER_PROPERTY(ShaderNodeFloat, "Value", Variant::Type::Real, "getValue", "setValue");
+		CLASS_REGISTER_PROPERTY(ShaderNodeFloat, "Value", Variant::Type::Real, getValue, setValue);
 	}
 
 	void ShaderNodeFloat::setVariableName(const String& variableName)

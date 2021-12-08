@@ -21,17 +21,17 @@ namespace Echo
 
 	void Timeline::bindMethods()
 	{
-		CLASS_BIND_METHOD(Timeline, play, DEF_METHOD("play"));
-		CLASS_BIND_METHOD(Timeline, getAnim, DEF_METHOD("getAnim"));
-		CLASS_BIND_METHOD(Timeline, setAnim, DEF_METHOD("setAnim"));
-		CLASS_BIND_METHOD(Timeline, getAnimData, DEF_METHOD("getAnimData"));
-		CLASS_BIND_METHOD(Timeline, setAnimData, DEF_METHOD("setAnimData"));
-		CLASS_BIND_METHOD(Timeline, getTimeScale, DEF_METHOD("getTimeScale"));
-		CLASS_BIND_METHOD(Timeline, setTimeScale, DEF_METHOD("setTimeScale"));
+		CLASS_BIND_METHOD(Timeline, play);
+		CLASS_BIND_METHOD(Timeline, getAnim);
+		CLASS_BIND_METHOD(Timeline, setAnim);
+		CLASS_BIND_METHOD(Timeline, getAnimData);
+		CLASS_BIND_METHOD(Timeline, setAnimData);
+		CLASS_BIND_METHOD(Timeline, getTimeScale);
+		CLASS_BIND_METHOD(Timeline, setTimeScale);
 
-		CLASS_REGISTER_PROPERTY(Timeline, "TimeScale", Variant::Type::Real, "getTimeScale", "setTimeScale");
-		CLASS_REGISTER_PROPERTY(Timeline, "Anim", Variant::Type::StringOption, "getAnim", "setAnim");
-		CLASS_REGISTER_PROPERTY(Timeline, "AnimData", Variant::Type::Base64String, "getAnimData", "setAnimData");
+		CLASS_REGISTER_PROPERTY(Timeline, "TimeScale", Variant::Type::Real, getTimeScale, setTimeScale);
+		CLASS_REGISTER_PROPERTY(Timeline, "Anim", Variant::Type::StringOption, getAnim, setAnim);
+		CLASS_REGISTER_PROPERTY(Timeline, "AnimData", Variant::Type::Base64String, getAnimData, setAnimData);
 	}
 
 	void Timeline::setAnim(const StringOption& animName)

@@ -25,10 +25,10 @@ namespace Echo
 
     void TextureAtlas::bindMethods()
     {
-		CLASS_BIND_METHOD(TextureAtlas, getTextureRes, DEF_METHOD("getTextureRes"));
-		CLASS_BIND_METHOD(TextureAtlas, setTextureRes, DEF_METHOD("setTextureRes"));
+		CLASS_BIND_METHOD(TextureAtlas, getTextureRes);
+		CLASS_BIND_METHOD(TextureAtlas, setTextureRes);
 
-		CLASS_REGISTER_PROPERTY(TextureAtlas, "Texture", Variant::Type::ResourcePath, "getTextureRes", "setTextureRes");
+		CLASS_REGISTER_PROPERTY(TextureAtlas, "Texture", Variant::Type::ResourcePath, getTextureRes, setTextureRes);
 
 		CLASS_REGISTER_EDITOR(TextureAtlas, TextureAtlasEditor)
     }

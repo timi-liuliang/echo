@@ -63,10 +63,10 @@ namespace Echo
 
     void ShaderNodeFrameBuffer::bindMethods()
     {
-        CLASS_BIND_METHOD(ShaderNodeFrameBuffer, getOption, DEF_METHOD("getOption"));
-        CLASS_BIND_METHOD(ShaderNodeFrameBuffer, setOption, DEF_METHOD("setOption"));
+        CLASS_BIND_METHOD(ShaderNodeFrameBuffer, getOption);
+        CLASS_BIND_METHOD(ShaderNodeFrameBuffer, setOption);
 
-        CLASS_REGISTER_PROPERTY(ShaderNodeFrameBuffer, "Attribute", Variant::Type::String, "getOption", "setOption");
+        CLASS_REGISTER_PROPERTY(ShaderNodeFrameBuffer, "Attribute", Variant::Type::String, getOption, setOption);
     }
 
     String ShaderNodeFrameBuffer::getOption() const

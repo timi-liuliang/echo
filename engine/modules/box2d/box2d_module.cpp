@@ -51,19 +51,19 @@ namespace Echo
 
 	void Box2DModule::bindMethods()
 	{
-        CLASS_BIND_METHOD(Box2DModule, getFramesPerSecond, DEF_METHOD("getFramesPerSecond"));
-        CLASS_BIND_METHOD(Box2DModule, setFramesPerSecond, DEF_METHOD("setFramesPerSecond"));
-        CLASS_BIND_METHOD(Box2DModule, getPixelsPerMeter, DEF_METHOD("getPixelsPerMeter"));
-        CLASS_BIND_METHOD(Box2DModule, setPixelsPerPeter, DEF_METHOD("setPixelsPerMeter"));
-        CLASS_BIND_METHOD(Box2DModule, getGravity, DEF_METHOD("getGravity"));
-        CLASS_BIND_METHOD(Box2DModule, setGravity, DEF_METHOD("setGravity"));
-        CLASS_BIND_METHOD(Box2DModule, getDebugDrawOption, DEF_METHOD("getDebugDrawOption"));
-        CLASS_BIND_METHOD(Box2DModule, setDebugDrawOption, DEF_METHOD("setDebugDrawOption"));
+        CLASS_BIND_METHOD(Box2DModule, getFramesPerSecond);
+        CLASS_BIND_METHOD(Box2DModule, setFramesPerSecond);
+        CLASS_BIND_METHOD(Box2DModule, getPixelsPerMeter);
+        CLASS_BIND_METHOD(Box2DModule, setPixelsPerPeter);
+        CLASS_BIND_METHOD(Box2DModule, getGravity);
+        CLASS_BIND_METHOD(Box2DModule, setGravity);
+        CLASS_BIND_METHOD(Box2DModule, getDebugDrawOption);
+        CLASS_BIND_METHOD(Box2DModule, setDebugDrawOption);
 
-        CLASS_REGISTER_PROPERTY(Box2DModule, "FramesPerSecond", Variant::Type::Int, "getFramesPerSecond", "setFramesPerSecond");
-        CLASS_REGISTER_PROPERTY(Box2DModule, "DebugDraw", Variant::Type::StringOption, "getDebugDrawOption", "setDebugDrawOption");
-        CLASS_REGISTER_PROPERTY(Box2DModule, "PixelsPerMeter", Variant::Type::Real, "getPixelsPerMeter", "setPixelsPerMeter");
-        CLASS_REGISTER_PROPERTY(Box2DModule, "Gravity", Variant::Type::Vector2, "getGravity", "setGravity");
+        CLASS_REGISTER_PROPERTY(Box2DModule, "FramesPerSecond", Variant::Type::Int, getFramesPerSecond, setFramesPerSecond);
+        CLASS_REGISTER_PROPERTY(Box2DModule, "DebugDraw", Variant::Type::StringOption, getDebugDrawOption, setDebugDrawOption);
+        CLASS_REGISTER_PROPERTY(Box2DModule, "PixelsPerMeter", Variant::Type::Real, getPixelsPerMeter, setPixelsPerMeter);
+        CLASS_REGISTER_PROPERTY(Box2DModule, "Gravity", Variant::Type::Vector2, getGravity, setGravity);
 	}
 
 	void Box2DModule::registerTypes()

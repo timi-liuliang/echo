@@ -20,13 +20,13 @@ namespace Echo
 
 	void TextureRender::bindMethods()
 	{
-		CLASS_BIND_METHOD(TextureRender, getClearColor, DEF_METHOD("getClearColor"));
-		CLASS_BIND_METHOD(TextureRender, setClearColor, DEF_METHOD("setClearColor"));
-		CLASS_BIND_METHOD(TextureRender, getPixelFormatName, DEF_METHOD("getPixelFormatName"));
-		CLASS_BIND_METHOD(TextureRender, setPixelFormatName, DEF_METHOD("setPixelFormatName"));
+		CLASS_BIND_METHOD(TextureRender, getClearColor);
+		CLASS_BIND_METHOD(TextureRender, setClearColor);
+		CLASS_BIND_METHOD(TextureRender, getPixelFormatName);
+		CLASS_BIND_METHOD(TextureRender, setPixelFormatName);
 
-		CLASS_REGISTER_PROPERTY(TextureRender, "ClearColor", Variant::Type::Color, "getClearColor", "setClearColor");
-		CLASS_REGISTER_PROPERTY(TextureRender, "Format", Variant::Type::StringOption, "getPixelFormatName", "setPixelFormatName");
+		CLASS_REGISTER_PROPERTY(TextureRender, "ClearColor", Variant::Type::Color, getClearColor, setClearColor);
+		CLASS_REGISTER_PROPERTY(TextureRender, "Format", Variant::Type::StringOption, getPixelFormatName, setPixelFormatName);
 	}
 
 	Res* TextureRender::create()

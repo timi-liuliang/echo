@@ -20,10 +20,10 @@ namespace Echo
 
     void ParticleSystem::bindMethods()
     {
-        CLASS_BIND_METHOD(ParticleSystem, getMaterial,        DEF_METHOD("getMaterial"));
-        CLASS_BIND_METHOD(ParticleSystem, setMaterial,        DEF_METHOD("setMaterial"));
+        CLASS_BIND_METHOD(ParticleSystem, getMaterial);
+        CLASS_BIND_METHOD(ParticleSystem, setMaterial);
 
-        CLASS_REGISTER_PROPERTY(ParticleSystem, "Material", Variant::Type::Object, "getMaterial", "setMaterial");
+        CLASS_REGISTER_PROPERTY(ParticleSystem, "Material", Variant::Type::Object, getMaterial, setMaterial);
         CLASS_REGISTER_PROPERTY_HINT(ParticleSystem, "Material", PropertyHintType::ObjectType, "Material");
     }
 

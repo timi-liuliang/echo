@@ -40,10 +40,10 @@ namespace Echo
 
     void ShaderNodeShared::bindMethods()
     {
-		CLASS_BIND_METHOD(ShaderNodeShared, getOption, DEF_METHOD("getOption"));
-		CLASS_BIND_METHOD(ShaderNodeShared, setOption, DEF_METHOD("setOption"));
+		CLASS_BIND_METHOD(ShaderNodeShared, getOption);
+		CLASS_BIND_METHOD(ShaderNodeShared, setOption);
 
-		CLASS_REGISTER_PROPERTY(ShaderNodeShared, "Shared", Variant::Type::String, "getOption", "setOption");
+		CLASS_REGISTER_PROPERTY(ShaderNodeShared, "Shared", Variant::Type::String, getOption, setOption);
     }
 
     String ShaderNodeShared::getOption() const

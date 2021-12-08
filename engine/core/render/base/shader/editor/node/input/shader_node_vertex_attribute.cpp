@@ -63,10 +63,10 @@ namespace Echo
 
     void ShaderNodeVertexAttribute::bindMethods()
     {
-		CLASS_BIND_METHOD(ShaderNodeVertexAttribute, getOption, DEF_METHOD("getOption"));
-		CLASS_BIND_METHOD(ShaderNodeVertexAttribute, setOption, DEF_METHOD("setOption"));
+		CLASS_BIND_METHOD(ShaderNodeVertexAttribute, getOption);
+		CLASS_BIND_METHOD(ShaderNodeVertexAttribute, setOption);
 
-		CLASS_REGISTER_PROPERTY(ShaderNodeVertexAttribute, "Attribute", Variant::Type::String, "getOption", "setOption");
+		CLASS_REGISTER_PROPERTY(ShaderNodeVertexAttribute, "Attribute", Variant::Type::String, getOption, setOption);
     }
 
     String ShaderNodeVertexAttribute::getOption() const

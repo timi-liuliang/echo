@@ -21,10 +21,10 @@ namespace Echo
 
 	void Scratch::bindMethods()
 	{
-		CLASS_BIND_METHOD(Scratch, getParentClass, DEF_METHOD("getParentClass"));
-		CLASS_BIND_METHOD(Scratch, setParentClass, DEF_METHOD("setParentClass"));
+		CLASS_BIND_METHOD(Scratch, getParentClass);
+		CLASS_BIND_METHOD(Scratch, setParentClass);
 
-		CLASS_REGISTER_PROPERTY(Scratch, "Parent", Variant::Type::String, "getParentClass", "setParentClass");
+		CLASS_REGISTER_PROPERTY(Scratch, "Parent", Variant::Type::String, getParentClass, setParentClass);
 	}
 
 	Res* Scratch::load(const ResourcePath& path)

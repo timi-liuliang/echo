@@ -20,24 +20,24 @@ namespace Echo
 
 	void Box2DBody::bindMethods()
 	{
-		CLASS_BIND_METHOD(Box2DBody, getType, DEF_METHOD("getType"));
-		CLASS_BIND_METHOD(Box2DBody, setType, DEF_METHOD("setType"));
-		CLASS_BIND_METHOD(Box2DBody, isFixRotation, DEF_METHOD("isFixRotation"));
-		CLASS_BIND_METHOD(Box2DBody, setFixRotation, DEF_METHOD("setFixRotation"));
-		CLASS_BIND_METHOD(Box2DBody, getGravityScale, DEF_METHOD("getGravityScale"));
-		CLASS_BIND_METHOD(Box2DBody, setGravityScale, DEF_METHOD("setGravityScale"));
-        CLASS_BIND_METHOD(Box2DBody, setLinearVelocity, DEF_METHOD("setLinearVelocity"));
-		CLASS_BIND_METHOD(Box2DBody, getLinearVelocity, DEF_METHOD("getLinearVelocity"));
-		CLASS_BIND_METHOD(Box2DBody, getAngle, DEF_METHOD("getAngle"));
-		CLASS_BIND_METHOD(Box2DBody, setAngularVelocity, DEF_METHOD("setAngularVelocity"));
-		CLASS_BIND_METHOD(Box2DBody, getAngularVelocity, DEF_METHOD("getAngularVelocity"));
-		CLASS_BIND_METHOD(Box2DBody, applyForce, DEF_METHOD("applyForce"));
-		CLASS_BIND_METHOD(Box2DBody, applyForceToCenter, DEF_METHOD("applyForceToCenter"));
-        CLASS_BIND_METHOD(Box2DBody, syncTransformTob2Body, DEF_METHOD("syncTransformTob2Body"));
+		CLASS_BIND_METHOD(Box2DBody, getType);
+		CLASS_BIND_METHOD(Box2DBody, setType);
+		CLASS_BIND_METHOD(Box2DBody, isFixRotation);
+		CLASS_BIND_METHOD(Box2DBody, setFixRotation);
+		CLASS_BIND_METHOD(Box2DBody, getGravityScale);
+		CLASS_BIND_METHOD(Box2DBody, setGravityScale);
+        CLASS_BIND_METHOD(Box2DBody, setLinearVelocity);
+		CLASS_BIND_METHOD(Box2DBody, getLinearVelocity);
+		CLASS_BIND_METHOD(Box2DBody, getAngle);
+		CLASS_BIND_METHOD(Box2DBody, setAngularVelocity);
+		CLASS_BIND_METHOD(Box2DBody, getAngularVelocity);
+		CLASS_BIND_METHOD(Box2DBody, applyForce);
+		CLASS_BIND_METHOD(Box2DBody, applyForceToCenter);
+        CLASS_BIND_METHOD(Box2DBody, syncTransformTob2Body);
 
-		CLASS_REGISTER_PROPERTY(Box2DBody, "Type", Variant::Type::StringOption, "getType", "setType");
-		CLASS_REGISTER_PROPERTY(Box2DBody, "FixRotation", Variant::Type::Bool, "isFixRotation", "setFixRotation");
-		CLASS_REGISTER_PROPERTY(Box2DBody, "GravityScale", Variant::Type::Real, "getGravityScale", "setGravityScale");
+		CLASS_REGISTER_PROPERTY(Box2DBody, "Type", Variant::Type::StringOption, getType, setType);
+		CLASS_REGISTER_PROPERTY(Box2DBody, "FixRotation", Variant::Type::Bool, isFixRotation, setFixRotation);
+		CLASS_REGISTER_PROPERTY(Box2DBody, "GravityScale", Variant::Type::Real, getGravityScale, setGravityScale);
         
         CLASS_REGISTER_SIGNAL(Box2DBody, beginContact);
 		CLASS_REGISTER_SIGNAL(Box2DBody, endContact);

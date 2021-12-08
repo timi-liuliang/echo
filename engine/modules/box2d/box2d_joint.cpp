@@ -14,13 +14,13 @@ namespace Echo
     
     void Box2DJoint::bindMethods()
     {
-        CLASS_BIND_METHOD(Box2DJoint, getBodyA, DEF_METHOD("getBodyA"));
-        CLASS_BIND_METHOD(Box2DJoint, setBodyA, DEF_METHOD("setBodyA"));
-        CLASS_BIND_METHOD(Box2DJoint, getBodyB, DEF_METHOD("getBodyB"));
-        CLASS_BIND_METHOD(Box2DJoint, setBodyB, DEF_METHOD("setBodyB"));
+        CLASS_BIND_METHOD(Box2DJoint, getBodyA);
+        CLASS_BIND_METHOD(Box2DJoint, setBodyA);
+        CLASS_BIND_METHOD(Box2DJoint, getBodyB);
+        CLASS_BIND_METHOD(Box2DJoint, setBodyB);
         
-        CLASS_REGISTER_PROPERTY(Box2DJoint, "BodyA", Variant::Type::NodePath, "getBodyA", "setBodyA");
-        CLASS_REGISTER_PROPERTY(Box2DJoint, "BodyB", Variant::Type::NodePath, "getBodyB", "setBodyB");
+        CLASS_REGISTER_PROPERTY(Box2DJoint, "BodyA", Variant::Type::NodePath, getBodyA, setBodyA);
+        CLASS_REGISTER_PROPERTY(Box2DJoint, "BodyB", Variant::Type::NodePath, getBodyB, setBodyB);
     }
     
     void Box2DJoint::setBodyA(const NodePath& nodePath)

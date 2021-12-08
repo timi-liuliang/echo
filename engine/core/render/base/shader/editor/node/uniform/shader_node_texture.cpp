@@ -32,16 +32,16 @@ namespace Echo
 
 	void ShaderNodeTexture::bindMethods()
 	{
-		CLASS_BIND_METHOD(ShaderNodeTexture, setType, DEF_METHOD("setType"));
-		CLASS_BIND_METHOD(ShaderNodeTexture, getType, DEF_METHOD("getType"));
-		CLASS_BIND_METHOD(ShaderNodeTexture, setAtla, DEF_METHOD("setAtla"));
-		CLASS_BIND_METHOD(ShaderNodeTexture, isAtla, DEF_METHOD("isAtla"));
-		CLASS_BIND_METHOD(ShaderNodeTexture, setTexture, DEF_METHOD("setTexture"));
-		CLASS_BIND_METHOD(ShaderNodeTexture, getTexture, DEF_METHOD("getTexture"));
+		CLASS_BIND_METHOD(ShaderNodeTexture, setType);
+		CLASS_BIND_METHOD(ShaderNodeTexture, getType);
+		CLASS_BIND_METHOD(ShaderNodeTexture, setAtla);
+		CLASS_BIND_METHOD(ShaderNodeTexture, isAtla);
+		CLASS_BIND_METHOD(ShaderNodeTexture, setTexture);
+		CLASS_BIND_METHOD(ShaderNodeTexture, getTexture);
 
-		CLASS_REGISTER_PROPERTY(ShaderNodeTexture, "Type", Variant::Type::StringOption, "getType", "setType");
-		CLASS_REGISTER_PROPERTY(ShaderNodeTexture, "Atla", Variant::Type::Bool, "isAtla", "setAtla");
-		CLASS_REGISTER_PROPERTY(ShaderNodeTexture, "Texture", Variant::Type::ResourcePath, "getTexture", "setTexture");
+		CLASS_REGISTER_PROPERTY(ShaderNodeTexture, "Type", Variant::Type::StringOption, getType, setType);
+		CLASS_REGISTER_PROPERTY(ShaderNodeTexture, "Atla", Variant::Type::Bool, isAtla, setAtla);
+		CLASS_REGISTER_PROPERTY(ShaderNodeTexture, "Texture", Variant::Type::ResourcePath, getTexture, setTexture);
 	}
 
 	void ShaderNodeTexture::setAtla(bool isAtla)

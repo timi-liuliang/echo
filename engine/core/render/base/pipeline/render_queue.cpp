@@ -11,13 +11,13 @@ namespace Echo
 
 	void RenderQueue::bindMethods()
 	{
-		CLASS_BIND_METHOD(RenderQueue, isSort, DEF_METHOD("isSort"));
-		CLASS_BIND_METHOD(RenderQueue, setSort, DEF_METHOD("setSort"));
-		CLASS_BIND_METHOD(RenderQueue, getCameraFilter, DEF_METHOD("getCameraFilter"));
-		CLASS_BIND_METHOD(RenderQueue, setCameraFilter, DEF_METHOD("setCameraFilter"));
+		CLASS_BIND_METHOD(RenderQueue, isSort);
+		CLASS_BIND_METHOD(RenderQueue, setSort);
+		CLASS_BIND_METHOD(RenderQueue, getCameraFilter);
+		CLASS_BIND_METHOD(RenderQueue, setCameraFilter);
 
-		CLASS_REGISTER_PROPERTY(RenderQueue, "Sort", Variant::Type::Bool, "isSort", "setSort");
-		CLASS_REGISTER_PROPERTY(RenderQueue, "CameraFilter", Variant::Type::Int, "getCameraFilter", "setCameraFilter");
+		CLASS_REGISTER_PROPERTY(RenderQueue, "Sort", Variant::Type::Bool, isSort, setSort);
+		CLASS_REGISTER_PROPERTY(RenderQueue, "CameraFilter", Variant::Type::Int, getCameraFilter, setCameraFilter);
 	}
 
 	void RenderQueue::render(FrameBufferPtr& frameBuffer)

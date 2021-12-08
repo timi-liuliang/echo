@@ -19,9 +19,9 @@ namespace Echo
 	{
 		BIND_METHOD(nn::sigmoid, "nn.sigmoid");
 
-		CLASS_BIND_METHOD(Neuron, getBias, DEF_METHOD("getBias"));
-		CLASS_BIND_METHOD(Neuron, setBias, DEF_METHOD("setBias"));
+		CLASS_BIND_METHOD(Neuron, getBias);
+		CLASS_BIND_METHOD(Neuron, setBias);
 
-		CLASS_REGISTER_PROPERTY(Neuron, "Bias", Variant::Type::Real, "getBias", "setBias");
+		CLASS_REGISTER_PROPERTY(Neuron, "Bias", Variant::Type::Real, getBias, setBias);
 	}
 }

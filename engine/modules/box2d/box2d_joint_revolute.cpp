@@ -12,10 +12,10 @@ namespace Echo
     
     void Box2DJointRevolute::bindMethods()
     {
-        CLASS_BIND_METHOD(Box2DJointRevolute, getAnchor, "getAnchor");
-        CLASS_BIND_METHOD(Box2DJointRevolute, setAnchor, "setAnchor");
+        CLASS_BIND_METHOD(Box2DJointRevolute, getAnchor);
+        CLASS_BIND_METHOD(Box2DJointRevolute, setAnchor);
         
-        CLASS_REGISTER_PROPERTY(Box2DJointRevolute, "Anchor", Variant::Type::Vector2, "getAnchor", "setAnchor");
+        CLASS_REGISTER_PROPERTY(Box2DJointRevolute, "Anchor", Variant::Type::Vector2, getAnchor, setAnchor);
     }
 
 	// create shape

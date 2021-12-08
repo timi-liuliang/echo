@@ -16,8 +16,8 @@ namespace Echo
 
 	void Camera2D::bindMethods()
 	{
-		CLASS_BIND_METHOD(Camera2D, getWidth, DEF_METHOD("getWidth"));
-		CLASS_BIND_METHOD(Camera2D, getHeight, DEF_METHOD("getHeight"));
+		CLASS_BIND_METHOD(Camera2D, getWidth);
+		CLASS_BIND_METHOD(Camera2D, getHeight);
 	}
 
 	float Camera2D::getWidth() const
