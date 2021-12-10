@@ -15,10 +15,10 @@ namespace Echo
 
 	void PhysxShapeSphere::bindMethods()
 	{
-		CLASS_BIND_METHOD(PhysxShapeSphere, getRadius, DEF_METHOD("getRadius"));
-		CLASS_BIND_METHOD(PhysxShapeSphere, setRadius, DEF_METHOD("setRadius"));
+		CLASS_BIND_METHOD(PhysxShapeSphere, getRadius);
+		CLASS_BIND_METHOD(PhysxShapeSphere, setRadius);
 
-		CLASS_REGISTER_PROPERTY(PhysxShapeSphere, "Radius", Variant::Type::Real, "getRadius", "setRadius");
+		CLASS_REGISTER_PROPERTY(PhysxShapeSphere, "Radius", Variant::Type::Real, getRadius, setRadius);
 	}
 
 	void PhysxShapeSphere::setRadius(float radius)

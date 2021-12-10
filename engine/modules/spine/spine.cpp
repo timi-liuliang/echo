@@ -43,20 +43,20 @@ namespace Echo
 
 	void Spine::bindMethods()
 	{
-		CLASS_BIND_METHOD(Spine, getBillboardType, DEF_METHOD("getBillboardType"));
-		CLASS_BIND_METHOD(Spine, setBillobardType, DEF_METHOD("setBillobardType"));
-		CLASS_BIND_METHOD(Spine, getSpin, DEF_METHOD("getSpin"));
-		CLASS_BIND_METHOD(Spine, setSpin, DEF_METHOD("setSpin"));
-		CLASS_BIND_METHOD(Spine, getAtlas,DEF_METHOD("getAtlas"));
-		CLASS_BIND_METHOD(Spine, setAtlas, DEF_METHOD("setAtlas"));
-		CLASS_BIND_METHOD(Spine, setAnim, DEF_METHOD("setAnim"));
-		CLASS_BIND_METHOD(Spine, getAnim, DEF_METHOD("getAnim"));
-		CLASS_BIND_METHOD(Spine, playAnim, DEF_METHOD("playAnim"));
+		CLASS_BIND_METHOD(Spine, getBillboardType);
+		CLASS_BIND_METHOD(Spine, setBillobardType);
+		CLASS_BIND_METHOD(Spine, getSpin);
+		CLASS_BIND_METHOD(Spine, setSpin);
+		CLASS_BIND_METHOD(Spine, getAtlas);
+		CLASS_BIND_METHOD(Spine, setAtlas);
+		CLASS_BIND_METHOD(Spine, setAnim);
+		CLASS_BIND_METHOD(Spine, getAnim);
+		CLASS_BIND_METHOD(Spine, playAnim);
 
-		CLASS_REGISTER_PROPERTY(Spine, "Billboard", Variant::Type::StringOption, "getBillboardType", "setBillobardType");
-		CLASS_REGISTER_PROPERTY(Spine, "Spin", Variant::Type::ResourcePath, "getSpin", "setSpin");
-		CLASS_REGISTER_PROPERTY(Spine, "Atlas", Variant::Type::ResourcePath, "getAtlas", "setAtlas");
-		CLASS_REGISTER_PROPERTY(Spine, "Anim", Variant::Type::StringOption, "getAnim", "setAnim");
+		CLASS_REGISTER_PROPERTY(Spine, "Billboard", Variant::Type::StringOption, getBillboardType, setBillobardType);
+		CLASS_REGISTER_PROPERTY(Spine, "Spin", Variant::Type::ResourcePath, getSpin, setSpin);
+		CLASS_REGISTER_PROPERTY(Spine, "Atlas", Variant::Type::ResourcePath, getAtlas, setAtlas);
+		CLASS_REGISTER_PROPERTY(Spine, "Anim", Variant::Type::StringOption, getAnim, setAnim);
 	}
 
 	void Spine::setSpin(const ResourcePath& res)

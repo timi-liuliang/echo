@@ -19,14 +19,14 @@ namespace Echo
 
 	void PhysxController::bindMethods()
 	{
-		CLASS_BIND_METHOD(PhysxController, move, DEF_METHOD("move"));
-		CLASS_BIND_METHOD(PhysxController, sweep, DEF_METHOD("sweep"));
-		CLASS_BIND_METHOD(PhysxController, overlap, DEF_METHOD("overlap"));
-		CLASS_BIND_METHOD(PhysxController, getContactOffset, DEF_METHOD("getContactOffset"));
-		CLASS_BIND_METHOD(PhysxController, setContactOffset, DEF_METHOD("setContactOffset"));
-		CLASS_BIND_METHOD(PhysxController, getFootPosition, DEF_METHOD("getFootPosition"));
+		CLASS_BIND_METHOD(PhysxController, move);
+		CLASS_BIND_METHOD(PhysxController, sweep);
+		CLASS_BIND_METHOD(PhysxController, overlap);
+		CLASS_BIND_METHOD(PhysxController, getContactOffset);
+		CLASS_BIND_METHOD(PhysxController, setContactOffset);
+		CLASS_BIND_METHOD(PhysxController, getFootPosition);
 
-		CLASS_REGISTER_PROPERTY(PhysxController, "ContactOffset", Variant::Type::Real, "getContactOffset", "setContactOffset");
+		CLASS_REGISTER_PROPERTY(PhysxController, "ContactOffset", Variant::Type::Real, getContactOffset, setContactOffset);
 	}
 
 	float PhysxController::getContactOffset() const

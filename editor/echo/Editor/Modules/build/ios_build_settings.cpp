@@ -66,37 +66,37 @@ namespace Echo
 
     void iOSBuildSettings::bindMethods()
     {
-        CLASS_BIND_METHOD(iOSBuildSettings, getAppName,         DEF_METHOD("getAppName"));
-        CLASS_BIND_METHOD(iOSBuildSettings, setAppName,         DEF_METHOD("setAppName"));
-        CLASS_BIND_METHOD(iOSBuildSettings, getIdentifier,      DEF_METHOD("getIdentifier"));
-        CLASS_BIND_METHOD(iOSBuildSettings, setIdentifier,      DEF_METHOD("setIdentifier"));
-        CLASS_BIND_METHOD(iOSBuildSettings, getVersion,         DEF_METHOD("getVersion"));
-        CLASS_BIND_METHOD(iOSBuildSettings, setVersion,         DEF_METHOD("setVersion"));
-        CLASS_BIND_METHOD(iOSBuildSettings, getIconRes,         DEF_METHOD("getIconRes"));
-        CLASS_BIND_METHOD(iOSBuildSettings, setIconRes,         DEF_METHOD("setIconRes"));
-        CLASS_BIND_METHOD(iOSBuildSettings, isHiddenStatusBar,  DEF_METHOD("isHiddenStatusBar"));
-        CLASS_BIND_METHOD(iOSBuildSettings, setHiddenStatusBar, DEF_METHOD("setHiddenStatusBar"));
+        CLASS_BIND_METHOD(iOSBuildSettings, getAppName);
+        CLASS_BIND_METHOD(iOSBuildSettings, setAppName);
+        CLASS_BIND_METHOD(iOSBuildSettings, getIdentifier);
+        CLASS_BIND_METHOD(iOSBuildSettings, setIdentifier);
+        CLASS_BIND_METHOD(iOSBuildSettings, getVersion);
+        CLASS_BIND_METHOD(iOSBuildSettings, setVersion);
+        CLASS_BIND_METHOD(iOSBuildSettings, getIconRes);
+        CLASS_BIND_METHOD(iOSBuildSettings, setIconRes);
+        CLASS_BIND_METHOD(iOSBuildSettings, isHiddenStatusBar);
+        CLASS_BIND_METHOD(iOSBuildSettings, setHiddenStatusBar);
 
-        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "AppName",    Variant::Type::String,          "getAppName",       "setAppName");
-        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "Identifier", Variant::Type::String,          "getIdentifier",    "setIdentifier");
-        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "Version",    Variant::Type::String,          "getVersion",       "setVersion");
-        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "Icon",       Variant::Type::ResourcePath,    "getIconRes",       "setIconRes");
-        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "HiddenStatusBar", Variant::Type::Bool,       "isHiddenStatusBar","setHiddenStatusBar");
+        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "AppName",    Variant::Type::String,          getAppName,       setAppName);
+        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "Identifier", Variant::Type::String,          getIdentifier,    setIdentifier);
+        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "Version",    Variant::Type::String,          getVersion,       setVersion);
+        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "Icon",       Variant::Type::ResourcePath,    getIconRes,       setIconRes);
+        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "HiddenStatusBar", Variant::Type::Bool,       isHiddenStatusBar,setHiddenStatusBar);
         
         // Ui interface orientation
-        CLASS_BIND_METHOD(iOSBuildSettings, isUIInterfaceOrientationPortrait,           DEF_METHOD("isUIInterfaceOrientationPortrait"));
-        CLASS_BIND_METHOD(iOSBuildSettings, setUIInterfaceOrientationPortrait,          DEF_METHOD("setUIInterfaceOrientationPortrait"));
-        CLASS_BIND_METHOD(iOSBuildSettings, isUIInterfaceOrientationPortraitUpsideDown, DEF_METHOD("isUIInterfaceOrientationPortraitUpsideDown"));
-        CLASS_BIND_METHOD(iOSBuildSettings, setUIInterfaceOrientationPortraitUpsideDown,DEF_METHOD("setUIInterfaceOrientationPortraitUpsideDown"));
-        CLASS_BIND_METHOD(iOSBuildSettings, isUIInterfaceOrientationLandscapeLeft,      DEF_METHOD("isUIInterfaceOrientationLandscapeLeft"));
-        CLASS_BIND_METHOD(iOSBuildSettings, setUIInterfaceOrientationLandscapeLeft,     DEF_METHOD("setUIInterfaceOrientationLandscapeLeft"));
-        CLASS_BIND_METHOD(iOSBuildSettings, isUIInterfaceOrientationLandscapeRight,     DEF_METHOD("isUIInterfaceOrientationLandscapeRight"));
-        CLASS_BIND_METHOD(iOSBuildSettings, setUIInterfaceOrientationLandscapeRight,    DEF_METHOD("setUIInterfaceOrientationLandscapeRight"));
+        CLASS_BIND_METHOD(iOSBuildSettings, isUIInterfaceOrientationPortrait);
+        CLASS_BIND_METHOD(iOSBuildSettings, setUIInterfaceOrientationPortrait);
+        CLASS_BIND_METHOD(iOSBuildSettings, isUIInterfaceOrientationPortraitUpsideDown);
+        CLASS_BIND_METHOD(iOSBuildSettings, setUIInterfaceOrientationPortraitUpsideDown);
+        CLASS_BIND_METHOD(iOSBuildSettings, isUIInterfaceOrientationLandscapeLeft);
+        CLASS_BIND_METHOD(iOSBuildSettings, setUIInterfaceOrientationLandscapeLeft);
+        CLASS_BIND_METHOD(iOSBuildSettings, isUIInterfaceOrientationLandscapeRight);
+        CLASS_BIND_METHOD(iOSBuildSettings, setUIInterfaceOrientationLandscapeRight);
         
-        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "Portrait",           Variant::Type::Bool, "isUIInterfaceOrientationPortrait",            "setUIInterfaceOrientationPortrait");
-        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "PortraitUpsideDown", Variant::Type::Bool, "isUIInterfaceOrientationPortraitUpsideDown",  "setUIInterfaceOrientationPortraitUpsideDown");
-        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "LandscapeLeft",      Variant::Type::Bool, "isUIInterfaceOrientationLandscapeLeft",       "setUIInterfaceOrientationLandscapeLeft");
-        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "LandscapeRight",     Variant::Type::Bool, "isUIInterfaceOrientationLandscapeRight",      "setUIInterfaceOrientationLandscapeRight");
+        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "Portrait",           Variant::Type::Bool, isUIInterfaceOrientationPortrait,            setUIInterfaceOrientationPortrait);
+        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "PortraitUpsideDown", Variant::Type::Bool, isUIInterfaceOrientationPortraitUpsideDown,  setUIInterfaceOrientationPortraitUpsideDown);
+        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "LandscapeLeft",      Variant::Type::Bool, isUIInterfaceOrientationLandscapeLeft,       setUIInterfaceOrientationLandscapeLeft);
+        CLASS_REGISTER_PROPERTY(iOSBuildSettings, "LandscapeRight",     Variant::Type::Bool, isUIInterfaceOrientationLandscapeRight,      setUIInterfaceOrientationLandscapeRight);
         
         CLASS_REGISTER_PROPERTY_HINT(iOSBuildSettings, "Portrait",           PropertyHintType::Category, "Device Orientation");
         CLASS_REGISTER_PROPERTY_HINT(iOSBuildSettings, "PortraitUpsideDown", PropertyHintType::Category, "Device Orientation");

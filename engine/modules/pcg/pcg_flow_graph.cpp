@@ -21,12 +21,12 @@ namespace Echo
 
 	void PCGFlowGraph::bindMethods()
 	{
-		CLASS_BIND_METHOD(PCGFlowGraph, run, DEF_METHOD("run"));
-		CLASS_BIND_METHOD(PCGFlowGraph, getGraph, DEF_METHOD("getGraph"));
-		CLASS_BIND_METHOD(PCGFlowGraph, setGraph, DEF_METHOD("setGraph"));
-		CLASS_BIND_METHOD(PCGFlowGraph, getNodeByName, DEF_METHOD("getNodeByName"));
+		CLASS_BIND_METHOD(PCGFlowGraph, run);
+		CLASS_BIND_METHOD(PCGFlowGraph, getGraph);
+		CLASS_BIND_METHOD(PCGFlowGraph, setGraph);
+		CLASS_BIND_METHOD(PCGFlowGraph, getNodeByName);
 
-		CLASS_REGISTER_PROPERTY(PCGFlowGraph, "Graph", Variant::Type::String, "getGraph", "setGraph");
+		CLASS_REGISTER_PROPERTY(PCGFlowGraph, "Graph", Variant::Type::String, getGraph, setGraph);
 
 		CLASS_REGISTER_PROPERTY_HINT(PCGFlowGraph, "Graph", PropertyHintType::ReadOnly, "true");
 		CLASS_REGISTER_PROPERTY_HINT(PCGFlowGraph, "Graph", PropertyHintType::Language, "xml");

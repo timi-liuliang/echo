@@ -15,14 +15,14 @@ namespace Echo
 
 	void MeshRender::bindMethods()
 	{
-		CLASS_BIND_METHOD(MeshRender, getMesh, DEF_METHOD("getMesh"));
-		CLASS_BIND_METHOD(MeshRender, setMesh, DEF_METHOD("setMesh"));
-		CLASS_BIND_METHOD(MeshRender, getMaterial, DEF_METHOD("getMaterial"));
-		CLASS_BIND_METHOD(MeshRender, setMaterial, DEF_METHOD("setMaterial"));
+		CLASS_BIND_METHOD(MeshRender, getMesh);
+		CLASS_BIND_METHOD(MeshRender, setMesh);
+		CLASS_BIND_METHOD(MeshRender, getMaterial);
+		CLASS_BIND_METHOD(MeshRender, setMaterial);
 
-		CLASS_REGISTER_PROPERTY(MeshRender, "Mesh", Variant::Type::Object, "getMesh", "setMesh");
+		CLASS_REGISTER_PROPERTY(MeshRender, "Mesh", Variant::Type::Object, getMesh, setMesh);
 		CLASS_REGISTER_PROPERTY_HINT(MeshRender, "Mesh", PropertyHintType::ObjectType, "Mesh");
-		CLASS_REGISTER_PROPERTY(MeshRender, "Material", Variant::Type::Object, "getMaterial", "setMaterial");
+		CLASS_REGISTER_PROPERTY(MeshRender, "Material", Variant::Type::Object, getMaterial, setMaterial);
 		CLASS_REGISTER_PROPERTY_HINT(MeshRender, "Material", PropertyHintType::ObjectType, "Material");
 	}
 

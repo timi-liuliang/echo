@@ -27,7 +27,7 @@ namespace Echo
 
 	void Application::bindMethods()
 	{
-		CLASS_BIND_METHOD(Application, quit, DEF_METHOD("quit"));
+		CLASS_BIND_METHOD(Application, quit);
 	}
 
 	void Application::init(QWidget* mainWindow, size_t hwnd, const Echo::String& echoProject)

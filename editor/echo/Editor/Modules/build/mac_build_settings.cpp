@@ -32,19 +32,19 @@ namespace Echo
 
     void MacBuildSettings::bindMethods()
     {
-        CLASS_BIND_METHOD(MacBuildSettings, getAppName,         DEF_METHOD("getAppName"));
-        CLASS_BIND_METHOD(MacBuildSettings, setAppName,         DEF_METHOD("setAppName"));
-        CLASS_BIND_METHOD(MacBuildSettings, getIdentifier,      DEF_METHOD("getIdentifier"));
-        CLASS_BIND_METHOD(MacBuildSettings, setIdentifier,      DEF_METHOD("setIdentifier"));
-        CLASS_BIND_METHOD(MacBuildSettings, getVersion,         DEF_METHOD("getVersion"));
-        CLASS_BIND_METHOD(MacBuildSettings, setVersion,         DEF_METHOD("setVersion"));
-        CLASS_BIND_METHOD(MacBuildSettings, getIconRes,         DEF_METHOD("getIconRes"));
-        CLASS_BIND_METHOD(MacBuildSettings, setIconRes,         DEF_METHOD("setIconRes"));
+        CLASS_BIND_METHOD(MacBuildSettings, getAppName);
+        CLASS_BIND_METHOD(MacBuildSettings, setAppName);
+        CLASS_BIND_METHOD(MacBuildSettings, getIdentifier);
+        CLASS_BIND_METHOD(MacBuildSettings, setIdentifier);
+        CLASS_BIND_METHOD(MacBuildSettings, getVersion);
+        CLASS_BIND_METHOD(MacBuildSettings, setVersion);
+        CLASS_BIND_METHOD(MacBuildSettings, getIconRes);
+        CLASS_BIND_METHOD(MacBuildSettings, setIconRes);
 
-        CLASS_REGISTER_PROPERTY(MacBuildSettings, "AppName",    Variant::Type::String,          "getAppName",       "setAppName");
-        CLASS_REGISTER_PROPERTY(MacBuildSettings, "Identifier", Variant::Type::String,          "getIdentifier",    "setIdentifier");
-        CLASS_REGISTER_PROPERTY(MacBuildSettings, "Version",    Variant::Type::String,          "getVersion",       "setVersion");
-        CLASS_REGISTER_PROPERTY(MacBuildSettings, "Icon",       Variant::Type::ResourcePath,    "getIconRes",       "setIconRes");
+        CLASS_REGISTER_PROPERTY(MacBuildSettings, "AppName",    Variant::Type::String,          getAppName,       setAppName);
+        CLASS_REGISTER_PROPERTY(MacBuildSettings, "Identifier", Variant::Type::String,          getIdentifier,    setIdentifier);
+        CLASS_REGISTER_PROPERTY(MacBuildSettings, "Version",    Variant::Type::String,          getVersion,       setVersion);
+        CLASS_REGISTER_PROPERTY(MacBuildSettings, "Icon",       Variant::Type::ResourcePath,    getIconRes,       setIconRes);
     }
 
     void MacBuildSettings::setOutputDir(const String& outputDir)

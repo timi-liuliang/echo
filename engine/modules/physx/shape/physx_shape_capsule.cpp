@@ -17,13 +17,13 @@ namespace Echo
 
 	void PhysxShapeCapsule::bindMethods()
 	{
-		CLASS_BIND_METHOD(PhysxShapeCapsule, getRadius, DEF_METHOD("getRadius"));
-		CLASS_BIND_METHOD(PhysxShapeCapsule, setRadius, DEF_METHOD("setRadius"));
-		CLASS_BIND_METHOD(PhysxShapeCapsule, getHeight, DEF_METHOD("getHeight"));
-		CLASS_BIND_METHOD(PhysxShapeCapsule, setHeight, DEF_METHOD("setHeight"));
+		CLASS_BIND_METHOD(PhysxShapeCapsule, getRadius);
+		CLASS_BIND_METHOD(PhysxShapeCapsule, setRadius);
+		CLASS_BIND_METHOD(PhysxShapeCapsule, getHeight);
+		CLASS_BIND_METHOD(PhysxShapeCapsule, setHeight);
 
-		CLASS_REGISTER_PROPERTY(PhysxShapeCapsule, "Radius", Variant::Type::Real, "getRadius", "setRadius");
-		CLASS_REGISTER_PROPERTY(PhysxShapeCapsule, "Height", Variant::Type::Real, "getHeight", "setHeight");
+		CLASS_REGISTER_PROPERTY(PhysxShapeCapsule, "Radius", Variant::Type::Real, getRadius, setRadius);
+		CLASS_REGISTER_PROPERTY(PhysxShapeCapsule, "Height", Variant::Type::Real, getHeight, setHeight);
 	}
 
 	void PhysxShapeCapsule::setRadius(float radius)

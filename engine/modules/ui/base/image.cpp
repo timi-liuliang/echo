@@ -19,19 +19,19 @@ namespace Echo
     
     void UiImage::bindMethods()
     {
-        CLASS_BIND_METHOD(UiImage, getTextureRes,   DEF_METHOD("getTextureRes"));
-        CLASS_BIND_METHOD(UiImage, setTextureRes,   DEF_METHOD("setTextureRes"));
-        CLASS_BIND_METHOD(UiImage, getWidth,        DEF_METHOD("getWidth"));
-        CLASS_BIND_METHOD(UiImage, setWidth,        DEF_METHOD("setWidth"));
-        CLASS_BIND_METHOD(UiImage, getHeight,       DEF_METHOD("getHeight"));
-        CLASS_BIND_METHOD(UiImage, setHeight,       DEF_METHOD("setHeight"));
-        CLASS_BIND_METHOD(UiImage, getMaterial,     DEF_METHOD("getMaterial"));
-        CLASS_BIND_METHOD(UiImage, setMaterial,     DEF_METHOD("setMaterial"));
+        CLASS_BIND_METHOD(UiImage, getTextureRes);
+        CLASS_BIND_METHOD(UiImage, setTextureRes);
+        CLASS_BIND_METHOD(UiImage, getWidth);
+        CLASS_BIND_METHOD(UiImage, setWidth);
+        CLASS_BIND_METHOD(UiImage, getHeight);
+        CLASS_BIND_METHOD(UiImage, setHeight);
+        CLASS_BIND_METHOD(UiImage, getMaterial);
+        CLASS_BIND_METHOD(UiImage, setMaterial);
         
-        CLASS_REGISTER_PROPERTY(UiImage, "Width", Variant::Type::Int, "getWidth", "setWidth");
-        CLASS_REGISTER_PROPERTY(UiImage, "Height", Variant::Type::Int, "getHeight", "setHeight");
-        CLASS_REGISTER_PROPERTY(UiImage, "Texture", Variant::Type::ResourcePath, "getTextureRes", "setTextureRes");
-        CLASS_REGISTER_PROPERTY(UiImage, "Material", Variant::Type::Object, "getMaterial", "setMaterial");
+        CLASS_REGISTER_PROPERTY(UiImage, "Width", Variant::Type::Int, getWidth, setWidth);
+        CLASS_REGISTER_PROPERTY(UiImage, "Height", Variant::Type::Int, getHeight, setHeight);
+        CLASS_REGISTER_PROPERTY(UiImage, "Texture", Variant::Type::ResourcePath, getTextureRes, setTextureRes);
+        CLASS_REGISTER_PROPERTY(UiImage, "Material", Variant::Type::Object, getMaterial, setMaterial);
         CLASS_REGISTER_PROPERTY_HINT(UiImage, "Material", PropertyHintType::ObjectType, "Material");
     }
     

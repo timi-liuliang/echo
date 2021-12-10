@@ -25,16 +25,16 @@ namespace Echo
 
     void EditorCameraSettings::bindMethods()
     {
-		CLASS_BIND_METHOD(EditorCameraSettings, getMoveSpeed, DEF_METHOD("getMoveSpeed"));
-		CLASS_BIND_METHOD(EditorCameraSettings, setMoveSpeed, DEF_METHOD("setMoveSpeed"));
-		CLASS_BIND_METHOD(EditorCameraSettings, getNearClip, DEF_METHOD("getNearClip"));
-		CLASS_BIND_METHOD(EditorCameraSettings, setNearClip, DEF_METHOD("setNearClip"));
-		CLASS_BIND_METHOD(EditorCameraSettings, getFarClip, DEF_METHOD("getFarClip"));
-		CLASS_BIND_METHOD(EditorCameraSettings, setFarClip, DEF_METHOD("setFarClip"));
+		CLASS_BIND_METHOD(EditorCameraSettings, getMoveSpeed);
+		CLASS_BIND_METHOD(EditorCameraSettings, setMoveSpeed);
+		CLASS_BIND_METHOD(EditorCameraSettings, getNearClip);
+		CLASS_BIND_METHOD(EditorCameraSettings, setNearClip);
+		CLASS_BIND_METHOD(EditorCameraSettings, getFarClip);
+		CLASS_BIND_METHOD(EditorCameraSettings, setFarClip);
 
-		CLASS_REGISTER_PROPERTY(EditorCameraSettings, "MoveSpeed", Variant::Type::Real, "getMoveSpeed", "setMoveSpeed");
-		CLASS_REGISTER_PROPERTY(EditorCameraSettings, "NearClip", Variant::Type::Real, "getNearClip", "setNearClip");
-		CLASS_REGISTER_PROPERTY(EditorCameraSettings, "FarClip", Variant::Type::Real, "getFarClip", "setFarClip");
+		CLASS_REGISTER_PROPERTY(EditorCameraSettings, "MoveSpeed", Variant::Type::Real, getMoveSpeed, setMoveSpeed);
+		CLASS_REGISTER_PROPERTY(EditorCameraSettings, "NearClip", Variant::Type::Real, getNearClip, setNearClip);
+		CLASS_REGISTER_PROPERTY(EditorCameraSettings, "FarClip", Variant::Type::Real, getFarClip, setFarClip);
 
 		CLASS_REGISTER_PROPERTY_HINT(EditorCameraSettings, "MoveSpeed", PropertyHintType::Category, "3D Camera");
 		CLASS_REGISTER_PROPERTY_HINT(EditorCameraSettings, "NearClip", PropertyHintType::Category, "3D Camera");
@@ -43,8 +43,6 @@ namespace Echo
 
 	void EditorCameraSettings::setMoveSpeed(float moveSpeed)
 	{ 
-
-
 		m_moveSpeed = moveSpeed; 
 	}
 }

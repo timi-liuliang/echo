@@ -17,13 +17,13 @@ namespace Echo
 
 	void PhysxBody::bindMethods()
 	{
-		CLASS_BIND_METHOD(PhysxBody, getType, DEF_METHOD("getType"));
-		CLASS_BIND_METHOD(PhysxBody, setType, DEF_METHOD("setType"));
-		CLASS_BIND_METHOD(PhysxBody, setLinearVelocity, DEF_METHOD("setLinearVelocity"));
-		CLASS_BIND_METHOD(PhysxBody, getLinearVelocity, DEF_METHOD("getLinearVelocity"));
-		CLASS_BIND_METHOD(PhysxBody, addForce, DEF_METHOD("addForce"));
+		CLASS_BIND_METHOD(PhysxBody, getType);
+		CLASS_BIND_METHOD(PhysxBody, setType);
+		CLASS_BIND_METHOD(PhysxBody, setLinearVelocity);
+		CLASS_BIND_METHOD(PhysxBody, getLinearVelocity);
+		CLASS_BIND_METHOD(PhysxBody, addForce);
 
-		CLASS_REGISTER_PROPERTY(PhysxBody, "Type", Variant::Type::StringOption, "getType", "setType");
+		CLASS_REGISTER_PROPERTY(PhysxBody, "Type", Variant::Type::StringOption, getType, setType);
 	}
 
 	void PhysxBody::updateInternal(float elapsedTime)

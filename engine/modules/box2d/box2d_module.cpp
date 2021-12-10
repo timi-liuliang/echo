@@ -62,7 +62,7 @@ namespace Echo
 
         CLASS_REGISTER_PROPERTY(Box2DModule, "FramesPerSecond", Variant::Type::Int, getFramesPerSecond, setFramesPerSecond);
         CLASS_REGISTER_PROPERTY(Box2DModule, "DebugDraw", Variant::Type::StringOption, getDebugDrawOption, setDebugDrawOption);
-        CLASS_REGISTER_PROPERTY(Box2DModule, "PixelsPerMeter", Variant::Type::Real, getPixelsPerMeter, setPixelsPerMeter);
+        CLASS_REGISTER_PROPERTY(Box2DModule, "PixelsPerMeter", Variant::Type::Real, getPixelsPerMeter, setPixelsPerPeter);
         CLASS_REGISTER_PROPERTY(Box2DModule, "Gravity", Variant::Type::Vector2, getGravity, setGravity);
 	}
 

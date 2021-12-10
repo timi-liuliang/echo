@@ -543,13 +543,13 @@ namespace Echo
 
 	void OpenDrive::bindMethods()
 	{
-		CLASS_BIND_METHOD(OpenDrive, getXodrRes, DEF_METHOD("getXodrRes"));
-		CLASS_BIND_METHOD(OpenDrive, setXodrRes, DEF_METHOD("setXodrRes"));
-		CLASS_BIND_METHOD(OpenDrive, getDebugDraw, DEF_METHOD("getDebugDraw"));
-		CLASS_BIND_METHOD(OpenDrive, setDebugDraw, DEF_METHOD("setDebugDraw"));
+		CLASS_BIND_METHOD(OpenDrive, getXodrRes);
+		CLASS_BIND_METHOD(OpenDrive, setXodrRes);
+		CLASS_BIND_METHOD(OpenDrive, getDebugDraw);
+		CLASS_BIND_METHOD(OpenDrive, setDebugDraw);
 
-		CLASS_REGISTER_PROPERTY(OpenDrive, "Xodr", Variant::Type::ResourcePath, "getXodrRes", "setXodrRes");
-		CLASS_REGISTER_PROPERTY(OpenDrive, "DebugDraw", Variant::Type::Object, "getDebugDraw", "setDebugDraw");
+		CLASS_REGISTER_PROPERTY(OpenDrive, "Xodr", Variant::Type::ResourcePath, getXodrRes, setXodrRes);
+		CLASS_REGISTER_PROPERTY(OpenDrive, "DebugDraw", Variant::Type::Object, getDebugDraw, setDebugDraw);
 		CLASS_REGISTER_PROPERTY_HINT(OpenDrive, "DebugDraw", PropertyHintType::ObjectType, "OpenDriveDebugDraw");
 	}
 

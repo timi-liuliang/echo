@@ -15,10 +15,10 @@ namespace Echo
 
 	void PCGSphere::bindMethods()
 	{
-		CLASS_BIND_METHOD(PCGSphere, getRadius, DEF_METHOD("getRadius"));
-		CLASS_BIND_METHOD(PCGSphere, setRadius, DEF_METHOD("setRadius"));
+		CLASS_BIND_METHOD(PCGSphere, getRadius);
+		CLASS_BIND_METHOD(PCGSphere, setRadius);
 
-		CLASS_REGISTER_PROPERTY(PCGSphere, "Radius", Variant::Type::Real, "getRadius", "setRadius");
+		CLASS_REGISTER_PROPERTY(PCGSphere, "Radius", Variant::Type::Real, getRadius, setRadius);
 	}
 
 	void PCGSphere::setRadius(float radius)

@@ -15,16 +15,16 @@ namespace Echo
 
 	void RvoAgent::bindMethods()
 	{
-		CLASS_BIND_METHOD(RvoAgent, getRadius,	DEF_METHOD("getRadius"));
-		CLASS_BIND_METHOD(RvoAgent, setRadius,	DEF_METHOD("setRadius"));
-		CLASS_BIND_METHOD(RvoAgent, getSpeed,	DEF_METHOD("getSpeed"));
-		CLASS_BIND_METHOD(RvoAgent, setSpeed,	DEF_METHOD("setSpeed"));
-		CLASS_BIND_METHOD(RvoAgent, getGoal,	DEF_METHOD("getGoal"));
-		CLASS_BIND_METHOD(RvoAgent, setGoal,	DEF_METHOD("setGoal"));
+		CLASS_BIND_METHOD(RvoAgent, getRadius);
+		CLASS_BIND_METHOD(RvoAgent, setRadius);
+		CLASS_BIND_METHOD(RvoAgent, getSpeed);
+		CLASS_BIND_METHOD(RvoAgent, setSpeed);
+		CLASS_BIND_METHOD(RvoAgent, getGoal);
+		CLASS_BIND_METHOD(RvoAgent, setGoal);
 
-		CLASS_REGISTER_PROPERTY(RvoAgent, "Radius", Variant::Type::Real, "getRadius", "setRadius");
-		CLASS_REGISTER_PROPERTY(RvoAgent, "Speed", Variant::Type::Real, "getSpeed", "setSpeed");
-		CLASS_REGISTER_PROPERTY(RvoAgent, "Goal", Variant::Type::Vector3, "getGoal", "setGoal");
+		CLASS_REGISTER_PROPERTY(RvoAgent, "Radius", Variant::Type::Real, getRadius, setRadius);
+		CLASS_REGISTER_PROPERTY(RvoAgent, "Speed", Variant::Type::Real, getSpeed, setSpeed);
+		CLASS_REGISTER_PROPERTY(RvoAgent, "Goal", Variant::Type::Vector3, getGoal, setGoal);
 	}
 
 	void RvoAgent::setRadius(float radius)

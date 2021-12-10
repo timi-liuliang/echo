@@ -27,10 +27,10 @@ namespace Echo
 
 	void RvoModule::bindMethods()
 	{
-		CLASS_BIND_METHOD(RvoModule, getDebugDrawOption, DEF_METHOD("getDebugDrawOption"));
-		CLASS_BIND_METHOD(RvoModule, setDebugDrawOption, DEF_METHOD("setDebugDrawOption"));
+		CLASS_BIND_METHOD(RvoModule, getDebugDrawOption);
+		CLASS_BIND_METHOD(RvoModule, setDebugDrawOption);
 
-		CLASS_REGISTER_PROPERTY(RvoModule, "DebugDraw", Variant::Type::StringOption, "getDebugDrawOption", "setDebugDrawOption");
+		CLASS_REGISTER_PROPERTY(RvoModule, "DebugDraw", Variant::Type::StringOption, getDebugDrawOption, setDebugDrawOption);
 	}
 
 	void RvoModule::registerTypes()

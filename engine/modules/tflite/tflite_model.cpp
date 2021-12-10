@@ -17,10 +17,10 @@ namespace Echo
 
 	void TFLiteModel::bindMethods()
 	{
-		CLASS_BIND_METHOD(TFLiteModel, getModelRes, DEF_METHOD("getModelRes"));
-		CLASS_BIND_METHOD(TFLiteModel, setModelRes, DEF_METHOD("setModelRes"));
+		CLASS_BIND_METHOD(TFLiteModel, getModelRes);
+		CLASS_BIND_METHOD(TFLiteModel, setModelRes);
 
-		CLASS_REGISTER_PROPERTY(TFLiteModel, "Model", Variant::Type::ResourcePath, "getModelRes", "setModelRes");
+		CLASS_REGISTER_PROPERTY(TFLiteModel, "Model", Variant::Type::ResourcePath, getModelRes, setModelRes);
 	}
 
 	void TFLiteModel::setModelRes(const ResourcePath& path)

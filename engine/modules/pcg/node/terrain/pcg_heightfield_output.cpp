@@ -17,13 +17,13 @@ namespace Echo
 
 	void PCGHeightfieldOutput::bindMethods()
 	{
-		CLASS_BIND_METHOD(PCGHeightfieldOutput, getTerrainPath, DEF_METHOD("getTerrainPath"));
-		CLASS_BIND_METHOD(PCGHeightfieldOutput, setTerrainPath, DEF_METHOD("setTerrainPath"));
-		CLASS_BIND_METHOD(PCGHeightfieldOutput, isAutoCreate, DEF_METHOD("isAutoCreate"));
-		CLASS_BIND_METHOD(PCGHeightfieldOutput, setAutoCreate, DEF_METHOD("setAutoCreate"));
+		CLASS_BIND_METHOD(PCGHeightfieldOutput, getTerrainPath);
+		CLASS_BIND_METHOD(PCGHeightfieldOutput, setTerrainPath);
+		CLASS_BIND_METHOD(PCGHeightfieldOutput, isAutoCreate);
+		CLASS_BIND_METHOD(PCGHeightfieldOutput, setAutoCreate);
 
-		CLASS_REGISTER_PROPERTY(PCGHeightfieldOutput, "Terrain", Variant::Type::NodePath, "getTerrainPath", "setTerrainPath");
-		CLASS_REGISTER_PROPERTY(PCGHeightfieldOutput, "AutoCreate", Variant::Type::Bool, "isAutoCreate", "setAutoCreate");
+		CLASS_REGISTER_PROPERTY(PCGHeightfieldOutput, "Terrain", Variant::Type::NodePath, getTerrainPath, setTerrainPath);
+		CLASS_REGISTER_PROPERTY(PCGHeightfieldOutput, "AutoCreate", Variant::Type::Bool, isAutoCreate, setAutoCreate);
 	}
 
 	void PCGHeightfieldOutput::setTerrainPath(const NodePath& terrainPath)

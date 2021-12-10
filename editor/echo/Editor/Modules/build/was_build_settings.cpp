@@ -25,10 +25,10 @@ namespace Echo
 
 	void WebAssemblyBuildSettings::bindMethods()
 	{
-		CLASS_BIND_METHOD(WebAssemblyBuildSettings, getIconRes, DEF_METHOD("getIconRes"));
-		CLASS_BIND_METHOD(WebAssemblyBuildSettings, setIconRes, DEF_METHOD("setIconRes"));
+		CLASS_BIND_METHOD(WebAssemblyBuildSettings, getIconRes);
+		CLASS_BIND_METHOD(WebAssemblyBuildSettings, setIconRes);
 
-		CLASS_REGISTER_PROPERTY(WebAssemblyBuildSettings, "Icon", Variant::Type::ResourcePath, "getIconRes", "setIconRes");
+		CLASS_REGISTER_PROPERTY(WebAssemblyBuildSettings, "Icon", Variant::Type::ResourcePath, getIconRes, setIconRes);
 	}
 
 	ImagePtr WebAssemblyBuildSettings::getPlatformThumbnail() const

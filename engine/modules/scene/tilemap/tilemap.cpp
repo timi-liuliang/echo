@@ -19,28 +19,28 @@ namespace Echo
     
     void TileMap::bindMethods()
     {
-        CLASS_BIND_METHOD(TileMap, getTileShape, DEF_METHOD("getTileShape"));
-        CLASS_BIND_METHOD(TileMap, setTileShape, DEF_METHOD("setTileShape"));
-		CLASS_BIND_METHOD(TileMap, getWidth, DEF_METHOD("getWidth"));
-		CLASS_BIND_METHOD(TileMap, setWidth, DEF_METHOD("setWidth"));
-		CLASS_BIND_METHOD(TileMap, getHeight, DEF_METHOD("getHeight"));
-		CLASS_BIND_METHOD(TileMap, setHeight, DEF_METHOD("setHeight"));
-		CLASS_BIND_METHOD(TileMap, getTileSize, DEF_METHOD("getTileSize"));
-		CLASS_BIND_METHOD(TileMap, setTileSize, DEF_METHOD("setTileSize"));
-		CLASS_BIND_METHOD(TileMap, isFlipX, DEF_METHOD("isFlipX"));
-		CLASS_BIND_METHOD(TileMap, setFlipX, DEF_METHOD("setFlipX"));
-		CLASS_BIND_METHOD(TileMap, isFlipY, DEF_METHOD("isFlipY"));
-		CLASS_BIND_METHOD(TileMap, setFlipY, DEF_METHOD("setFlipY"));
-        CLASS_BIND_METHOD(TileMap, getTileCenter, DEF_METHOD("getTileCenter"));
-        CLASS_BIND_METHOD(TileMap, getTile, DEF_METHOD("getTile"));
-        CLASS_BIND_METHOD(TileMap, setTile, DEF_METHOD("setTile"));
+        CLASS_BIND_METHOD(TileMap, getTileShape);
+        CLASS_BIND_METHOD(TileMap, setTileShape);
+		CLASS_BIND_METHOD(TileMap, getWidth);
+		CLASS_BIND_METHOD(TileMap, setWidth);
+		CLASS_BIND_METHOD(TileMap, getHeight);
+		CLASS_BIND_METHOD(TileMap, setHeight);
+		CLASS_BIND_METHOD(TileMap, getTileSize);
+		CLASS_BIND_METHOD(TileMap, setTileSize);
+		CLASS_BIND_METHOD(TileMap, isFlipX);
+		CLASS_BIND_METHOD(TileMap, setFlipX);
+		CLASS_BIND_METHOD(TileMap, isFlipY);
+		CLASS_BIND_METHOD(TileMap, setFlipY);
+        CLASS_BIND_METHOD(TileMap, getTileCenter);
+        CLASS_BIND_METHOD(TileMap, getTile);
+        CLASS_BIND_METHOD(TileMap, setTile);
 
-        CLASS_REGISTER_PROPERTY(TileMap, "TileShape", Variant::Type::StringOption, "getTileShape", "setTileShape");
-        CLASS_REGISTER_PROPERTY(TileMap, "Width", Variant::Type::Int, "getWidth", "setWidth");
-        CLASS_REGISTER_PROPERTY(TileMap, "Height", Variant::Type::Int, "getHeight", "setHeight");
-        CLASS_REGISTER_PROPERTY(TileMap, "TileSize", Variant::Type::Vector2, "getTileSize", "setTileSize");
-        CLASS_REGISTER_PROPERTY(TileMap, "FlipX", Variant::Type::Bool, "isFlipX", "setFlipX");
-        CLASS_REGISTER_PROPERTY(TileMap, "FlipY", Variant::Type::Bool, "isFlipY", "setFlipY");
+        CLASS_REGISTER_PROPERTY(TileMap, "TileShape", Variant::Type::StringOption, getTileShape, setTileShape);
+        CLASS_REGISTER_PROPERTY(TileMap, "Width", Variant::Type::Int, getWidth, setWidth);
+        CLASS_REGISTER_PROPERTY(TileMap, "Height", Variant::Type::Int, getHeight, setHeight);
+        CLASS_REGISTER_PROPERTY(TileMap, "TileSize", Variant::Type::Vector2, getTileSize, setTileSize);
+        CLASS_REGISTER_PROPERTY(TileMap, "FlipX", Variant::Type::Bool, isFlipX, setFlipX);
+        CLASS_REGISTER_PROPERTY(TileMap, "FlipY", Variant::Type::Bool, isFlipY, setFlipY);
     }
 
     void TileMap::setTileShape(const StringOption& option)

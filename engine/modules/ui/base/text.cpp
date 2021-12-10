@@ -25,22 +25,22 @@ namespace Echo
     
     void UiText::bindMethods()
     {
-        CLASS_BIND_METHOD(UiText, getText,          DEF_METHOD("getText"));
-        CLASS_BIND_METHOD(UiText, setText,          DEF_METHOD("setText"));
-        CLASS_BIND_METHOD(UiText, getFont,          DEF_METHOD("getFont"));
-        CLASS_BIND_METHOD(UiText, setFont,          DEF_METHOD("setFont"));
-		CLASS_BIND_METHOD(UiText, getFontSize,		DEF_METHOD("getFontSize"));
-		CLASS_BIND_METHOD(UiText, setFontSize,		DEF_METHOD("setFontSize"));
-        CLASS_BIND_METHOD(UiText, getWidth,         DEF_METHOD("getWidth"));
-        CLASS_BIND_METHOD(UiText, setWidth,         DEF_METHOD("setWidth"));
-        CLASS_BIND_METHOD(UiText, getHeight,        DEF_METHOD("getHeight"));
-        CLASS_BIND_METHOD(UiText, setHeight,        DEF_METHOD("setHeight"));
+        CLASS_BIND_METHOD(UiText, getText);
+        CLASS_BIND_METHOD(UiText, setText);
+        CLASS_BIND_METHOD(UiText, getFont);
+        CLASS_BIND_METHOD(UiText, setFont);
+		CLASS_BIND_METHOD(UiText, getFontSize);
+		CLASS_BIND_METHOD(UiText, setFontSize);
+        CLASS_BIND_METHOD(UiText, getWidth);
+        CLASS_BIND_METHOD(UiText, setWidth);
+        CLASS_BIND_METHOD(UiText, getHeight);
+        CLASS_BIND_METHOD(UiText, setHeight);
         
-        CLASS_REGISTER_PROPERTY(UiText, "Width", Variant::Type::Int, "getWidth", "setWidth");
-        CLASS_REGISTER_PROPERTY(UiText, "Height", Variant::Type::Int, "getHeight", "setHeight");
-        CLASS_REGISTER_PROPERTY(UiText, "Text", Variant::Type::String, "getText", "setText");
-        CLASS_REGISTER_PROPERTY(UiText, "Font", Variant::Type::ResourcePath, "getFont", "setFont");
-		CLASS_REGISTER_PROPERTY(UiText, "FontSize", Variant::Type::Int, "getFontSize", "setFontSize");
+        CLASS_REGISTER_PROPERTY(UiText, "Width", Variant::Type::Int, getWidth, setWidth);
+        CLASS_REGISTER_PROPERTY(UiText, "Height", Variant::Type::Int, getHeight, setHeight);
+        CLASS_REGISTER_PROPERTY(UiText, "Text", Variant::Type::String, getText, setText);
+        CLASS_REGISTER_PROPERTY(UiText, "Font", Variant::Type::ResourcePath, getFont, setFont);
+		CLASS_REGISTER_PROPERTY(UiText, "FontSize", Variant::Type::Int, getFontSize, setFontSize);
     }
     
     void UiText::setText(const String& text)

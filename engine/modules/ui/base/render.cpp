@@ -18,10 +18,10 @@ namespace Echo
 
 	void UiRender::bindMethods()
 	{
-		CLASS_BIND_METHOD(UiRender, getAlpha, DEF_METHOD("getAlpha"));
-		CLASS_BIND_METHOD(UiRender, setAlpha, DEF_METHOD("setAlpha"));
+		CLASS_BIND_METHOD(UiRender, getAlpha);
+		CLASS_BIND_METHOD(UiRender, setAlpha);
 
-		CLASS_REGISTER_PROPERTY(UiRender, "Alpha", Variant::Type::Real, "getAlpha", "setAlpha");
+		CLASS_REGISTER_PROPERTY(UiRender, "Alpha", Variant::Type::Real, getAlpha, setAlpha);
 	}
 
 	void* UiRender::getGlobalUniformValue(const String& name)

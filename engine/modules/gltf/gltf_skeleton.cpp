@@ -16,13 +16,13 @@ namespace Echo
 
 	void GltfSkeleton::bindMethods()
 	{
-		CLASS_BIND_METHOD(GltfSkeleton, getGltfRes, DEF_METHOD("getGltfRes"));
-		CLASS_BIND_METHOD(GltfSkeleton, setGltfRes, DEF_METHOD("setGltfRes"));
-		CLASS_BIND_METHOD(GltfSkeleton, getAnim, DEF_METHOD("getAnim"));
-		CLASS_BIND_METHOD(GltfSkeleton, setAnim, DEF_METHOD("setAnim"));
+		CLASS_BIND_METHOD(GltfSkeleton, getGltfRes);
+		CLASS_BIND_METHOD(GltfSkeleton, setGltfRes);
+		CLASS_BIND_METHOD(GltfSkeleton, getAnim);
+		CLASS_BIND_METHOD(GltfSkeleton, setAnim);
 
-		CLASS_REGISTER_PROPERTY(GltfSkeleton, "Gltf", Variant::Type::ResourcePath, "getGltfRes", "setGltfRes");
-		CLASS_REGISTER_PROPERTY(GltfSkeleton, "Anim", Variant::Type::StringOption, "getAnim", "setAnim");
+		CLASS_REGISTER_PROPERTY(GltfSkeleton, "Gltf", Variant::Type::ResourcePath, getGltfRes, setGltfRes);
+		CLASS_REGISTER_PROPERTY(GltfSkeleton, "Anim", Variant::Type::StringOption, getAnim, setAnim);
 	}
 
 	// set gltf resource

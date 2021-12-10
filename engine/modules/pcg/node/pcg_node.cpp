@@ -17,13 +17,13 @@ namespace Echo
 
 	void PCGNode::bindMethods()
 	{
-		CLASS_BIND_METHOD(PCGNode, getName, DEF_METHOD("getName"));
-		CLASS_BIND_METHOD(PCGNode, setName, DEF_METHOD("setName"));
-		CLASS_BIND_METHOD(PCGNode, getPosition, DEF_METHOD("getPosition"));
-		CLASS_BIND_METHOD(PCGNode, setPosition, DEF_METHOD("setPosition"));
+		CLASS_BIND_METHOD(PCGNode, getName);
+		CLASS_BIND_METHOD(PCGNode, setName);
+		CLASS_BIND_METHOD(PCGNode, getPosition);
+		CLASS_BIND_METHOD(PCGNode, setPosition);
 
-		CLASS_REGISTER_PROPERTY(PCGNode, "Name", Variant::Type::String, "getName", "setName");
-		CLASS_REGISTER_PROPERTY(PCGNode, "Position", Variant::Type::Vector2, "getPosition", "setPosition");
+		CLASS_REGISTER_PROPERTY(PCGNode, "Name", Variant::Type::String, getName, setName);
+		CLASS_REGISTER_PROPERTY(PCGNode, "Position", Variant::Type::Vector2, getPosition, setPosition);
 	}
 
 	void PCGNode::setName(const String& name)

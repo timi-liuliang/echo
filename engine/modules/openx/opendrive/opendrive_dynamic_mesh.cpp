@@ -20,13 +20,13 @@ namespace Echo
 
 	void OpenDriveDynamicMesh::bindMethods()
 	{
-		CLASS_BIND_METHOD(OpenDriveDynamicMesh, getStepLength, DEF_METHOD("getStepLength"));
-		CLASS_BIND_METHOD(OpenDriveDynamicMesh, setStepLength, DEF_METHOD("setStepLength"));
-		CLASS_BIND_METHOD(OpenDriveDynamicMesh, getMaterial, DEF_METHOD("getMaterial"));
-		CLASS_BIND_METHOD(OpenDriveDynamicMesh, setMaterial, DEF_METHOD("setMaterial"));
+		CLASS_BIND_METHOD(OpenDriveDynamicMesh, getStepLength);
+		CLASS_BIND_METHOD(OpenDriveDynamicMesh, setStepLength);
+		CLASS_BIND_METHOD(OpenDriveDynamicMesh, getMaterial);
+		CLASS_BIND_METHOD(OpenDriveDynamicMesh, setMaterial);
 
-		CLASS_REGISTER_PROPERTY(OpenDriveDynamicMesh, "StepLength", Variant::Type::Real, "getStepLength", "setStepLength");
-		CLASS_REGISTER_PROPERTY(OpenDriveDynamicMesh, "Material", Variant::Type::Object, "getMaterial", "setMaterial");
+		CLASS_REGISTER_PROPERTY(OpenDriveDynamicMesh, "StepLength", Variant::Type::Real, getStepLength, setStepLength);
+		CLASS_REGISTER_PROPERTY(OpenDriveDynamicMesh, "Material", Variant::Type::Object, getMaterial, setMaterial);
 		CLASS_REGISTER_PROPERTY_HINT(OpenDriveDynamicMesh, "Material", PropertyHintType::ObjectType, "Material");
 	}
 

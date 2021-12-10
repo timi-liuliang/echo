@@ -27,19 +27,19 @@ namespace Echo
 
     void AndroidBuildSettings::bindMethods()
     {
-		CLASS_BIND_METHOD(AndroidBuildSettings, getAppName, DEF_METHOD("getAppName"));
-		CLASS_BIND_METHOD(AndroidBuildSettings, setAppName, DEF_METHOD("setAppName"));
-        CLASS_BIND_METHOD(AndroidBuildSettings, getIconBackgroundRes,   DEF_METHOD("getIconBackgroundRes"));
-        CLASS_BIND_METHOD(AndroidBuildSettings, setIconBackgroundRes,   DEF_METHOD("setIconBackgroundRes"));
-		CLASS_BIND_METHOD(AndroidBuildSettings, getIconForegroundRes, DEF_METHOD("getIconForegroundRes"));
-		CLASS_BIND_METHOD(AndroidBuildSettings, setIconForegroundRes, DEF_METHOD("setIconForegroundRes"));
-		CLASS_BIND_METHOD(AndroidBuildSettings, isFullscreen, DEF_METHOD("isFullscreen"));
-		CLASS_BIND_METHOD(AndroidBuildSettings, setFullscreen, DEF_METHOD("setFullscreen"));
+		CLASS_BIND_METHOD(AndroidBuildSettings, getAppName);
+		CLASS_BIND_METHOD(AndroidBuildSettings, setAppName);
+        CLASS_BIND_METHOD(AndroidBuildSettings, getIconBackgroundRes);
+        CLASS_BIND_METHOD(AndroidBuildSettings, setIconBackgroundRes);
+		CLASS_BIND_METHOD(AndroidBuildSettings, getIconForegroundRes);
+		CLASS_BIND_METHOD(AndroidBuildSettings, setIconForegroundRes);
+		CLASS_BIND_METHOD(AndroidBuildSettings, isFullscreen);
+		CLASS_BIND_METHOD(AndroidBuildSettings, setFullscreen);
 
-		CLASS_REGISTER_PROPERTY(AndroidBuildSettings, "AppName", Variant::Type::String, "getAppName", "setAppName");
-        CLASS_REGISTER_PROPERTY(AndroidBuildSettings, "IconBackground", Variant::Type::ResourcePath, "getIconBackgroundRes", "setIconBackgroundRes");
-		CLASS_REGISTER_PROPERTY(AndroidBuildSettings, "IconForeground", Variant::Type::ResourcePath, "getIconForegroundRes", "setIconForegroundRes");
-		CLASS_REGISTER_PROPERTY(AndroidBuildSettings, "Fullscreen", Variant::Type::Bool, "isFullscreen", "setFullscreen");
+		CLASS_REGISTER_PROPERTY(AndroidBuildSettings, "AppName", Variant::Type::String, getAppName, setAppName);
+        CLASS_REGISTER_PROPERTY(AndroidBuildSettings, "IconBackground", Variant::Type::ResourcePath, getIconBackgroundRes, setIconBackgroundRes);
+		CLASS_REGISTER_PROPERTY(AndroidBuildSettings, "IconForeground", Variant::Type::ResourcePath, getIconForegroundRes, setIconForegroundRes);
+		CLASS_REGISTER_PROPERTY(AndroidBuildSettings, "Fullscreen", Variant::Type::Bool, isFullscreen, setFullscreen);
     }
 
 	ImagePtr AndroidBuildSettings::getPlatformThumbnail() const

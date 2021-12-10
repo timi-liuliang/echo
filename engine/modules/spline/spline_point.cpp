@@ -15,10 +15,10 @@ namespace Echo
 
 	void SplinePoint::bindMethods()
 	{
-		CLASS_BIND_METHOD(SplinePoint, getPointId, DEF_METHOD("getPointId"));
-		CLASS_BIND_METHOD(SplinePoint, setPointId, DEF_METHOD("setPointId"));
+		CLASS_BIND_METHOD(SplinePoint, getPointId);
+		CLASS_BIND_METHOD(SplinePoint, setPointId);
 
-		CLASS_REGISTER_PROPERTY(SplinePoint, "PointId", Variant::Type::Int, "getPointId", "setPointId");
+		CLASS_REGISTER_PROPERTY(SplinePoint, "PointId", Variant::Type::Int, getPointId, setPointId);
 	}
 
 	i32 SplinePoint::getPointId()

@@ -20,21 +20,21 @@ namespace Echo
     
     void Terrain::bindMethods()
     {
-        CLASS_BIND_METHOD(Terrain, getDataPath,     DEF_METHOD("getDataPath"));
-        CLASS_BIND_METHOD(Terrain, setDataPath,     DEF_METHOD("setDataPath"));
-        CLASS_BIND_METHOD(Terrain, getColumns,       DEF_METHOD("getColumns"));
-        CLASS_BIND_METHOD(Terrain, getRows,          DEF_METHOD("getRows"));
-		CLASS_BIND_METHOD(Terrain, getHeightRange,   DEF_METHOD("getHeightRange"));
-		CLASS_BIND_METHOD(Terrain, setHeightRange,   DEF_METHOD("setHeightRange"));
-		CLASS_BIND_METHOD(Terrain, getGridSpacing,   DEF_METHOD("getGridSpacing"));
-		CLASS_BIND_METHOD(Terrain, setGridSpacing,   DEF_METHOD("setGridSpacing"));
-        CLASS_BIND_METHOD(Terrain, getMaterial,      DEF_METHOD("getMaterial"));
-        CLASS_BIND_METHOD(Terrain, setMaterial,      DEF_METHOD("setMaterial"));
+        CLASS_BIND_METHOD(Terrain, getDataPath);
+        CLASS_BIND_METHOD(Terrain, setDataPath);
+        CLASS_BIND_METHOD(Terrain, getColumns);
+        CLASS_BIND_METHOD(Terrain, getRows);
+		CLASS_BIND_METHOD(Terrain, getHeightRange);
+		CLASS_BIND_METHOD(Terrain, setHeightRange);
+		CLASS_BIND_METHOD(Terrain, getGridSpacing);
+		CLASS_BIND_METHOD(Terrain, setGridSpacing);
+        CLASS_BIND_METHOD(Terrain, getMaterial);
+        CLASS_BIND_METHOD(Terrain, setMaterial);
         
-        CLASS_REGISTER_PROPERTY(Terrain, "Data", Variant::Type::ResourcePath, "getDataPath", "setDataPath");
-		CLASS_REGISTER_PROPERTY(Terrain, "HeightRange", Variant::Type::Real, "getHeightRange", "setHeightRange");
-		CLASS_REGISTER_PROPERTY(Terrain, "GridSpacing", Variant::Type::Int, "getGridSpacing", "setGridSpacing");
-        CLASS_REGISTER_PROPERTY(Terrain, "Material", Variant::Type::Object, "getMaterial", "setMaterial");
+        CLASS_REGISTER_PROPERTY(Terrain, "Data", Variant::Type::ResourcePath, getDataPath, setDataPath);
+		CLASS_REGISTER_PROPERTY(Terrain, "HeightRange", Variant::Type::Real, getHeightRange, setHeightRange);
+		CLASS_REGISTER_PROPERTY(Terrain, "GridSpacing", Variant::Type::Int, getGridSpacing, setGridSpacing);
+        CLASS_REGISTER_PROPERTY(Terrain, "Material", Variant::Type::Object, getMaterial, setMaterial);
         CLASS_REGISTER_PROPERTY_HINT(Terrain, "Material", PropertyHintType::ObjectType, "Material");
     }
     

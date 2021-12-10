@@ -25,10 +25,10 @@ namespace Echo
 
 	void WeChatBuildSettings::bindMethods()
 	{
-		CLASS_BIND_METHOD(WeChatBuildSettings, getIconRes, DEF_METHOD("getIconRes"));
-		CLASS_BIND_METHOD(WeChatBuildSettings, setIconRes, DEF_METHOD("setIconRes"));
+		CLASS_BIND_METHOD(WeChatBuildSettings, getIconRes);
+		CLASS_BIND_METHOD(WeChatBuildSettings, setIconRes);
 
-		CLASS_REGISTER_PROPERTY(WeChatBuildSettings, "Icon", Variant::Type::ResourcePath, "getIconRes", "setIconRes");
+		CLASS_REGISTER_PROPERTY(WeChatBuildSettings, "Icon", Variant::Type::ResourcePath, getIconRes, setIconRes);
 	}
 
 	ImagePtr WeChatBuildSettings::getPlatformThumbnail() const

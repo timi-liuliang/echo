@@ -14,13 +14,13 @@ namespace Echo
 
 	void PCGGrid::bindMethods()
 	{
-		CLASS_BIND_METHOD(PCGGrid, getRows,		DEF_METHOD("getRows"));
-		CLASS_BIND_METHOD(PCGGrid, setRows,		DEF_METHOD("setRows"));
-		CLASS_BIND_METHOD(PCGGrid, getColumns,	DEF_METHOD("getColumns"));
-		CLASS_BIND_METHOD(PCGGrid, setColumns,	DEF_METHOD("setColumns"));
+		CLASS_BIND_METHOD(PCGGrid, getRows);
+		CLASS_BIND_METHOD(PCGGrid, setRows);
+		CLASS_BIND_METHOD(PCGGrid, getColumns);
+		CLASS_BIND_METHOD(PCGGrid, setColumns);
 
-		CLASS_REGISTER_PROPERTY(PCGGrid, "Rows", Variant::Type::Int, "getRows", "setRows");
-		CLASS_REGISTER_PROPERTY(PCGGrid, "Columns", Variant::Type::Int, "getColumns", "setColumns");
+		CLASS_REGISTER_PROPERTY(PCGGrid, "Rows", Variant::Type::Int, getRows, setRows);
+		CLASS_REGISTER_PROPERTY(PCGGrid, "Columns", Variant::Type::Int, getColumns, setColumns);
 	}
 
 	void PCGGrid::setRows(i32 rows)

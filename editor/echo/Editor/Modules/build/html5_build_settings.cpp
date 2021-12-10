@@ -25,10 +25,10 @@ namespace Echo
 
 	void Html5BuildSettings::bindMethods()
 	{
-		CLASS_BIND_METHOD(Html5BuildSettings, getIconRes, DEF_METHOD("getIconRes"));
-		CLASS_BIND_METHOD(Html5BuildSettings, setIconRes, DEF_METHOD("setIconRes"));
+		CLASS_BIND_METHOD(Html5BuildSettings, getIconRes);
+		CLASS_BIND_METHOD(Html5BuildSettings, setIconRes);
 
-		CLASS_REGISTER_PROPERTY(Html5BuildSettings, "Icon", Variant::Type::ResourcePath, "getIconRes", "setIconRes");
+		CLASS_REGISTER_PROPERTY(Html5BuildSettings, "Icon", Variant::Type::ResourcePath, getIconRes, setIconRes);
 	}
 
 	ImagePtr Html5BuildSettings::getPlatformThumbnail() const

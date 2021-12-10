@@ -16,13 +16,13 @@ namespace Echo
 
 	void PCGImageVoronoi::bindMethods()
 	{
-		CLASS_BIND_METHOD(PCGImageVoronoi, getWidth, DEF_METHOD("getWidth"));
-		CLASS_BIND_METHOD(PCGImageVoronoi, setWidth, DEF_METHOD("setWidth"));
-		CLASS_BIND_METHOD(PCGImageVoronoi, getHeight, DEF_METHOD("getHeight"));
-		CLASS_BIND_METHOD(PCGImageVoronoi, setHeight, DEF_METHOD("setHeight"));
+		CLASS_BIND_METHOD(PCGImageVoronoi, getWidth);
+		CLASS_BIND_METHOD(PCGImageVoronoi, setWidth);
+		CLASS_BIND_METHOD(PCGImageVoronoi, getHeight);
+		CLASS_BIND_METHOD(PCGImageVoronoi, setHeight);
 
-		CLASS_REGISTER_PROPERTY(PCGImageVoronoi, "Width", Variant::Type::Int, "getWidth", "setWidth");
-		CLASS_REGISTER_PROPERTY(PCGImageVoronoi, "Height", Variant::Type::Int, "getHeight", "setHeight");
+		CLASS_REGISTER_PROPERTY(PCGImageVoronoi, "Width", Variant::Type::Int, getWidth, setWidth);
+		CLASS_REGISTER_PROPERTY(PCGImageVoronoi, "Height", Variant::Type::Int, getHeight, setHeight);
 	}
 
 	void PCGImageVoronoi::setWidth(i32 width)

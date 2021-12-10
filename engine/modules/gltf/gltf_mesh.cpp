@@ -30,23 +30,23 @@ namespace Echo
 
 	void GltfMesh::bindMethods()
 	{
-		CLASS_BIND_METHOD(GltfMesh, getGltfRes, DEF_METHOD("getGltfRes"));
-		CLASS_BIND_METHOD(GltfMesh, setGltfRes, DEF_METHOD("setGltfRes"));
-		CLASS_BIND_METHOD(GltfMesh, getMeshIdx, DEF_METHOD("getMeshIdx"));
-		CLASS_BIND_METHOD(GltfMesh, setMeshIdx, DEF_METHOD("setMeshIdx"));
-		CLASS_BIND_METHOD(GltfMesh, getPrimitiveIdx, DEF_METHOD("getPrimitiveIdx"));
-		CLASS_BIND_METHOD(GltfMesh, setPrimitiveIdx, DEF_METHOD("setPrimitiveIdx"));
-		CLASS_BIND_METHOD(GltfMesh, getMaterial, DEF_METHOD("getMaterial"));
-		CLASS_BIND_METHOD(GltfMesh, setMaterial, DEF_METHOD("setMaterial"));
-		CLASS_BIND_METHOD(GltfMesh, getSkeletonPath, DEF_METHOD("getSkeletonPath"));
-		CLASS_BIND_METHOD(GltfMesh, setSkeletonPath, DEF_METHOD("setSkeletonPath"));
+		CLASS_BIND_METHOD(GltfMesh, getGltfRes);
+		CLASS_BIND_METHOD(GltfMesh, setGltfRes);
+		CLASS_BIND_METHOD(GltfMesh, getMeshIdx);
+		CLASS_BIND_METHOD(GltfMesh, setMeshIdx);
+		CLASS_BIND_METHOD(GltfMesh, getPrimitiveIdx);
+		CLASS_BIND_METHOD(GltfMesh, setPrimitiveIdx);
+		CLASS_BIND_METHOD(GltfMesh, getMaterial);
+		CLASS_BIND_METHOD(GltfMesh, setMaterial);
+		CLASS_BIND_METHOD(GltfMesh, getSkeletonPath);
+		CLASS_BIND_METHOD(GltfMesh, setSkeletonPath);
 
-		CLASS_REGISTER_PROPERTY(GltfMesh, "Gltf", Variant::Type::ResourcePath, "getGltfRes", "setGltfRes");
-		CLASS_REGISTER_PROPERTY(GltfMesh, "Mesh", Variant::Type::Int, "getMeshIdx", "setMeshIdx");
-		CLASS_REGISTER_PROPERTY(GltfMesh, "Primitive", Variant::Type::Int, "getPrimitiveIdx", "setPrimitiveIdx");
-		CLASS_REGISTER_PROPERTY(GltfMesh, "Material", Variant::Type::Object, "getMaterial", "setMaterial");
+		CLASS_REGISTER_PROPERTY(GltfMesh, "Gltf", Variant::Type::ResourcePath, getGltfRes, setGltfRes);
+		CLASS_REGISTER_PROPERTY(GltfMesh, "Mesh", Variant::Type::Int, getMeshIdx, setMeshIdx);
+		CLASS_REGISTER_PROPERTY(GltfMesh, "Primitive", Variant::Type::Int, getPrimitiveIdx, setPrimitiveIdx);
+		CLASS_REGISTER_PROPERTY(GltfMesh, "Material", Variant::Type::Object, getMaterial, setMaterial);
         CLASS_REGISTER_PROPERTY_HINT(GltfMesh, "Material", PropertyHintType::ObjectType, "Material");
-        CLASS_REGISTER_PROPERTY(GltfMesh, "Skeleton", Variant::Type::NodePath, "getSkeletonPath", "setSkeletonPath");
+        CLASS_REGISTER_PROPERTY(GltfMesh, "Skeleton", Variant::Type::NodePath, getSkeletonPath, setSkeletonPath);
 	}
 
 	// set gltf resource

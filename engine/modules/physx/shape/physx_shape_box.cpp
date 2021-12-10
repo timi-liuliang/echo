@@ -17,10 +17,10 @@ namespace Echo
 
 	void PhysxShapeBox::bindMethods()
 	{
-		CLASS_BIND_METHOD(PhysxShapeBox, getHalfExtents, DEF_METHOD("getHalfExtents"));
-		CLASS_BIND_METHOD(PhysxShapeBox, setHalfExtents, DEF_METHOD("setHalfExtents"));
+		CLASS_BIND_METHOD(PhysxShapeBox, getHalfExtents);
+		CLASS_BIND_METHOD(PhysxShapeBox, setHalfExtents);
 
-		CLASS_REGISTER_PROPERTY(PhysxShapeBox, "HalfExtents", Variant::Type::Vector3, "getHalfExtents", "setHalfExtents");
+		CLASS_REGISTER_PROPERTY(PhysxShapeBox, "HalfExtents", Variant::Type::Vector3, getHalfExtents, setHalfExtents);
 	}
 
 	void PhysxShapeBox::setHalfExtents(const Vector3& halfExtents)

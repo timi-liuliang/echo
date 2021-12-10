@@ -26,10 +26,10 @@ namespace Echo
 
     void EditorRenderSettings::bindMethods()
     {
-		CLASS_BIND_METHOD(EditorRenderSettings, getPolygonMode, DEF_METHOD("getPolygonMode"));
-		CLASS_BIND_METHOD(EditorRenderSettings, setPolygonMode, DEF_METHOD("setPolygonMode"));
+		CLASS_BIND_METHOD(EditorRenderSettings, getPolygonMode);
+		CLASS_BIND_METHOD(EditorRenderSettings, setPolygonMode);
 
-		CLASS_REGISTER_PROPERTY(EditorRenderSettings, "PolygonMode", Variant::Type::StringOption, "getPolygonMode", "setPolygonMode");
+		CLASS_REGISTER_PROPERTY(EditorRenderSettings, "PolygonMode", Variant::Type::StringOption, getPolygonMode, setPolygonMode);
     }
 
     void EditorRenderSettings::setPolygonMode(const StringOption& option) 

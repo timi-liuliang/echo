@@ -18,10 +18,10 @@ namespace Echo
 
 	void PhysxShapeMesh::bindMethods()
 	{
-		CLASS_BIND_METHOD(PhysxShapeMesh, getDataPath, DEF_METHOD("getDataPath"));
-		CLASS_BIND_METHOD(PhysxShapeMesh, setDataPath, DEF_METHOD("setDataPath"));
+		CLASS_BIND_METHOD(PhysxShapeMesh, getDataPath);
+		CLASS_BIND_METHOD(PhysxShapeMesh, setDataPath);
 
-		CLASS_REGISTER_PROPERTY(PhysxShapeMesh, "Data", Variant::Type::ResourcePath, "getDataPath", "setDataPath");
+		CLASS_REGISTER_PROPERTY(PhysxShapeMesh, "Data", Variant::Type::ResourcePath, getDataPath, setDataPath);
 	}
 
 	void PhysxShapeMesh::setDataPath(const ResourcePath& path)

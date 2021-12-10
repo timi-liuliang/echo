@@ -34,19 +34,19 @@ namespace Echo
 
 	void Live2dCubism::bindMethods()
 	{
-		CLASS_BIND_METHOD(Live2dCubism, getMoc, DEF_METHOD("getMoc"));
-		CLASS_BIND_METHOD(Live2dCubism, setMoc, DEF_METHOD("setMoc"));
-		CLASS_BIND_METHOD(Live2dCubism, getTextureRes, DEF_METHOD("getTextureRes"));
-		CLASS_BIND_METHOD(Live2dCubism, setTextureRes, DEF_METHOD("setTextureRes"));
-		CLASS_BIND_METHOD(Live2dCubism, getMotionRes, DEF_METHOD("getMotionRes"));
-		CLASS_BIND_METHOD(Live2dCubism, setMotionRes, DEF_METHOD("setMotionRes"));
-		CLASS_BIND_METHOD(Live2dCubism, getMaterial, DEF_METHOD("getMaterial"));
-		CLASS_BIND_METHOD(Live2dCubism, setMaterial, DEF_METHOD("setMaterial"));
+		CLASS_BIND_METHOD(Live2dCubism, getMoc);
+		CLASS_BIND_METHOD(Live2dCubism, setMoc);
+		CLASS_BIND_METHOD(Live2dCubism, getTextureRes);
+		CLASS_BIND_METHOD(Live2dCubism, setTextureRes);
+		CLASS_BIND_METHOD(Live2dCubism, getMotionRes);
+		CLASS_BIND_METHOD(Live2dCubism, setMotionRes);
+		CLASS_BIND_METHOD(Live2dCubism, getMaterial);
+		CLASS_BIND_METHOD(Live2dCubism, setMaterial);
 
-		CLASS_REGISTER_PROPERTY(Live2dCubism, "Material", Variant::Type::Object, "getMaterial", "setMaterial");
-		CLASS_REGISTER_PROPERTY(Live2dCubism, "Texture", Variant::Type::ResourcePath, "getTextureRes", "setTextureRes");
-		CLASS_REGISTER_PROPERTY(Live2dCubism, "Moc", Variant::Type::ResourcePath, "getMoc", "setMoc");
-		CLASS_REGISTER_PROPERTY(Live2dCubism, "Motion", Variant::Type::ResourcePath, "getMotionRes", "setMotionRes");
+		CLASS_REGISTER_PROPERTY(Live2dCubism, "Material", Variant::Type::Object, getMaterial, setMaterial);
+		CLASS_REGISTER_PROPERTY(Live2dCubism, "Texture", Variant::Type::ResourcePath, getTextureRes, setTextureRes);
+		CLASS_REGISTER_PROPERTY(Live2dCubism, "Moc", Variant::Type::ResourcePath, getMoc, setMoc);
+		CLASS_REGISTER_PROPERTY(Live2dCubism, "Motion", Variant::Type::ResourcePath, getMotionRes, setMotionRes);
 	}
 
 	void Live2dCubism::parseParams()

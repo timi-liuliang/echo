@@ -7,16 +7,16 @@ namespace Echo
 {
 	void FrameBuffer::bindMethods()
 	{
-		CLASS_BIND_METHOD(FrameBuffer, isClearColor, DEF_METHOD("isClearColor"));
-		CLASS_BIND_METHOD(FrameBuffer, setClearColor, DEF_METHOD("setClearColor"));
-		CLASS_BIND_METHOD(FrameBuffer, getClearColorValue, DEF_METHOD("getClearColorValue"));
-		CLASS_BIND_METHOD(FrameBuffer, setClearColorValue, DEF_METHOD("setClearColorValue"));
-		CLASS_BIND_METHOD(FrameBuffer, isClearDepth, DEF_METHOD("isClearDepth"));
-		CLASS_BIND_METHOD(FrameBuffer, setClearDepth, DEF_METHOD("setClearDepth"));
+		CLASS_BIND_METHOD(FrameBuffer, isClearColor);
+		CLASS_BIND_METHOD(FrameBuffer, setClearColor);
+		CLASS_BIND_METHOD(FrameBuffer, getClearColorValue);
+		CLASS_BIND_METHOD(FrameBuffer, setClearColorValue);
+		CLASS_BIND_METHOD(FrameBuffer, isClearDepth);
+		CLASS_BIND_METHOD(FrameBuffer, setClearDepth);
 
-		CLASS_REGISTER_PROPERTY(FrameBuffer, "IsClearColor", Variant::Type::Bool, "isClearColor", "setClearColor");
-		CLASS_REGISTER_PROPERTY(FrameBuffer, "ClearColor", Variant::Type::Color, "getClearColorValue", "setClearColorValue");
-		CLASS_REGISTER_PROPERTY(FrameBuffer, "IsClearDepth", Variant::Type::Bool, "isClearDepth", "setClearDepth");
+		CLASS_REGISTER_PROPERTY(FrameBuffer, "IsClearColor", Variant::Type::Bool, isClearColor, setClearColor);
+		CLASS_REGISTER_PROPERTY(FrameBuffer, "ClearColor", Variant::Type::Color, getClearColorValue, setClearColorValue);
+		CLASS_REGISTER_PROPERTY(FrameBuffer, "IsClearDepth", Variant::Type::Bool, isClearDepth, setClearDepth);
 	}
 
 	FrameBufferOffScreen::FrameBufferOffScreen()
@@ -35,16 +35,16 @@ namespace Echo
 
 	void FrameBufferOffScreen::bindMethods()
 	{
-		CLASS_BIND_METHOD(FrameBufferOffScreen, getColorA, DEF_METHOD("getColorA"));
-		CLASS_BIND_METHOD(FrameBufferOffScreen, setColorA, DEF_METHOD("setColorA"));
-		CLASS_BIND_METHOD(FrameBufferOffScreen, getColorB, DEF_METHOD("getColorB"));
-		CLASS_BIND_METHOD(FrameBufferOffScreen, setColorB, DEF_METHOD("setColorB"));
-		CLASS_BIND_METHOD(FrameBufferOffScreen, getDepth,  DEF_METHOD("getDepth"));
-		CLASS_BIND_METHOD(FrameBufferOffScreen, setDepth,  DEF_METHOD("setDepth"));
+		CLASS_BIND_METHOD(FrameBufferOffScreen, getColorA);
+		CLASS_BIND_METHOD(FrameBufferOffScreen, setColorA);
+		CLASS_BIND_METHOD(FrameBufferOffScreen, getColorB);
+		CLASS_BIND_METHOD(FrameBufferOffScreen, setColorB);
+		CLASS_BIND_METHOD(FrameBufferOffScreen, getDepth);
+		CLASS_BIND_METHOD(FrameBufferOffScreen, setDepth);
 
-		CLASS_REGISTER_PROPERTY(FrameBufferOffScreen, "ColorA", Variant::Type::ResourcePath, "getColorA", "setColorA");
-		CLASS_REGISTER_PROPERTY(FrameBufferOffScreen, "ColorB", Variant::Type::ResourcePath, "getColorB", "setColorB");
-		CLASS_REGISTER_PROPERTY(FrameBufferOffScreen, "DepthStencil", Variant::Type::ResourcePath, "getDepth", "setDepth");
+		CLASS_REGISTER_PROPERTY(FrameBufferOffScreen, "ColorA", Variant::Type::ResourcePath, getColorA, setColorA);
+		CLASS_REGISTER_PROPERTY(FrameBufferOffScreen, "ColorB", Variant::Type::ResourcePath, getColorB, setColorB);
+		CLASS_REGISTER_PROPERTY(FrameBufferOffScreen, "DepthStencil", Variant::Type::ResourcePath, getDepth, setDepth);
 	}
 
 	Res* FrameBufferOffScreen::create()

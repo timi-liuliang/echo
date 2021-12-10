@@ -18,10 +18,10 @@ namespace Echo
 
 	void PhysxShapeHeightfield::bindMethods()
 	{
-		CLASS_BIND_METHOD(PhysxShapeHeightfield, getDataPath, DEF_METHOD("getDataPath"));
-		CLASS_BIND_METHOD(PhysxShapeHeightfield, setDataPath, DEF_METHOD("setDataPath"));
+		CLASS_BIND_METHOD(PhysxShapeHeightfield, getDataPath);
+		CLASS_BIND_METHOD(PhysxShapeHeightfield, setDataPath);
 
-		CLASS_REGISTER_PROPERTY(PhysxShapeHeightfield, "Data", Variant::Type::ResourcePath, "getDataPath", "setDataPath");
+		CLASS_REGISTER_PROPERTY(PhysxShapeHeightfield, "Data", Variant::Type::ResourcePath, getDataPath, setDataPath);
 	}
 
 	void PhysxShapeHeightfield::setDataPath(const ResourcePath& path)

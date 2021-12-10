@@ -33,13 +33,13 @@ namespace Echo
 
 	void LightModule::bindMethods()
 	{
-        CLASS_BIND_METHOD(LightModule, isIBLEnable, DEF_METHOD("isIBLEnable"));
-        CLASS_BIND_METHOD(LightModule, setIBLEnable, DEF_METHOD("setIBLEnable"));
-        CLASS_BIND_METHOD(LightModule, getIBLBrdfPath, DEF_METHOD("getIBLBrdfPath"));
-        CLASS_BIND_METHOD(LightModule, setIBLBrdfPath, DEF_METHOD("setIBLBrdfPath"));
+        CLASS_BIND_METHOD(LightModule, isIBLEnable);
+        CLASS_BIND_METHOD(LightModule, setIBLEnable);
+        CLASS_BIND_METHOD(LightModule, getIBLBrdfPath);
+        CLASS_BIND_METHOD(LightModule, setIBLBrdfPath);
 
-        CLASS_REGISTER_PROPERTY(LightModule, "ImageBasedLighting", Variant::Type::Bool, "isIBLEnable", "setIBLEnable");
-        CLASS_REGISTER_PROPERTY(LightModule, "Brdf", Variant::Type::ResourcePath, "getIBLBrdfPath", "setIBLBrdfPath");
+        CLASS_REGISTER_PROPERTY(LightModule, "ImageBasedLighting", Variant::Type::Bool, isIBLEnable, setIBLEnable);
+        CLASS_REGISTER_PROPERTY(LightModule, "Brdf", Variant::Type::ResourcePath, getIBLBrdfPath, setIBLBrdfPath);
 	}
 
 	void LightModule::registerTypes()

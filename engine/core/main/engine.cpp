@@ -55,7 +55,7 @@ namespace Echo
 
 	void Engine::bindMethods()
 	{
-		CLASS_BIND_METHOD(Engine, getFrameTime, "getFrameTime");
+		CLASS_BIND_METHOD(Engine, getFrameTime);
 	}
 
 	void Engine::initializeDll()

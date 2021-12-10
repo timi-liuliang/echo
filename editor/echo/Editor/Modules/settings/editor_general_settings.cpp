@@ -19,9 +19,9 @@ namespace Echo
 
     void EditorGeneralSettings::bindMethods()
     {
-		CLASS_BIND_METHOD(EditorGeneralSettings, isShow3dGrid, DEF_METHOD("isShow3dGrid"));
-		CLASS_BIND_METHOD(EditorGeneralSettings, setShow3dGrid, DEF_METHOD("setShow3dGrid"));
+		CLASS_BIND_METHOD(EditorGeneralSettings, isShow3dGrid);
+		CLASS_BIND_METHOD(EditorGeneralSettings, setShow3dGrid);
 
-		CLASS_REGISTER_PROPERTY(EditorGeneralSettings, "Show3dGrid", Variant::Type::Bool, "isShow3dGrid", "setShow3dGrid");
+		CLASS_REGISTER_PROPERTY(EditorGeneralSettings, "Show3dGrid", Variant::Type::Bool, isShow3dGrid, setShow3dGrid);
     }
 }

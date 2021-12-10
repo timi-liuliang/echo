@@ -18,13 +18,13 @@ namespace Echo
 
 	void CubeLightCustom::bindMethods()
 	{
-		CLASS_BIND_METHOD(CubeLightCustom, getUsage, DEF_METHOD("getUsage"));
-		CLASS_BIND_METHOD(CubeLightCustom, setUsage, DEF_METHOD("setUsage"));
-		CLASS_BIND_METHOD(CubeLightCustom, getCubeMap, DEF_METHOD("getCubeMap"));
-		CLASS_BIND_METHOD(CubeLightCustom, setCubeMap, DEF_METHOD("setCubeMap"));
+		CLASS_BIND_METHOD(CubeLightCustom, getUsage);
+		CLASS_BIND_METHOD(CubeLightCustom, setUsage);
+		CLASS_BIND_METHOD(CubeLightCustom, getCubeMap);
+		CLASS_BIND_METHOD(CubeLightCustom, setCubeMap);
 
-		CLASS_REGISTER_PROPERTY(CubeLightCustom, "Usage", Variant::Type::StringOption, "getUsage", "setUsage");
-		CLASS_REGISTER_PROPERTY(CubeLightCustom, "CubeMap", Variant::Type::ResourcePath, "getCubeMap", "setCubeMap");
+		CLASS_REGISTER_PROPERTY(CubeLightCustom, "Usage", Variant::Type::StringOption, getUsage, setUsage);
+		CLASS_REGISTER_PROPERTY(CubeLightCustom, "CubeMap", Variant::Type::ResourcePath, getCubeMap, setCubeMap);
 	}
 
 	void CubeLightCustom::setCubeMap(const ResourcePath& cubemap)

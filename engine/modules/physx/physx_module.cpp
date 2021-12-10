@@ -88,17 +88,17 @@ namespace Echo
 
 	void PhysxModule::bindMethods()
 	{
-        CLASS_BIND_METHOD(PhysxModule, getDebugDrawOption, DEF_METHOD("getDebugDrawOption"));
-        CLASS_BIND_METHOD(PhysxModule, setDebugDrawOption, DEF_METHOD("setDebugDrawOption"));
-		CLASS_BIND_METHOD(PhysxModule, getGravity, DEF_METHOD("getGravity"));
-		CLASS_BIND_METHOD(PhysxModule, setGravity, DEF_METHOD("setGravity"));
-		CLASS_BIND_METHOD(PhysxModule, getShift, DEF_METHOD("getShift"));
-		CLASS_BIND_METHOD(PhysxModule, setShift, DEF_METHOD("setShift"));
-		CLASS_BIND_METHOD(PhysxModule, rayCast,  DEF_METHOD("rayCast"));
+        CLASS_BIND_METHOD(PhysxModule, getDebugDrawOption);
+        CLASS_BIND_METHOD(PhysxModule, setDebugDrawOption);
+		CLASS_BIND_METHOD(PhysxModule, getGravity);
+		CLASS_BIND_METHOD(PhysxModule, setGravity);
+		CLASS_BIND_METHOD(PhysxModule, getShift);
+		CLASS_BIND_METHOD(PhysxModule, setShift);
+		CLASS_BIND_METHOD(PhysxModule, rayCast);
 
-        CLASS_REGISTER_PROPERTY(PhysxModule, "DebugDraw", Variant::Type::StringOption, "getDebugDrawOption", "setDebugDrawOption");
-		CLASS_REGISTER_PROPERTY(PhysxModule, "Gravity", Variant::Type::Vector3, "getGravity", "setGravity");
-		CLASS_REGISTER_PROPERTY(PhysxModule, "Shift", Variant::Type::Vector3, "getShift", "setShift");
+        CLASS_REGISTER_PROPERTY(PhysxModule, "DebugDraw", Variant::Type::StringOption, getDebugDrawOption, setDebugDrawOption);
+		CLASS_REGISTER_PROPERTY(PhysxModule, "Gravity", Variant::Type::Vector3, getGravity, setGravity);
+		CLASS_REGISTER_PROPERTY(PhysxModule, "Shift", Variant::Type::Vector3, getShift, setShift);
 	}
 
 	void PhysxModule::setGravity(const Vector3& gravity)

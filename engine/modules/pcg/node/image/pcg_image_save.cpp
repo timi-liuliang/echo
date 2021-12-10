@@ -28,14 +28,14 @@ namespace Echo
 
 	void PCGImageSave::bindMethods()
 	{
-		CLASS_BIND_METHOD(PCGImageSave, getPathName, DEF_METHOD("getPathName"));
-		CLASS_BIND_METHOD(PCGImageSave, setPathName, DEF_METHOD("setPathName"));
-		CLASS_BIND_METHOD(PCGImageSave, getFormat,   DEF_METHOD("getFormat"));
-		CLASS_BIND_METHOD(PCGImageSave, setFormat,   DEF_METHOD("setFormat"));
+		CLASS_BIND_METHOD(PCGImageSave, getPathName);
+		CLASS_BIND_METHOD(PCGImageSave, setPathName);
+		CLASS_BIND_METHOD(PCGImageSave, getFormat);
+		CLASS_BIND_METHOD(PCGImageSave, setFormat);
 
-		CLASS_REGISTER_PROPERTY(PCGImageSave, "PathName", Variant::Type::ResourcePath, "getPathName", "setPathName");
+		CLASS_REGISTER_PROPERTY(PCGImageSave, "PathName", Variant::Type::ResourcePath, getPathName, setPathName);
 		CLASS_REGISTER_PROPERTY_HINT(PCGImageSave, "PathName", PropertyHintType::ResourceBehavior, "save");
-		CLASS_REGISTER_PROPERTY(PCGImageSave, "Format", Variant::Type::StringOption, "getFormat", "setFormat");
+		CLASS_REGISTER_PROPERTY(PCGImageSave, "Format", Variant::Type::StringOption, getFormat, setFormat);
 	}
 
 	void PCGImageSave::setOutputFormat()

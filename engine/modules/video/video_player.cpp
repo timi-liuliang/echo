@@ -14,20 +14,20 @@ namespace Echo
 
 	void VideoPlayer::bindMethods()
 	{
-		CLASS_BIND_METHOD(VideoPlayer, is2d,		        DEF_METHOD("is2d"));
-		CLASS_BIND_METHOD(VideoPlayer, set2d,		        DEF_METHOD("set2d"));
-        CLASS_BIND_METHOD(VideoPlayer, isLoop,              DEF_METHOD("isLoop"));
-        CLASS_BIND_METHOD(VideoPlayer, setLoop,             DEF_METHOD("setLoop"));
-        CLASS_BIND_METHOD(VideoPlayer, isPlayOnAwake,       DEF_METHOD("isPlayOnAwake"));
-        CLASS_BIND_METHOD(VideoPlayer, setPlayOnAwake,      DEF_METHOD("setPlayOnAwake"));
-        CLASS_BIND_METHOD(VideoPlayer, getVideo,	        DEF_METHOD("getVideo"));
-        CLASS_BIND_METHOD(VideoPlayer, setVideo,	        DEF_METHOD("setVideo"));
+		CLASS_BIND_METHOD(VideoPlayer, is2d);
+		CLASS_BIND_METHOD(VideoPlayer, set2d);
+        CLASS_BIND_METHOD(VideoPlayer, isLoop);
+        CLASS_BIND_METHOD(VideoPlayer, setLoop);
+        CLASS_BIND_METHOD(VideoPlayer, isPlayOnAwake);
+        CLASS_BIND_METHOD(VideoPlayer, setPlayOnAwake);
+        CLASS_BIND_METHOD(VideoPlayer, getVideo);
+        CLASS_BIND_METHOD(VideoPlayer, setVideo);
 
-		CLASS_REGISTER_PROPERTY(VideoPlayer, "Is2D", Variant::Type::Bool, "is2d", "set2d");
-        CLASS_REGISTER_PROPERTY(VideoPlayer, "Loop", Variant::Type::Bool, "isLoop", "setLoop");
-        CLASS_REGISTER_PROPERTY(VideoPlayer, "PlayOnAwake", Variant::Type::Bool, "isPlayOnAwake", "setPlayOnAwake");
-        CLASS_REGISTER_PROPERTY(VideoPlayer, "Volume", Variant::Type::Real, "getVolume", "setVolume");
-        CLASS_REGISTER_PROPERTY(VideoPlayer, "Video", Variant::Type::ResourcePath, "getVideo", "setVideo");
+		CLASS_REGISTER_PROPERTY(VideoPlayer, "Is2D", Variant::Type::Bool, is2d, set2d);
+        CLASS_REGISTER_PROPERTY(VideoPlayer, "Loop", Variant::Type::Bool, isLoop, setLoop);
+        CLASS_REGISTER_PROPERTY(VideoPlayer, "PlayOnAwake", Variant::Type::Bool, isPlayOnAwake, setPlayOnAwake);
+        CLASS_REGISTER_PROPERTY(VideoPlayer, "Volume", Variant::Type::Real, getVolume, setVolume);
+        CLASS_REGISTER_PROPERTY(VideoPlayer, "Video", Variant::Type::ResourcePath, getVideo, setVideo);
 	}
 
 	void VideoPlayer::setLoop(bool loop)
