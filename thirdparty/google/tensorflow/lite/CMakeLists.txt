@@ -11,7 +11,7 @@ INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/google/eigen)
 INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/google/flatbuffers/include)
 INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/google/gemmlowp)
 INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/google/ruy)
-INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/google/farmhash/src)
+INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/google/farmhash)
 INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/google/fp16/include)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 
@@ -51,6 +51,7 @@ SET(TFLITE_BASE_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/stderr_reporter.h
 	${CMAKE_CURRENT_SOURCE_DIR}/stderr_reporter.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/string_util.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/tflite_with_xnnpack_optional.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/util.h
 	${CMAKE_CURRENT_SOURCE_DIR}/util.cc
 )
@@ -103,6 +104,7 @@ SET(TFLITE_KENELS_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/activations.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/arg_min_max.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/assign_variable.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/audio_spectrogram.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/basic_rnn.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/batch_matmul.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/batch_to_space_nd.cc
@@ -131,6 +133,7 @@ SET(TFLITE_KENELS_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/dequantize.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/detection_postprocess.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/div.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/kernels/eigen_support.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/elementwise.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/embedding_lookup.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/kernels/embedding_lookup_sparse.cc
@@ -243,6 +246,13 @@ SET(TFLITE_SCHEMA_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/schema/schema_utils.cc
 )
 
+# Experimental files
+SET(TFLITE_EXPERIMENTAL_FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/experimental/resource/initialization_status.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/experimental/resource/resource_variable.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/experimental/resource/static_hashtable.cc
+)
+
 # All Files
 SET(ALL_FILES 
 	${TFLITE_BASE_FILES}
@@ -252,6 +262,7 @@ SET(ALL_FILES
 	${TFLITE_KENELS_FILES}
 	${TFLITE_SCHEMA_FILES}
 	${TFLITE_PROFILING_FILES}
+	${TFLITE_EXPERIMENTAL_FILES}
 )
 
 # Group
@@ -266,7 +277,7 @@ ENDIF()
 ADD_LIBRARY(${MODULE_NAME} ${ALL_FILES} CMakeLists.txt)
 
 # Link
-TARGET_LINK_LIBRARIES(${MODULE_NAME} clog cpuinfo gemmlowp ruy)
+TARGET_LINK_LIBRARIES(${MODULE_NAME} clog cpuinfo gemmlowp ruy farmhash fft2d flatbuffers)
 
 # Set Folder
 SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES FOLDER "thirdparty/google")
