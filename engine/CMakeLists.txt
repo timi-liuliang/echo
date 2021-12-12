@@ -29,6 +29,7 @@ INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/live2d/Cubism31SdkNative-EAP5/C
 INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/freetype-2.10.0/include)
 INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/RadeonRays/RadeonRays/include)
 INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/google)
+INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/google/flatbuffers/include)
 
 IF(${ECHO_PLATFORM_WINDOWS})
     INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/engine/core/render/gles)
