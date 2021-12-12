@@ -34,7 +34,5 @@ namespace Echo
 		TfLiteInterpreter*		m_interpreter = nullptr;
 		i32						m_inputCount = 0;
 		i32						m_outputCount = 0;
-		vector<TfLiteTensor*>	m_inputs;
-		vector<TfLiteTensor*>	m_outputs;
 	};
 }

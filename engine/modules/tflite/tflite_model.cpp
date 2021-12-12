@@ -47,6 +47,8 @@ namespace Echo
 					m_interpreter = TfLiteInterpreterCreate(m_model, options);
 					if (m_interpreter)
 					{
+						TfLiteInterpreterAllocateTensors(m_interpreter);
+
 						m_inputCount = TfLiteInterpreterGetInputTensorCount(m_interpreter);
 						m_outputCount = TfLiteInterpreterGetOutputTensorCount(m_interpreter);
 					}
@@ -67,9 +69,8 @@ namespace Echo
 	{
 		if (m_interpreter)
 		{
-			if (kTfLiteOk != TfLiteInterpreterInvoke(m_interpreter))
+			if (kTfLiteOk == TfLiteInterpreterInvoke(m_interpreter))
 			{
-
 			}
 		}
 	}
