@@ -49,8 +49,19 @@ namespace Echo
 					{
 						TfLiteInterpreterAllocateTensors(m_interpreter);
 
-						m_inputCount = TfLiteInterpreterGetInputTensorCount(m_interpreter);
-						m_outputCount = TfLiteInterpreterGetOutputTensorCount(m_interpreter);
+						i32 inputCount = TfLiteInterpreterGetInputTensorCount(m_interpreter);
+						for (i32 i = 0; i < inputCount; i++)
+						{
+							m_inputs.emplace_back(TfLiteInterpreterGetInputTensor(m_interpreter, i));
+						}
+
+						i32 outputCount = TfLiteInterpreterGetOutputTensorCount(m_interpreter);
+						for (i32 i = 0; i < outputCount; i++)
+						{
+							m_outputs.emplace_back(TfLiteInterpreterGetOutputTensor(m_interpreter, i));
+						}
+
+						invoke();
 					}
 					else
 					{
@@ -69,8 +80,30 @@ namespace Echo
 	{
 		if (m_interpreter)
 		{
+			i32 inByteSize = TfLiteTensorByteSize(m_inputs[0]);
+			i32 inNumDims = TfLiteTensorNumDims(m_inputs[0]);
+			vector<int>::type inSizes;
+			for (i32 i = 0; i < inNumDims; i++)
+			{
+				inSizes.emplace_back(TfLiteTensorDim(m_inputs[0], i));
+			}
+
 			if (kTfLiteOk == TfLiteInterpreterInvoke(m_interpreter))
 			{
+				i32 outByteSize = TfLiteTensorByteSize(m_outputs[0]);
+				i32 outNumDims = TfLiteTensorNumDims(m_outputs[0]);
+				vector<int>::type outSizes;
+				for (i32 i = 0; i < outNumDims; i++)
+				{
+					outSizes.emplace_back(TfLiteTensorDim(m_outputs[0], i));
+				}
+
+				vector<ui8>::type result;
+				result.resize(10240);
+				
+				TfLiteTensorCopyToBuffer(m_outputs[0], result.data(), outByteSize);
+
+				int a = 10;
 			}
 		}
 	}

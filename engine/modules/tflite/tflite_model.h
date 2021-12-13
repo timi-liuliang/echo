@@ -18,21 +18,21 @@ namespace Echo
 		const ResourcePath& getModelRes() { return m_modelRes; }
 
 		// Input count
-		i32 getInputCount() const { return m_inputCount; }
+		i32 getInputCount() const { return i32(m_inputs.size()); }
 		void setInputCount() {}
 
 		// Output count
-		i32 getOutputCount() const { return m_outputCount; }
+		i32 getOutputCount() const { return i32(m_outputs.size()); }
 		void setOutputCount() {}
 
 		// Invoke
 		void invoke();
 
 	public:
-		ResourcePath			m_modelRes = ResourcePath("", ".tflite");
-		TfLiteModel*			m_model = nullptr;
-		TfLiteInterpreter*		m_interpreter = nullptr;
-		i32						m_inputCount = 0;
-		i32						m_outputCount = 0;
+		ResourcePath						m_modelRes = ResourcePath("", ".tflite");
+		TfLiteModel*						m_model = nullptr;
+		TfLiteInterpreter*					m_interpreter = nullptr;
+		vector<TfLiteTensor*>::type			m_inputs;
+		vector<const TfLiteTensor*>::type	m_outputs;
 	};
 }
