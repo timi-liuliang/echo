@@ -88,7 +88,7 @@ namespace Echo
 						pixels[idx++] = color.r * 255.99f;
 					}
 
-					i32 pixelBytes = PixelUtil::GetPixelSize(PixelFormat::PF_R8_UINT);
+					i32 pixelBytes = PixelUtil::GetPixelBytes(PixelFormat::PF_R8_UINT);
 					stbi_write_png(fullPath.c_str(), image->getWidth(), image->getHeight(), 1, pixels.data(), image->getWidth() * pixelBytes);
 				}
 				else if (m_format.getValue() == "PF_R16_UINT")

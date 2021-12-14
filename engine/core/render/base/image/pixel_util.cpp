@@ -15,7 +15,7 @@ namespace Echo
 		return ((ui32)pixFmtDesc.ch0Bits + (ui32)pixFmtDesc.ch1Bits + (ui32)pixFmtDesc.ch2Bits + (ui32)pixFmtDesc.ch3Bits);
 	}
 
-	ui32 PixelUtil::GetPixelSize(PixelFormat pixFmt)
+	ui32 PixelUtil::GetPixelBytes(PixelFormat pixFmt)
 	{
 		return (GetPixelBits(pixFmt) / 8);
 	}
@@ -430,7 +430,7 @@ namespace Echo
 				((Math::FloatToFixed(a, des.ch3Bits) << des.ch3Shift) & des.ch3Mask);
 
 			// And write to memory
-			Math::IntWrite(pDest, GetPixelSize(pixFmt), value);
+			Math::IntWrite(pDest, GetPixelBytes(pixFmt), value);
 		}
 		else
 		{
@@ -678,8 +678,8 @@ namespace Echo
 				return;
 			}
 
-			const ui32 srcPixelSize = PixelUtil::GetPixelSize(src.pixFmt);
-			const ui32 dstPixelSize = PixelUtil::GetPixelSize(dst.pixFmt);
+			const ui32 srcPixelSize = PixelUtil::GetPixelBytes(src.pixFmt);
+			const ui32 dstPixelSize = PixelUtil::GetPixelBytes(dst.pixFmt);
 			ui8* srcptr = static_cast<ui8*>(src.data) + (src.left + src.top * src.rowPitch + src.front * src.slicePitch) * srcPixelSize;
 			ui8* dstptr = static_cast<ui8*>(dst.data) + (dst.left + dst.top * dst.rowPitch + dst.front * dst.slicePitch) * dstPixelSize;
 
@@ -717,8 +717,8 @@ namespace Echo
 			return;
 		}
 
-		const ui32 srcPixelSize = PixelUtil::GetPixelSize(src.pixFmt);
-		const ui32 dstPixelSize = PixelUtil::GetPixelSize(dst.pixFmt);
+		const ui32 srcPixelSize = PixelUtil::GetPixelBytes(src.pixFmt);
+		const ui32 dstPixelSize = PixelUtil::GetPixelBytes(dst.pixFmt);
 		ui8* srcptr = static_cast<ui8*>(src.data) + (src.left + src.top * src.rowPitch + src.front * src.slicePitch) * srcPixelSize;
 		ui8* dstptr = static_cast<ui8*>(dst.data) + (dst.left + dst.top * dst.rowPitch + dst.front * dst.slicePitch) * dstPixelSize;
 

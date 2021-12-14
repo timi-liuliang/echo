@@ -187,7 +187,7 @@ namespace Echo
 			stream->m_vertDeclaration[i].type = GLESMapping::MapDataType(stream->m_vertElements[i].m_pixFmt);
 			stream->m_vertDeclaration[i].bNormalize = PixelUtil::IsNormalized(stream->m_vertElements[i].m_pixFmt);
 			stream->m_vertDeclaration[i].elementOffset = elmOffset;
-			elmOffset += PixelUtil::GetPixelSize(stream->m_vertElements[i].m_pixFmt);
+			elmOffset += PixelUtil::GetPixelBytes(stream->m_vertElements[i].m_pixFmt);
 		}
 
 		// check

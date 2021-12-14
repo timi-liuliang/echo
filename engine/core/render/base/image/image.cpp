@@ -34,7 +34,7 @@ namespace Echo
 		m_depth = depth;
 		m_numMipmaps = numMipMaps;
 		m_flags = 0;
-		m_pixelSize = PixelUtil::GetPixelSize(pixFmt);
+		m_pixelSize = PixelUtil::GetPixelBytes(pixFmt);
 
 		// Set flags
 		if (PixelUtil::IsCompressed(pixFmt))
@@ -105,7 +105,7 @@ namespace Echo
 
 		// Get the format and compute the pixel size
 		pImage->m_format = imgInfo.pixFmt;
-		pImage->m_pixelSize = static_cast<Byte>(PixelUtil::GetPixelSize(imgInfo.pixFmt));
+		pImage->m_pixelSize = static_cast<Byte>(PixelUtil::GetPixelBytes(imgInfo.pixFmt));
 		// Just use internal buffer of returned memory stream
 		outBuff.takeData(pImage->m_data);
 
@@ -155,7 +155,7 @@ namespace Echo
 
 		// Get the format and compute the pixel size
 		pImage->m_format = imgInfo.pixFmt;
-		pImage->m_pixelSize = static_cast<Byte>(PixelUtil::GetPixelSize(imgInfo.pixFmt));
+		pImage->m_pixelSize = static_cast<Byte>(PixelUtil::GetPixelBytes(imgInfo.pixFmt));
 		pImage->m_data = pResult->getPtr();
 		EchoSafeDelete(pResult, MemoryDataStream);
 
@@ -420,7 +420,7 @@ namespace Echo
 			EchoSafeFree(m_data);
 
 			m_format = targetFormat;
-			m_pixelSize = PixelUtil::GetPixelSize(m_format);
+			m_pixelSize = PixelUtil::GetPixelBytes(m_format);
 			m_size = PixelUtil::GetMemorySize(m_width, m_height, 1, m_format);
 			m_data = static_cast<Byte*>(destBox.data);
 		}
@@ -513,7 +513,7 @@ namespace Echo
 					temp.data = buf.getData();
 				}
 				// super-optimized: no conversion
-				switch (PixelUtil::GetPixelSize(src.pixFmt)) 
+				switch (PixelUtil::GetPixelBytes(src.pixFmt)) 
 				{
 				case 1: NearestResampler<1>::Scale(src, temp); break;
 				case 2: NearestResampler<2>::Scale(src, temp); break;
@@ -570,7 +570,7 @@ namespace Echo
 							temp.data = buf.getData();
 						}
 						// super-optimized: byte-oriented math, no conversion
-						switch (PixelUtil::GetPixelSize(src.pixFmt)) 
+						switch (PixelUtil::GetPixelBytes(src.pixFmt)) 
 						{
 						case 1: LinearResamplerByte<1>::Scale(src, temp); break;
 						case 2: LinearResamplerByte<2>::Scale(src, temp); break;

@@ -121,7 +121,7 @@ namespace Echo
 
 	void RaytracingCamera::renderToFrameBuffer()
 	{
-		size_t pixelsize = PixelUtil::GetPixelSize(PF_RGBA8_UNORM);
+		size_t pixelsize = PixelUtil::GetPixelBytes(PF_RGBA8_UNORM);
 		Buffer buffer(ui32(m_width * m_height * pixelsize), m_imageColors.data(), false);
 		if (!m_texture)
 		{

@@ -62,8 +62,8 @@ namespace Echo
 	{
 		static void Scale(const PixelBox& src, const PixelBox& dst)
 		{
-			ui32 srcelemsize = PixelUtil::GetPixelSize(src.pixFmt);
-			ui32 dstelemsize = PixelUtil::GetPixelSize(dst.pixFmt);
+			ui32 srcelemsize = PixelUtil::GetPixelBytes(src.pixFmt);
+			ui32 dstelemsize = PixelUtil::GetPixelBytes(dst.pixFmt);
 
 			// srcdata stays at beginning, pdst is a moving pointer
 			Byte* srcdata = (Byte*)src.data;
@@ -150,8 +150,8 @@ namespace Echo
 	{
 		static void Scale(const PixelBox& src, const PixelBox& dst)
 		{
-			ui32 srcchannels = PixelUtil::GetPixelSize(src.pixFmt) / sizeof(float);
-			ui32 dstchannels = PixelUtil::GetPixelSize(dst.pixFmt) / sizeof(float);
+			ui32 srcchannels = PixelUtil::GetPixelBytes(src.pixFmt) / sizeof(float);
+			ui32 dstchannels = PixelUtil::GetPixelBytes(dst.pixFmt) / sizeof(float);
 			// assert(srcchannels == 3 || srcchannels == 4);
 			// assert(dstchannels == 3 || dstchannels == 4);
 

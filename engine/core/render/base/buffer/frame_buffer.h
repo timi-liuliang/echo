@@ -40,7 +40,7 @@ namespace Echo
 				m_width = width;
 				m_height = height;
 				m_format = format;
-				m_data.resize(PixelUtil::GetPixelSize(m_format) * m_width * m_height);
+				m_data.resize(PixelUtil::GetPixelBytes(m_format) * m_width * m_height);
 			}
 		};
 

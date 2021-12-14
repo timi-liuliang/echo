@@ -135,7 +135,7 @@ namespace Echo
                     viAttributeDescriptions.emplace_back(attributeDescription);
                 }
 
-                elementOffset += PixelUtil::GetPixelSize(vertElements[i].m_pixFmt);
+                elementOffset += PixelUtil::GetPixelBytes(vertElements[i].m_pixFmt);
             }
         }
     }

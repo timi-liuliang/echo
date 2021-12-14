@@ -91,7 +91,7 @@ namespace Echo
 				if (!PixelUtil::IsDepth(m_pixFmt))
 				{
 					m_usage = Texture::TU_GPU_READ;
-					size_t pixelsize = m_width * m_height * PixelUtil::GetPixelSize(m_pixFmt);
+					size_t pixelsize = m_width * m_height * PixelUtil::GetPixelBytes(m_pixFmt);
 					if (pixelsize)
 					{
 						vector<Byte>::type textureData(pixelsize, 0);

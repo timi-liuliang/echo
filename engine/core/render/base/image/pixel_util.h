@@ -9,7 +9,7 @@ namespace Echo
 	public:
 		static String				GetPixelFormatName(PixelFormat pixFmt);
 		static ui32					GetPixelBits(PixelFormat pixFmt);
-		static ui32					GetPixelSize(PixelFormat pixFmt);
+		static ui32					GetPixelBytes(PixelFormat pixFmt);
 		static Dword				GetFlags(PixelFormat pixFmt);
 		static bool					IsNormalized(PixelFormat pixFmt);
 		static bool					HasAlpha(PixelFormat pixFmt);

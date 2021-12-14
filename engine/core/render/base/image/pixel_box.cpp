@@ -79,7 +79,7 @@ namespace Echo
 			return false;
 		}
 
-		const ui32 pixSize = PixelUtil::GetPixelSize(pixFmt);
+		const ui32 pixSize = PixelUtil::GetPixelBytes(pixFmt);
 
 		// Calculate new data origin
 		// Notice how we do not propagate left/top/front from the incoming box, since
@@ -100,7 +100,7 @@ namespace Echo
 	{
 		Color color;
 
-		Byte pixelSize = PixelUtil::GetPixelSize(pixFmt);
+		Byte pixelSize = PixelUtil::GetPixelBytes(pixFmt);
 		size_t pixelOffset = pixelSize * (z * slicePitch + y * rowPitch + x);
 		PixelUtil::UnpackColor(color, pixFmt, (Byte*)data + pixelOffset);
 
@@ -109,7 +109,7 @@ namespace Echo
 
 	void PixelBox::setColor(const Color& color, ui32 x, ui32 y, ui32 z)
 	{
-		Byte pixelSize = PixelUtil::GetPixelSize(pixFmt);
+		Byte pixelSize = PixelUtil::GetPixelBytes(pixFmt);
 		size_t pixelOffset = pixelSize * (z * slicePitch + y * rowPitch + x);
 		PixelUtil::PackColor(color, pixFmt, (Byte*)data + pixelOffset);
 	}

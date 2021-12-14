@@ -88,6 +88,14 @@ namespace Echo
 				inSizes.emplace_back(TfLiteTensorDim(m_inputs[0], i));
 			}
 
+			// Set
+			{
+				Image* image = Image::loadFromFile("Res://model/banana.jpg");
+
+				i32 bytes = image->getWidth() * image->getHeight() * PixelUtil::GetPixelBytes(image->getPixelFormat());
+				TfLiteTensorCopyFromBuffer(m_inputs[0], image->getData(), bytes);
+			}
+
 			if (kTfLiteOk == TfLiteInterpreterInvoke(m_interpreter))
 			{
 				i32 outByteSize = TfLiteTensorByteSize(m_outputs[0]);
@@ -99,7 +107,7 @@ namespace Echo
 				}
 
 				vector<ui8>::type result;
-				result.resize(10240);
+				result.resize(outByteSize);
 				
 				TfLiteTensorCopyToBuffer(m_outputs[0], result.data(), outByteSize);
 

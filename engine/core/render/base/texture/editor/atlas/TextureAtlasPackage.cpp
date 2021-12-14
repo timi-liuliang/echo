@@ -69,7 +69,7 @@ namespace Echo
 		if (nodeIdx != INVALID)
 		{
 			m_nodes[nodeIdx].m_id = nodeIdx;
-			size_t pixelsize = PixelUtil::GetPixelSize(m_format);
+			size_t pixelsize = PixelUtil::GetPixelBytes(m_format);
 
 			// copy pixels over from texture to pNode->m_rc part of texture
 			if (!m_textureData)
