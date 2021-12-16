@@ -1,7 +1,7 @@
 #pragma once
 
 #include "engine/core/scene/node.h"
-#include "thirdparty/google/tensorflow/lite/c/c_api.h"
+#include "tflite_tensor.h"
 
 namespace Echo
 {
@@ -32,7 +32,7 @@ namespace Echo
 		ResourcePath						m_modelRes = ResourcePath("", ".tflite");
 		TfLiteModel*						m_model = nullptr;
 		TfLiteInterpreter*					m_interpreter = nullptr;
-		vector<TfLiteTensor*>::type			m_inputs;
+		vector<TFLiteTensor*>::type			m_inputs;
 		vector<const TfLiteTensor*>::type	m_outputs;
 	};
 }

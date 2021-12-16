@@ -52,7 +52,10 @@ namespace Echo
 						i32 inputCount = TfLiteInterpreterGetInputTensorCount(m_interpreter);
 						for (i32 i = 0; i < inputCount; i++)
 						{
-							m_inputs.emplace_back(TfLiteInterpreterGetInputTensor(m_interpreter, i));
+							TFLiteTensor* tensor = EchoNew(TFLiteTensor);
+							tensor->setTensor(TfLiteInterpreterGetInputTensor(m_interpreter, i));
+
+							m_inputs.emplace_back(tensor);
 						}
 
 						i32 outputCount = TfLiteInterpreterGetOutputTensorCount(m_interpreter);
@@ -80,21 +83,7 @@ namespace Echo
 	{
 		if (m_interpreter)
 		{
-			i32 inByteSize = TfLiteTensorByteSize(m_inputs[0]);
-			i32 inNumDims = TfLiteTensorNumDims(m_inputs[0]);
-			vector<int>::type inSizes;
-			for (i32 i = 0; i < inNumDims; i++)
-			{
-				inSizes.emplace_back(TfLiteTensorDim(m_inputs[0], i));
-			}
-
-			// Set
-			{
-				Image* image = Image::loadFromFile("Res://model/banana.jpg");
-
-				i32 bytes = image->getWidth() * image->getHeight() * PixelUtil::GetPixelBytes(image->getPixelFormat());
-				TfLiteTensorCopyFromBuffer(m_inputs[0], image->getData(), bytes);
-			}
+			m_inputs[0]->setImage("Res://model/banana.jpg");
 
 			if (kTfLiteOk == TfLiteInterpreterInvoke(m_interpreter))
 			{
