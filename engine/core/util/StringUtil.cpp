@@ -382,6 +382,15 @@ namespace Echo
 		return String(buffer);
 	}
 
+	String StringUtil::ToString(const vector<ui8>::type& val)
+	{
+		String result;
+		for (ui8 element : val)
+			result += Format("%d ", element);
+
+		return result;
+	}
+
 	String StringUtil::ToString(bool val, bool bYesNo)
 	{
 		if (val)

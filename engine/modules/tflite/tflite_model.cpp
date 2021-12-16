@@ -25,6 +25,8 @@ namespace Echo
 		CLASS_BIND_METHOD(TFLiteModel, setInputCount);
 		CLASS_BIND_METHOD(TFLiteModel, getOutputCount);
 		CLASS_BIND_METHOD(TFLiteModel, setOutputCount);
+		CLASS_BIND_METHOD(TFLiteModel, getInput);
+		CLASS_BIND_METHOD(TFLiteModel, getOutput);
 
 		CLASS_REGISTER_PROPERTY(TFLiteModel, "InputCount", Variant::Type::Int, getInputCount, setInputCount);
 		CLASS_REGISTER_PROPERTY(TFLiteModel, "OutputCount", Variant::Type::Int, getOutputCount, setOutputCount);
@@ -52,19 +54,20 @@ namespace Echo
 						i32 inputCount = TfLiteInterpreterGetInputTensorCount(m_interpreter);
 						for (i32 i = 0; i < inputCount; i++)
 						{
-							TFLiteTensor* tensor = EchoNew(TFLiteTensor);
-							tensor->setTensor(TfLiteInterpreterGetInputTensor(m_interpreter, i));
+							TFLiteInput* input = EchoNew(TFLiteInput);
+							input->bindTensor(TfLiteInterpreterGetInputTensor(m_interpreter, i));
 
-							m_inputs.emplace_back(tensor);
+							m_inputs.emplace_back(input);
 						}
 
 						i32 outputCount = TfLiteInterpreterGetOutputTensorCount(m_interpreter);
 						for (i32 i = 0; i < outputCount; i++)
 						{
-							m_outputs.emplace_back(TfLiteInterpreterGetOutputTensor(m_interpreter, i));
-						}
+							TFLiteOutput* output = EchoNew(TFLiteOutput);
+							output->bindTensor(TfLiteInterpreterGetOutputTensor(m_interpreter, i));
 
-						invoke();
+							m_outputs.emplace_back(output);
+						}
 					}
 					else
 					{
@@ -83,24 +86,8 @@ namespace Echo
 	{
 		if (m_interpreter)
 		{
-			m_inputs[0]->setImage("Res://model/banana.jpg");
-
 			if (kTfLiteOk == TfLiteInterpreterInvoke(m_interpreter))
 			{
-				i32 outByteSize = TfLiteTensorByteSize(m_outputs[0]);
-				i32 outNumDims = TfLiteTensorNumDims(m_outputs[0]);
-				vector<int>::type outSizes;
-				for (i32 i = 0; i < outNumDims; i++)
-				{
-					outSizes.emplace_back(TfLiteTensorDim(m_outputs[0], i));
-				}
-
-				vector<ui8>::type result;
-				result.resize(outByteSize);
-				
-				TfLiteTensorCopyToBuffer(m_outputs[0], result.data(), outByteSize);
-
-				int a = 10;
 			}
 		}
 	}

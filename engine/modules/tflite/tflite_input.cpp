@@ -1,25 +1,25 @@
 #include "thirdparty/google/tensorflow/lite/c/c_api_internal.h"
-#include "tflite_tensor.h"
+#include "tflite_input.h"
 #include "engine/core/log/Log.h"
 
 namespace Echo
 {
-	TFLiteTensor::TFLiteTensor()
+	TFLiteInput::TFLiteInput()
 		: Object()
 	{
 
 	}
 
-	TFLiteTensor::~TFLiteTensor()
+	TFLiteInput::~TFLiteInput()
 	{
 	}
 
-	void TFLiteTensor::bindMethods()
+	void TFLiteInput::bindMethods()
 	{
-
+		CLASS_BIND_METHOD(TFLiteInput, setImage);
 	}
 
-	void TFLiteTensor::setTensor(TfLiteTensor* tensor) 
+	void TFLiteInput::bindTensor(TfLiteTensor* tensor)
 	{ 
 		m_tensor = tensor;
 		if (m_tensor)
@@ -34,13 +34,13 @@ namespace Echo
 		}
 	}
 
-	void TFLiteTensor::setImage(const String& resPath)
+	void TFLiteInput::setImage(const String& resPath)
 	{
 		Image* image = Image::loadFromFile(resPath);
 
 		i32 bytes = image->getWidth() * image->getHeight() * PixelUtil::GetPixelBytes(image->getPixelFormat());
 		TfLiteTensorCopyFromBuffer(m_tensor, image->getData(), bytes);
 
-		EchoSafeDelete(image, Image);
+		//EchoSafeDelete(image, Image);
 	}
 }

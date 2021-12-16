@@ -1,7 +1,8 @@
 #pragma once
 
 #include "engine/core/scene/node.h"
-#include "tflite_tensor.h"
+#include "tflite_input.h"
+#include "tflite_output.h"
 
 namespace Echo
 {
@@ -25,6 +26,10 @@ namespace Echo
 		i32 getOutputCount() const { return i32(m_outputs.size()); }
 		void setOutputCount() {}
 
+		// Input|Output
+		Object* getInput(i32 index) { return index >= 0 && index < getInputCount() ? m_inputs[index] : nullptr; }
+		Object* getOutput(i32 index) { return index >= 0 && index < getOutputCount() ? m_outputs[index] : nullptr; }
+
 		// Invoke
 		void invoke();
 
@@ -32,7 +37,7 @@ namespace Echo
 		ResourcePath						m_modelRes = ResourcePath("", ".tflite");
 		TfLiteModel*						m_model = nullptr;
 		TfLiteInterpreter*					m_interpreter = nullptr;
-		vector<TFLiteTensor*>::type			m_inputs;
-		vector<const TfLiteTensor*>::type	m_outputs;
+		vector<TFLiteInput*>::type			m_inputs;
+		vector<TFLiteOutput*>::type			m_outputs;
 	};
 }

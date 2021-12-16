@@ -42,6 +42,7 @@ namespace Echo
 		String			ToString(ui32 val, Word width = 0, char fill = ' ');
 		String			ToString(ui64 val, Word width = 0, char fill = ' ');
 
+		String			ToString(const vector<ui8>::type& val);
 		String			ToString(bool val, bool bYesNo = false);
 		String			ToString(const vector<double>::type& val);
 		String			ToString(const Vector2& val);

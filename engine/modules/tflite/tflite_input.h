@@ -5,16 +5,16 @@
 
 namespace Echo
 {
-	class TFLiteTensor : public Object
+	class TFLiteInput : public Object
 	{
-		ECHO_CLASS(TFLiteTensor, Object)
+		ECHO_CLASS(TFLiteInput, Object)
 
 	public:
-		TFLiteTensor();
-		virtual ~TFLiteTensor();
+		TFLiteInput();
+		virtual ~TFLiteInput();
 
 		// Internal tensor
-		void setTensor(TfLiteTensor* tensor);
+		void bindTensor(TfLiteTensor* tensor);
 		TfLiteTensor* getTensor() { return m_tensor; }
 
 		// Set image data
