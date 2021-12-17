@@ -14,6 +14,7 @@ namespace Echo
 
 	TFLiteModel::~TFLiteModel()
 	{
+		Reset();
 	}
 
 	void TFLiteModel::bindMethods()
@@ -35,18 +36,20 @@ namespace Echo
 
 	void TFLiteModel::setModelRes(const ResourcePath& path)
 	{
+		Reset();
+
 		if (m_modelRes.setPath(path.getPath()))
 		{
-			MemoryReader memReader(path.getPath());
-			if (memReader.getSize())
+			m_memoryReader = EchoNew(MemoryReader(path.getPath()));
+			if (m_memoryReader->getSize())
 			{
-				m_model = TfLiteModelCreate(memReader.getData<const char*>(), memReader.getSize());
+				m_model = TfLiteModelCreate(m_memoryReader->getData<const char*>(), m_memoryReader->getSize());
 				if (m_model)
 				{
-					TfLiteInterpreterOptions* options = TfLiteInterpreterOptionsCreate();
-					TfLiteInterpreterOptionsSetNumThreads(options, 1);
+					m_options = TfLiteInterpreterOptionsCreate();
+					TfLiteInterpreterOptionsSetNumThreads(m_options, 2);
 
-					m_interpreter = TfLiteInterpreterCreate(m_model, options);
+					m_interpreter = TfLiteInterpreterCreate(m_model, m_options);
 					if (m_interpreter)
 					{
 						TfLiteInterpreterAllocateTensors(m_interpreter);
@@ -86,9 +89,34 @@ namespace Echo
 	{
 		if (m_interpreter)
 		{
-			if (kTfLiteOk == TfLiteInterpreterInvoke(m_interpreter))
+			TfLiteStatus status = TfLiteInterpreterInvoke(m_interpreter);
+			if (kTfLiteOk != status)
 			{
+				EchoLogError("TfLiteModel invoke failed");
 			}
+		}
+	}
+
+	void TFLiteModel::Reset()
+	{
+		EchoSafeDelete(m_memoryReader, MemoryReader);
+
+		if (m_interpreter)
+		{
+			TfLiteInterpreterDelete(m_interpreter);
+			m_interpreter = nullptr;
+		}
+
+		if (m_options)
+		{
+			TfLiteInterpreterOptionsDelete(m_options);
+			m_options = nullptr;
+		}
+
+		if (m_model)
+		{
+			TfLiteModelDelete(m_model);
+			m_model = nullptr;
 		}
 	}
 }

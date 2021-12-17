@@ -1,5 +1,6 @@
 #pragma once
 
+#include "engine/core/io/io.h"
 #include "engine/core/scene/node.h"
 #include "tflite_input.h"
 #include "tflite_output.h"
@@ -33,9 +34,14 @@ namespace Echo
 		// Invoke
 		void invoke();
 
+		// Reset
+		void Reset();
+
 	public:
 		ResourcePath						m_modelRes = ResourcePath("", ".tflite");
+		MemoryReader*						m_memoryReader = nullptr;
 		TfLiteModel*						m_model = nullptr;
+		TfLiteInterpreterOptions*			m_options = nullptr;
 		TfLiteInterpreter*					m_interpreter = nullptr;
 		vector<TFLiteInput*>::type			m_inputs;
 		vector<TFLiteOutput*>::type			m_outputs;

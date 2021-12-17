@@ -20,9 +20,6 @@ namespace Echo
 		// Get Data
 		void getData();
 
-		// Print
-		void print();
-
 	public:
 		const TfLiteTensor*	m_tensor = nullptr;
 		i32					m_bytes = 0;

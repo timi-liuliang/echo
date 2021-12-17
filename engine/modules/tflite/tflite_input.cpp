@@ -39,8 +39,15 @@ namespace Echo
 		Image* image = Image::loadFromFile(resPath);
 
 		i32 bytes = image->getWidth() * image->getHeight() * PixelUtil::GetPixelBytes(image->getPixelFormat());
-		TfLiteTensorCopyFromBuffer(m_tensor, image->getData(), bytes);
+		if (bytes == m_bytes)
+		{
+			TfLiteTensorCopyFromBuffer(m_tensor, image->getData(), bytes);
+		}
+		else
+		{
+			EchoLogError("TFLiteInput set iamge failed, image size not right");
+		}
 
-		//EchoSafeDelete(image, Image);
+		EchoSafeDelete(image, Image);
 	}
 }

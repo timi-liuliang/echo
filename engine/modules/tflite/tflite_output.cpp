@@ -16,7 +16,6 @@ namespace Echo
 
 	void TFLiteOutput::bindMethods()
 	{
-		CLASS_BIND_METHOD(TFLiteOutput, print);
 	}
 
 	void TFLiteOutput::bindTensor(const TfLiteTensor* tensor)
@@ -39,12 +38,5 @@ namespace Echo
 		m_result.resize(m_bytes);
 
 		TfLiteTensorCopyToBuffer(m_tensor, m_result.data(), m_bytes);
-	}
-
-	void TFLiteOutput::print()
-	{
-		getData();
-
-		EchoLogInfo(StringUtil::ToString(m_result).c_str());
 	}
 }
