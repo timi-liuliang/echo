@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/core/scene/node.h"
+#include <cpp-httplib/httplib.h>
 
 namespace Echo
 {
@@ -12,6 +13,10 @@ namespace Echo
 		HttpClient();
 		virtual ~HttpClient();
 
+		// Get
+		void getRequest(const String& host, int port, const String& path);
+
 	private:
+		httplib::Client*	m_client = nullptr;
 	};
 }

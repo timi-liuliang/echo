@@ -1,6 +1,8 @@
 #include "http_module.h"
 #include "http_server.h"
 #include "http_client.h"
+#include "editor/http_server_editor.h"
+#include "editor/http_client_editor.h"
 
 namespace Echo
 {
@@ -30,6 +32,9 @@ namespace Echo
 	{
 		Class::registerType<HttpServer>();
 		Class::registerType<HttpClient>();
+
+		CLASS_REGISTER_EDITOR(HttpClient, HttpClientEditor)
+		CLASS_REGISTER_EDITOR(HttpServer, HttpServerEditor)
 	}
 
 	void HttpModule::update(float elapsedTime)
