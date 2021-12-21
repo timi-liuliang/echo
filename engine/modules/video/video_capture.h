@@ -2,7 +2,7 @@
 
 #include "engine/core/scene/node.h"
 #include "video_base.h"
-#include <thirdparty/jplayer/player.h>
+#include "capture/video_capture_interface.h"
 
 namespace Echo
 {
@@ -13,5 +13,8 @@ namespace Echo
 	public:
 		VideoCapture();
 		virtual ~VideoCapture();
+
+	private:
+		IVideoCapture* m_implement = nullptr;
 	};
 }
