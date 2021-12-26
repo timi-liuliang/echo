@@ -1,4 +1,4 @@
-#include "http_module.h"
+#include "net_module.h"
 #include "http_server.h"
 #include "http_client.h"
 #include "editor/http_server_editor.h"
@@ -6,29 +6,29 @@
 
 namespace Echo
 {
-	DECLARE_MODULE(HttpModule)
+	DECLARE_MODULE(NetModule)
 
-	HttpModule::HttpModule()
+	NetModule::NetModule()
 	{
 
 	}
 
-	HttpModule::~HttpModule()
+	NetModule::~NetModule()
 	{
 	}
 
-	HttpModule* HttpModule::instance()
+	NetModule* NetModule::instance()
 	{
-		static HttpModule* inst = EchoNew(HttpModule);
+		static NetModule* inst = EchoNew(NetModule);
 		return inst;
 	}
 
-	void HttpModule::bindMethods()
+	void NetModule::bindMethods()
 	{
 
 	}
 
-	void HttpModule::registerTypes()
+	void NetModule::registerTypes()
 	{
 		Class::registerType<HttpServer>();
 		Class::registerType<HttpClient>();
@@ -37,7 +37,7 @@ namespace Echo
 		CLASS_REGISTER_EDITOR(HttpServer, HttpServerEditor)
 	}
 
-	void HttpModule::update(float elapsedTime)
+	void NetModule::update(float elapsedTime)
 	{
 	}
 }

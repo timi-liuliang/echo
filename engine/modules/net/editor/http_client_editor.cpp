@@ -16,7 +16,7 @@ namespace Echo
 
 	ImagePtr HttpClientEditor::getThumbnail() const
 	{
-		return Image::loadFromFile(Engine::instance()->getRootPath() + "engine/modules/http/editor/icon/httpclient.png");
+		return Image::loadFromFile(Engine::instance()->getRootPath() + "engine/modules/net/editor/icon/httpclient.png");
 	}
 #endif
 }

@@ -4,16 +4,16 @@
 
 namespace Echo
 {
-	class HttpModule : public Module
+	class NetModule : public Module
 	{
-		ECHO_SINGLETON_CLASS(HttpModule, Module)
+		ECHO_SINGLETON_CLASS(NetModule, Module)
 
 	public:
-		HttpModule();
-		virtual ~HttpModule();
+		NetModule();
+		virtual ~NetModule();
 
 		// instance
-		static HttpModule* instance();
+		static NetModule* instance();
 
 		// register all types of the module
 		virtual void registerTypes() override;

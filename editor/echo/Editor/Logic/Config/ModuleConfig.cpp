@@ -8,7 +8,7 @@ namespace Echo
 		REGISTER_MODULE(CameraModule)
 		REGISTER_MODULE(Box2DModule)
 		REGISTER_MODULE(AudioModule)
-		REGISTER_MODULE(HttpModule)
+		REGISTER_MODULE(NetModule)
 		REGISTER_MODULE(Live2DModule)
 		REGISTER_MODULE(RvoModule)
 		REGISTER_MODULE(SpineModule)
