@@ -22,10 +22,13 @@ namespace Echo
 
 	void VideCaptureDShow::Start()
 	{
-		ChooseDevice();
+		IBaseFilter* baseFilter = nullptr;
+		ChooseDevice(baseFilter);
+
+		int a = 10;
 	}
 
-	void VideCaptureDShow::ChooseDevice()
+	void VideCaptureDShow::ChooseDevice(IBaseFilter*& baseFilter)
 	{
 		HRESULT hr;
 
@@ -42,13 +45,25 @@ namespace Echo
 
 				while (enumMoniker->Next(1, &moniker, &cFected) == S_OK)
 				{
-					IPropertyBag* propBag = nullptr;
+					IPropertyBag* propertyBag = nullptr;
+					moniker->BindToStorage(0, 0, IID_IPropertyBag, (void**)&propertyBag);
+
+					hr = moniker->BindToObject(0, 0, IID_IBaseFilter, (void**)&baseFilter);
+					if (S_OK == hr)
+					{
+						moniker->Release();
+						break;
+					}
 				}
+
+				enumMoniker->Release();
 			}
 			else
 			{
 				EchoLogError("Enum video capture device failed");
 			}
+
+			sysDevEnum->Release();
 		}
 	}
 }

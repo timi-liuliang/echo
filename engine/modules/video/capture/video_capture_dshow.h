@@ -17,7 +17,7 @@ namespace Echo
 
 	private:
 		// Device
-		void ChooseDevice();
+		void ChooseDevice(class IBaseFilter*& baseFilter);
 	};
 }
 
