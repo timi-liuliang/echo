@@ -101,5 +101,4 @@ namespace Echo
 #else
 	#define OGLESDebug(Func)  Func;
 #endif
-
 }
