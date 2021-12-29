@@ -11,7 +11,7 @@ namespace Echo
 {
 	VideCaptureDShow::DeviceInfo::~DeviceInfo()
 	{
-		if (m_filter) m_filter->Release();
+		if (m_deviceFilter) m_deviceFilter->Release();
 		if (m_propertyBag) m_propertyBag->Release();
 		if (m_moniker) m_moniker->Release();
 	}
@@ -30,11 +30,45 @@ namespace Echo
 		};
 
 		m_moniker->BindToStorage(0, 0, IID_IPropertyBag, (void**)&m_propertyBag);
-		m_moniker->BindToObject(0, 0, IID_IBaseFilter, (void**)&m_filter);
+		m_moniker->BindToObject(0, 0, IID_IBaseFilter, (void**)&m_deviceFilter);
 
 		readProperty(L"FriendlyName", m_friendlyName);
 		readProperty(L"Description", m_description);
 		readProperty(L"DevicePath", m_devicePath);
+
+		m_isVFWCard = isVFWCard(m_deviceFilter);
+		m_isWDMCard = isWDMCard(m_deviceFilter);
+
+	}
+
+	bool VideCaptureDShow::DeviceInfo::isVFWCard(IBaseFilter* deviceFilter)
+	{
+		if (deviceFilter)
+		{
+			IAMVfwCaptureDialogs* vfwCaptureDialogs = nullptr;
+			if (SUCCEEDED(deviceFilter->QueryInterface(IID_IAMVfwCaptureDialogs, (void**)&vfwCaptureDialogs)))
+			{
+				vfwCaptureDialogs->Release();
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	bool VideCaptureDShow::DeviceInfo::isWDMCard(IBaseFilter* deviceFilter)
+	{
+		if (deviceFilter)
+		{
+			IAMAnalogVideoDecoder* analogVideoDecoder = nullptr;
+			if (SUCCEEDED(deviceFilter->QueryInterface(IID_IAMAnalogVideoDecoder, (void**)&analogVideoDecoder)))
+			{
+				analogVideoDecoder->Release();
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	VideCaptureDShow::VideCaptureDShow()

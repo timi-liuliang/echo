@@ -8,6 +8,7 @@
 
 namespace Echo
 {
+	// https://blog.csdn.net/lijian2017/article/details/80346580?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_title~default-0.pc_relevant_paycolumn_v2&spm=1001.2101.3001.4242.1&utm_relevant_index=3
 	class VideCaptureDShow : public IVideoCapture
 	{
 	public:
@@ -16,16 +17,22 @@ namespace Echo
 		{
 			IMoniker*		m_moniker = nullptr;
 			IPropertyBag*	m_propertyBag = nullptr;
-			IBaseFilter*	m_filter = nullptr;
+			IBaseFilter*	m_deviceFilter = nullptr;
 			std::string		m_friendlyName;
 			std::string		m_description;
 			std::string		m_devicePath;
+			bool			m_isVFWCard = false;
+			bool			m_isWDMCard = false;
 
 			DeviceInfo() {}
 			~DeviceInfo();
 
 			// Read properties
 			void initialzie();
+
+			// Check card type
+			bool isVFWCard(IBaseFilter* deviceFilter);
+			bool isWDMCard(IBaseFilter* deviceFilter);
 		};
 
 	public:
