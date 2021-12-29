@@ -40,11 +40,14 @@ namespace Echo
 		virtual ~VideCaptureDShow();
 
 		// Start
-		void Start();
+		void start();
 
 	private:
 		// Device
-		void ChooseDevice(class IBaseFilter*& baseFilter);
+		void enumCaptureDevices(class IBaseFilter*& baseFilter);
+
+		// Init Graph Builder
+		void initCaptureGraphBuilder();
 
 	private:
 		std::vector<DeviceInfo>	m_devices;

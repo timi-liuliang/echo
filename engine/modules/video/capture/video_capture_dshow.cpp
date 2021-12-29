@@ -38,7 +38,6 @@ namespace Echo
 
 		m_isVFWCard = isVFWCard(m_deviceFilter);
 		m_isWDMCard = isWDMCard(m_deviceFilter);
-
 	}
 
 	bool VideCaptureDShow::DeviceInfo::isVFWCard(IBaseFilter* deviceFilter)
@@ -74,7 +73,7 @@ namespace Echo
 	VideCaptureDShow::VideCaptureDShow()
 	{
 		// Test
-		Start();
+		start();
 	}
 
 	VideCaptureDShow::~VideCaptureDShow()
@@ -82,15 +81,15 @@ namespace Echo
 
 	}
 
-	void VideCaptureDShow::Start()
+	void VideCaptureDShow::start()
 	{
 		IBaseFilter* baseFilter = nullptr;
-		ChooseDevice(baseFilter);
+		enumCaptureDevices(baseFilter);
 
-		int a = 10;
+		initCaptureGraphBuilder();
 	}
 
-	void VideCaptureDShow::ChooseDevice(IBaseFilter*& baseFilter)
+	void VideCaptureDShow::enumCaptureDevices(IBaseFilter*& baseFilter)
 	{
 		HRESULT hr;
 
@@ -120,6 +119,24 @@ namespace Echo
 			}
 
 			sysDevEnum->Release();
+		}
+	}
+
+	void VideCaptureDShow::initCaptureGraphBuilder()
+	{
+		IGraphBuilder* graphBuilder = nullptr;
+		ICaptureGraphBuilder2* captureGraphBuilder2 = nullptr;
+
+		if (SUCCEEDED(CoCreateInstance(CLSID_CaptureGraphBuilder2, nullptr, CLSCTX_INPROC_SERVER, IID_ICaptureGraphBuilder2, (void**)&captureGraphBuilder2)))
+		{
+			if (SUCCEEDED(CoCreateInstance(CLSID_FilterGraph, nullptr, CLSCTX_INPROC_SERVER, IID_IGraphBuilder, (void**)&graphBuilder)))
+			{
+				captureGraphBuilder2->SetFiltergraph(graphBuilder);
+			}
+			else
+			{
+				captureGraphBuilder2->Release();
+			}
 		}
 	}
 }
