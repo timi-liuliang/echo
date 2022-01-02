@@ -5,6 +5,7 @@
 #ifdef ECHO_PLATFORM_WINDOWS
 
 #include <dshow.h>
+#include "sample_grabber_cb.h"
 
 namespace Echo
 {
@@ -49,8 +50,17 @@ namespace Echo
 		// Init Graph Builder
 		void initCaptureGraphBuilder();
 
+		// Open device
+		void openDevice(int deviceID);
+
 	private:
-		std::vector<DeviceInfo>	m_devices;
+		std::vector<DeviceInfo*>m_devices;
+		IGraphBuilder*			m_graph = nullptr;
+		ICaptureGraphBuilder2*	m_capture = nullptr;
+		IMediaControl*			m_mediaControl = nullptr;
+		IVideoWindow*			m_videoWindow = nullptr;
+		IMediaEventEx*			m_mediaEvent = nullptr;
+		SampleGrabberCallback	m_sampleGrabberCb;
 	};
 }
 

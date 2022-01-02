@@ -4,6 +4,7 @@
 #ifdef ECHO_PLATFORM_WINDOWS
 
 #include <dshow.h>
+#include "qedit.h"
 
 #pragma comment(lib, "Strmiids.lib")
 
@@ -87,27 +88,30 @@ namespace Echo
 		enumCaptureDevices(baseFilter);
 
 		initCaptureGraphBuilder();
+
+		openDevice(0);
 	}
 
 	void VideCaptureDShow::enumCaptureDevices(IBaseFilter*& baseFilter)
 	{
 		HRESULT hr;
 
-		ICreateDevEnum* sysDevEnum = nullptr;
-		hr = CoCreateInstance(CLSID_SystemDeviceEnum, nullptr, CLSCTX_INPROC_SERVER, IID_ICreateDevEnum, (void**)&sysDevEnum);
-		if (hr == S_OK)
+		ICreateDevEnum* deviceEnum = nullptr;
+		hr = CoCreateInstance(CLSID_SystemDeviceEnum, nullptr, CLSCTX_INPROC_SERVER, IID_ICreateDevEnum, (void**)&deviceEnum);
+		if (SUCCEEDED(hr))
 		{
 			// An enumerator for the video capture category
 			IEnumMoniker* enumMoniker = nullptr;
-			hr = sysDevEnum->CreateClassEnumerator(CLSID_VideoInputDeviceCategory, &enumMoniker, 0);
+			hr = deviceEnum->CreateClassEnumerator(CLSID_VideoInputDeviceCategory, &enumMoniker, 0);
 			if (S_OK == hr)
 			{
 				ULONG cFected;
-				DeviceInfo deviceInfo;
+				DeviceInfo* deviceInfo = EchoNew(DeviceInfo);
+				enumMoniker->Reset();
 
-				while (enumMoniker->Next(1, &deviceInfo.m_moniker, &cFected) == S_OK)
+				while (enumMoniker->Next(1, &deviceInfo->m_moniker, &cFected) == S_OK)
 				{
-					deviceInfo.initialzie();
+					deviceInfo->initialzie();
 					m_devices.emplace_back(deviceInfo);
 				}
 
@@ -118,26 +122,90 @@ namespace Echo
 				EchoLogError("Enum video capture device failed");
 			}
 
-			sysDevEnum->Release();
+			deviceEnum->Release();
 		}
 	}
 
 	void VideCaptureDShow::initCaptureGraphBuilder()
 	{
-		IGraphBuilder* graphBuilder = nullptr;
-		ICaptureGraphBuilder2* captureGraphBuilder2 = nullptr;
+		HRESULT hr;
 
-		if (SUCCEEDED(CoCreateInstance(CLSID_CaptureGraphBuilder2, nullptr, CLSCTX_INPROC_SERVER, IID_ICaptureGraphBuilder2, (void**)&captureGraphBuilder2)))
+		if (SUCCEEDED(CoCreateInstance(CLSID_CaptureGraphBuilder2, nullptr, CLSCTX_INPROC_SERVER, IID_ICaptureGraphBuilder2, (void**)&m_capture)))
 		{
-			if (SUCCEEDED(CoCreateInstance(CLSID_FilterGraph, nullptr, CLSCTX_INPROC_SERVER, IID_IGraphBuilder, (void**)&graphBuilder)))
+			if (SUCCEEDED(CoCreateInstance(CLSID_FilterGraph, nullptr, CLSCTX_INPROC_SERVER, IID_IGraphBuilder, (void**)&m_graph)))
 			{
-				captureGraphBuilder2->SetFiltergraph(graphBuilder);
+				// Obtain interfaces for media control and Video Window
+				m_graph->QueryInterface(IID_IMediaControl, (LPVOID*)&m_mediaControl);
+				m_graph->QueryInterface(IID_IVideoWindow, (LPVOID*)&m_videoWindow);
+				m_graph->QueryInterface(IID_IMediaEventEx, (LPVOID*)&m_mediaEvent);
+
+				hr = m_capture->SetFiltergraph(m_graph);
+				if (FAILED(hr))
+					return;
 			}
 			else
 			{
-				captureGraphBuilder2->Release();
+				m_capture->Release();
 			}
 		}
+	}
+
+	void VideCaptureDShow::openDevice(int deviceID)
+	{
+		IBaseFilter* samplerGrabberFilter = nullptr;
+		HRESULT hr = CoCreateInstance(CLSID_SampleGrabber, nullptr, CLSCTX_INPROC_SERVER, IID_IBaseFilter, (LPVOID*)&samplerGrabberFilter);
+		if (FAILED(hr))	
+			return;
+
+		IBaseFilter* deviceFilter = m_devices[deviceID]->m_deviceFilter;
+
+		hr = m_graph->AddFilter(deviceFilter, L"Video Filter");
+		if (FAILED(hr))
+			return;
+
+		hr = m_graph->AddFilter(samplerGrabberFilter, L"Sample Grabber");
+		if (FAILED(hr))
+			return;
+
+		ISampleGrabber* sampleGrabber = nullptr;
+		hr = samplerGrabberFilter->QueryInterface(IID_ISampleGrabber, (LPVOID*)&sampleGrabber);
+		if (FAILED(hr))
+			return;
+
+		HDC hdc = GetDC(NULL);
+		int bitDepth = GetDeviceCaps(hdc, BITSPIXEL);
+		ReleaseDC(nullptr, hdc);
+
+		AM_MEDIA_TYPE mediaType;
+		ZeroMemory(&mediaType, sizeof(AM_MEDIA_TYPE));
+
+		mediaType.majortype = MEDIATYPE_Video;
+		switch (bitDepth)
+		{
+		case  8:	mediaType.subtype = MEDIASUBTYPE_RGB8;	break;
+		case 16:	mediaType.subtype = MEDIASUBTYPE_RGB555;break;
+		case 24:	mediaType.subtype = MEDIASUBTYPE_RGB24;	break;
+		case 32:	mediaType.subtype = MEDIASUBTYPE_RGB32;	break;
+		default:	break;
+		}
+		mediaType.formattype = FORMAT_VideoInfo;
+		
+		hr = sampleGrabber->SetMediaType(&mediaType);
+		if (FAILED(hr))
+			return;
+
+		hr = m_capture->RenderStream(&PIN_CATEGORY_PREVIEW, &MEDIATYPE_Video, deviceFilter, samplerGrabberFilter, nullptr);
+		if (FAILED(hr))
+			return;
+
+		hr = sampleGrabber->GetConnectedMediaType(&mediaType);
+		if (FAILED(hr))
+			return;
+
+		VIDEOINFOHEADER* vih = (VIDEOINFOHEADER*)mediaType.pbFormat;
+		hr = sampleGrabber->SetCallback(&m_sampleGrabberCb, 1);
+
+		m_mediaControl->Run();
 	}
 }
 
