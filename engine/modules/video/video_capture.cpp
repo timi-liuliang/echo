@@ -1,7 +1,7 @@
 #include "video_capture.h"
 #include "engine/core/main/Engine.h"
 #include "engine/core/io/IO.h"
-#include "capture/video_capture_dshow.h"
+#include "capture/dshow/video_capture_dshow.h"
 
 namespace Echo
 {

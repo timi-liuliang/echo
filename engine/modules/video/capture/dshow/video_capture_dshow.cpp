@@ -73,8 +73,6 @@ namespace Echo
 
 	VideCaptureDShow::VideCaptureDShow()
 	{
-		// Test
-		start();
 	}
 
 	VideCaptureDShow::~VideCaptureDShow()

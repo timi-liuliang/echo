@@ -1,11 +1,8 @@
 #pragma once
 
-#include "video_capture_interface.h"
+#include "sample_grabber_cb.h"
 
 #ifdef ECHO_PLATFORM_WINDOWS
-
-#include <dshow.h>
-#include "sample_grabber_cb.h"
 
 namespace Echo
 {
