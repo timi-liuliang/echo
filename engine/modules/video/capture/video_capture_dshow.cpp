@@ -89,6 +89,8 @@ namespace Echo
 
 		initCaptureGraphBuilder();
 
+		m_grabberCb = EchoNew(SampleGrabberCallback);
+
 		openDevice(0);
 	}
 
@@ -156,6 +158,10 @@ namespace Echo
 		if (FAILED(hr))	
 			return;
 
+		hr = CoCreateInstance(CLSID_NullRenderer, NULL, CLSCTX_INPROC_SERVER, IID_IBaseFilter, (void**)&m_destFilter);
+		if (FAILED(hr))
+			return;
+
 		IBaseFilter* deviceFilter = m_devices[deviceID]->m_deviceFilter;
 
 		hr = m_graph->AddFilter(deviceFilter, L"Video Filter");
@@ -163,6 +169,10 @@ namespace Echo
 			return;
 
 		hr = m_graph->AddFilter(m_grabberFilter, L"Sample Grabber");
+		if (FAILED(hr))
+			return;
+
+		hr = m_graph->AddFilter(m_destFilter, L"Null Renderer");
 		if (FAILED(hr))
 			return;
 
@@ -192,10 +202,6 @@ namespace Echo
 		if (FAILED(hr))
 			return;
 
-		hr = CoCreateInstance(CLSID_NullRenderer, NULL, CLSCTX_INPROC_SERVER, IID_IBaseFilter, (void**)&m_destFilter);
-		if (FAILED(hr))
-			return;
-
 		// https://docs.microsoft.com/en-us/previous-versions/ms784859(v=vs.85)
 		hr = m_capture->RenderStream(&PIN_CATEGORY_CAPTURE, &MEDIATYPE_Video, deviceFilter, m_grabberFilter, m_destFilter);
 		if (FAILED(hr))
@@ -206,9 +212,47 @@ namespace Echo
 			return;
 
 		VIDEOINFOHEADER* vih = (VIDEOINFOHEADER*)mediaType.pbFormat;
-		hr = m_grabber->SetCallback(&m_grabberCb, 1);
+		hr = m_grabber->SetCallback(m_grabberCb, 1);
+		if (FAILED(hr))
+			return;
 
-		m_mediaControl->Run();
+		hr = m_mediaControl->Run();
+		if (FAILED(hr))
+			return;
+
+		hr = m_grabber->SetOneShot(FALSE);
+		if (FAILED(hr))
+			return;
+	}
+
+	ui8* VideCaptureDShow::queryFrame()
+	{
+		if (m_grabber)
+		{
+			HRESULT hr;
+
+			long evCode;
+			hr = m_mediaEvent->WaitForCompletion(INFINITE, &evCode);
+			if (FAILED(hr))
+				return nullptr;
+
+			long size = 0;
+			hr = m_grabber->GetCurrentBuffer(&size, nullptr);
+			if (FAILED(hr))
+				return nullptr;
+
+			if (size > 0)
+			{
+				vector<ui8>::type buffer;
+				buffer.resize(size);
+
+				hr = m_grabber->GetCurrentBuffer(&size, (long*)buffer.data());
+				if (FAILED(hr))
+					return nullptr;
+			}
+		}
+
+		return nullptr;
 	}
 }
 

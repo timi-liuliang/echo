@@ -43,6 +43,9 @@ namespace Echo
 		// Start
 		void start();
 
+		// Query Frame
+		ui8* queryFrame();
+
 	private:
 		// Device
 		void enumCaptureDevices(class IBaseFilter*& baseFilter);
@@ -62,7 +65,7 @@ namespace Echo
 		IMediaEventEx*			m_mediaEvent = nullptr;
 		IBaseFilter*			m_grabberFilter = nullptr;
 		ISampleGrabber*			m_grabber = nullptr;
-		SampleGrabberCallback	m_grabberCb;
+		SampleGrabberCallback*	m_grabberCb = nullptr;
 		IBaseFilter*			m_destFilter = nullptr;
 	};
 }

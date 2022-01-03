@@ -1,6 +1,6 @@
 #pragma once
 
-///////////////////////////////////////////////////////////////////////////////////
+#ifdef ECHO_PLATFORM_WINDOWS
 
 interface ISampleGrabberCB : public IUnknown
 {
@@ -8,18 +8,9 @@ interface ISampleGrabberCB : public IUnknown
 	virtual STDMETHODIMP BufferCB( double SampleTime, BYTE *pBuffer, long BufferLen ) = 0;
 };
 
-///////////////////////////////////////////////////////////////////////////////////
+static const IID IID_ISampleGrabberCB = { 0x0579154A, 0x2B53, 0x4994, { 0xB0, 0xD0, 0xE7, 0x73, 0x14, 0x8E, 0xFF, 0x85 } };
 
-static
-	const
-	IID IID_ISampleGrabberCB = { 0x0579154A, 0x2B53, 0x4994, { 0xB0, 0xD0, 0xE7, 0x73, 0x14, 0x8E, 0xFF, 0x85 } };
-
-///////////////////////////////////////////////////////////////////////////////////
-
-interface
-	ISampleGrabber
-	:
-public IUnknown
+interface ISampleGrabber : public IUnknown
 {
 	virtual HRESULT STDMETHODCALLTYPE SetOneShot( BOOL OneShot ) = 0;
 	virtual HRESULT STDMETHODCALLTYPE SetMediaType( const AM_MEDIA_TYPE *pType ) = 0;
@@ -71,3 +62,5 @@ static
 static
 	const
 	CLSID CLSID_AudioEffects2Category = { 0xcc7bfb45, 0xf175, 0x11d1, { 0xa3, 0x92, 0x0, 0xe0, 0x29, 0x1f, 0x39, 0x59 } };
+
+#endif
