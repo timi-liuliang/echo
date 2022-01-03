@@ -152,8 +152,7 @@ namespace Echo
 
 	void VideCaptureDShow::openDevice(int deviceID)
 	{
-		IBaseFilter* samplerGrabberFilter = nullptr;
-		HRESULT hr = CoCreateInstance(CLSID_SampleGrabber, nullptr, CLSCTX_INPROC_SERVER, IID_IBaseFilter, (LPVOID*)&samplerGrabberFilter);
+		HRESULT hr = CoCreateInstance(CLSID_SampleGrabber, nullptr, CLSCTX_INPROC_SERVER, IID_IBaseFilter, (LPVOID*)&m_grabberFilter);
 		if (FAILED(hr))	
 			return;
 
@@ -163,12 +162,11 @@ namespace Echo
 		if (FAILED(hr))
 			return;
 
-		hr = m_graph->AddFilter(samplerGrabberFilter, L"Sample Grabber");
+		hr = m_graph->AddFilter(m_grabberFilter, L"Sample Grabber");
 		if (FAILED(hr))
 			return;
 
-		ISampleGrabber* sampleGrabber = nullptr;
-		hr = samplerGrabberFilter->QueryInterface(IID_ISampleGrabber, (LPVOID*)&sampleGrabber);
+		hr = m_grabberFilter->QueryInterface(IID_ISampleGrabber, (LPVOID*)&m_grabber);
 		if (FAILED(hr))
 			return;
 
@@ -190,20 +188,25 @@ namespace Echo
 		}
 		mediaType.formattype = FORMAT_VideoInfo;
 		
-		hr = sampleGrabber->SetMediaType(&mediaType);
+		hr = m_grabber->SetMediaType(&mediaType);
 		if (FAILED(hr))
 			return;
 
-		hr = m_capture->RenderStream(&PIN_CATEGORY_PREVIEW, &MEDIATYPE_Video, deviceFilter, samplerGrabberFilter, nullptr);
+		hr = CoCreateInstance(CLSID_NullRenderer, NULL, CLSCTX_INPROC_SERVER, IID_IBaseFilter, (void**)&m_destFilter);
 		if (FAILED(hr))
 			return;
 
-		hr = sampleGrabber->GetConnectedMediaType(&mediaType);
+		// https://docs.microsoft.com/en-us/previous-versions/ms784859(v=vs.85)
+		hr = m_capture->RenderStream(&PIN_CATEGORY_CAPTURE, &MEDIATYPE_Video, deviceFilter, m_grabberFilter, m_destFilter);
+		if (FAILED(hr))
+			return;
+
+		hr = m_grabber->GetConnectedMediaType(&mediaType);
 		if (FAILED(hr))
 			return;
 
 		VIDEOINFOHEADER* vih = (VIDEOINFOHEADER*)mediaType.pbFormat;
-		hr = sampleGrabber->SetCallback(&m_sampleGrabberCb, 1);
+		hr = m_grabber->SetCallback(&m_grabberCb, 1);
 
 		m_mediaControl->Run();
 	}

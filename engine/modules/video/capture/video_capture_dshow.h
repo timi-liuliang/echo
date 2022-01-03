@@ -60,7 +60,10 @@ namespace Echo
 		IMediaControl*			m_mediaControl = nullptr;
 		IVideoWindow*			m_videoWindow = nullptr;
 		IMediaEventEx*			m_mediaEvent = nullptr;
-		SampleGrabberCallback	m_sampleGrabberCb;
+		IBaseFilter*			m_grabberFilter = nullptr;
+		ISampleGrabber*			m_grabber = nullptr;
+		SampleGrabberCallback	m_grabberCb;
+		IBaseFilter*			m_destFilter = nullptr;
 	};
 }
 
