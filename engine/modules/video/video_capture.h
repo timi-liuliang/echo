@@ -14,7 +14,15 @@ namespace Echo
 		VideoCapture();
 		virtual ~VideoCapture();
 
+		// Render target
+		void setRenderTarget(const ResourcePath& res);
+		const ResourcePath& getRenderTarget() const { return m_renderTarget; }
+
+		// Update
+		virtual void updateInternal(float elapsedTime) override;
+
 	private:
-		IVideoCapture* m_implement = nullptr;
+		IVideoCapture*	m_implement = nullptr;
+		ResourcePath	m_renderTarget = ResourcePath("", ".rt");
 	};
 }

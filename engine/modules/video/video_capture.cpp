@@ -18,5 +18,22 @@ namespace Echo
 
 	void VideoCapture::bindMethods()
 	{
+		CLASS_BIND_METHOD(VideoCapture, getRenderTarget);
+		CLASS_BIND_METHOD(VideoCapture, setRenderTarget);
+
+		CLASS_REGISTER_PROPERTY(VideoCapture, "RenderTarget", Variant::Type::ResourcePath, getRenderTarget, setRenderTarget);
+	}
+
+	void VideoCapture::setRenderTarget(const ResourcePath& res)
+	{
+		if (m_renderTarget.setPath(res.getPath()))
+		{
+
+		}
+	}
+
+	void VideoCapture::updateInternal(float elapsedTime)
+	{
+
 	}
 }
