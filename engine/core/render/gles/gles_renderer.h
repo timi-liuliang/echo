@@ -76,7 +76,7 @@ namespace Echo
 		// textures
 		virtual Texture*  createTexture2D(const String& name) override;
 		virtual TextureCube* createTextureCube(const String& name) override;
-		virtual TextureRender* createTextureRender(const String& name) override;
+		virtual TextureRenderTarget2D* createTextureRender(const String& name) override;
 
 		ShaderProgram*	createShaderProgram() override;
 		GLESShader*	createShader(ShaderProgram::ShaderType type, const char* srcBuffer, ui32 size);

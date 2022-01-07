@@ -1,7 +1,7 @@
 #pragma once
 
 #include "base/texture/texture.h"
-#include "base/texture/texture_render.h"
+#include "base/texture/texture_render_target_2d.h"
 #include "vk_render_base.h"
 #include "vk_render_state.h"
 
@@ -72,7 +72,7 @@ namespace Echo
 		void convertFormat(Image* image);
     };
 
-    class VKTextureRender : public TextureRender, public VKTexture
+    class VKTextureRender : public TextureRenderTarget2D, public VKTexture
     {
     public:
         VKTextureRender(const String& name);

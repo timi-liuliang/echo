@@ -91,7 +91,7 @@ namespace Echo
 		Class::registerType<RenderPipeline>();
 		Class::registerType<Texture>();
 		Class::registerType<TextureCube>();
-		Class::registerType<TextureRender>();
+		Class::registerType<TextureRenderTarget2D>();
 		Class::registerType<ShaderProgram>();
 		Class::registerType<ShaderTemplate>();
 		Class::registerType<FrameBuffer>();

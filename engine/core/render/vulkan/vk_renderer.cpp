@@ -77,7 +77,7 @@ namespace Echo
         return EchoNew(VKTexture2D(name));
     }
 
-	TextureRender* VKRenderer::createTextureRender(const String& name)
+	TextureRenderTarget2D* VKRenderer::createTextureRender(const String& name)
 	{ 
 		return EchoNew(VKTextureRender(name)); 
 	}

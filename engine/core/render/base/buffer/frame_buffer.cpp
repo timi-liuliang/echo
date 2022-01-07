@@ -59,7 +59,7 @@ namespace Echo
 
 	void FrameBufferOffScreen::setColorA(const ResourcePath& path)
 	{
-		m_views[0] = ECHO_DOWN_CAST<TextureRender*>(Res::get(path));
+		m_views[0] = ECHO_DOWN_CAST<TextureRenderTarget2D*>(Res::get(path));
 	}
 
 	ResourcePath FrameBufferOffScreen::getColorB()
@@ -69,7 +69,7 @@ namespace Echo
 
 	void FrameBufferOffScreen::setColorB(const ResourcePath& path)
 	{
-		m_views[Attachment::ColorB] = ECHO_DOWN_CAST<TextureRender*>(Res::get(path));
+		m_views[Attachment::ColorB] = ECHO_DOWN_CAST<TextureRenderTarget2D*>(Res::get(path));
 	}
 
 	ResourcePath FrameBufferOffScreen::getDepth()
@@ -81,7 +81,7 @@ namespace Echo
 	void FrameBufferOffScreen::setDepth(const ResourcePath& path)
 	{
 		i32 idx = i32(Attachment::DepthStencil);
-		m_views[idx] = ECHO_DOWN_CAST<TextureRender*>(Res::get(path));
+		m_views[idx] = ECHO_DOWN_CAST<TextureRenderTarget2D*>(Res::get(path));
 	}
 
 	Res* FrameBufferWindow::create()

@@ -35,7 +35,7 @@ namespace Echo
         // create texture
         virtual Texture*       createTexture2D(const String& name) override;
         virtual TextureCube*   createTextureCube(const String& name) override {return nullptr; }
-        virtual TextureRender* createTextureRender(const String& name) override;
+        virtual TextureRenderTarget2D* createTextureRender(const String& name) override;
 
         // create views
         virtual FrameBufferOffScreen* createFrameBufferOffScreen(ui32 width, ui32 height) override { return EchoNew(VKFramebufferOffscreen(width, height));}

@@ -80,7 +80,7 @@ namespace Echo
 		// create texture
 		virtual Texture* createTexture2D(const String& name)=0;
 		virtual TextureCube* createTextureCube(const String& name) = 0;
-		virtual TextureRender* createTextureRender(const String& name) = 0;
+		virtual TextureRenderTarget2D* createTextureRender(const String& name) = 0;
 
 		// create shader
 		virtual ShaderProgram* createShaderProgram()=0;

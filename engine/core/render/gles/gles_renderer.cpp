@@ -394,7 +394,7 @@ namespace Echo
 		return name.empty() ? EchoNew(GLESTextureCube) : EchoNew(GLESTextureCube(name));
 	}
 
-	TextureRender* GLESRenderer::createTextureRender(const String& name)
+	TextureRenderTarget2D* GLESRenderer::createTextureRender(const String& name)
 	{
 		return EchoNew(GLESTextureRender(name));
 	}

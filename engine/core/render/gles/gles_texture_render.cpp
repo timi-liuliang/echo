@@ -13,7 +13,7 @@
 namespace Echo
 {
 	GLESTextureRender::GLESTextureRender(const String& name)
-		: TextureRender(name)
+		: TextureRenderTarget2D(name)
 		, m_glesTexture(0)
 	{
 	}

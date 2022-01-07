@@ -325,7 +325,7 @@ namespace Echo
 	}
 
     VKTextureRender::VKTextureRender(const String& name)
-        : TextureRender(name)
+        : TextureRenderTarget2D(name)
     {
 
     }

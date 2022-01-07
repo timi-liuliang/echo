@@ -6,14 +6,14 @@
 
 namespace Echo
 {
-	class TextureRender : public Texture
+	class TextureRenderTarget2D : public Texture
 	{
-		ECHO_RES(TextureRender, Texture, ".rt", TextureRender::create, Res::load)
+		ECHO_RES(TextureRenderTarget2D, Texture, ".rt", TextureRenderTarget2D::create, Res::load)
 
 	public:
-		TextureRender();
-		TextureRender(const String& name);
-		virtual ~TextureRender();
+		TextureRenderTarget2D();
+		TextureRenderTarget2D(const String& name);
+		virtual ~TextureRenderTarget2D();
 
 		// create fun
 		static Res* create();
@@ -49,5 +49,5 @@ namespace Echo
 		Color			m_clearColor	  = Color::BLACK;
 		StringOption    m_pixelFormatName = StringOption("PF_RGBA8_UNORM", {"PF_RGBA8_UNORM", "PF_RGBA16_FLOAT" , "PF_D24_UNORM_S8_UINT"});
 	};
-	typedef ResRef<TextureRender> TextureRenderPtr;
+	typedef ResRef<TextureRenderTarget2D> TextureRenderTarget2DPtr;
 }

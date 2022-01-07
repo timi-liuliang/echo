@@ -2,7 +2,7 @@
 
 #include "engine/core/math/color.h"
 #include "engine/core/render/base/image/pixel_format.h"
-#include "engine/core/render/base/texture/texture_render.h"
+#include "engine/core/render/base/texture/texture_render_target_2d.h"
 
 namespace Echo
 {

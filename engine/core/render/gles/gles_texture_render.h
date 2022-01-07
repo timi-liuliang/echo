@@ -1,10 +1,10 @@
 #pragma once
 
-#include <base/texture/texture_render.h>
+#include <base/texture/texture_render_target_2d.h>
 
 namespace Echo
 {
-	class GLESTextureRender: public TextureRender
+	class GLESTextureRender: public TextureRenderTarget2D
 	{
 		friend class GLESRenderer;
 

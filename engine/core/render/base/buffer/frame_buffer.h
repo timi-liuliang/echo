@@ -4,7 +4,7 @@
 #include "engine/core/scene/node.h"
 #include "engine/core/resource/Res.h"
 #include "base/texture/texture.h"
-#include "base/texture/texture_render.h"
+#include "base/texture/texture_render_target_2d.h"
 
 namespace Echo
 {
@@ -108,7 +108,7 @@ namespace Echo
         bool hasDepthAttachment() { return m_views[int(Attachment::DepthStencil)]; }
 
 	protected:
-        array<TextureRenderPtr, 9>  m_views;
+        array<TextureRenderTarget2DPtr, 9>  m_views;
 	};
 
     class FrameBufferWindow : public FrameBuffer

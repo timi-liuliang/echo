@@ -126,7 +126,7 @@ namespace Echo
 
 	void GLESFrameBufferOffScreen::onSize( ui32 width, ui32 height )
 	{
-        for (TextureRender* colorView : m_views)
+        for (TextureRenderTarget2D* colorView : m_views)
         {
             if (colorView)
                 colorView->onSize(width, height);
