@@ -406,7 +406,8 @@ namespace Echo
 		getWorldMatrix();
 
 		// Script update
-		m_script.update(this);
+		if(IsGame)
+			m_script.update(this);
 
 		// Update
 		updateInternal(elapsedTime);

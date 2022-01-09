@@ -38,7 +38,7 @@ namespace Echo
 		virtual ~VideCaptureDShow();
 
 		// Start
-		void start();
+		virtual void start() override;
 
 		// Query Frame
 		ui8* queryFrame();

@@ -127,22 +127,25 @@ namespace Studio
 		if (!isNodeVirtual)
 		{
 			Echo::Node* node = (Echo::Node*)Echo::Class::create(nodeName);
-			node->setName(nodeName);
-			Echo::ImagePtr thumbnail = node->getEditor() ? node->getEditor()->getThumbnail() : nullptr;
-			EchoSafeDelete(node, Node);
-			if (thumbnail)
+			if (node)
 			{
-				QImage image(thumbnail->getData(), thumbnail->getWidth(), thumbnail->getHeight(), QImage::Format_RGBA8888);
-				nodeItem->setIcon(QIcon(QPixmap::fromImage(image)));
-			}
-			else
-			{
-				// get icon path by node name
-				Echo::String lowerCaseNodeName = nodeName;
-				Echo::StringUtil::LowerCase(lowerCaseNodeName);
-				Echo::String qIconPath = Echo::StringUtil::Format(":/icon/node/%s.png", lowerCaseNodeName.c_str());
+				node->setName(nodeName);
+				Echo::ImagePtr thumbnail = node->getEditor() ? node->getEditor()->getThumbnail() : nullptr;
+				EchoSafeDelete(node, Node);
+				if (thumbnail)
+				{
+					QImage image(thumbnail->getData(), thumbnail->getWidth(), thumbnail->getHeight(), QImage::Format_RGBA8888);
+					nodeItem->setIcon(QIcon(QPixmap::fromImage(image)));
+				}
+				else
+				{
+					// get icon path by node name
+					Echo::String lowerCaseNodeName = nodeName;
+					Echo::StringUtil::LowerCase(lowerCaseNodeName);
+					Echo::String qIconPath = Echo::StringUtil::Format(":/icon/node/%s.png", lowerCaseNodeName.c_str());
 
-				nodeItem->setIcon(QIcon(qIconPath.c_str()));
+					nodeItem->setIcon(QIcon(qIconPath.c_str()));
+				}
 			}
 		}
 

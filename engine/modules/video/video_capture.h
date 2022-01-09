@@ -14,6 +14,9 @@ namespace Echo
 		VideoCapture();
 		virtual ~VideoCapture();
 
+		// Start
+		void openDevice();
+
 		// Render target
 		void setRenderTarget(const ResourcePath& res);
 		const ResourcePath& getRenderTarget() const { return m_renderTarget; }

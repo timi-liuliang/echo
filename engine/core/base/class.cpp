@@ -147,6 +147,7 @@ namespace Echo
 			return obj;
 		}
 
+		EchoLogError("Create Class [%s] failed", className.c_str());
 		return nullptr;
 	}
 

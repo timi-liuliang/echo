@@ -18,10 +18,19 @@ namespace Echo
 
 	void VideoCapture::bindMethods()
 	{
+		CLASS_BIND_METHOD(VideoCapture, openDevice);
 		CLASS_BIND_METHOD(VideoCapture, getRenderTarget);
 		CLASS_BIND_METHOD(VideoCapture, setRenderTarget);
 
 		CLASS_REGISTER_PROPERTY(VideoCapture, "RenderTarget", Variant::Type::ResourcePath, getRenderTarget, setRenderTarget);
+	}
+
+	void VideoCapture::openDevice()
+	{
+		if (m_implement)
+		{
+			m_implement->start();
+		}
 	}
 
 	void VideoCapture::setRenderTarget(const ResourcePath& res)

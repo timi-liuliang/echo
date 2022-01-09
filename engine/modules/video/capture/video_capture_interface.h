@@ -7,5 +7,7 @@ namespace Echo
 	class IVideoCapture
 	{
 	public:
+		// Start
+		virtual void start() {}
 	};
 }
