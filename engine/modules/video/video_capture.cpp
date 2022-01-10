@@ -43,6 +43,13 @@ namespace Echo
 
 	void VideoCapture::updateInternal(float elapsedTime)
 	{
+		if (m_implement)
+		{
+			void* buffer = nullptr;
+			i32   bufferLen = 0;
 
+			m_implement->lockFrame(buffer, bufferLen);
+			m_implement->unlockFrame();
+		}
 	}
 }

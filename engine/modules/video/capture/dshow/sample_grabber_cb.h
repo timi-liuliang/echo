@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../video_capture_interface.h"
+#include "engine/core/thread/Threading.h"
 
 #ifdef ECHO_PLATFORM_WINDOWS
 
@@ -12,20 +13,32 @@ namespace Echo
 	class SampleGrabberCallback : public ISampleGrabberCB
 	{
 	public:
-		ULONG STDMETHODCALLTYPE AddRef();
-		ULONG STDMETHODCALLTYPE Release();
+		SampleGrabberCallback();
+
+		// Initialize
+		HRESULT Initialize(i32 Width, i32 Height, ui8 bytesPerPixel, AM_MEDIA_TYPE mediaType);
+
+		// Lock
+		void lockFrame(void*& buffer, i32& bufferLen);
+
+		// Unlock
+		void unlockFrame();
+
+	public:
+		ULONG STDMETHODCALLTYPE AddRef() { return 1; }
+		ULONG STDMETHODCALLTYPE Release() { return 2; }
 		HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void** ppvObject);
 
 		HRESULT STDMETHODCALLTYPE SampleCB(double Time, IMediaSample* pSample);
 		HRESULT STDMETHODCALLTYPE BufferCB(double Time, BYTE* pBuffer, long BufferLen);
 
-		SampleGrabberCallback();
-		BOOL SaveBitmap(BYTE* pBuffer, long lBufferSize);
 	public:
-		BOOL m_bGetPicture;
-		long m_lWidth;
-		long m_lHeight;
-		int  m_iBitCount;
+		EE_MUTEX			(m_mutex);
+		i32					m_width;
+		i32					m_height;
+		ui8					m_bytesPerPixel;
+		AM_MEDIA_TYPE		m_mediaType;
+		std::vector<ui8>	m_buffer;
 	};
 }
 

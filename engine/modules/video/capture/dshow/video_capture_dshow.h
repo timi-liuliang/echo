@@ -40,8 +40,11 @@ namespace Echo
 		// Start
 		virtual void start() override;
 
-		// Query Frame
-		ui8* queryFrame();
+		// Lock
+		virtual void lockFrame(void*& buffer, i32& bufferLen);
+
+		// Unlock
+		virtual void unlockFrame();
 
 	private:
 		// Device

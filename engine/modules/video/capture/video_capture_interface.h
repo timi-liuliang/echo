@@ -9,5 +9,11 @@ namespace Echo
 	public:
 		// Start
 		virtual void start() {}
+
+		// Lock
+		virtual void lockFrame(void*& buffer, i32& bufferLen) {}
+
+		// Unlock
+		virtual void unlockFrame() {}
 	};
 }

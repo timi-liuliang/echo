@@ -210,6 +210,10 @@ namespace Echo
 			return;
 
 		VIDEOINFOHEADER* vih = (VIDEOINFOHEADER*)mediaType.pbFormat;
+		hr = m_grabberCb->Initialize(vih->bmiHeader.biWidth, vih->bmiHeader.biHeight, vih->bmiHeader.biBitCount / 8, mediaType);
+		if (FAILED(hr))
+			return;
+
 		hr = m_grabber->SetCallback(m_grabberCb, 1);
 		if (FAILED(hr))
 			return;
@@ -223,34 +227,22 @@ namespace Echo
 			return;
 	}
 
-	ui8* VideCaptureDShow::queryFrame()
+	void VideCaptureDShow::lockFrame(void*& buffer, i32& bufferLen)
 	{
-		if (m_grabber)
+		if (m_grabberCb)
 		{
-			HRESULT hr;
-
-			long evCode;
-			hr = m_mediaEvent->WaitForCompletion(INFINITE, &evCode);
-			if (FAILED(hr))
-				return nullptr;
-
-			long size = 0;
-			hr = m_grabber->GetCurrentBuffer(&size, nullptr);
-			if (FAILED(hr))
-				return nullptr;
-
-			if (size > 0)
-			{
-				vector<ui8>::type buffer;
-				buffer.resize(size);
-
-				hr = m_grabber->GetCurrentBuffer(&size, (long*)buffer.data());
-				if (FAILED(hr))
-					return nullptr;
-			}
+			m_grabberCb->lockFrame(buffer, bufferLen);
 		}
+		else
+		{
+			buffer = nullptr;
+			bufferLen = 0;
+		}
+	}
 
-		return nullptr;
+	void VideCaptureDShow::unlockFrame()
+	{
+		m_grabberCb->unlockFrame();
 	}
 }
 
