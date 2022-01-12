@@ -41,7 +41,7 @@ namespace Echo
 		virtual void start() override;
 
 		// Lock
-		virtual void lockFrame(void*& buffer, i32& bufferLen);
+		virtual bool lockFrame(void*& buffer, i32& width, i32& height, PixelFormat& format, i32& bufferLen);
 
 		// Unlock
 		virtual void unlockFrame();

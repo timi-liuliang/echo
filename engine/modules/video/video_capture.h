@@ -3,6 +3,7 @@
 #include "engine/core/scene/node.h"
 #include "video_base.h"
 #include "capture/video_capture_interface.h"
+#include "base/texture/texture_render_target_2d.h"
 
 namespace Echo
 {
@@ -19,13 +20,14 @@ namespace Echo
 
 		// Render target
 		void setRenderTarget(const ResourcePath& res);
-		const ResourcePath& getRenderTarget() const { return m_renderTarget; }
+		const ResourcePath& getRenderTarget() const { return m_renderTargetResPath; }
 
 		// Update
 		virtual void updateInternal(float elapsedTime) override;
 
 	private:
-		IVideoCapture*	m_implement = nullptr;
-		ResourcePath	m_renderTarget = ResourcePath("", ".rt");
+		IVideoCapture*				m_implement = nullptr;
+		ResourcePath				m_renderTargetResPath = ResourcePath("", ".rt");
+		TextureRenderTarget2DPtr	m_renderTarget;
 	};
 }

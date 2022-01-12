@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/core/base/echo_def.h"
+#include "engine/core/render/base/image/pixel_format.h"
 
 namespace Echo
 {
@@ -11,7 +12,7 @@ namespace Echo
 		virtual void start() {}
 
 		// Lock
-		virtual void lockFrame(void*& buffer, i32& bufferLen) {}
+		virtual bool lockFrame(void*& buffer, i32& width, i32& height, PixelFormat& format, i32& bufferLen) { return false; }
 
 		// Unlock
 		virtual void unlockFrame() {}

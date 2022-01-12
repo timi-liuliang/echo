@@ -1,4 +1,5 @@
 #include "sample_grabber_cb.h"
+#include "engine/core/render/base/image/pixel_util.h"
 
 #ifdef ECHO_PLATFORM_WINDOWS
 
@@ -19,12 +20,17 @@ namespace Echo
 		return S_OK;
 	}
 
-	void SampleGrabberCallback::lockFrame(void*& buffer, i32& bufferLen)
+	bool SampleGrabberCallback::lockFrame(void*& buffer, i32& width, i32& height, PixelFormat& format, i32& bufferLen)
 	{
 		m_mutex.lock();
 
 		buffer = (void*)m_buffer.data();
 		bufferLen = (i32)m_buffer.size();
+		width = m_width;
+		height = m_height;
+		format = PF_RGBA8_UNORM;
+
+		return bufferLen == width * height * PixelUtil::GetPixelBytes(format);
 	}
 
 	void SampleGrabberCallback::unlockFrame()

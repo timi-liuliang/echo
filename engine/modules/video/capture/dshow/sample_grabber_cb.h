@@ -19,7 +19,7 @@ namespace Echo
 		HRESULT Initialize(i32 Width, i32 Height, ui8 bytesPerPixel, AM_MEDIA_TYPE mediaType);
 
 		// Lock
-		void lockFrame(void*& buffer, i32& bufferLen);
+		bool lockFrame(void*& buffer, i32& width, i32& height, PixelFormat& format, i32& bufferLen);
 
 		// Unlock
 		void unlockFrame();

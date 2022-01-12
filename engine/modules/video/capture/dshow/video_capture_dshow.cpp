@@ -227,16 +227,18 @@ namespace Echo
 			return;
 	}
 
-	void VideCaptureDShow::lockFrame(void*& buffer, i32& bufferLen)
+	bool VideCaptureDShow::lockFrame(void*& buffer, i32& width, i32& height, PixelFormat& format, i32& bufferLen)
 	{
 		if (m_grabberCb)
 		{
-			m_grabberCb->lockFrame(buffer, bufferLen);
+			return m_grabberCb->lockFrame(buffer, width, height, format, bufferLen);
 		}
 		else
 		{
 			buffer = nullptr;
 			bufferLen = 0;
+
+			return false;
 		}
 	}
 

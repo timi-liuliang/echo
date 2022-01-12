@@ -35,20 +35,26 @@ namespace Echo
 
 	void VideoCapture::setRenderTarget(const ResourcePath& res)
 	{
-		if (m_renderTarget.setPath(res.getPath()))
+		if (m_renderTargetResPath.setPath(res.getPath()))
 		{
-
+			m_renderTarget = ECHO_DOWN_CAST<TextureRenderTarget2D*>(Res::get(res));
 		}
 	}
 
 	void VideoCapture::updateInternal(float elapsedTime)
 	{
-		if (m_implement)
+		if (m_implement && m_renderTarget)
 		{
-			void* buffer = nullptr;
-			i32   bufferLen = 0;
+			void*		buffer = nullptr;
+			i32			bufferLen = 0;
+			i32			width = 0;
+			i32			height = 0;
+			PixelFormat format;
 
-			m_implement->lockFrame(buffer, bufferLen);
+			if (m_implement->lockFrame(buffer, width, height, format, bufferLen))
+			{
+				m_renderTarget->updateTexture2D(format, Texture::TU_GPU_READ, width, height, buffer, bufferLen);
+			}
 			m_implement->unlockFrame();
 		}
 	}
