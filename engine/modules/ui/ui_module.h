@@ -17,7 +17,12 @@ namespace Echo
 
 		// register all types of the module
 		virtual void registerTypes() override;
+	
+		// UiImage default material
+		void setUiImageDefaultShader(const ResourcePath& path) { m_uiImageDefaultShader.setPath(path.getPath()); }
+		const ResourcePath& getUiImageDefaultShader() { return m_uiImageDefaultShader; }
 
-		// get font
+	protected:
+		ResourcePath	m_uiImageDefaultShader = ResourcePath("Engine://Render/Pipeline/Shaders/Ui/UiImage.shader", ".shader");
 	};
 }

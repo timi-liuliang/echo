@@ -30,7 +30,7 @@ namespace Echo
         
         // material
         Material* getMaterial() const { return m_material; }
-        void setMaterial( Object* material) { m_material = (Material*)material; }
+        void setMaterial(Object* material);
 
     protected:
         // build drawable
@@ -50,11 +50,9 @@ namespace Echo
         void clearRenderable();
         
     private:
-        ResourcePath            m_textureRes = ResourcePath("", ".png");
+        ResourcePath            m_textureRes = ResourcePath("", ".png|.rt");
         MeshPtr                 m_mesh;
-        ShaderProgramPtr        m_shader;
         MaterialPtr             m_material;
-        MaterialPtr             m_materialDefault;
         RenderProxyPtr          m_renderable;
         Matrix4                 m_matWVP;
         i32                     m_width = 128;

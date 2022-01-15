@@ -54,8 +54,8 @@ namespace Echo
 			if (m_implement->lockFrame(buffer, width, height, format, bufferLen))
 			{
 				m_renderTarget->updateTexture2D(format, Texture::TU_GPU_READ, width, height, buffer, bufferLen);
+				m_implement->unlockFrame();
 			}
-			m_implement->unlockFrame();
 		}
 	}
 }

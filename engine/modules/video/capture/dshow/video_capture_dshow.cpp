@@ -244,7 +244,8 @@ namespace Echo
 
 	void VideCaptureDShow::unlockFrame()
 	{
-		m_grabberCb->unlockFrame();
+		if(m_grabberCb)
+			m_grabberCb->unlockFrame();
 	}
 }
 

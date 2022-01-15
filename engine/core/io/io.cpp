@@ -128,6 +128,10 @@ namespace Echo
 		{
             return m_userFileSystem.isExist(resourceName);
 		}
+        else if (StringUtil::StartWith(resourceName, "Engine://"))
+        {
+            return m_engineFileSystem.isExist(resourceName);
+        }
 
 		return PathUtil::IsFileExist(resourceName);
 	}

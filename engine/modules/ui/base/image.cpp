@@ -4,6 +4,7 @@
 #include "base/renderer.h"
 #include "base/shader/shader_program.h"
 #include "engine/core/main/Engine.h"
+#include "engine/modules/ui/ui_module.h"
 
 namespace Echo
 {
@@ -62,39 +63,48 @@ namespace Echo
             buildRenderable();
         }
     }
+
+    void UiImage::setMaterial(Object* material)
+    { 
+        if (m_material != material)
+        {
+            m_material = (Material*)material;
+            buildRenderable();
+        }    
+    }
     
     void UiImage::buildRenderable()
     {
+        clearRenderable();
+                     
+        // Material
+        if(!m_material)
+        {
+            const ResourcePath& defaultShader = UiModule::instance()->getUiImageDefaultShader();
+
+            m_material = ECHO_CREATE_RES(Material);
+            m_material->setShaderPath(defaultShader);
+        }
+
         if (!m_textureRes.getPath().empty())
         {
-            clearRenderable();
-            
-            StringArray macros = {"ALPHA_ADJUST"};
-            m_shader = ShaderProgram::getDefault2D(macros);
-            
-            // material
-            if(!m_materialDefault)
-            {
-                m_materialDefault = ECHO_CREATE_RES(Material);
-                m_materialDefault->setShaderPath(m_shader->getPath());
-            }
-
-            m_materialDefault->setUniformTexture("BaseColor", m_textureRes.getPath());
-            
-            // mesh
-            Ui::VertexArray vertices;
-            Ui::IndiceArray indices;
-            buildMeshData(vertices, indices);
-            
-            MeshVertexFormat define;
-            define.m_isUseUV = true;
-            
-            m_mesh = Mesh::create(true, true);
-            m_mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(Word), indices.data());
-            m_mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data());
-            
-            m_renderable = RenderProxy::create(m_mesh, m_materialDefault, this, false);
+            if(m_material && m_material->isUniformExist("SrcTexture"))
+                m_material->setUniformTexture("SrcTexture", m_textureRes.getPath());
         }
+            
+        // Mesh
+        Ui::VertexArray vertices;
+        Ui::IndiceArray indices;
+        buildMeshData(vertices, indices);
+            
+        MeshVertexFormat define;
+        define.m_isUseUV = true;
+            
+        m_mesh = Mesh::create(true, true);
+        m_mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(Word), indices.data());
+        m_mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data());
+            
+        m_renderable = RenderProxy::create(m_mesh, m_material, this, false);
     }
     
     void UiImage::updateInternal(float elapsedTime)
@@ -109,14 +119,7 @@ namespace Echo
     }
     
     void UiImage::buildMeshData(Ui::VertexArray& oVertices, Ui::IndiceArray& oIndices)
-    {
-        //Texture* texture = m_materialDefault->getTexture(0);
-        //if (texture)
-        //{
-        //    if(!m_width) m_width  = texture->getWidth();
-        //    if(!m_height) m_height = texture->getHeight();
-        //}
-        
+    {    
         float hw = m_width * 0.5f;
         float hh = m_height * 0.5f;
         
