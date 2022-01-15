@@ -45,7 +45,7 @@ namespace Echo
         {
             m_width = width;
             
-            buildRenderable();
+            clearRenderable();
         }
     }
     
@@ -55,7 +55,7 @@ namespace Echo
         {
             m_height = height;
             
-            buildRenderable();
+            clearRenderable();
         }
     }
 
@@ -63,7 +63,7 @@ namespace Echo
     {
         if (m_textureRes.setPath(path.getPath()))
         {
-            buildRenderable();
+            clearRenderable();
         }
     }
 
@@ -73,7 +73,7 @@ namespace Echo
         {
             m_color = color;
 
-            buildRenderable();
+            clearRenderable();
         }
     }
 
@@ -82,7 +82,7 @@ namespace Echo
         if (m_material != material)
         {
             m_material = (Material*)material;
-            buildRenderable();
+            clearRenderable();
         }    
     }
     
@@ -124,10 +124,10 @@ namespace Echo
     {
         if (isNeedRender())
         {
-            if (m_renderable)
-            {
-                m_renderable->submitToRenderQueue();
-            }
+            if (!m_renderable)
+                buildRenderable();
+
+            m_renderable->submitToRenderQueue();
         }
     }
     
