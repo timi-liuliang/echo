@@ -8,7 +8,7 @@ namespace Echo
 {
     class ShaderNodeFloat : public ShaderNodeUniform
     {
-        ECHO_CLASS(ShaderNodeFloat, ShaderNode)
+        ECHO_CLASS(ShaderNodeFloat, ShaderNodeUniform)
 
     public:
         ShaderNodeFloat();

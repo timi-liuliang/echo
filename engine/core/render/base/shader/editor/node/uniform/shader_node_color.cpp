@@ -50,7 +50,7 @@ namespace Echo
 		{
 			compiler.addUniform("vec4", getVariableName().c_str());
 
-            compiler.addCode(Echo::StringUtil::Format("\tvec4 %s_Value = vec4(SRgbToLinear(fs_ubo.%s.rgb), fs_ubo.%s.a);\n", getVariableName().c_str(), getVariableName().c_str(), getVariableName().c_str()));
+            compiler.addCode(Echo::StringUtil::Format("\tvec4 %s_Value = vec4(fs_ubo.%s.rgba);\n", getVariableName().c_str(), getVariableName().c_str(), getVariableName().c_str()));
 		}
 		else
 		{

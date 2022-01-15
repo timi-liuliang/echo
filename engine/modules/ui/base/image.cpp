@@ -20,28 +20,23 @@ namespace Echo
     
     void UiImage::bindMethods()
     {
-        CLASS_BIND_METHOD(UiImage, getTextureRes);
-        CLASS_BIND_METHOD(UiImage, setTextureRes);
         CLASS_BIND_METHOD(UiImage, getWidth);
         CLASS_BIND_METHOD(UiImage, setWidth);
         CLASS_BIND_METHOD(UiImage, getHeight);
         CLASS_BIND_METHOD(UiImage, setHeight);
+        CLASS_BIND_METHOD(UiImage, getTextureRes);
+        CLASS_BIND_METHOD(UiImage, setTextureRes);
+        CLASS_BIND_METHOD(UiImage, getColor);
+        CLASS_BIND_METHOD(UiImage, setColor);
         CLASS_BIND_METHOD(UiImage, getMaterial);
         CLASS_BIND_METHOD(UiImage, setMaterial);
         
         CLASS_REGISTER_PROPERTY(UiImage, "Width", Variant::Type::Int, getWidth, setWidth);
         CLASS_REGISTER_PROPERTY(UiImage, "Height", Variant::Type::Int, getHeight, setHeight);
         CLASS_REGISTER_PROPERTY(UiImage, "Texture", Variant::Type::ResourcePath, getTextureRes, setTextureRes);
+        CLASS_REGISTER_PROPERTY(UiImage, "Color", Variant::Type::Color, getColor, setColor);
         CLASS_REGISTER_PROPERTY(UiImage, "Material", Variant::Type::Object, getMaterial, setMaterial);
         CLASS_REGISTER_PROPERTY_HINT(UiImage, "Material", PropertyHintType::ObjectType, "Material");
-    }
-    
-    void UiImage::setTextureRes(const ResourcePath& path)
-    {
-        if (m_textureRes.setPath(path.getPath()))
-        {
-            buildRenderable();
-        }
     }
     
     void UiImage::setWidth(i32 width)
@@ -60,6 +55,24 @@ namespace Echo
         {
             m_height = height;
             
+            buildRenderable();
+        }
+    }
+
+    void UiImage::setTextureRes(const ResourcePath& path)
+    {
+        if (m_textureRes.setPath(path.getPath()))
+        {
+            buildRenderable();
+        }
+    }
+
+    void UiImage::setColor(const Color& color)
+    {
+        if (m_color != color)
+        {
+            m_color = color;
+
             buildRenderable();
         }
     }
@@ -86,11 +99,11 @@ namespace Echo
             m_material->setShaderPath(defaultShader);
         }
 
-        if (!m_textureRes.getPath().empty())
-        {
-            if(m_material && m_material->isUniformExist("SrcTexture"))
-                m_material->setUniformTexture("SrcTexture", m_textureRes.getPath());
-        }
+        if (!m_textureRes.getPath().empty() && m_material && m_material->isUniformExist("SrcTexture"))
+            m_material->setUniformTexture("SrcTexture", m_textureRes.getPath());
+
+        if (m_material && m_material->isUniformExist("SrcColor"))
+            m_material->setUniformValue("SrcColor", &m_color);
             
         // Mesh
         Ui::VertexArray vertices;

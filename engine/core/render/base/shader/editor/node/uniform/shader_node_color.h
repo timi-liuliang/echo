@@ -8,7 +8,7 @@ namespace Echo
 {
     class ShaderNodeColor : public ShaderNodeUniform
     {
-        ECHO_CLASS(ShaderNodeColor, ShaderNode)
+        ECHO_CLASS(ShaderNodeColor, ShaderNodeUniform)
 
     public:
         ShaderNodeColor();
