@@ -191,7 +191,7 @@ namespace Echo
 		case  8:	mediaType.subtype = MEDIASUBTYPE_RGB8;	break;
 		case 16:	mediaType.subtype = MEDIASUBTYPE_RGB555;break;
 		case 24:	mediaType.subtype = MEDIASUBTYPE_RGB24;	break;
-		case 32:	mediaType.subtype = MEDIASUBTYPE_RGB32;	break;
+		case 32:	mediaType.subtype = MEDIASUBTYPE_ARGB32;	break;
 		default:	break;
 		}
 		mediaType.formattype = FORMAT_VideoInfo;

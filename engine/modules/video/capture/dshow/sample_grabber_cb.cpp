@@ -70,9 +70,34 @@ namespace Echo
 
 		if (m_buffer.size() == BufferLen)
 		{
-			EE_LOCK_MUTEX(m_mutex)
+			EE_LOCK_MUTEX(m_mutex);
 
-			std::memcpy(m_buffer.data(), pBuffer, BufferLen);
+			if (m_upsideDown)
+			{
+				// https://microsoft.public.win32.programmer.directx.video.narkive.com/fySNYIqF/output-video-upside-down
+				i32 bufferLenPerRow = BufferLen / m_height;
+				for (i32 i = 0; i < m_height; i++)
+				{
+					ui8* srcPtr = pBuffer + (m_height-i-1) * bufferLenPerRow;
+					ui8* dstPtr = m_buffer.data() + i * bufferLenPerRow;
+
+					if (false)
+					{
+						//for (i32 j = 0; j < m_width; j++)
+						//{
+						//	*(dstPtr + j) = *(srcPtr + m_width - j - 1);
+						//}
+					}
+					else
+					{
+						std::memcpy(dstPtr, srcPtr, bufferLenPerRow);
+					}
+				}
+			}
+			else
+			{
+				std::memcpy(m_buffer.data(), pBuffer, BufferLen);
+			}
 		}
 
 		return S_OK;

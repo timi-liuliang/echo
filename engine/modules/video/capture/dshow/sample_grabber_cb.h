@@ -34,6 +34,7 @@ namespace Echo
 
 	public:
 		EE_MUTEX			(m_mutex);
+		bool				m_upsideDown = true;
 		i32					m_width;
 		i32					m_height;
 		ui8					m_bytesPerPixel;

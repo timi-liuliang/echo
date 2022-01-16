@@ -2,14 +2,11 @@
 #include "engine/core/log/Log.h"
 #include "engine/core/io/stream/MemoryDataStream.h"
 #include "image_codec.h"
-
 #include "stb/stb_image.h"
-
 
 #ifdef _WINDOWS_
 #undef _WINDOWS_
 #endif
-
 
 #if (ECHO_ENDIAN == ECHO_ENDIAN_BIG)
 #	define FREEIMAGE_BIGENDIAN
@@ -102,24 +99,24 @@ namespace Echo
     }
 
     ImageCodec::ImageCodec(ImageFormat imgFmt)
-            : m_imgFmt(imgFmt) {
+    : m_imgFmt(imgFmt)
+    {
     }
 
-    ImageCodec::~ImageCodec() {
+    ImageCodec::~ImageCodec() 
+    {
     }
 
-    ImageFormat ImageCodec::getImageFormat() const {
+    ImageFormat ImageCodec::getImageFormat() const 
+    {
         return m_imgFmt;
     }
 
-    bool ImageCodec::codeToFile(ImageFormat imgFmt, const Buffer &buff, const Image::ImageInfo &imgInfo,
-                                const String &filename) const {
-
-
+    bool ImageCodec::codeToFile(ImageFormat imgFmt, const Buffer &buff, const Image::ImageInfo &imgInfo, const String &filename) const 
+    {
         Buffer outBuff;
-        if (!encode(buff, outBuff, imgInfo)) {
+        if (!encode(buff, outBuff, imgInfo)) 
             return false;
-        }
 
         Byte *pData = NULL;
         outBuff.takeData(pData);
@@ -127,19 +124,23 @@ namespace Echo
         return true;
     }
 
-    bool ImageCodec::encode(const Buffer &inBuff, Buffer &outBuff, const Image::ImageInfo &imgInfo) const {
+    bool ImageCodec::encode(const Buffer &inBuff, Buffer &outBuff, const Image::ImageInfo &imgInfo) const 
+    {
         return doEncode(m_imgFmt, inBuff, outBuff, imgInfo);
     }
 
-    bool ImageCodec::decode(const Buffer &inBuff, Buffer &outBuff, Image::ImageInfo &imgInfo) {
+    bool ImageCodec::decode(const Buffer &inBuff, Buffer &outBuff, Image::ImageInfo &imgInfo) 
+    {
         return doDecode(m_imgFmt, inBuff, outBuff, imgInfo);
     }
 
-    DataStream *ImageCodec::decode(DataStream *inStream, Image::ImageInfo &imgInfo) {
+    DataStream *ImageCodec::decode(DataStream *inStream, Image::ImageInfo &imgInfo) 
+    {
         return doDecode(m_imgFmt, inStream, imgInfo);
     }
 
-    ImageFormat ImageCodec::GetImageFormat(const String &filename) {
+    ImageFormat ImageCodec::GetImageFormat(const String &filename) 
+    {
 //        FREE_IMAGE_FORMAT fiImgFmt;
 //        fiImgFmt = FreeImage_GetFileType(filename.c_str());
         return Image::GetImageFormatByExt(PathUtil::GetFileExt(filename));
