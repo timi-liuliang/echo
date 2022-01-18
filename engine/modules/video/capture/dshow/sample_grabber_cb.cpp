@@ -20,19 +20,6 @@ namespace Echo
 		return S_OK;
 	}
 
-	bool SampleGrabberCallback::lockFrame(void*& buffer, i32& width, i32& height, PixelFormat& format, i32& bufferLen)
-	{
-		m_mutex.lock();
-
-		buffer = (void*)m_buffer.data();
-		bufferLen = (i32)m_buffer.size();
-		width = m_width;
-		height = m_height;
-		format = PF_RGBA8_UNORM;
-
-		return bufferLen == width * height * PixelUtil::GetPixelBytes(format);
-	}
-
 	void SampleGrabberCallback::unlockFrame()
 	{
 		m_mutex.unlock();
@@ -76,17 +63,36 @@ namespace Echo
 			{
 				// https://microsoft.public.win32.programmer.directx.video.narkive.com/fySNYIqF/output-video-upside-down
 				i32 bufferLenPerRow = BufferLen / m_height;
+				i32 pixelBytes = bufferLenPerRow / m_width;
+
+				#pragma omp parallel for
 				for (i32 i = 0; i < m_height; i++)
 				{
 					ui8* srcPtr = pBuffer + (m_height-i-1) * bufferLenPerRow;
 					ui8* dstPtr = m_buffer.data() + i * bufferLenPerRow;
 
-					if (false)
+					if (true)
 					{
-						//for (i32 j = 0; j < m_width; j++)
-						//{
-						//	*(dstPtr + j) = *(srcPtr + m_width - j - 1);
-						//}
+						for (i32 j = 0; j < m_width; j++)
+						{
+							ui8* srcPixelPtr = srcPtr + (m_width-j-1) * pixelBytes;
+							ui8* dstPixelPtr = dstPtr + j * pixelBytes;
+
+							if (pixelBytes == 4)
+							{
+								for (i32 k = 0; k < pixelBytes; k++)
+								{
+									dstPixelPtr[0] = srcPixelPtr[2];	// Red
+									dstPixelPtr[1] = srcPixelPtr[1];	// Green
+									dstPixelPtr[2] = srcPixelPtr[0];	// Blue
+									dstPixelPtr[3] = srcPixelPtr[3];	// Alpha
+								}
+							}
+							else
+							{
+								std::memcpy(dstPixelPtr, srcPixelPtr, pixelBytes);
+							}
+						}
 					}
 					else
 					{
@@ -101,6 +107,19 @@ namespace Echo
 		}
 
 		return S_OK;
+	}
+
+	bool SampleGrabberCallback::lockFrame(void*& buffer, i32& width, i32& height, PixelFormat& format, i32& bufferLen)
+	{
+		m_mutex.lock();
+
+		buffer = (void*)m_buffer.data();
+		bufferLen = (i32)m_buffer.size();
+		width = m_width;
+		height = m_height;
+		format = PF_RGBA8_UNORM;
+
+		return bufferLen == width * height * PixelUtil::GetPixelBytes(format);
 	}
 }
 
