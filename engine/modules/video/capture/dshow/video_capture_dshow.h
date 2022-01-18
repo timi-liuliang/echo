@@ -26,7 +26,7 @@ namespace Echo
 			~DeviceInfo();
 
 			// Read properties
-			void initialzie();
+			void initialzie(IMoniker* moniker);
 
 			// Check card type
 			bool isVFWCard(IBaseFilter* deviceFilter);

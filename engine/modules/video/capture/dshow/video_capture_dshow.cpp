@@ -17,8 +17,10 @@ namespace Echo
 		if (m_moniker) m_moniker->Release();
 	}
 
-	void VideCaptureDShow::DeviceInfo::initialzie()
+	void VideCaptureDShow::DeviceInfo::initialzie(IMoniker* moniker)
 	{
+		m_moniker = moniker;
+
 		auto readProperty = [this](const wchar_t* name, std::string& value)
 		{
 			VARIANT propValue;
@@ -106,12 +108,13 @@ namespace Echo
 			if (S_OK == hr)
 			{
 				ULONG cFected;
-				DeviceInfo* deviceInfo = EchoNew(DeviceInfo);
 				enumMoniker->Reset();
 
-				while (enumMoniker->Next(1, &deviceInfo->m_moniker, &cFected) == S_OK)
+				IMoniker* moniker = nullptr;
+				while (enumMoniker->Next(1, &moniker, &cFected) == S_OK)
 				{
-					deviceInfo->initialzie();
+					DeviceInfo* deviceInfo = EchoNew(DeviceInfo);
+					deviceInfo->initialzie(moniker);
 					m_devices.emplace_back(deviceInfo);
 				}
 
