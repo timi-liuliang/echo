@@ -14,6 +14,7 @@ namespace Echo
 		m_width = Width;
 		m_height = Height;
 		m_bytesPerPixel = bytesPerPixel;
+		m_mediaType = mediaType;
 
 		m_buffer.resize(m_width * m_height * m_bytesPerPixel);
 
@@ -78,10 +79,11 @@ namespace Echo
 							ui8* srcPixelPtr = srcPtr + (m_width-j-1) * pixelBytes;
 							ui8* dstPixelPtr = dstPtr + j * pixelBytes;
 
-							if (pixelBytes == 4)
+							if (pixelBytes == 4 && m_mediaType.subtype== MEDIASUBTYPE_ARGB32)
 							{
 								for (i32 k = 0; k < pixelBytes; k++)
 								{
+									// Why BGRA? Big endian?
 									dstPixelPtr[0] = srcPixelPtr[2];	// Red
 									dstPixelPtr[1] = srcPixelPtr[1];	// Green
 									dstPixelPtr[2] = srcPixelPtr[0];	// Blue
