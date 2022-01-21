@@ -66,7 +66,9 @@ namespace Echo
 		IBaseFilter*			m_grabberFilter = nullptr;
 		ISampleGrabber*			m_grabber = nullptr;
 		SampleGrabberCallback*	m_grabberCb = nullptr;
-		IBaseFilter*			m_destFilter = nullptr;
+		IBaseFilter*			m_destFilterNulllRenderer = nullptr;
+		bool					m_writeToAvi = false;
+		IBaseFilter*			m_writeToAviFilter = nullptr;
 	};
 }
 

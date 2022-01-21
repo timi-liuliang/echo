@@ -162,7 +162,7 @@ namespace Echo
 		if (FAILED(hr))	
 			return false;
 
-		hr = CoCreateInstance(CLSID_NullRenderer, NULL, CLSCTX_INPROC_SERVER, IID_IBaseFilter, (void**)&m_destFilter);
+		hr = CoCreateInstance(CLSID_NullRenderer, NULL, CLSCTX_INPROC_SERVER, IID_IBaseFilter, (void**)&m_destFilterNulllRenderer);
 		if (FAILED(hr))
 			return false;
 
@@ -176,7 +176,7 @@ namespace Echo
 		if (FAILED(hr))
 			return false;
 
-		hr = m_graph->AddFilter(m_destFilter, L"Null Renderer");
+		hr = m_graph->AddFilter(m_destFilterNulllRenderer, L"Null Renderer");
 		if (FAILED(hr))
 			return false;
 
@@ -206,10 +206,24 @@ namespace Echo
 		if (FAILED(hr))
 			return false;
 
-		// https://docs.microsoft.com/en-us/previous-versions/ms784859(v=vs.85)
-		hr = m_capture->RenderStream(&PIN_CATEGORY_CAPTURE, &MEDIATYPE_Video, deviceFilter, m_grabberFilter, m_destFilter);
-		if (FAILED(hr))
-			return false;
+		if (m_writeToAvi)
+		{
+			// https://docs.microsoft.com/en-us/windows/win32/directshow/capturing-video-to-an-avi-file
+			hr = m_capture->SetOutputFileName(&MEDIASUBTYPE_Avi, L"D:\\Test.avi", &m_writeToAviFilter, nullptr);
+			if (FAILED(hr))
+				return false;
+
+			hr = m_capture->RenderStream(&PIN_CATEGORY_CAPTURE, &MEDIATYPE_Video, deviceFilter, m_grabberFilter, m_writeToAviFilter);
+			if (FAILED(hr))
+				return false;
+		}
+		else
+		{
+			// https://docs.microsoft.com/en-us/previous-versions/ms784859(v=vs.85)
+			hr = m_capture->RenderStream(&PIN_CATEGORY_CAPTURE, &MEDIATYPE_Video, deviceFilter, m_grabberFilter, m_destFilterNulllRenderer);
+			if (FAILED(hr))
+				return false;
+		}
 
 		hr = m_grabber->GetConnectedMediaType(&mediaType);
 		if (FAILED(hr))
