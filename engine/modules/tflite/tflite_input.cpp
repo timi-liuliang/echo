@@ -17,6 +17,7 @@ namespace Echo
 	void TFLiteInput::bindMethods()
 	{
 		CLASS_BIND_METHOD(TFLiteInput, setImage);
+		//CLASS_BIND_METHOD(TFLiteInput, setBuffer);
 	}
 
 	void TFLiteInput::bindTensor(TfLiteTensor* tensor)
@@ -41,7 +42,7 @@ namespace Echo
 		i32 bytes = image->getWidth() * image->getHeight() * PixelUtil::GetPixelBytes(image->getPixelFormat());
 		if (bytes == m_bytes)
 		{
-			TfLiteTensorCopyFromBuffer(m_tensor, image->getData(), bytes);
+			setBuffer(image->getData(), bytes);
 		}
 		else
 		{
@@ -49,5 +50,10 @@ namespace Echo
 		}
 
 		EchoSafeDelete(image, Image);
+	}
+
+	void TFLiteInput::setBuffer(void* buffer, i32 bytes)
+	{
+		TfLiteTensorCopyFromBuffer(m_tensor, buffer, bytes);
 	}
 }

@@ -41,6 +41,11 @@ namespace Echo
 		}
 	}
 
+	void VideoCapture::setSavePath(const ResourcePath& path)
+	{
+		m_savePath.setPath(path.getPath());
+	}
+
 	void VideoCapture::updateInternal(float elapsedTime)
 	{
 		if (m_implement && m_renderTarget)

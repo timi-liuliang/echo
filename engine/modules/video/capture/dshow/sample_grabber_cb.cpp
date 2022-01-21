@@ -113,15 +113,20 @@ namespace Echo
 
 	bool SampleGrabberCallback::lockFrame(void*& buffer, i32& width, i32& height, PixelFormat& format, i32& bufferLen)
 	{
-		m_mutex.lock();
+		if (bufferLen == width * height * PixelUtil::GetPixelBytes(PF_RGBA8_UNORM))
+		{
+			m_mutex.lock();
 
-		buffer = (void*)m_buffer.data();
-		bufferLen = (i32)m_buffer.size();
-		width = m_width;
-		height = m_height;
-		format = PF_RGBA8_UNORM;
+			buffer = (void*)m_buffer.data();
+			bufferLen = (i32)m_buffer.size();
+			width = m_width;
+			height = m_height;
+			format = PF_RGBA8_UNORM;
 
-		return bufferLen == width * height * PixelUtil::GetPixelBytes(format);
+			return true;
+		}
+
+		return false;
 	}
 }
 

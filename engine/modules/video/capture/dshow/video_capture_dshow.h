@@ -54,7 +54,7 @@ namespace Echo
 		void initCaptureGraphBuilder();
 
 		// Open device
-		void openDevice(int deviceID);
+		bool openDevice(int deviceID);
 
 	private:
 		std::vector<DeviceInfo*>m_devices;

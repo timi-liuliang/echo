@@ -17,8 +17,9 @@ namespace Echo
 		void bindTensor(TfLiteTensor* tensor);
 		TfLiteTensor* getTensor() { return m_tensor; }
 
-		// Set image data
+		// Set data
 		void setImage(const String& resPath);
+		void setBuffer(void* buffer, i32 bytes);
 
 	public:
 		TfLiteTensor*		m_tensor = nullptr;

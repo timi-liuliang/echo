@@ -22,6 +22,10 @@ namespace Echo
 		void setRenderTarget(const ResourcePath& res);
 		const ResourcePath& getRenderTarget() const { return m_renderTargetResPath; }
 
+		// Save
+		void setSavePath(const ResourcePath& path);
+		const ResourcePath& getSavePath() const { return m_savePath; }
+
 		// Update
 		virtual void updateInternal(float elapsedTime) override;
 
@@ -29,5 +33,6 @@ namespace Echo
 		IVideoCapture*				m_implement = nullptr;
 		ResourcePath				m_renderTargetResPath = ResourcePath("", ".rt");
 		TextureRenderTarget2DPtr	m_renderTarget;
+		ResourcePath				m_savePath;
 	};
 }

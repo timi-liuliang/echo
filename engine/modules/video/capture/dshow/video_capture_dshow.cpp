@@ -153,33 +153,36 @@ namespace Echo
 		}
 	}
 
-	void VideCaptureDShow::openDevice(int deviceID)
+	bool VideCaptureDShow::openDevice(int deviceID)
 	{
+		if (deviceID < 0 || deviceID >= m_devices.size())
+			return false;
+
 		HRESULT hr = CoCreateInstance(CLSID_SampleGrabber, nullptr, CLSCTX_INPROC_SERVER, IID_IBaseFilter, (LPVOID*)&m_grabberFilter);
 		if (FAILED(hr))	
-			return;
+			return false;
 
 		hr = CoCreateInstance(CLSID_NullRenderer, NULL, CLSCTX_INPROC_SERVER, IID_IBaseFilter, (void**)&m_destFilter);
 		if (FAILED(hr))
-			return;
+			return false;
 
 		IBaseFilter* deviceFilter = m_devices[deviceID]->m_deviceFilter;
 
 		hr = m_graph->AddFilter(deviceFilter, L"Video Filter");
 		if (FAILED(hr))
-			return;
+			return false;
 
 		hr = m_graph->AddFilter(m_grabberFilter, L"Sample Grabber");
 		if (FAILED(hr))
-			return;
+			return false;
 
 		hr = m_graph->AddFilter(m_destFilter, L"Null Renderer");
 		if (FAILED(hr))
-			return;
+			return false;
 
 		hr = m_grabberFilter->QueryInterface(IID_ISampleGrabber, (LPVOID*)&m_grabber);
 		if (FAILED(hr))
-			return;
+			return false;
 
 		HDC hdc = GetDC(NULL);
 		int bitDepth = GetDeviceCaps(hdc, BITSPIXEL);
@@ -201,33 +204,35 @@ namespace Echo
 		
 		hr = m_grabber->SetMediaType(&mediaType);
 		if (FAILED(hr))
-			return;
+			return false;
 
 		// https://docs.microsoft.com/en-us/previous-versions/ms784859(v=vs.85)
 		hr = m_capture->RenderStream(&PIN_CATEGORY_CAPTURE, &MEDIATYPE_Video, deviceFilter, m_grabberFilter, m_destFilter);
 		if (FAILED(hr))
-			return;
+			return false;
 
 		hr = m_grabber->GetConnectedMediaType(&mediaType);
 		if (FAILED(hr))
-			return;
+			return false;
 
 		VIDEOINFOHEADER* vih = (VIDEOINFOHEADER*)mediaType.pbFormat;
 		hr = m_grabberCb->Initialize(vih->bmiHeader.biWidth, vih->bmiHeader.biHeight, vih->bmiHeader.biBitCount / 8, mediaType);
 		if (FAILED(hr))
-			return;
+			return false;
 
 		hr = m_grabber->SetCallback(m_grabberCb, 1);
 		if (FAILED(hr))
-			return;
+			return false;
 
 		hr = m_mediaControl->Run();
 		if (FAILED(hr))
-			return;
+			return false;
 
 		hr = m_grabber->SetOneShot(FALSE);
 		if (FAILED(hr))
-			return;
+			return false;
+
+		return true;
 	}
 
 	bool VideCaptureDShow::lockFrame(void*& buffer, i32& width, i32& height, PixelFormat& format, i32& bufferLen)
