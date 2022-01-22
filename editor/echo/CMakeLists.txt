@@ -25,6 +25,16 @@ IF(${ECHO_PLATFORM_WINDOWS})
 		LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/live2d/Cubism31SdkNative-EAP5/Core/lib/windows/x86_64)
 		LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/opencl/windows/lib/x64)
 	ENDIF()
+
+    # VS  http://www.oschina.net/code/explore/mariadb-5.2.4/CMakeLists.txt
+	IF(MSVC)
+		SET(CMAKE_CXX_FLAGS_DEBUG			"${CMAKE_CXX_FLAGS_DEBUG} /wd4996 /wd4819 /MP /openmp")
+		SET(CMAKE_CXX_FLAGS_RELEASE			"${CMAKE_CXX_FLAGS_RELEASE} /wd4996 /wd4819 /MP /openmp")
+		SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO	"${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /wd4996 /wd4819  /MP /openmp")
+		SET(CMAKE_C_FLAGS_DEBUG				"${CMAKE_C_FLAGS_DEBUG} /wd4996 /wd4819  /MP /openmp")
+		SET(CMAKE_C_FLAGS_RELEASE			"${CMAKE_C_FLAGS_RELEASE} /wd4996 /wd4819  /MP /openmp")
+		SET(CMAKE_C_FLAGS_RELWITHDEBINFO	"${CMAKE_C_FLAGS_RELWITHDEBINFO} /wd4996 /wd4819  /MP /openmp")
+	ENDIF(MSVC)
 ENDIF()
 
 # set module name
