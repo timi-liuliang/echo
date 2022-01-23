@@ -23,6 +23,7 @@
 #include "controller/physx_controller_capsule.h"
 #include "editor/physx_controller_box_editor.h"
 #include "editor/physx_controller_capsule_editor.h"
+#include "vehicle/physx_vehicle_drive4w.h"
 #include "engine/core/main/Engine.h"
 
 namespace Echo
@@ -135,6 +136,7 @@ namespace Echo
 		Class::registerType<PhysxShapePlane>();
 		Class::registerType<PhysxShapeHeightfield>();
 		Class::registerType<PhysxShapeMesh>();
+		Class::registerType<PhysxVehicleDrive4W>();
 
 		CLASS_REGISTER_EDITOR(PhysxBody, PhysxBodyEditor)
 		CLASS_REGISTER_EDITOR(PhysxShapeBox, PhysxShapeBoxEditor)
