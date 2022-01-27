@@ -11,6 +11,14 @@ namespace Echo
 		ECHO_CLASS(PhysxVehicleDrive4W, Node)
 
 	public:
+		// Surface Type
+		enum SurfaceType
+		{
+			DrivableSurface = 0xffff0000,
+			UndriveableSurface = 0x0000ffff
+		};
+
+	public:
 		PhysxVehicleDrive4W();
 		virtual ~PhysxVehicleDrive4W();
 
@@ -20,6 +28,7 @@ namespace Echo
 		void setupWheelsSimulationData(physx::PxVehicleWheelsSimData* wheelsSimData);
 		void setupDriveSimData(physx::PxVehicleDriveSimData4W& driveSimData);
 		void setupVehicleActor(physx::PxRigidDynamic* vehicleActor);
+		void setupNonDrivableSurface(physx::PxFilterData& filterData);
 
 		// Reset
 		void reset();

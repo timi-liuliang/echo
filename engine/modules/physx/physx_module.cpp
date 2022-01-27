@@ -23,7 +23,9 @@
 #include "controller/physx_controller_capsule.h"
 #include "editor/physx_controller_box_editor.h"
 #include "editor/physx_controller_capsule_editor.h"
+#include "vehicle/physx_vehicle_wheel.h"
 #include "vehicle/physx_vehicle_drive4w.h"
+#include "editor/physx_vehicle_wheel_editor.h"
 #include "editor/physx_vehicle_drive4w_editor.h"
 #include "engine/core/main/Engine.h"
 
@@ -137,6 +139,7 @@ namespace Echo
 		Class::registerType<PhysxShapePlane>();
 		Class::registerType<PhysxShapeHeightfield>();
 		Class::registerType<PhysxShapeMesh>();
+		Class::registerType<PhysxVehicleWheel>();
 		Class::registerType<PhysxVehicleDrive4W>();
 
 		CLASS_REGISTER_EDITOR(PhysxBody, PhysxBodyEditor)
@@ -148,6 +151,7 @@ namespace Echo
 		CLASS_REGISTER_EDITOR(PhysxShapeMesh, PhysxShapeMeshEditor)
 		CLASS_REGISTER_EDITOR(PhysxControllerBox, PhysxControllerBoxEditor)
 		CLASS_REGISTER_EDITOR(PhysxControllerCapsule, PhysxControllerCapsuleEditor)
+		CLASS_REGISTER_EDITOR(PhysxVehicleWheel, PhysxVehicleWheelEditor)
 		CLASS_REGISTER_EDITOR(PhysxVehicleDrive4W, PhysxVehicleDrive4WEditor)
 	}
 
