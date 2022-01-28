@@ -1,8 +1,7 @@
 #pragma once
 
 #include "engine/core/scene/node.h"
-#include "../physx_base.h"
-#include "vehicle/PxVehicleDrive4W.h"
+#include "physx_vehicle_wheel.h"
 
 namespace Echo
 {
@@ -11,6 +10,8 @@ namespace Echo
 		ECHO_CLASS(PhysxVehicleDrive4W, Node)
 
 	public:
+		typedef vector<PhysxVehicleWheel*>::type WheelList;
+
 		// Surface Type
 		enum SurfaceType
 		{
@@ -22,19 +23,32 @@ namespace Echo
 		PhysxVehicleDrive4W();
 		virtual ~PhysxVehicleDrive4W();
 
+	public:
+		// Get wheel by index
+		vector<PhysxVehicleWheel*>::type getAllWheels();
+
 	protected:
 		// Setting up the vehicle
 		void settingUp();
 		void setupWheelsSimulationData(physx::PxVehicleWheelsSimData* wheelsSimData);
 		void setupDriveSimData(physx::PxVehicleDriveSimData4W& driveSimData);
-		void setupVehicleActor(physx::PxRigidDynamic* vehicleActor);
+		void setupVehicleActor();
 		void setupNonDrivableSurface(physx::PxFilterData& filterData);
+
+		// Chassis mesh
+		physx::PxConvexMesh* createChassisMesh(const physx::PxVec3& dims);
 
 		// Reset
 		void reset();
 
 	private:
-		i32								m_numWheels = 4;
+		physx::PxF32					m_chassisMass = 0.f;
+		physx::PxVec3					m_chassisDims = physx::PxVec3(0.f, 0.f, 0.f);
+		physx::PxVec3					m_chassisMOI = physx::PxVec3(0.f, 0.f, 0.f);
+		physx::PxVec3					m_chassisCMOffset = physx::PxVec3(0.f, 0.f, 0.f);
+		physx::PxMaterial*				m_chassisMaterial = nullptr;
+		physx::PxFilterData				m_chassisFilterData;
+		WheelList						m_wheels;
 		physx::PxVehicleWheelsSimData*	m_wheelsSimData = nullptr;
 		physx::PxRigidDynamic*			m_vehicleActor = nullptr;
 		physx::PxVehicleDrive4W*		m_vehicleDrive4W = nullptr;
