@@ -7,7 +7,13 @@ namespace Echo
 	PhysxVehicleDrive4W::PhysxVehicleDrive4W()
 		: Node()
 	{
-
+		m_chassisMass = 1500.f;
+		m_chassisDims = physx::PxVec3(3.5f, 2.f, 9.f);
+		m_chassisMOI = physx::PxVec3(
+			(m_chassisDims.y * m_chassisDims.y + m_chassisDims.z * m_chassisDims.z) * m_chassisMass / 12.0f,
+			(m_chassisDims.x * m_chassisDims.x + m_chassisDims.z * m_chassisDims.z) * 0.8f * m_chassisMass / 12.0f,
+			(m_chassisDims.x * m_chassisDims.x + m_chassisDims.y * m_chassisDims.y) * m_chassisMass / 12.0f);
+		m_chassisCMOffset = physx::PxVec3(0.0f, -m_chassisDims.y * 0.5f + 0.65f, 0.25f);
 	}
 
 	PhysxVehicleDrive4W::~PhysxVehicleDrive4W()
@@ -48,8 +54,6 @@ namespace Echo
 
 	void PhysxVehicleDrive4W::setupWheelsSimulationData(physx::PxVehicleWheelsSimData* wheelsSimData)
 	{
-		physx::PxVec3 chassisCMOffset(0.f, 0.f, 0.f);
-
 		// Set up the wheel data structures with mass, moi, radius, width
 		physx::PxVehicleWheelData wheels[PX_MAX_NB_WHEELS];
 		{
@@ -67,6 +71,13 @@ namespace Echo
 			wheels[physx::PxVehicleDrive4WWheelOrder::eFRONT_RIGHT].mMaxSteer = physx::PxPi * 0.3333f;
 		}
 
+		physx::PxVec3 wheelCenterActorOffsets[PX_MAX_NB_WHEELS];
+		for (ui32 i = 0; i < m_wheels.size(); i++)
+		{
+			const Vector3& wheelLocalPos = m_wheels[i]->getLocalPosition();
+			wheelCenterActorOffsets[i] = physx::PxVec3(wheelLocalPos.x, wheelLocalPos.y, wheelLocalPos.z);
+		}
+
 		// Set up the tires
 		physx::PxVehicleTireData tires[PX_MAX_NB_WHEELS];
 		{
@@ -78,11 +89,9 @@ namespace Echo
 
 		// Set up the suspensions
 		physx::PxVehicleSuspensionData suspensions[PX_MAX_NB_WHEELS];
-		physx::PxVec3 wheelCenterActorOffsets[PX_MAX_NB_WHEELS];
 		{
-			physx::PxVec3 chassisCMOffset(0.f, 0.f, 0.f);
 			physx::PxF32 suspSprungMasses[PX_MAX_NB_WHEELS];
-			physx::PxVehicleComputeSprungMasses(m_wheels.size(), wheelCenterActorOffsets, chassisCMOffset, m_chassisMass, 1, suspSprungMasses);
+			physx::PxVehicleComputeSprungMasses(m_wheels.size(), wheelCenterActorOffsets, m_chassisCMOffset, m_chassisMass, 1, suspSprungMasses);
 
 			// Set the suspenson data
 			for (ui32 i = 0; i < m_wheels.size(); i++)
@@ -122,7 +131,7 @@ namespace Echo
 				suspTravelDirections[i] = physx::PxVec3(0, -1, 0);
 
 				//Wheel center offset is offset from rigid body center of mass.
-				wheelCentreCMOffsets[i] = wheelCenterActorOffsets[i] - chassisCMOffset;
+				wheelCentreCMOffsets[i] = wheelCenterActorOffsets[i] - m_chassisCMOffset;
 
 				//Suspension force application point 0.3 metres below
 				//rigid body center of mass.
@@ -197,6 +206,8 @@ namespace Echo
 		physx::PxPhysics* physics = PhysxModule::instance()->getPxPhysics();
 		if (physics)
 		{
+			m_chassisMaterial = physics->createMaterial(0.5f, 0.5f, 0.5f);
+
 			Vector3 startPosition = getWorldPosition() + PhysxModule::instance()->getShift();
 			physx::PxTransform pxTransform((physx::PxVec3&)startPosition, (physx::PxQuat&)getWorldOrientation());
 			m_vehicleActor = physics->createRigidDynamic(pxTransform);
@@ -279,6 +290,14 @@ namespace Echo
 		{
 			m_wheelsSimData->free();
 			m_wheelsSimData = nullptr;
+		}
+	}
+
+	void PhysxVehicleDrive4W::updateInternal(float elapsedTime)
+	{
+		if (m_isEnable && !m_vehicleDrive4W)
+		{
+			settingUp();
 		}
 	}
 }

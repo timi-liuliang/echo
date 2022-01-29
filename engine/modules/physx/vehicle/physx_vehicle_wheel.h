@@ -29,7 +29,7 @@ namespace Echo
 		const physx::PxFilterData& getPxSimFilterData() const { return m_simFilterData; }
 
 		// Physx material
-		physx::PxMaterial* getPxMaterial() { return m_material; }
+		physx::PxMaterial* getPxMaterial();
 
 		// Get wheel mesh
 		physx::PxConvexMesh* getPxWheelMesh();

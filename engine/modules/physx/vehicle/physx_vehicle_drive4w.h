@@ -5,6 +5,7 @@
 
 namespace Echo
 {
+	// https://docs.nvidia.com/gameworks/content/gameworkslibrary/physx/guide/Manual/Vehicles.html
 	class PhysxVehicleDrive4W : public Node 
 	{
 		ECHO_CLASS(PhysxVehicleDrive4W, Node)
@@ -23,11 +24,16 @@ namespace Echo
 		PhysxVehicleDrive4W();
 		virtual ~PhysxVehicleDrive4W();
 
-	public:
 		// Get wheel by index
 		vector<PhysxVehicleWheel*>::type getAllWheels();
 
+		// Reset
+		void reset();
+
 	protected:
+		// update
+		virtual void updateInternal(float elapsedTime) override;
+
 		// Setting up the vehicle
 		void settingUp();
 		void setupWheelsSimulationData(physx::PxVehicleWheelsSimData* wheelsSimData);
@@ -38,14 +44,11 @@ namespace Echo
 		// Chassis mesh
 		physx::PxConvexMesh* createChassisMesh(const physx::PxVec3& dims);
 
-		// Reset
-		void reset();
-
 	private:
-		physx::PxF32					m_chassisMass = 0.f;
-		physx::PxVec3					m_chassisDims = physx::PxVec3(0.f, 0.f, 0.f);
-		physx::PxVec3					m_chassisMOI = physx::PxVec3(0.f, 0.f, 0.f);
-		physx::PxVec3					m_chassisCMOffset = physx::PxVec3(0.f, 0.f, 0.f);
+		physx::PxF32					m_chassisMass;
+		physx::PxVec3					m_chassisDims;
+		physx::PxVec3					m_chassisMOI;
+		physx::PxVec3					m_chassisCMOffset;				// Center of mass offset
 		physx::PxMaterial*				m_chassisMaterial = nullptr;
 		physx::PxFilterData				m_chassisFilterData;
 		WheelList						m_wheels;

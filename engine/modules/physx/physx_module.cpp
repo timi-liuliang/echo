@@ -165,7 +165,7 @@ namespace Echo
 			m_accumulator += elapsedTime;
 			while (m_accumulator > m_stepLength)
 			{
-				m_pxScene->simulate(m_stepLength);
+				m_pxScene->simulate(isGame ? m_stepLength : 0);
 				m_pxScene->fetchResults(true);
 
 				m_accumulator -= m_stepLength;

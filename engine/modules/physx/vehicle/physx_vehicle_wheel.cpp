@@ -56,4 +56,14 @@ namespace Echo
 
 		return convexMesh;
 	}
+
+	physx::PxMaterial* PhysxVehicleWheel::getPxMaterial()
+	{ 
+		if (!m_material)
+		{
+			m_material = PhysxModule::instance()->getPxPhysics()->createMaterial(0.5f, 0.5f, 0.5f);
+		}
+
+		return m_material;
+	}
 }
