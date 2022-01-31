@@ -3,6 +3,7 @@
 #include "engine/core/main/module.h"
 #include "physx_debug_draw.h"
 #include "physx_base.h"
+#include "vehicle/physx_vehicle_scene_query.h"
 
 namespace Echo
 {
@@ -12,6 +13,7 @@ namespace Echo
 
 	public:
 		typedef vector<physx::PxVehicleWheels*>::type PhysxVehicleArray;
+		typedef physx::PxVehicleDrivableSurfaceToTireFrictionPairs PxVehicleSurfaceTireFriction;
 
 	public:
 		PhysxModule();
@@ -81,6 +83,10 @@ namespace Echo
 		physx::PxScene*					m_pxScene = nullptr;
 		physx::PxControllerManager*		m_pxControllerManager = nullptr;
 		PhysxVehicleArray				m_vehicles;
+		physx::PxVehicleSceneQueryData*	m_vehicleSceneQueryData = nullptr;
+		physx::PxBatchQuery*			m_vehicleBatchQuery = nullptr;
+		physx::PxMaterial*				m_vehicleDefaultMaterial = nullptr;
+		PxVehicleSurfaceTireFriction*	m_vehicleFrictionPairs = nullptr;
 		float							m_stepLength = 0.025f;
 		float							m_accumulator = 0.f;
 		PhysxDebugDraw*					m_debugDraw = nullptr;

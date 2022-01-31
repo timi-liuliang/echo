@@ -60,6 +60,11 @@ namespace Echo
 			m_debugDraw = EchoNew(PhysxDebugDraw(m_pxScene));
 			m_pxControllerManager = PxCreateControllerManager(*m_pxScene);
 
+			m_vehicleSceneQueryData = physx::PxVehicleSceneQueryData::allocate(100, PX_MAX_NB_WHEELS, 1, 1, physx::PxWheelSceneQueryPreFilterBlocking, nullptr, *m_pxAllocatorCb);
+			m_vehicleBatchQuery = physx::PxVehicleSceneQueryData::setUpBatchedSceneQuery(0, *m_vehicleSceneQueryData, m_pxScene);
+			m_vehicleDefaultMaterial = m_pxPhysics->createMaterial(0.5f, 0.5f, 0.5f);
+			m_vehicleFrictionPairs = createFrictionPairs(m_vehicleDefaultMaterial);
+
 			if (physx::PxPvdSceneClient* pvdClient = m_pxScene->getScenePvdClient())
 			{
 				pvdClient->setScenePvdFlags(physx::PxPvdSceneFlag::eTRANSMIT_CONSTRAINTS | physx::PxPvdSceneFlag::eTRANSMIT_CONTACTS | physx::PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES);
@@ -165,14 +170,18 @@ namespace Echo
 			m_accumulator += elapsedTime;
 			while (m_accumulator > m_stepLength)
 			{
-				//physx::PxRaycastQueryResult* raycastResults = gVehicleSceneQueryData->getRaycastQueryResultBuffer(0);
-				//const physx::PxU32 raycastResultsSize = gVehicleSceneQueryData->getQueryResultBufferSize();
-				//physx::PxVehicleSuspensionRaycasts(gBatchQuery, 1, vehicles, raycastResultsSize, raycastResults);
+				for (physx::PxVehicleWheels* vehicle : m_vehicles)
+				{
+					physx::PxVehicleWheels* vehicles[1] = { vehicle };
+					physx::PxRaycastQueryResult* raycastResults = m_vehicleSceneQueryData->getRaycastQueryResultBuffer(0);
+					const physx::PxU32 raycastResultsSize = m_vehicleSceneQueryData->getQueryResultBufferSize();
+					physx::PxVehicleSuspensionRaycasts(m_vehicleBatchQuery, 1, vehicles, raycastResultsSize, raycastResults);
 
-				//const PxVec3 grav = m_pxScene->getGravity();
-				//physx::PxWheelQueryResult wheelQueryResults[PX_MAX_NB_WHEELS];
-				//physx::PxVehicleWheelQueryResult vehicleQueryResults[1] = { {wheelQueryResults, m_vehicleDrive4W->mWheelsSimData.getNbWheels()} };
-				//physx::PxVehicleUpdates(m_stepLength, grav, *gFrictionPairs, 1, vehicles, vehicleQueryResults);
+					const physx::PxVec3 grav = m_pxScene->getGravity();
+					physx::PxWheelQueryResult wheelQueryResults[PX_MAX_NB_WHEELS];
+					physx::PxVehicleWheelQueryResult vehicleQueryResults[1] = { {wheelQueryResults, vehicle->mWheelsSimData.getNbWheels()} };
+					physx::PxVehicleUpdates(m_stepLength, grav, *m_vehicleFrictionPairs, 1, vehicles, vehicleQueryResults);
+				}
 
 				m_pxScene->simulate(isGame ? m_stepLength : 0);
 				m_pxScene->fetchResults(true);

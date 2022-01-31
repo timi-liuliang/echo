@@ -4,14 +4,20 @@
 
 namespace physx
 {
-	class PhysxVehicleSceneQueryData
+	enum
+	{
+		DRIVABLE_SURFACE = 0xffff0000,
+		UNDRIVABLE_SURFACE = 0x0000ffff
+	};
+
+	class PxVehicleSceneQueryData
 	{
 	public:
-		PhysxVehicleSceneQueryData();
-		~PhysxVehicleSceneQueryData();
+		PxVehicleSceneQueryData();
+		~PxVehicleSceneQueryData();
 
 		//Allocate scene query data for up to maxNumVehicles and up to maxNumWheelsPerVehicle with numVehiclesInBatch per batch query.
-		static PhysxVehicleSceneQueryData* allocate(
+		static PxVehicleSceneQueryData* allocate(
 			const PxU32 maxNumVehicles, const PxU32 maxNumWheelsPerVehicle, const PxU32 maxNumHitPointsPerWheel, const PxU32 numVehiclesInBatch,
 			PxBatchQueryPreFilterShader preFilterShader, PxBatchQueryPostFilterShader postFilterShader,
 			PxAllocatorCallback& allocator
@@ -21,7 +27,7 @@ namespace physx
 		void free(PxAllocatorCallback& allocator);
 
 		//Create a PxBatchQuery instance that will be used for a single specified batch.
-		static PxBatchQuery* setUpBatchedSceneQuery(const PxU32 batchId, const PhysxVehicleSceneQueryData& vehicleSceneQueryData, PxScene* scene);
+		static PxBatchQuery* setUpBatchedSceneQuery(const PxU32 batchId, const PxVehicleSceneQueryData& vehicleSceneQueryData, PxScene* scene);
 
 		//Return an array of scene query results for a single specified batch.
 		PxRaycastQueryResult* getRaycastQueryResultBuffer(const PxU32 batchId);
@@ -53,4 +59,8 @@ namespace physx
 		//Filter shader used to reject hit shapes that initially overlap sweeps.
 		PxBatchQueryPostFilterShader mPostFilterShader;
 	};
+
+	PxQueryHitType::Enum PxWheelSceneQueryPreFilterBlocking(PxFilterData filterData0, PxFilterData filterData1,const void* constantBlock, PxU32 constantBlockSize,PxHitFlags& queryFlags);
+
+	PxVehicleDrivableSurfaceToTireFrictionPairs* createFrictionPairs(const PxMaterial* defaultMaterial);
 }
