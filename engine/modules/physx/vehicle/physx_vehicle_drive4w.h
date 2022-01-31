@@ -30,18 +30,28 @@ namespace Echo
 		// Reset
 		void reset();
 
+	public:
+		// set the car back to its rest state
+		void setToRestState();
+
+		// set accel
+		void setAccel(float accel);
+
+		// set the car will use auto-gears
+		void setUseAutoGears(bool useAutoGears);
+
 	protected:
 		// update
 		virtual void updateInternal(float elapsedTime) override;
 
-		// Setting up the vehicle
+		// setting up the vehicle
 		void settingUp();
 		void setupWheelsSimulationData(physx::PxVehicleWheelsSimData* wheelsSimData);
 		void setupDriveSimData(physx::PxVehicleDriveSimData4W& driveSimData);
 		void setupVehicleActor();
 		void setupNonDrivableSurface(physx::PxFilterData& filterData);
 
-		// Chassis mesh
+		// chassis mesh
 		physx::PxConvexMesh* createChassisMesh(const physx::PxVec3& dims);
 
 	private:

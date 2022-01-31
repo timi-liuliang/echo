@@ -165,6 +165,15 @@ namespace Echo
 			m_accumulator += elapsedTime;
 			while (m_accumulator > m_stepLength)
 			{
+				//physx::PxRaycastQueryResult* raycastResults = gVehicleSceneQueryData->getRaycastQueryResultBuffer(0);
+				//const physx::PxU32 raycastResultsSize = gVehicleSceneQueryData->getQueryResultBufferSize();
+				//physx::PxVehicleSuspensionRaycasts(gBatchQuery, 1, vehicles, raycastResultsSize, raycastResults);
+
+				//const PxVec3 grav = m_pxScene->getGravity();
+				//physx::PxWheelQueryResult wheelQueryResults[PX_MAX_NB_WHEELS];
+				//physx::PxVehicleWheelQueryResult vehicleQueryResults[1] = { {wheelQueryResults, m_vehicleDrive4W->mWheelsSimData.getNbWheels()} };
+				//physx::PxVehicleUpdates(m_stepLength, grav, *gFrictionPairs, 1, vehicles, vehicleQueryResults);
+
 				m_pxScene->simulate(isGame ? m_stepLength : 0);
 				m_pxScene->fetchResults(true);
 
@@ -223,5 +232,16 @@ namespace Echo
 		}
 
 		return false;
+	}
+
+	void PhysxModule::addVehicle(physx::PxVehicleWheels* vehicle)
+	{
+		if (vehicle)
+			m_vehicles.emplace_back(vehicle);
+	}
+
+	void PhysxModule::removeVehicle(physx::PxVehicleWheels* vehicle)
+	{
+		m_vehicles.erase(std::remove(m_vehicles.begin(), m_vehicles.end(), vehicle), m_vehicles.end());
 	}
 }

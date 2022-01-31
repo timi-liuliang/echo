@@ -11,6 +11,9 @@ namespace Echo
 		ECHO_SINGLETON_CLASS(PhysxModule, Module)
 
 	public:
+		typedef vector<physx::PxVehicleWheels*>::type PhysxVehicleArray;
+
+	public:
 		PhysxModule();
         virtual ~PhysxModule();
 
@@ -55,6 +58,11 @@ namespace Echo
 		const Vector3& getShift() const { return m_shift; }
 		void setShift(const Vector3& shift);
 
+	public:
+		// vehicle
+		void addVehicle(physx::PxVehicleWheels* vehicle);
+		void removeVehicle(physx::PxVehicleWheels* vehicle);
+
 	private:
 		// initialize
 		bool initPhysx();
@@ -72,6 +80,7 @@ namespace Echo
 		Vector3							m_shift = Vector3::ZERO;
 		physx::PxScene*					m_pxScene = nullptr;
 		physx::PxControllerManager*		m_pxControllerManager = nullptr;
+		PhysxVehicleArray				m_vehicles;
 		float							m_stepLength = 0.025f;
 		float							m_accumulator = 0.f;
 		PhysxDebugDraw*					m_debugDraw = nullptr;

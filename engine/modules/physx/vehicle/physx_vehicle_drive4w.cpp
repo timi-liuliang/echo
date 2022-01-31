@@ -49,6 +49,8 @@ namespace Echo
 			// Vehicle drive 4w
 			m_vehicleDrive4W = physx::PxVehicleDrive4W::allocate(m_wheels.size());
 			m_vehicleDrive4W->setup(physics, m_vehicleActor, *m_wheelsSimData, driveSimData, m_wheels.size() - 4);
+
+			PhysxModule::instance()->addVehicle(m_vehicleDrive4W);
 		}
 	}
 
@@ -288,6 +290,8 @@ namespace Echo
 	{
 		if (m_wheelsSimData)
 		{
+			PhysxModule::instance()->removeVehicle(m_vehicleDrive4W);
+
 			m_wheelsSimData->free();
 			m_wheelsSimData = nullptr;
 		}
@@ -299,5 +303,26 @@ namespace Echo
 		{
 			settingUp();
 		}
+
+		// test
+		setAccel(10.f);
+	}
+
+	void PhysxVehicleDrive4W::setToRestState()
+	{
+		if (m_vehicleDrive4W)
+			m_vehicleDrive4W->setToRestState();
+	}
+
+	void PhysxVehicleDrive4W::setAccel(float accel)
+	{
+		if (m_vehicleDrive4W)
+			m_vehicleDrive4W->mDriveDynData.setAnalogInput(physx::PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, accel);
+	}
+
+	void PhysxVehicleDrive4W::setUseAutoGears(bool useAutoGears)
+	{
+		if (m_vehicleDrive4W)
+			m_vehicleDrive4W->mDriveDynData.setUseAutoGears(useAutoGears);
 	}
 }
