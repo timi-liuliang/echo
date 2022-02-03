@@ -305,7 +305,14 @@ namespace Echo
 		}
 
 		// test
-		setAccel(10.f);
+		static float acc = 0;
+		acc += elapsedTime;
+		if (acc > 1.f)
+			acc = 0.f;
+
+		setUseAutoGears(true);
+		//setAccel(0.1f);
+		setSteer(-25.f * Math::DEG2RAD);
 	}
 
 	void PhysxVehicleDrive4W::setToRestState()
@@ -318,6 +325,29 @@ namespace Echo
 	{
 		if (m_vehicleDrive4W)
 			m_vehicleDrive4W->mDriveDynData.setAnalogInput(physx::PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, accel);
+	}
+
+	void PhysxVehicleDrive4W::setSteer(float steer)
+	{
+		if (m_vehicleDrive4W)
+		{
+			if(steer>0.f)
+				m_vehicleDrive4W->mDriveDynData.setAnalogInput(physx::PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, steer);
+			else
+				m_vehicleDrive4W->mDriveDynData.setAnalogInput(physx::PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, Math::Abs(steer));
+		}
+	}
+
+	void PhysxVehicleDrive4W::setBrake(float brake)
+	{
+		if (m_vehicleDrive4W)
+			m_vehicleDrive4W->mDriveDynData.setAnalogInput(physx::PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, brake);
+	}
+
+	void PhysxVehicleDrive4W::setHandBrake(float handBrake)
+	{
+		if (m_vehicleDrive4W)
+			m_vehicleDrive4W->mDriveDynData.setAnalogInput(physx::PxVehicleDrive4WControl::eANALOG_INPUT_HANDBRAKE, handBrake);
 	}
 
 	void PhysxVehicleDrive4W::setUseAutoGears(bool useAutoGears)

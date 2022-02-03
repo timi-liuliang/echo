@@ -36,6 +36,15 @@ namespace Echo
 
 		// set accel
 		void setAccel(float accel);
+		
+		// set steer
+		void setSteer(float steer);
+
+		// brake
+		void setBrake(float brake);
+
+		// hand brake
+		void setHandBrake(float handBrake);
 
 		// set the car will use auto-gears
 		void setUseAutoGears(bool useAutoGears);
