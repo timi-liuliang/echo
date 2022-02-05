@@ -26,10 +26,10 @@ namespace Echo
 			{
 				const physx::PxF32 cosTheta = physx::PxCos(i * physx::PxPi * 2.0f / 16.0f);
 				const physx::PxF32 sinTheta = physx::PxSin(i * physx::PxPi * 2.0f / 16.0f);
-				const physx::PxF32 y = m_radius * cosTheta;
-				const physx::PxF32 z = m_radius * sinTheta;
-				points[2 * i + 0] = physx::PxVec3(-m_width / 2.0f, y, z);
-				points[2 * i + 1] = physx::PxVec3(+m_width / 2.0f, y, z);
+				const physx::PxF32 x = m_radius * cosTheta;
+				const physx::PxF32 y = m_radius * sinTheta;
+				points[2 * i + 0] = physx::PxVec3(x, y, -m_width / 2.0f);
+				points[2 * i + 1] = physx::PxVec3(x, y, +m_width / 2.0f);
 			}
 
 			m_pxWheelMesh = createConvexMesh(points, 32);

@@ -48,6 +48,7 @@ namespace Echo
 
 		// set the car will use auto-gears
 		void setUseAutoGears(bool useAutoGears);
+		bool isUseAutoGears() const { return m_isUseAutoGears; }
 
 	protected:
 		// update
@@ -74,5 +75,6 @@ namespace Echo
 		physx::PxVehicleWheelsSimData*	m_wheelsSimData = nullptr;
 		physx::PxRigidDynamic*			m_vehicleActor = nullptr;
 		physx::PxVehicleDrive4W*		m_vehicleDrive4W = nullptr;
+		bool							m_isUseAutoGears = true;
 	};
 }

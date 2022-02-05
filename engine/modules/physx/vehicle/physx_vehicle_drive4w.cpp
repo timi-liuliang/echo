@@ -8,7 +8,7 @@ namespace Echo
 		: Node()
 	{
 		m_chassisMass = 1500.f;
-		m_chassisDims = physx::PxVec3(3.5f, 2.f, 9.f);
+		m_chassisDims = physx::PxVec3(9.f, 2.f, 3.5f);
 		m_chassisMOI = physx::PxVec3(
 			(m_chassisDims.y * m_chassisDims.y + m_chassisDims.z * m_chassisDims.z) * m_chassisMass / 12.0f,
 			(m_chassisDims.x * m_chassisDims.x + m_chassisDims.z * m_chassisDims.z) * 0.8f * m_chassisMass / 12.0f,
@@ -23,6 +23,10 @@ namespace Echo
 
 	void PhysxVehicleDrive4W::bindMethods()
 	{
+		CLASS_BIND_METHOD(PhysxVehicleDrive4W, isUseAutoGears);
+		CLASS_BIND_METHOD(PhysxVehicleDrive4W, setUseAutoGears);
+
+		CLASS_REGISTER_PROPERTY(PhysxVehicleDrive4W, "AutoGears", Variant::Type::Bool, isUseAutoGears, setUseAutoGears);
 	}
 
 	void PhysxVehicleDrive4W::settingUp()
@@ -49,6 +53,9 @@ namespace Echo
 			// Vehicle drive 4w
 			m_vehicleDrive4W = physx::PxVehicleDrive4W::allocate(m_wheels.size());
 			m_vehicleDrive4W->setup(physics, m_vehicleActor, *m_wheelsSimData, driveSimData, m_wheels.size() - 4);
+			m_vehicleDrive4W->mDriveDynData.setToRestState();
+			m_vehicleDrive4W->mDriveDynData.forceGearChange(physx::PxVehicleGearsData::eFIRST);
+			m_vehicleDrive4W->mDriveDynData.setUseAutoGears(m_isUseAutoGears);
 
 			PhysxModule::instance()->addVehicle(m_vehicleDrive4W);
 		}
@@ -170,7 +177,7 @@ namespace Echo
 	{
 		// Diff
 		physx::PxVehicleDifferential4WData diff;
-		diff.mType = physx::PxVehicleDifferential4WData::eDIFF_TYPE_LS_4WD;
+		diff.mType = physx::PxVehicleDifferential4WData::eDIFF_TYPE_LS_FRONTWD;
 		driveSimData.setDiffData(diff);
 
 		// Engine
@@ -310,9 +317,9 @@ namespace Echo
 		if (acc > 1.f)
 			acc = 0.f;
 
-		setUseAutoGears(true);
-		//setAccel(0.1f);
-		setSteer(-25.f * Math::DEG2RAD);
+		if(IsGame)
+			setAccel(1.f);
+		//setSteer(-5.f * Math::DEG2RAD);
 	}
 
 	void PhysxVehicleDrive4W::setToRestState()
@@ -352,7 +359,9 @@ namespace Echo
 
 	void PhysxVehicleDrive4W::setUseAutoGears(bool useAutoGears)
 	{
+		m_isUseAutoGears = useAutoGears;
+
 		if (m_vehicleDrive4W)
-			m_vehicleDrive4W->mDriveDynData.setUseAutoGears(useAutoGears);
+			m_vehicleDrive4W->mDriveDynData.setUseAutoGears(m_isUseAutoGears);
 	}
 }
