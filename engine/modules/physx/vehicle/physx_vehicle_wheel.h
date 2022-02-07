@@ -20,7 +20,7 @@ namespace Echo
 		float getWidth() const { return m_width; }
 
 		// Radius
-		float getRadius() const { return m_width; }
+		float getRadius() const { return m_radius; }
 
 		// MOI
 		float getMOI() const { return 0.5f * m_mass * m_radius * m_radius; }
