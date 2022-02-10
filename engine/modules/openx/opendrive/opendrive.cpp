@@ -926,19 +926,16 @@ namespace Echo
 
 	void OpenDrive::drawLane(OpenDrive::Road& road, OpenDrive::LaneSection& laneSection)
 	{
-		double startX, startY, startH;
-		double endX, endY, endH;
-
-		i32    stepCount = std::max<i32>(i32(laneSection.getLength() / 1), 1);
-		double stepLength = laneSection.getLength() / stepCount;
+		vector<double>::type samplePoints = sampleLaneSection(road, laneSection);
 
 		for (OpenDrive::Lane& lane : laneSection.m_lanes)
 		{
 			if (lane.m_id != 0)
 			{
-				for (i32 i = 0; i <= stepCount; i++)
+				for (size_t i = 0; i < samplePoints.size(); i++)
 				{
-					double ds0 = i * stepLength + laneSection.m_s;
+					double startX, startY, startH;
+					double ds0 = samplePoints[i];
 					road.evaluate(ds0, startX, startY, startH);
 
 					Vector3 center0 = toVec3(startX, startY);
@@ -961,6 +958,42 @@ namespace Echo
 		}
 	}
 
+	vector<double>::type OpenDrive::sampleLaneSection(OpenDrive::Road& road, OpenDrive::LaneSection& laneSection)
+	{
+		vector<double>::type result;
+
+		double laneS = laneSection.m_s;
+		double laneE = laneSection.m_s + laneSection.getLength();
+
+		for (OpenDrive::Geometry* geometry : road.m_geometries)
+		{
+			double geoS = geometry->m_s;
+			double geoE = geometry->m_s + geometry->getLength();
+
+			if (!(geoS > laneE || geoE < laneS))
+			{
+				double finalS = std::max<double>(laneS, geoS);
+				double finalE = std::min<double>(laneE, geoE);
+
+				if (geometry->isType(OpenDrive::Geometry::Line))
+				{
+					result.push_back(finalS);
+					result.push_back(finalE);
+				}
+				else
+				{
+					double finalLength = finalE - finalS;
+					i32    stepCount = std::max<i32>(i32(finalLength / 1), 1);
+					double stepLength = finalLength / stepCount;
+
+					for (i32 i = 0; i <= stepCount; i++)
+						result.push_back(i * stepLength + finalS);
+				}
+			}
+		}
+
+		return result;
+	}
 
 	Vector3 OpenDrive::toDir3(double radian, double h)
 	{

@@ -45,13 +45,16 @@ namespace Echo
 			double m_length = 0.0;	// Length of the element's reference line
 
 			Geometry(double s, double x, double y, double hdg, double length, Type type)
-				: m_s(s)
+				: m_type(type)
 				, m_x(x)
 				, m_y(y)
 				, m_hdg(hdg)
 				, m_length(length)
-				, m_type(type)
+				, m_s(s)
 			{}
+
+			// Check type
+			bool isType(Type type) const { return m_type == type; }
 
 			// Evaluate
 			virtual void evaluate(double sampleLength, double& x, double& y, double& h) {}
@@ -428,6 +431,9 @@ namespace Echo
 
 		// Draw lane
 		void drawLane(OpenDrive::Road& road, LaneSection& laneSection);
+
+		// Sample Lane Section
+		vector<double>::type sampleLaneSection(OpenDrive::Road& road, OpenDrive::LaneSection& laneSection);
 
 		// Get lane mesh
 		OpenDriveDynamicMesh* getLaneMesh(Lane& lane);
