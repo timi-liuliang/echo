@@ -45,6 +45,10 @@ namespace Echo
 						physx::PxTransform localTransform((physx::PxVec3&)getLocalPosition(), (physx::PxQuat&)getLocalOrientation());
 						m_pxShape->setLocalPose(localTransform);
 
+						physx::PxFilterData filterData;
+						filterData.word3 = 0xffff0000;
+						m_pxShape->setQueryFilterData(filterData);
+
 						body->getPxBody()->attachShape(*m_pxShape);
 					}
 				}

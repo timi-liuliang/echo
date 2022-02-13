@@ -311,15 +311,28 @@ namespace Echo
 			settingUp();
 		}
 
-		// test
-		static float acc = 0;
-		acc += elapsedTime;
-		if (acc > 1.f)
-			acc = 0.f;
-
 		if(IsGame)
+		{
 			setAccel(1.f);
-		//setSteer(-5.f * Math::DEG2RAD);
+		}
+
+		if (m_vehicleActor)
+		{
+			const Vector3& shift = PhysxModule::instance()->getShift();
+
+			if (IsGame)
+			{
+				physx::PxTransform pxTransform = m_vehicleActor->getGlobalPose();
+				this->setWorldPosition((Vector3&)pxTransform.p - shift);
+				this->setWorldOrientation((Quaternion&)pxTransform.q);
+			}
+			else
+			{
+				//Vector3 finalPosition = getWorldPosition() + shift;
+				//physx::PxTransform pxTransform((physx::PxVec3&)finalPosition, (physx::PxQuat&)getWorldOrientation());
+				//m_vehicleDrive4W->setGlobalPose(pxTransform);
+			}
+		}
 	}
 
 	void PhysxVehicleDrive4W::setToRestState()

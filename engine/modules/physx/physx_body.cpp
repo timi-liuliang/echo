@@ -55,7 +55,7 @@ namespace Echo
 
 		if (m_pxBody)
 		{
-			if (Engine::instance()->getConfig().m_isGame)
+			if (IsGame)
 			{
 				physx::PxTransform pxTransform = m_pxBody->getGlobalPose();
 				this->setWorldPosition( (Vector3&)pxTransform.p - shift);
