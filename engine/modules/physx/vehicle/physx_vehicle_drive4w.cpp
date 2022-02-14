@@ -25,6 +25,7 @@ namespace Echo
 	{
 		CLASS_BIND_METHOD(PhysxVehicleDrive4W, isUseAutoGears);
 		CLASS_BIND_METHOD(PhysxVehicleDrive4W, setUseAutoGears);
+		CLASS_BIND_METHOD(PhysxVehicleDrive4W, setAccel);
 
 		CLASS_REGISTER_PROPERTY(PhysxVehicleDrive4W, "AutoGears", Variant::Type::Bool, isUseAutoGears, setUseAutoGears);
 	}
@@ -309,11 +310,6 @@ namespace Echo
 		if (m_isEnable && !m_vehicleDrive4W)
 		{
 			settingUp();
-		}
-
-		if(IsGame)
-		{
-			setAccel(1.f);
 		}
 
 		if (m_vehicleActor)
