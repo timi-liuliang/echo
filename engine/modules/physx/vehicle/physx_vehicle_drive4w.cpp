@@ -26,6 +26,7 @@ namespace Echo
 		CLASS_BIND_METHOD(PhysxVehicleDrive4W, isUseAutoGears);
 		CLASS_BIND_METHOD(PhysxVehicleDrive4W, setUseAutoGears);
 		CLASS_BIND_METHOD(PhysxVehicleDrive4W, setAccel);
+		CLASS_BIND_METHOD(PhysxVehicleDrive4W, setSteer);
 
 		CLASS_REGISTER_PROPERTY(PhysxVehicleDrive4W, "AutoGears", Variant::Type::Bool, isUseAutoGears, setUseAutoGears);
 	}
@@ -314,6 +315,8 @@ namespace Echo
 
 		if (m_vehicleActor)
 		{
+			updateSimulation(elapsedTime);
+
 			const Vector3& shift = PhysxModule::instance()->getShift();
 
 			if (IsGame)
@@ -331,6 +334,55 @@ namespace Echo
 		}
 	}
 
+	// https://www.cnblogs.com/walterwhiteJNU/p/15717072.html
+	void PhysxVehicleDrive4W::updateSimulation(float elapsedTime)
+	{
+		if (m_steeringInput > 0.f)
+		{
+			int a = 10;
+		}
+
+		physx::PxVehicleDrive4WRawInputData rawInputData;
+		rawInputData.setAnalogAccel(m_throttleInput);
+		rawInputData.setAnalogSteer(m_steeringInput);
+		//rawInputData.setAnalogBrake(BrakeInput);
+		//rawInputData.setAnalogHandbrake(HandbrakeInput);
+
+		m_vehicleDrive4W->mDriveDynData.setUseAutoGears(m_isUseAutoGears);
+
+		if (!m_vehicleDrive4W->mDriveDynData.getUseAutoGears())
+		{
+			//rawInputData.setGearUp(bRawGearUpInput);
+			//rawInputData.setGearDown(bRawGearDownInput);
+		}
+
+		physx::PxFixedSizeLookupTable<8> speedSteerLookup;
+		speedSteerLookup.addPair(0.0f, 0.75f);
+		speedSteerLookup.addPair(5.0f, 0.75f);
+		speedSteerLookup.addPair(30.0f, 0.125f);
+		speedSteerLookup.addPair(120.0f, 0.1f);
+
+		physx::PxVehiclePadSmoothingData smoothData = 
+		{
+			{
+				6.0f,    //rise rate eANALOG_INPUT_ACCEL
+				6.0f,    //rise rate eANALOG_INPUT_BRAKE
+				12.0f,   //rise rate eANALOG_INPUT_HANDBRAKE
+				2.5f,    //rise rate eANALOG_INPUT_STEER_LEFT
+				2.5f,    //rise rate eANALOG_INPUT_STEER_RIGHT
+			},
+			{
+				10.0f,   //fall rate eANALOG_INPUT_ACCEL
+				10.0f,   //fall rate eANALOG_INPUT_BRAKE
+				12.0f,   //fall rate eANALOG_INPUT_HANDBRAKE
+				5.0f,    //fall rate eANALOG_INPUT_STEER_LEFT
+				5.0f     //fall rate eANALOG_INPUT_STEER_RIGHT
+			}
+		};
+
+		physx::PxVehicleDrive4WSmoothAnalogRawInputsAndSetAnalogInputs(smoothData, speedSteerLookup, rawInputData, elapsedTime, false, *m_vehicleDrive4W);
+	}
+
 	void PhysxVehicleDrive4W::setToRestState()
 	{
 		if (m_vehicleDrive4W)
@@ -339,38 +391,26 @@ namespace Echo
 
 	void PhysxVehicleDrive4W::setAccel(float accel)
 	{
-		if (m_vehicleDrive4W)
-			m_vehicleDrive4W->mDriveDynData.setAnalogInput(physx::PxVehicleDrive4WControl::eANALOG_INPUT_ACCEL, accel);
+		m_throttleInput = accel;
 	}
 
 	void PhysxVehicleDrive4W::setSteer(float steer)
 	{
-		if (m_vehicleDrive4W)
-		{
-			if(steer>0.f)
-				m_vehicleDrive4W->mDriveDynData.setAnalogInput(physx::PxVehicleDrive4WControl::eANALOG_INPUT_STEER_LEFT, steer);
-			else
-				m_vehicleDrive4W->mDriveDynData.setAnalogInput(physx::PxVehicleDrive4WControl::eANALOG_INPUT_STEER_RIGHT, Math::Abs(steer));
-		}
+		m_steeringInput = steer;
 	}
 
 	void PhysxVehicleDrive4W::setBrake(float brake)
 	{
-		if (m_vehicleDrive4W)
-			m_vehicleDrive4W->mDriveDynData.setAnalogInput(physx::PxVehicleDrive4WControl::eANALOG_INPUT_BRAKE, brake);
+
 	}
 
 	void PhysxVehicleDrive4W::setHandBrake(float handBrake)
 	{
-		if (m_vehicleDrive4W)
-			m_vehicleDrive4W->mDriveDynData.setAnalogInput(physx::PxVehicleDrive4WControl::eANALOG_INPUT_HANDBRAKE, handBrake);
+
 	}
 
 	void PhysxVehicleDrive4W::setUseAutoGears(bool useAutoGears)
 	{
 		m_isUseAutoGears = useAutoGears;
-
-		if (m_vehicleDrive4W)
-			m_vehicleDrive4W->mDriveDynData.setUseAutoGears(m_isUseAutoGears);
 	}
 }

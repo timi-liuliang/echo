@@ -54,6 +54,9 @@ namespace Echo
 		// update
 		virtual void updateInternal(float elapsedTime) override;
 
+		// update simulation
+		void updateSimulation(float elapsedTime);
+
 		// setting up the vehicle
 		void settingUp();
 		void setupWheelsSimulationData(physx::PxVehicleWheelsSimData* wheelsSimData);
@@ -76,5 +79,7 @@ namespace Echo
 		physx::PxRigidDynamic*			m_vehicleActor = nullptr;
 		physx::PxVehicleDrive4W*		m_vehicleDrive4W = nullptr;
 		bool							m_isUseAutoGears = true;
+		float							m_throttleInput = 0.f;
+		float							m_steeringInput = 0.f;
 	};
 }
