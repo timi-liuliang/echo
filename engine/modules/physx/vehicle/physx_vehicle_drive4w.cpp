@@ -13,7 +13,7 @@ namespace Echo
 			(m_chassisDims.y * m_chassisDims.y + m_chassisDims.z * m_chassisDims.z) * m_chassisMass / 12.0f,
 			(m_chassisDims.x * m_chassisDims.x + m_chassisDims.z * m_chassisDims.z) * 0.8f * m_chassisMass / 12.0f,
 			(m_chassisDims.x * m_chassisDims.x + m_chassisDims.y * m_chassisDims.y) * m_chassisMass / 12.0f);
-		m_chassisCMOffset = physx::PxVec3(0.0f, -m_chassisDims.y * 0.5f + 0.65f, 0.25f);
+		m_chassisCMOffset = physx::PxVec3(0.0f, -m_chassisDims.y * 0.5f + 0.65f, 0.f);
 	}
 
 	PhysxVehicleDrive4W::~PhysxVehicleDrive4W()
@@ -163,6 +163,8 @@ namespace Echo
 		//Set the query filter data
 		for (physx::PxU32 i = 0; i < m_wheels.size(); i++)
 		{
+			i32 x = i>>2;
+
 			wheelsSimData->setWheelData(i, wheels[i]);
 			wheelsSimData->setTireData(i, tires[i]);
 			wheelsSimData->setSuspensionData(i, suspensions[i]);
@@ -201,14 +203,14 @@ namespace Echo
 		physx::PxVehicleAckermannGeometryData ackermann;
 		ackermann.mAccuracy = 1.f;
 		ackermann.mAxleSeparation = 
-			m_wheelsSimData->getWheelCentreOffset(physx::PxVehicleDrive4WWheelOrder::eFRONT_LEFT).z -
-			m_wheelsSimData->getWheelCentreOffset(physx::PxVehicleDrive4WWheelOrder::eREAR_LEFT).z;
-		ackermann.mFrontWidth =
-			m_wheelsSimData->getWheelCentreOffset(physx::PxVehicleDrive4WWheelOrder::eFRONT_RIGHT).x -
-			m_wheelsSimData->getWheelCentreOffset(physx::PxVehicleDrive4WWheelOrder::eFRONT_LEFT).x;
-		ackermann.mRearWidth =
-			m_wheelsSimData->getWheelCentreOffset(physx::PxVehicleDrive4WWheelOrder::eREAR_RIGHT).x -
+			m_wheelsSimData->getWheelCentreOffset(physx::PxVehicleDrive4WWheelOrder::eFRONT_LEFT).x -
 			m_wheelsSimData->getWheelCentreOffset(physx::PxVehicleDrive4WWheelOrder::eREAR_LEFT).x;
+		ackermann.mFrontWidth =
+			m_wheelsSimData->getWheelCentreOffset(physx::PxVehicleDrive4WWheelOrder::eFRONT_RIGHT).z -
+			m_wheelsSimData->getWheelCentreOffset(physx::PxVehicleDrive4WWheelOrder::eFRONT_LEFT).z;
+		ackermann.mRearWidth =
+			m_wheelsSimData->getWheelCentreOffset(physx::PxVehicleDrive4WWheelOrder::eREAR_RIGHT).z -
+			m_wheelsSimData->getWheelCentreOffset(physx::PxVehicleDrive4WWheelOrder::eREAR_LEFT).z;
 		driveSimData.setAckermannGeometryData(ackermann);
 	}
 
