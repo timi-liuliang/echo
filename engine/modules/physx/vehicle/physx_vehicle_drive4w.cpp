@@ -7,13 +7,7 @@ namespace Echo
 	PhysxVehicleDrive4W::PhysxVehicleDrive4W()
 		: Node()
 	{
-		m_chassisMass = 1500.f;
-		m_chassisDims = physx::PxVec3(9.f, 2.f, 3.5f);
-		m_chassisMOI = physx::PxVec3(
-			(m_chassisDims.y * m_chassisDims.y + m_chassisDims.z * m_chassisDims.z) * m_chassisMass / 12.0f,
-			(m_chassisDims.x * m_chassisDims.x + m_chassisDims.z * m_chassisDims.z) * 0.8f * m_chassisMass / 12.0f,
-			(m_chassisDims.x * m_chassisDims.x + m_chassisDims.y * m_chassisDims.y) * m_chassisMass / 12.0f);
-		m_chassisCMOffset = physx::PxVec3(0.0f, -m_chassisDims.y * 0.5f + 0.65f, 0.f);
+
 	}
 
 	PhysxVehicleDrive4W::~PhysxVehicleDrive4W()
@@ -35,10 +29,11 @@ namespace Echo
 	{
 		reset();
 
+		m_chassis = getChassis();
 		m_wheels = getAllWheels();
 
 		physx::PxPhysics* physics = PhysxModule::instance()->getPxPhysics();
-		if (m_wheels.size() > 0 && physics)
+		if (m_chassis && m_wheels.size() > 0 && physics)
 		{
 			// Wheels
 			m_wheelsSimData = physx::PxVehicleWheelsSimData::allocate(m_wheels.size());
@@ -102,7 +97,7 @@ namespace Echo
 		physx::PxVehicleSuspensionData suspensions[PX_MAX_NB_WHEELS];
 		{
 			physx::PxF32 suspSprungMasses[PX_MAX_NB_WHEELS];
-			physx::PxVehicleComputeSprungMasses(m_wheels.size(), wheelCenterActorOffsets, m_chassisCMOffset, m_chassisMass, 1, suspSprungMasses);
+			physx::PxVehicleComputeSprungMasses(m_wheels.size(), wheelCenterActorOffsets, m_chassis->getCMOffset(), m_chassis->getMass(), 1, suspSprungMasses);
 
 			// Set the suspenson data
 			for (ui32 i = 0; i < m_wheels.size(); i++)
@@ -142,7 +137,7 @@ namespace Echo
 				suspTravelDirections[i] = physx::PxVec3(0, -1, 0);
 
 				//Wheel center offset is offset from rigid body center of mass.
-				wheelCentreCMOffsets[i] = wheelCenterActorOffsets[i] - m_chassisCMOffset;
+				wheelCentreCMOffsets[i] = wheelCenterActorOffsets[i] - m_chassis->getCMOffset();
 
 				//Suspension force application point 0.3 metres below
 				//rigid body center of mass.
@@ -219,8 +214,6 @@ namespace Echo
 		physx::PxPhysics* physics = PhysxModule::instance()->getPxPhysics();
 		if (physics)
 		{
-			m_chassisMaterial = physics->createMaterial(0.5f, 0.5f, 0.5f);
-
 			Vector3 startPosition = getWorldPosition() + PhysxModule::instance()->getShift();
 			physx::PxTransform pxTransform((physx::PxVec3&)startPosition, (physx::PxQuat&)getWorldOrientation());
 			m_vehicleActor = physics->createRigidDynamic(pxTransform);
@@ -242,19 +235,33 @@ namespace Echo
 			}
 
 			// Add chassis shapes to the actor
-			vector<physx::PxConvexMesh*>::type chassisConvexMeshes = { createChassisMesh(m_chassisDims) };
+			vector<physx::PxConvexMesh*>::type chassisConvexMeshes = { m_chassis->getPxMesh() };
 			for (physx::PxU32 i = 0; i < chassisConvexMeshes.size(); i++)
 			{
-				physx::PxShape* chassisShape = physx::PxRigidActorExt::createExclusiveShape(*m_vehicleActor, physx::PxConvexMeshGeometry(chassisConvexMeshes[i]), *m_chassisMaterial);
+				physx::PxShape* chassisShape = physx::PxRigidActorExt::createExclusiveShape(*m_vehicleActor, physx::PxConvexMeshGeometry(chassisConvexMeshes[i]), *(m_chassis->getPxMaterial()));
 				chassisShape->setQueryFilterData(chassisQueryFilterData);
-				chassisShape->setSimulationFilterData(m_chassisFilterData);
+				chassisShape->setSimulationFilterData(m_chassis->getPxFilterData());
 				chassisShape->setLocalPose(physx::PxTransform(physx::PxIdentity));
 			}
 
-			m_vehicleActor->setMass(m_chassisMass);
-			m_vehicleActor->setMassSpaceInertiaTensor(m_chassisMOI);
-			m_vehicleActor->setCMassLocalPose(physx::PxTransform(m_chassisCMOffset, physx::PxQuat(physx::PxIdentity)));
+			m_vehicleActor->setMass(m_chassis->getMass());
+			m_vehicleActor->setMassSpaceInertiaTensor(m_chassis->getMOI());
+			m_vehicleActor->setCMassLocalPose(physx::PxTransform(m_chassis->getCMOffset(), physx::PxQuat(physx::PxIdentity)));
 		}
+	}
+
+	PhysxVehicleChassis* PhysxVehicleDrive4W::getChassis()
+	{
+		for (Node* child : m_children)
+		{
+			PhysxVehicleChassis* chassis = dynamic_cast<PhysxVehicleChassis*>(child);
+			if (chassis)
+			{
+				return chassis;
+			}
+		}
+
+		return nullptr;
 	}
 
 	vector<PhysxVehicleWheel*>::type PhysxVehicleDrive4W::getAllWheels()
@@ -275,26 +282,6 @@ namespace Echo
 	void PhysxVehicleDrive4W::setupNonDrivableSurface(physx::PxFilterData& filterData)
 	{
 		filterData.word3 = UndriveableSurface;
-	}
-
-	physx::PxConvexMesh* PhysxVehicleDrive4W::createChassisMesh(const physx::PxVec3& dims)
-	{
-		const physx::PxF32 x = dims.x * 0.5f;
-		const physx::PxF32 y = dims.y * 0.5f;
-		const physx::PxF32 z = dims.z * 0.5f;
-		physx::PxVec3 verts[8] =
-		{
-			physx::PxVec3(x,y,-z),
-			physx::PxVec3(x,y,z),
-			physx::PxVec3(x,-y,z),
-			physx::PxVec3(x,-y,-z),
-			physx::PxVec3(-x,y,-z),
-			physx::PxVec3(-x,y,z),
-			physx::PxVec3(-x,-y,z),
-			physx::PxVec3(-x,-y,-z)
-		};
-
-		return PhysxVehicleWheel::createConvexMesh(verts, 8);
 	}
 
 	void PhysxVehicleDrive4W::reset()

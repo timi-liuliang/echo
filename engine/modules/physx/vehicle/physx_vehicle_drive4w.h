@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/core/scene/node.h"
+#include "physx_vehicle_chassis.h"
 #include "physx_vehicle_wheel.h"
 
 namespace Echo
@@ -23,6 +24,9 @@ namespace Echo
 	public:
 		PhysxVehicleDrive4W();
 		virtual ~PhysxVehicleDrive4W();
+
+		// Get chassis
+		PhysxVehicleChassis* getChassis();
 
 		// Get wheel by index
 		vector<PhysxVehicleWheel*>::type getAllWheels();
@@ -64,16 +68,8 @@ namespace Echo
 		void setupVehicleActor();
 		void setupNonDrivableSurface(physx::PxFilterData& filterData);
 
-		// chassis mesh
-		physx::PxConvexMesh* createChassisMesh(const physx::PxVec3& dims);
-
 	private:
-		physx::PxF32					m_chassisMass;
-		physx::PxVec3					m_chassisDims;
-		physx::PxVec3					m_chassisMOI;
-		physx::PxVec3					m_chassisCMOffset;				// Center of mass offset
-		physx::PxMaterial*				m_chassisMaterial = nullptr;
-		physx::PxFilterData				m_chassisFilterData;
+		PhysxVehicleChassis*			m_chassis = nullptr;
 		WheelList						m_wheels;
 		physx::PxVehicleWheelsSimData*	m_wheelsSimData = nullptr;
 		physx::PxRigidDynamic*			m_vehicleActor = nullptr;
