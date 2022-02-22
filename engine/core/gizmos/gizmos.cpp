@@ -292,6 +292,32 @@ namespace Echo
 		}
 	}
 
+	void Gizmos::drawCylinder(const Vector3& center, const Vector3& up, float height, float radius, const Color& color, i32 segments)
+	{
+		Vector3 bottomCenter = center - up * height * 0.5;
+		Vector3 topCenter = center + up * height * 0.5;
+		float   deltaDegree = 2.f * Math::PI / segments;
+
+		for (int i = 0; i < segments; i++)
+		{
+			Vector3 dir1 = Quaternion::fromAxisAngle(up, i * deltaDegree + Math::PI_DIV4).rotateVec3(Vector3::UNIT_X) * radius;
+			Vector3 dir2 = Quaternion::fromAxisAngle(up, (i + 1) * deltaDegree + Math::PI_DIV4).rotateVec3(Vector3::UNIT_X) * radius;
+
+			Vector3 v1 = bottomCenter + dir1;
+			Vector3 v2 = bottomCenter + dir2;
+			Vector3 v3 = topCenter + dir1;
+			Vector3 v4 = topCenter + dir2;
+
+			drawLine(v1, v2, color);
+			drawLine(v3, v4, color);
+			drawLine(v1, v3, color);
+			drawLine(v2, v4, color);
+
+			drawLine(v1, bottomCenter, color);
+			drawLine(v3, topCenter, color);
+		}
+	}
+
 	void Gizmos::drawSprite(const Vector3& position, const Color& color, float pixels, TexturePtr texture, int flags)
 	{
 		Camera* camera = getCamera();

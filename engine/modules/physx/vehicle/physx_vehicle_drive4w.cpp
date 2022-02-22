@@ -297,28 +297,22 @@ namespace Echo
 
 	void PhysxVehicleDrive4W::updateInternal(float elapsedTime)
 	{
-		if (m_isEnable && !m_vehicleDrive4W)
+		if (IsGame)
 		{
-			settingUp();
-		}
-
-		if (m_vehicleActor)
-		{
-			updateSimulation(elapsedTime);
-
-			const Vector3& shift = PhysxModule::instance()->getShift();
-
-			if (IsGame)
+			if (m_isEnable && !m_vehicleDrive4W)
 			{
+				settingUp();
+			}
+
+			if (m_vehicleActor)
+			{
+				updateSimulation(elapsedTime);
+
+				const Vector3& shift = PhysxModule::instance()->getShift();
+
 				physx::PxTransform pxTransform = m_vehicleActor->getGlobalPose();
 				this->setWorldPosition((Vector3&)pxTransform.p - shift);
 				this->setWorldOrientation((Quaternion&)pxTransform.q);
-			}
-			else
-			{
-				//Vector3 finalPosition = getWorldPosition() + shift;
-				//physx::PxTransform pxTransform((physx::PxVec3&)finalPosition, (physx::PxQuat&)getWorldOrientation());
-				//m_vehicleDrive4W->setGlobalPose(pxTransform);
 			}
 		}
 	}

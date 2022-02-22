@@ -43,6 +43,9 @@ namespace Echo
 		// get controller manager
 		physx::PxControllerManager* getPxControllerManager() { return m_pxControllerManager; }
 
+		// get debug drawer
+		PhysxDebugDraw* getDebugDraw() { return m_debugDraw; }
+
 	public:
 		// ray casts
 		bool rayCast(const Vector3& origin, const Vector3& dir, float maxDistance);

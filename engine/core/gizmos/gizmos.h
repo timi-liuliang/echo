@@ -70,6 +70,9 @@ namespace Echo
 		// draw circle
 		void drawCircle(const Vector3& center, const Vector3& up, float radius, const Color& color);
 
+		// Draw cycliner
+		void drawCylinder(const Vector3& center, const Vector3& up, float height, float radius, const Color& color, i32 segments = 32);
+
 		// draw sprite
 		void drawSprite(const Vector3& position, const Color& color, float pixels, TexturePtr texture, int flags = RenderFlags::FixedPixel);
 
