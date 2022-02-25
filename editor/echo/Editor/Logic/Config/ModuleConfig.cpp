@@ -6,6 +6,7 @@ namespace Echo
 	void registerModules()
 	{
 		REGISTER_MODULE(CameraModule)
+		REGISTER_MODULE(SceneCaptureModule)
 		REGISTER_MODULE(Box2DModule)
 		REGISTER_MODULE(AudioModule)
 		REGISTER_MODULE(NetModule)
