@@ -17,6 +17,9 @@ namespace Echo
 		void setMass(double mass) { m_mass = mass;}
 		double getMass() const { return m_mass; }
 
+		// Dims
+		Vector3 getDims() const { return Vector3(m_dims.x, m_dims.y, m_dims.z); }
+
 		// MOI
 		const physx::PxVec3& getMOI() const { return m_MOI; }
 

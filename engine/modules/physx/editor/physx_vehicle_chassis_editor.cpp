@@ -2,6 +2,7 @@
 #include "engine/core/editor/editor.h"
 #include "engine/core/math/Curve.h"
 #include "engine/core/main/Engine.h"
+#include "../vehicle/physx_vehicle_chassis.h"
 
 namespace Echo
 {
@@ -11,6 +12,7 @@ namespace Echo
 	{
 		m_gizmo = ECHO_DOWN_CAST<Echo::Gizmos*>(Echo::Class::create("Gizmos"));
 		m_gizmo->setName(StringUtil::Format("gizmo_obj_%d", m_object->getId()));
+		m_gizmo->setRenderType("3d");
 	}
 
 	PhysxVehicleChassisEditor::~PhysxVehicleChassisEditor()
@@ -30,6 +32,17 @@ namespace Echo
 	void PhysxVehicleChassisEditor::editor_update_self()
 	{
 		m_gizmo->clear();
+
+		PhysxVehicleChassis* chassis = ECHO_DOWN_CAST<PhysxVehicleChassis*>(m_object);
+		if (chassis)
+		{
+			Vector3 center = chassis->getWorldPosition();
+			Matrix4 transform = chassis->getWorldMatrix();
+			Vector3 dims = chassis->getDims();
+
+			m_gizmo->drawOBB(dims, transform, Color::PURPLE);
+		}
+
 		m_gizmo->update(Engine::instance()->getFrameTime(), true);
 	}
 #endif
