@@ -71,7 +71,10 @@ namespace Echo
 		void drawCircle(const Vector3& center, const Vector3& up, float radius, const Color& color);
 
 		// Draw cycliner
-		void drawCylinder(const Vector3& center, const Vector3& up, float height, float radius, const Color& color, i32 segments = 32);
+		void drawCylinder(const Vector3& center, const Vector3& up, float height, float radius, const Color& color, i32 segments = 32, bool isLinkCenter=true);
+
+		// Draw OBB
+		void drawOBB(const Vector3& dims, const Matrix4& transform, const Color& color);
 
 		// draw sprite
 		void drawSprite(const Vector3& position, const Color& color, float pixels, TexturePtr texture, int flags = RenderFlags::FixedPixel);

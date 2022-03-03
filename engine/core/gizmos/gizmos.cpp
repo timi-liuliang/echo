@@ -2,6 +2,7 @@
 #include "engine/core/memory/MemAllocDef.h"
 #include "engine/core/scene/node_tree.h"
 #include "engine/core/render/base/renderer.h"
+#include "engine/core/geom/Box3.h"
 
 // material for vulkan or metal or opengles
 static const char* g_gizmoVsCode = R"(#version 450
@@ -292,7 +293,7 @@ namespace Echo
 		}
 	}
 
-	void Gizmos::drawCylinder(const Vector3& center, const Vector3& up, float height, float radius, const Color& color, i32 segments)
+	void Gizmos::drawCylinder(const Vector3& center, const Vector3& up, float height, float radius, const Color& color, i32 segments, bool isLinkCenter)
 	{
 		Vector3 bottomCenter = center - up * height * 0.5;
 		Vector3 topCenter = center + up * height * 0.5;
@@ -313,9 +314,40 @@ namespace Echo
 			drawLine(v1, v3, color);
 			drawLine(v2, v4, color);
 
-			drawLine(v1, bottomCenter, color);
-			drawLine(v3, topCenter, color);
+			if (isLinkCenter)
+			{
+				drawLine(v1, bottomCenter, color);
+				drawLine(v3, topCenter, color);
+			}
 		}
+	}
+
+	void Gizmos::drawOBB(const Vector3& dims, const Matrix4& transform, const Color& color)
+	{
+		array<Vector3, 8> eightPoints;
+
+		Box3 box(Vector3::ZERO, Vector3::UNIT_X, Vector3::UNIT_Y, Vector3::UNIT_Z, dims.x * 0.5f, dims.y * 0.5f, dims.z * 0.5f);
+		box.buildEightPoints(eightPoints.data());
+
+		for (Vector3& point : eightPoints)
+		{
+			point = transform.transform(point);
+		}
+
+		drawLine(eightPoints[0], eightPoints[1], color);
+		drawLine(eightPoints[1], eightPoints[2], color);
+		drawLine(eightPoints[2], eightPoints[3], color);
+		drawLine(eightPoints[3], eightPoints[0], color);
+
+		drawLine(eightPoints[4], eightPoints[5], color);
+		drawLine(eightPoints[5], eightPoints[6], color);
+		drawLine(eightPoints[6], eightPoints[7], color);
+		drawLine(eightPoints[7], eightPoints[4], color);
+
+		drawLine(eightPoints[0], eightPoints[4], color);
+		drawLine(eightPoints[1], eightPoints[5], color);
+		drawLine(eightPoints[2], eightPoints[6], color);
+		drawLine(eightPoints[3], eightPoints[7], color);
 	}
 
 	void Gizmos::drawSprite(const Vector3& position, const Color& color, float pixels, TexturePtr texture, int flags)
