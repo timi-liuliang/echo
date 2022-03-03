@@ -322,6 +322,6 @@ namespace Echo
 		NodeTree::instance()->update(m_frameTime);
 
 		// render
-		RenderPipeline::current()->render();
+		Renderer::instance()->render();
 	}
 }

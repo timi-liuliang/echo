@@ -277,4 +277,9 @@ namespace Echo
 		destroyRenderProxies(renderables.data(), static_cast<int>(renderables.size()));
 		renderables.clear();
 	}
+
+	void Renderer::render()
+	{
+		RenderPipeline::current()->render();
+	}
 }

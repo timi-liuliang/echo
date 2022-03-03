@@ -32,6 +32,14 @@ namespace Echo
 			RasterizerState::PolygonMode	m_polygonMode = RasterizerState::PM_FILL;		// Global Settings
 		};
 
+		// Scene
+		class Scene
+		{
+		public:
+			Scene() {}
+			~Scene() {}
+		};
+
 	public:
 		Renderer();
 		virtual ~Renderer();
@@ -107,6 +115,9 @@ namespace Echo
 
 		// on size
 		virtual void onSize(int width, int height) = 0;
+
+		// render
+		void render();
 
 		// draw
 		virtual void draw(RenderProxy* renderable, FrameBufferPtr& frameBuffer) = 0;
