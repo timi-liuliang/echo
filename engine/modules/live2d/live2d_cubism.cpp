@@ -285,10 +285,11 @@ namespace Echo
 				csmUpdateModel((csmModel*)m_model);
 
 				updateMeshBuffer();
-
-				m_renderable->submitToRenderQueue();
 			}
 		}
+
+		if (m_renderable)
+			m_renderable->setEnable(isNeedRender());
 	}
 
 	// build mesh data by drawables data

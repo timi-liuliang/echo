@@ -150,9 +150,10 @@ namespace Echo
 			}
 
 			buildRenderable();
-			if (m_renderable)
-				m_renderable->submitToRenderQueue();
 		}
+
+		if (m_renderable)
+			m_renderable->setEnable(isNeedRender());
 	}
 
 	void GltfMesh::syncGltfNodeAnim()

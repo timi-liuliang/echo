@@ -278,8 +278,15 @@ namespace Echo
 		renderables.clear();
 	}
 
-	void Renderer::render()
+	vector<RenderProxy*>::type Renderer::gatherRenderProxies()
 	{
-		RenderPipeline::current()->render();
+		vector<RenderProxy*>::type result;
+
+		for (auto it : m_renderProxies)
+		{
+			result.push_back(it.second);
+		}
+
+		return result;
 	}
 }

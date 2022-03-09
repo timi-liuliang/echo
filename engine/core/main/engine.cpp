@@ -311,6 +311,9 @@ namespace Echo
 		elapsedTime = Math::Clamp( elapsedTime, 0.f, 1.f);
 		m_frameTime = elapsedTime;
 
+		// update frame count
+		m_frameCount++;
+
 		// input update
 		Input::instance()->update();
 
@@ -322,6 +325,6 @@ namespace Echo
 		NodeTree::instance()->update(m_frameTime);
 
 		// render
-		Renderer::instance()->render();
+		RenderScene::renderAll();
 	}
 }

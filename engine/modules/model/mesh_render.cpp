@@ -42,11 +42,11 @@ namespace Echo
 
 	void MeshRender::updateInternal(float elapsedTime)
 	{
-		if (isNeedRender())
+		buildRenderable();
+
+		if (m_renderable)
 		{
-			buildRenderable();
-			if (m_renderable)
-				m_renderable->submitToRenderQueue();
+			m_renderable->setEnable(isNeedRender());
 		}
 	}
 

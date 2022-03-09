@@ -23,6 +23,7 @@ namespace Echo
 
 	Camera::~Camera()
 	{
+		EchoSafeDelete(m_renderScene, RenderScene);
 	}
 
 	void Camera::setPosition( const Vector3& pos )
@@ -189,5 +190,10 @@ namespace Echo
 			m_viewDirty = false;
 			m_projDirty = false;
 		}
+	}
+
+	void Camera::createRenderScene()
+	{
+		m_renderScene = EchoNew(RenderScene);
 	}
 }

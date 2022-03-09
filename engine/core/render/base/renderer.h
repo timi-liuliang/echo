@@ -3,6 +3,7 @@
 #include "misc/device_features.h"
 #include "state/render_state.h"
 #include "texture/texture_cube.h"
+#include "scene/render_scene.h"
 #include "base/proxy/render_proxy.h"
 #include "base/proxy/compute_proxy.h"
 #include "base/buffer/frame_buffer.h"
@@ -30,14 +31,6 @@ namespace Echo
 			bool							m_isFullscreen = false;
 			size_t							m_windowHandle = 0;								// window handle
 			RasterizerState::PolygonMode	m_polygonMode = RasterizerState::PM_FILL;		// Global Settings
-		};
-
-		// Scene
-		class Scene
-		{
-		public:
-			Scene() {}
-			~Scene() {}
 		};
 
 	public:
@@ -104,20 +97,8 @@ namespace Echo
         virtual MultisampleState* createMultisampleState() = 0;
 		virtual SamplerState* createSamplerState() = 0;
 
-		// renderable operate
-		virtual RenderProxy* createRenderProxy()=0;
-		RenderProxy* getRenderProxy(RenderableID id);
-		void destroyRenderProxies(RenderProxy** renderables, int num);
-		void destroyRenderProxies(vector<RenderProxy*>::type& renderables);
-
-		// computation proxy
-		virtual ComputeProxy* createComputeProxy() { return nullptr; }
-
 		// on size
 		virtual void onSize(int width, int height) = 0;
-
-		// render
-		void render();
 
 		// draw
 		virtual void draw(RenderProxy* renderable, FrameBufferPtr& frameBuffer) = 0;
@@ -140,6 +121,19 @@ namespace Echo
 		// start mipmap
 		void setStartMipmap(ui32 mipmap) { m_startMipmap = mipmap; }
 		ui32 getStartMipmap() const { return m_startMipmap; }
+
+	public:
+		// renderable operate
+		virtual RenderProxy* createRenderProxy() = 0;
+		RenderProxy* getRenderProxy(RenderableID id);
+		void destroyRenderProxies(RenderProxy** renderables, int num);
+		void destroyRenderProxies(vector<RenderProxy*>::type& renderables);
+
+		// computation proxy
+		virtual ComputeProxy* createComputeProxy() { return nullptr; }
+
+		// Gather renderables
+		vector<RenderProxy*>::type gatherRenderProxies();
 
 	protected:
 		Settings						m_settings;

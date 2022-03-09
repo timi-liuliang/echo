@@ -126,9 +126,10 @@ namespace Echo
         {
             if (!m_renderable)
                 buildRenderable();
-
-            m_renderable->submitToRenderQueue();
         }
+
+        if (m_renderable)
+            m_renderable->setEnable(isNeedRender());
     }
     
     void UiImage::buildMeshData(Ui::VertexArray& oVertices, Ui::IndiceArray& oIndices)

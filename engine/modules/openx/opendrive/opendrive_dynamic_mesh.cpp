@@ -94,15 +94,11 @@ namespace Echo
 
 	void OpenDriveDynamicMesh::updateInternal(float elapsedTime)
 	{
-		// update render
 		if (isNeedRender())
-		{
 			buildRenderable();
-			if (m_renderable)
-			{
-				m_renderable->submitToRenderQueue();
-			}
-		}
+
+		if (m_renderable)
+			m_renderable->setEnable(isNeedRender());
 	}
 
 	void OpenDriveDynamicMesh::updateMeshBuffer()

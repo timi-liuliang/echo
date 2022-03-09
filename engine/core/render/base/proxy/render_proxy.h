@@ -21,6 +21,10 @@ namespace Echo
 		// Identifier
 		ui32 getIdentifier() const { return m_identifier; }
 
+		// Is enable
+		bool isEnable() const { return m_enable; }
+		void setEnable(bool enable) { m_enable = enable; }
+
 		// Create method
 		static RenderProxy* create(MeshPtr mesh, Material* matInst, Render* node, bool raytracing);
 
@@ -48,7 +52,7 @@ namespace Echo
 		void SetCastShadow(bool castShadow) { m_castShadow = castShadow; }
 
 		// submit to renderqueue
-		void submitToRenderQueue();
+		void submitToRenderQueue(class RenderPipeline* pipeline);
 
 	protected:
 		RenderProxy(int identifier);
@@ -61,6 +65,7 @@ namespace Echo
 		MaterialPtr		m_material;
 		bool			m_raytracing = false;
 		bool			m_castShadow = false;
+		bool			m_enable = true;
 	};
 	typedef ResRef<RenderProxy> RenderProxyPtr;
 }

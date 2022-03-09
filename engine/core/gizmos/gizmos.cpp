@@ -127,14 +127,14 @@ namespace Echo
 		}
 
 		// render
-		if (m_renderable)
-		{
-			m_renderable->submitToRenderQueue();
-		}
-		else if(m_vertexs.size())
+		if(!m_renderable && m_vertexs.size())
 		{
 			m_renderable = RenderProxy::create(m_mesh, m_material, m_gizmos, false);
-			m_renderable->submitToRenderQueue();
+		}
+
+		if (m_renderable)
+		{
+			m_renderable->setEnable(true);
 		}
 
 		// auto clear data

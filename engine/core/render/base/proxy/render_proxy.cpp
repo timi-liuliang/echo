@@ -5,6 +5,7 @@
 #include "base/shader/material.h"
 #include "base/mesh/mesh.h"
 #include "engine/core/scene/render_node.h"
+#include "engine/core/main/engine.h"
 
 namespace Echo
 {
@@ -39,11 +40,11 @@ namespace Echo
 		return renderProxy;
 	}
 
-	void RenderProxy::submitToRenderQueue()
+	void RenderProxy::submitToRenderQueue(RenderPipeline* pipeline)
 	{
 		if (m_mesh && m_mesh->isValid())
 		{
-			RenderPipeline::current()->addRenderable(m_material->getRenderStage(), getIdentifier());
+			pipeline->addRenderable(m_material->getRenderStage(), getIdentifier());
 		}
 	}
 }

@@ -46,6 +46,9 @@ namespace Echo
 		float* getFrameTimePtr() { return &m_frameTime; }
 		ui32 getFrameTimeMS() { return ui32(m_frameTime*1000.f); }
 
+		// get frame count
+		ui32 getFrameCount() const { return m_frameCount;}
+
 		// is initialized
 		bool isInited() const { return m_isInited; }
 
@@ -85,6 +88,7 @@ namespace Echo
 		String				m_rootPath;
 		bool				m_isInited;
 		float				m_frameTime;
+		ui32				m_frameCount = 0;
 	};
 }
 

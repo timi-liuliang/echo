@@ -247,7 +247,9 @@ namespace Echo
 		}
 
 		updateRenderable();
-		m_renderable->submitToRenderQueue();
+		
+		if (m_renderable)
+			m_renderable->setEnable(isNeedRender());
 	}
 
 	void Spine::updateRenderable()

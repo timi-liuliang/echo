@@ -117,13 +117,8 @@ namespace Echo
     
     void UiText::updateInternal(float elapsedTime)
     {
-        if (isNeedRender())
-        {
-            if (m_renderable)
-            {
-                m_renderable->submitToRenderQueue();
-            }
-        }
+        if (m_renderable)
+            m_renderable->setEnable(isNeedRender());
     }
     
     void UiText::buildMeshData(Ui::VertexArray& oVertices, Ui::IndiceArray& oIndices)

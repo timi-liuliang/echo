@@ -114,11 +114,10 @@ namespace Echo
 			updateBillboard();
 
 			buildRenderable();
-			if (m_renderable)
-			{
-				m_renderable->submitToRenderQueue();
-			}
 		}
+
+		if (m_renderable)
+			m_renderable->setEnable(isNeedRender());
 	}
 
 	void Sprite::updateBillboard()

@@ -3,6 +3,7 @@
 #include "engine/core/math/Quaternion.h"
 #include "engine/core/geom/Frustum.h"
 #include "engine/core/util/Array.hpp"
+#include "engine/core/render/base/scene/render_scene.h"
 
 namespace Echo
 {
@@ -75,6 +76,10 @@ namespace Echo
 		const Matrix4& getProjMatrix() const { return m_matProj; }
 		const Matrix4& getViewProjMatrix() const { return m_matVP; }
 
+	public:
+		// render scene
+		void createRenderScene();
+
 	protected:
 		ProjMode		m_projMode;
 		Vector3			m_position;
@@ -93,5 +98,6 @@ namespace Echo
 		Matrix4			m_matProj;
 		bool			m_projDirty = true;
 		Matrix4			m_matVP;
+		RenderScene*	m_renderScene = nullptr;
 	};
 }

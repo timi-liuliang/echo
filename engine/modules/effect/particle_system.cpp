@@ -60,13 +60,10 @@ namespace Echo
     void ParticleSystem::updateInternal(float elapsedTime)
     {
         if (isNeedRender())
-        {
             buildRenderable();
-            if (m_renderable)
-            {
-                m_renderable->submitToRenderQueue();
-            }
-        }
+
+        if (m_renderable)
+            m_renderable->setEnable(isNeedRender());
     }
 
     void ParticleSystem::updateMeshBuffer()
