@@ -423,13 +423,10 @@ namespace Echo
 
 	void Gizmos::updateInternal(float elapsedTime)
 	{
-		if (isNeedRender())
-		{
-			m_lineBatch->update();
-			m_triangleBatch->update();
+		m_lineBatch->update();
+		m_triangleBatch->update();
 			
-			for (Batch* batch : m_spriteBatchs)
-				batch->update();
-		}
+		for (Batch* batch : m_spriteBatchs)
+			batch->update();
 	}
 }
