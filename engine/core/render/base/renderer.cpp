@@ -284,7 +284,10 @@ namespace Echo
 
 		for (auto it : m_renderProxies)
 		{
-			result.push_back(it.second);
+			if (it.second->isSubmitToRenderQueue())
+			{
+				result.push_back(it.second);
+			}
 		}
 
 		return result;

@@ -23,7 +23,6 @@ namespace Echo
 
 	Camera::~Camera()
 	{
-		EchoSafeDelete(m_renderScene, RenderScene);
 	}
 
 	void Camera::setPosition( const Vector3& pos )

@@ -134,7 +134,7 @@ namespace Echo
 
 		if (m_renderable)
 		{
-			m_renderable->setEnable(true);
+			m_renderable->setSubmitToRenderQueue(m_gizmos->isNeedRender());
 		}
 
 		// auto clear data

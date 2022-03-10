@@ -146,7 +146,7 @@ namespace Echo
             buildRenderable();
 
         if (m_renderable)
-            m_renderable->setEnable(isNeedRender());
+            m_renderable->setSubmitToRenderQueue(isNeedRender());
     }
     
     void Terrain::buildMeshData(VertexArray& oVertices, IndiceArray& oIndices)

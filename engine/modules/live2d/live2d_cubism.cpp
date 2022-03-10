@@ -289,7 +289,7 @@ namespace Echo
 		}
 
 		if (m_renderable)
-			m_renderable->setEnable(isNeedRender());
+			m_renderable->setSubmitToRenderQueue(isNeedRender());
 	}
 
 	// build mesh data by drawables data

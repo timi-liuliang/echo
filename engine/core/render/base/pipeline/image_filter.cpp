@@ -68,6 +68,7 @@ namespace Echo
 
 			// create render able
 			m_renderable = RenderProxy::create(m_mesh, m_material, nullptr, false);
+			m_renderable->setSubmitToRenderQueue(false);
 
 			m_isRenderableDirty = false;
 		}

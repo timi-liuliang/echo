@@ -30,11 +30,11 @@ namespace Echo
 
 	void RvoDebugDraw::update(float elapsedTime)
 	{
-		m_gizmo->clear();
-
 		RVO::RVOSimulator* simulator = RvoModule::instance()->getRvoSimulator();
-		if (simulator)
+		if (simulator && !simulator->getAgents().empty())
 		{
+			m_gizmo->clear();
+
 			for (RVO::Agent* rvAgent : simulator->getAgents())
 			{
 				const RvoAgent* agent = (const RvoAgent*)(rvAgent->getUserData());
@@ -53,8 +53,8 @@ namespace Echo
 					m_gizmo->drawLine(agent->getWorldPosition(), agent->getWorldPosition() + agent->getVelocity() * agent->getRadius() * 0.9f, Color::GREEN);
 				}
 			}
-		}
 
-		m_gizmo->update(Engine::instance()->getFrameTime(), true);
+			m_gizmo->update(Engine::instance()->getFrameTime(), true);
+		}
 	}
 }

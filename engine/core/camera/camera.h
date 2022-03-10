@@ -98,6 +98,6 @@ namespace Echo
 		Matrix4			m_matProj;
 		bool			m_projDirty = true;
 		Matrix4			m_matVP;
-		RenderScene*	m_renderScene = nullptr;
+		RenderScenePtr	m_renderScene;
 	};
 }

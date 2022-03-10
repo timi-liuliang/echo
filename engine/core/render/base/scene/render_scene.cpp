@@ -30,10 +30,7 @@ namespace Echo
 		vector<RenderProxy*>::type visibleRenderProxies = Renderer::instance()->gatherRenderProxies();
 		for (RenderProxy* renderproxy : visibleRenderProxies)
 		{
-			if (renderproxy && renderproxy->isEnable())
-			{
-				renderproxy->submitToRenderQueue(RenderPipeline::current());
-			}
+			renderproxy->submitToRenderQueue(RenderPipeline::current());
 		}
 
 		RenderPipeline::current()->render();
