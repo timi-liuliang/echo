@@ -1,7 +1,6 @@
 #pragma once
 
 #include "node.h"
-#include "bvh.h"
 #include "engine/core/gizmos/gizmos.h"
 #include "engine/core/camera/camera.h"
 
@@ -20,10 +19,6 @@ namespace Echo
 
 		// root node
         Node* getInvisibleRootNode();
-
-		// get bounding volume hierarchy accelerator
-		Bvh& get2dBvh() { return m_2dBvh; }
-		Bvh& get3dBvh() { return m_3dBvh; }
 
 	public:
 		// get main 3d camera
@@ -51,8 +46,6 @@ namespace Echo
 		Camera*			    m_3dCamera = nullptr;
 		Camera*				m_2dCamera = nullptr;
 		Camera*				m_uiCamera = nullptr;
-		Bvh					m_2dBvh;
-		Bvh					m_3dBvh;
         Node*				m_invisibleRoot = nullptr;	// invisible root node
 	};
 }

@@ -10,6 +10,7 @@ namespace Echo
 	Box2DDebugDraw::Box2DDebugDraw()
 	{
 		m_gizmosNode = ECHO_DOWN_CAST<Echo::Gizmos*>(Echo::Class::create("Gizmos"));
+		m_gizmosNode->setName("Box2DDebugDraw");
 		m_gizmosNode->setAutoClear(true);
 		m_gizmosNode->setLocalPosition(Vector3(0.f, 0.f, 100.f));
 	}

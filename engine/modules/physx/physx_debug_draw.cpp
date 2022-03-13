@@ -14,6 +14,7 @@ namespace Echo
 			m_pxScene = scene;
 
 			m_gizmosNode = ECHO_DOWN_CAST<Echo::Gizmos*>(Echo::Class::create("Gizmos"));
+			m_gizmosNode->setName("PhysxDebugDraw");
 			m_gizmosNode->setRenderType("3d");
 			m_gizmosNode->setAutoClear(true);
 			m_gizmosNode->setLocalPosition(Vector3(0.f, 0.f, 0.f));

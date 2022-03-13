@@ -13,11 +13,6 @@ namespace Echo
 
 	Render::~Render()
 	{
-		if (m_bvhNodeId != -1)
-		{
-			Bvh& bvh = m_renderType.getIdx() == 1 ? NodeTree::instance()->get3dBvh() : NodeTree::instance()->get2dBvh();
-			//bvh.destroyProxy(m_bvhNodeId);
-		}
 	}
 
 	void Render::bindMethods()
@@ -51,14 +46,6 @@ namespace Echo
 
 	void Render::setRenderType(const StringOption& type)
 	{
-		if (m_bvhNodeId != -1)
-		{
-			Bvh& bvh = m_renderType.getIdx() == 1 ? NodeTree::instance()->get3dBvh() : NodeTree::instance()->get2dBvh();
-			bvh.destroyProxy(m_bvhNodeId);
-
-			m_bvhNodeId = -1;
-		}
-
 		m_renderType.setValue(type.getValue());
 	}
 
@@ -74,18 +61,6 @@ namespace Echo
 			return;
 
 		Node::update(delta, bUpdateChildren);
-
-		if (m_bvhNodeId == -1)
-		{
-			AABB worldAABB = getLocalAABB();
-			if (worldAABB.isValid())
-			{
-				worldAABB = worldAABB.transform(getWorldMatrix());
-				Bvh& bvh = m_renderType.getIdx() == 1 ? NodeTree::instance()->get3dBvh() : NodeTree::instance()->get2dBvh();
-				
-				m_bvhNodeId = bvh.createProxy(worldAABB, getId());
-			}
-		}
 	}
 
 	void* Render::getGlobalUniformValue(const String& name)

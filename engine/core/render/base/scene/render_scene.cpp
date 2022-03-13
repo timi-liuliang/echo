@@ -26,7 +26,6 @@ namespace Echo
 
 	void RenderScene::render()
 	{
-		// frustum culling
 		vector<RenderProxy*>::type visibleRenderProxies = Renderer::instance()->gatherRenderProxies();
 		for (RenderProxy* renderproxy : visibleRenderProxies)
 		{

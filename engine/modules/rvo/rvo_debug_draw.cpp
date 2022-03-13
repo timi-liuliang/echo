@@ -7,7 +7,7 @@ namespace Echo
 	RvoDebugDraw::RvoDebugDraw()
 	{
 		m_gizmo = ECHO_DOWN_CAST<Echo::Gizmos*>(Echo::Class::create("Gizmos"));
-		m_gizmo->setName("gizmo_rvo_debug_draw");
+		m_gizmo->setName("RvoDebugDraw");
 		m_gizmo->setRenderType("3d");
 	}
 

@@ -9,6 +9,7 @@
 #include "base/buffer/frame_buffer.h"
 #include "base/buffer/gpu_buffer.h"
 #include "base/misc/view_port.h"
+#include "scene/bvh.h"
 
 namespace Echo
 {
@@ -123,9 +124,11 @@ namespace Echo
 		ui32 getStartMipmap() const { return m_startMipmap; }
 
 	public:
-		// renderable operate
+		// create|get render proxy
 		virtual RenderProxy* createRenderProxy() = 0;
 		RenderProxy* getRenderProxy(RenderableID id);
+
+		// destroy render proxyies
 		void destroyRenderProxies(RenderProxy** renderables, int num);
 		void destroyRenderProxies(vector<RenderProxy*>::type& renderables);
 
@@ -138,6 +141,8 @@ namespace Echo
 	protected:
 		Settings						m_settings;
 		std::map<ui32, RenderProxy*>	m_renderProxies;
+		Bvh								m_renderProxies3dBvh;
+		Bvh								m_renderProxies2dBvh;
 		std::map<ui32, ComputeProxy*>	m_computeProxies;
 		ui32							m_startMipmap = 0;
 		DeviceFeature					m_deviceFeature;

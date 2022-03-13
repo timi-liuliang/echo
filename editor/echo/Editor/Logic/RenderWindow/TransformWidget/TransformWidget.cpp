@@ -14,6 +14,7 @@ namespace Studio
 		m_position = Echo::Vector3::ZERO;
 
 		m_axis = ECHO_DOWN_CAST<Echo::Gizmos*>(Echo::Class::create("Gizmos"));
+		m_axis->setName("TransformWidget");
 		m_axis->setParent(EchoEngine::instance()->getInvisibleEditorNode());
 		m_axis->setLineWidth(3.f);
 		m_axis->setVisible(true);
