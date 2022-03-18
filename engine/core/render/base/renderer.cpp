@@ -66,6 +66,7 @@
 #include "base/shader/editor/node/math/shader_node_smooth_step.h"
 #include "base/shader/editor/node/math/shader_node_split.h"
 #include "base/shader/editor/node/math/shader_node_substraction.h"
+#include "engine/core/scene/render_node.h"
 
 namespace Echo
 {
@@ -265,6 +266,11 @@ namespace Echo
                 {
                     m_renderProxies.erase(it);
                     
+					if (it->second->m_bvh)
+					{
+						it->second->m_bvh->destroyProxy(it->second->m_bvhNodeId);
+					}
+
                     EchoSafeDelete(renderable, RenderProxy);
                     renderables[i] = nullptr;
                 }
@@ -278,15 +284,95 @@ namespace Echo
 		renderables.clear();
 	}
 
-	vector<RenderProxy*>::type Renderer::gatherRenderProxies()
+	void Renderer::updateRenderProxyBvh(RenderProxy* renderProxy)
 	{
-		vector<RenderProxy*>::type result;
-
-		for (auto it : m_renderProxies)
+		auto getBvh = [&](const StringOption& renderType)->Bvh*
 		{
-			if (it.second->isSubmitToRenderQueue())
+			if		(renderType.getIdx() == 0)	return &m_renderProxies2dBvh;
+			else if (renderType.getIdx() == 1)	return &m_renderProxies3dBvh;
+			else								return &m_renderProxiesUiBvh;
+		};
+
+		Render* renderNode = renderProxy->m_node;
+		if(!renderNode) return;
+
+		Bvh* bvh = getBvh(renderNode->getRenderType());
+		if (renderProxy->m_bvh && renderProxy->m_bvh != bvh)
+		{
+			renderProxy->m_bvh->destroyProxy(renderProxy->m_bvhNodeId);
+			renderProxy->m_bvh = nullptr;
+			renderProxy->m_bvhNodeId = -1;
+		}
+
+		if (renderProxy->m_bvhNodeId == -1)
+		{
+			AABB worldAABB = renderNode->getLocalAABB();
+			if (worldAABB.isValid())
 			{
-				result.push_back(it.second);
+				worldAABB = worldAABB.transform(renderNode->getWorldMatrix());
+				renderProxy->m_bvh = bvh;
+				renderProxy->m_bvhNodeId = bvh->createProxy(worldAABB, getId());
+			}
+		}
+		else
+		{
+			AABB worldAABB = renderNode->getLocalAABB();
+			if (worldAABB.isValid())
+			{
+				worldAABB = worldAABB.transform(renderNode->getWorldMatrix());
+				renderProxy->m_bvh->moveProxy(renderProxy->m_bvhNodeId, worldAABB, Vector3::ZERO);
+			}
+		}
+	}
+
+	vector<RenderProxy*>::type Renderer::gatherRenderProxies(RenderProxy::RenderType renderType, const Frustum& frustum)
+	{
+		BvhCbDefault cb;
+
+		if (renderType == RenderProxy::RenderType3D)
+			m_renderProxies3dBvh.query(&cb, frustum);
+
+		if (renderType == RenderProxy::RenderType2D)
+			m_renderProxies2dBvh.query(&cb, frustum);
+
+		if (renderType == RenderProxy::RenderTypeUI)
+			m_renderProxiesUiBvh.query(&cb, frustum);
+
+
+		vector<RenderProxy*>::type result;
+		for (i32 nodeId : cb.getQueryResults())
+		{
+			RenderProxy* proxy = getRenderProxy(nodeId);
+			if (proxy && proxy->isSubmitToRenderQueue())
+			{
+				result.push_back(proxy);
+			}
+		}
+
+		return result;
+	}
+
+	vector<RenderProxy*>::type Renderer::gatherRenderProxies(RenderProxy::RenderType renderType, const AABB& aabb)
+	{
+		BvhCbDefault cb;
+
+		if (renderType == RenderProxy::RenderType3D)
+			m_renderProxies3dBvh.query(&cb, aabb);
+
+		if (renderType == RenderProxy::RenderType2D)
+			m_renderProxies2dBvh.query(&cb, aabb);
+
+		if (renderType == RenderProxy::RenderTypeUI)
+			m_renderProxiesUiBvh.query(&cb, aabb);
+
+
+		vector<RenderProxy*>::type result;
+		for (i32 nodeId : cb.getQueryResults())
+		{
+			RenderProxy* proxy = getRenderProxy(nodeId);
+			if (proxy && proxy->isSubmitToRenderQueue())
+			{
+				result.push_back(proxy);
 			}
 		}
 

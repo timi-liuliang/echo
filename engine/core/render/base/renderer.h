@@ -125,8 +125,11 @@ namespace Echo
 
 	public:
 		// create|get render proxy
-		virtual RenderProxy* createRenderProxy() = 0;
+		virtual RenderProxy* createRenderProxy() { return nullptr; }
 		RenderProxy* getRenderProxy(RenderableID id);
+
+		// update bvh
+		void updateRenderProxyBvh(RenderProxy* renderProxy);
 
 		// destroy render proxyies
 		void destroyRenderProxies(RenderProxy** renderables, int num);
@@ -136,13 +139,15 @@ namespace Echo
 		virtual ComputeProxy* createComputeProxy() { return nullptr; }
 
 		// Gather renderables
-		vector<RenderProxy*>::type gatherRenderProxies();
+		vector<RenderProxy*>::type gatherRenderProxies(RenderProxy::RenderType renderType, const Frustum& frustum);
+		vector<RenderProxy*>::type gatherRenderProxies(RenderProxy::RenderType renderType, const AABB& aabb);
 
 	protected:
 		Settings						m_settings;
 		std::map<ui32, RenderProxy*>	m_renderProxies;
 		Bvh								m_renderProxies3dBvh;
 		Bvh								m_renderProxies2dBvh;
+		Bvh								m_renderProxiesUiBvh;
 		std::map<ui32, ComputeProxy*>	m_computeProxies;
 		ui32							m_startMipmap = 0;
 		DeviceFeature					m_deviceFeature;

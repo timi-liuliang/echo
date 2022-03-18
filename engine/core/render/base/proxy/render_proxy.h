@@ -18,6 +18,16 @@ namespace Echo
 		friend class Renderer;
 
 	public:
+		// Type
+		enum RenderType
+		{
+			RenderType2D = 1 << 0,
+			RenderType3D = 1 << 1,
+			RenderTypeUI = 1 << 2,
+			All = RenderType2D | RenderType3D | RenderTypeUI,
+		};
+
+	public:
 		// Identifier
 		ui32 getIdentifier() const { return m_identifier; }
 
@@ -49,7 +59,7 @@ namespace Echo
 
 		// Is enable submit to render queues
 		bool isSubmitToRenderQueue() const { return m_isSubmitToRenderQueue; }
-		void setSubmitToRenderQueue(bool enable) { m_isSubmitToRenderQueue = enable; }
+		void setSubmitToRenderQueue(bool enable);
 
 		// submit to renderqueue
 		void submitToRenderQueue(class RenderPipeline* pipeline);
@@ -58,9 +68,11 @@ namespace Echo
 		RenderProxy(int identifier);
 		virtual ~RenderProxy();
 
-	public:
+	protected:
 		ui32			m_identifier;
 		Render*			m_node = nullptr;
+		i32				m_bvhNodeId = -1;
+		class Bvh*		m_bvh = nullptr;
 		MeshPtr			m_mesh;
 		MaterialPtr		m_material;
 		bool			m_raytracing = false;

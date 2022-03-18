@@ -22,8 +22,8 @@ namespace Echo
 
 		m_nodeCapacity = 16;
 		m_nodeCount = 0;
-		m_nodes = (BvhNode*)EchoAlloc(BvhNode, m_nodeCapacity);
-		memset(m_nodes, 0, m_nodeCapacity * sizeof(BvhNode));
+		m_nodes.resize(m_nodeCapacity);
+		memset(m_nodes.data(), 0, m_nodeCapacity * sizeof(BvhNode));
 
 		// Build a linked list for the free list.
 		for (i32 i = 0; i < m_nodeCapacity - 1; ++i)
@@ -43,7 +43,7 @@ namespace Echo
 	Bvh::~Bvh()
 	{
 		// This frees the entire tree in one shot.
-		EchoSafeFree(m_nodes);
+		m_nodes.clear();
 	}
 
 	i32 Bvh::allocateNode()
@@ -54,11 +54,8 @@ namespace Echo
 			EchoAssert(m_nodeCount == m_nodeCapacity);
 
 			// The free list is empty. Rebuild a bigger pool.
-			BvhNode* oldNodes = m_nodes;
 			m_nodeCapacity *= 2;
-			m_nodes = (BvhNode*)EchoAlloc(BvhNode, m_nodeCapacity);
-			memcpy(m_nodes, oldNodes, m_nodeCount * sizeof(BvhNode));
-			EchoSafeFree(oldNodes);
+			m_nodes.resize(m_nodeCapacity);
 
 			// Build a linked list for the free list. The parent
 			// pointer becomes the "next" pointer.
@@ -122,6 +119,8 @@ namespace Echo
 
 	void Bvh::destroyProxy(i32 proxyId)
 	{
+		if(proxyId==NullNode) return;
+
 		EchoAssert(0 <= proxyId && proxyId < m_nodeCapacity);
 		EchoAssert(m_nodes[proxyId].IsLeaf());
 
@@ -389,7 +388,7 @@ namespace Echo
 	{
 		EchoAssert(iA != NullNode);
 
-		BvhNode* A = m_nodes + iA;
+		BvhNode* A = &m_nodes[iA];
 		if (A->IsLeaf() || A->height < 2)
 		{
 			return iA;
@@ -400,8 +399,8 @@ namespace Echo
 		EchoAssert(0 <= iB && iB < m_nodeCapacity);
 		EchoAssert(0 <= iC && iC < m_nodeCapacity);
 
-		BvhNode* B = m_nodes + iB;
-		BvhNode* C = m_nodes + iC;
+		BvhNode* B = &m_nodes[iB];
+		BvhNode* C = &m_nodes[iC];
 
 		i32 balance = C->height - B->height;
 
@@ -410,8 +409,8 @@ namespace Echo
 		{
 			i32 iF = C->child1;
 			i32 iG = C->child2;
-			BvhNode* F = m_nodes + iF;
-			BvhNode* G = m_nodes + iG;
+			BvhNode* F = &m_nodes[iF];
+			BvhNode* G = &m_nodes[iG];
 			EchoAssert(0 <= iF && iF < m_nodeCapacity);
 			EchoAssert(0 <= iG && iG < m_nodeCapacity);
 
@@ -470,8 +469,8 @@ namespace Echo
 		{
 			i32 iD = B->child1;
 			i32 iE = B->child2;
-			BvhNode* D = m_nodes + iD;
-			BvhNode* E = m_nodes + iE;
+			BvhNode* D = &m_nodes[iD];
+			BvhNode* E = &m_nodes[iE];
 			EchoAssert(0 <= iD && iD < m_nodeCapacity);
 			EchoAssert(0 <= iE && iE < m_nodeCapacity);
 
@@ -545,13 +544,13 @@ namespace Echo
 			return 0.0f;
 		}
 
-		const BvhNode* root = m_nodes + m_root;
+		const BvhNode* root = &m_nodes[m_root];
 		float rootArea = root->aabb.getPerimeter();
 
 		float totalArea = 0.0f;
 		for (i32 i = 0; i < m_nodeCapacity; ++i)
 		{
-			const BvhNode* node = m_nodes + i;
+			const BvhNode* node = &m_nodes[i];
 			if (node->height < 0)
 			{
 				// Free node in pool
@@ -567,7 +566,7 @@ namespace Echo
 	i32 Bvh::computeHeight(i32 nodeId) const
 	{
 		EchoAssert(0 <= nodeId && nodeId < m_nodeCapacity);
-		BvhNode* node = m_nodes + nodeId;
+		const BvhNode* node = &m_nodes[nodeId];
 
 		if (node->IsLeaf())
 		{
@@ -597,7 +596,7 @@ namespace Echo
 			EchoAssert(m_nodes[index].parent == NullNode);
 		}
 
-		const BvhNode* node = m_nodes + index;
+		const BvhNode* node = &m_nodes[index];
 
 		i32 child1 = node->child1;
 		i32 child2 = node->child2;
@@ -627,7 +626,7 @@ namespace Echo
 			return;
 		}
 
-		const BvhNode* node = m_nodes + index;
+		const BvhNode* node = &m_nodes[index];
 
 		i32 child1 = node->child1;
 		i32 child2 = node->child2;
@@ -683,7 +682,7 @@ namespace Echo
 		i32 maxBalance = 0;
 		for (i32 i = 0; i < m_nodeCapacity; ++i)
 		{
-			const BvhNode* node = m_nodes + i;
+			const BvhNode* node = &m_nodes[i];
 			if (node->height <= 1)
 			{
 				continue;
@@ -751,11 +750,11 @@ namespace Echo
 
 			i32 index1 = nodes[iMin];
 			i32 index2 = nodes[jMin];
-			BvhNode* child1 = m_nodes + index1;
-			BvhNode* child2 = m_nodes + index2;
+			BvhNode* child1 = &m_nodes[index1];
+			BvhNode* child2 = &m_nodes[index2];
 
 			i32 parentIndex = allocateNode();
-			BvhNode* parent = m_nodes + parentIndex;
+			BvhNode* parent = &m_nodes[parentIndex];
 			parent->child1 = index1;
 			parent->child2 = index2;
 			parent->height = 1 + Math::Max<i32>(child1->height, child2->height);
@@ -811,7 +810,7 @@ namespace Echo
 				continue;
 			}
 
-			const BvhNode* node = m_nodes + nodeId;
+			const BvhNode* node = &m_nodes[nodeId];
 
 			if (node->aabb.isIntersected(aabb))
 			{
@@ -845,7 +844,7 @@ namespace Echo
 				continue;
 			}
 
-			const BvhNode* node = m_nodes + nodeId;
+			const BvhNode* node = &m_nodes[nodeId];
 			if (frustum.isAABBIn(node->aabb.vMin, node->aabb.vMax))
 			{
 				if (node->IsLeaf())
@@ -891,7 +890,7 @@ namespace Echo
 				continue;
 			}
 
-			const BvhNode* node = m_nodes + nodeId;
+			const BvhNode* node = &m_nodes[nodeId];
 
 			if (!node->aabb.isIntersected(segmentAABB))
 			{

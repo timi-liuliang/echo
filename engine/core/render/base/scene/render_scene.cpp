@@ -26,8 +26,20 @@ namespace Echo
 
 	void RenderScene::render()
 	{
-		vector<RenderProxy*>::type visibleRenderProxies = Renderer::instance()->gatherRenderProxies();
-		for (RenderProxy* renderproxy : visibleRenderProxies)
+		vector<RenderProxy*>::type visibleRenderProxies3D = Renderer::instance()->gatherRenderProxies(RenderProxy::RenderType3D, Frustum());
+		for (RenderProxy* renderproxy : visibleRenderProxies3D)
+		{
+			renderproxy->submitToRenderQueue(RenderPipeline::current());
+		}
+
+		vector<RenderProxy*>::type visibleRenderProxies2D = Renderer::instance()->gatherRenderProxies(RenderProxy::RenderType2D, AABB(-Vector3::ONE, Vector3::ONE));
+		for (RenderProxy* renderproxy : visibleRenderProxies2D)
+		{
+			renderproxy->submitToRenderQueue(RenderPipeline::current());
+		}
+
+		vector<RenderProxy*>::type visibleRenderProxiesUI = Renderer::instance()->gatherRenderProxies(RenderProxy::RenderTypeUI, AABB(-Vector3::ONE, Vector3::ONE));
+		for (RenderProxy* renderproxy : visibleRenderProxiesUI)
 		{
 			renderproxy->submitToRenderQueue(RenderPipeline::current());
 		}

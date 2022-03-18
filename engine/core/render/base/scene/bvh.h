@@ -18,6 +18,25 @@ namespace Echo
 		virtual float rayCastCallback(i32 nodeId) = 0;
 	};
 
+	class BvhCbDefault : public BvhCb
+	{
+	public:
+		BvhCbDefault() {}
+		virtual ~BvhCbDefault() {}
+
+		// cb
+		virtual bool queryCallback(i32 nodeId) override { m_queryResults.emplace_back(nodeId); return true; }
+		virtual float rayCastCallback(i32 nodeId) override { m_rayCastResults.emplace_back(nodeId); return 0.f; }
+
+		// get results
+		const vector<i32>::type& getQueryResults() const { return m_queryResults; }
+		const vector<i32>::type& getRayCastResults() const { return m_rayCastResults; }
+
+	protected:
+		vector<i32>::type m_queryResults;
+		vector<i32>::type m_rayCastResults;
+	};
+
 	// node
 	struct BvhNode
 	{
@@ -43,6 +62,7 @@ namespace Echo
 		// leaf = 0, free node = -1
 		i32 height;
 	};
+	typedef vector<BvhNode>::type BvhNodeArray;
 
 	class Bvh
 	{
@@ -117,12 +137,12 @@ namespace Echo
 		void validateMetrics(i32 index) const;
 
 	private:
-		i32			m_root;
-		BvhNode*	m_nodes;
-		i32			m_nodeCount;
-		i32			m_nodeCapacity;
-		i32			m_freeList;
-		ui32		m_path;				// This is used to incrementally traverse the tree for re-balancing.
-		i32			m_insertionCount;
+		i32				m_root;
+		BvhNodeArray	m_nodes;
+		i32				m_nodeCount;
+		i32				m_nodeCapacity;
+		i32				m_freeList;
+		ui32			m_path;				// This is used to incrementally traverse the tree for re-balancing.
+		i32				m_insertionCount;
 	};
 }

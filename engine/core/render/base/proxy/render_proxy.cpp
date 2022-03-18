@@ -40,6 +40,13 @@ namespace Echo
 		return renderProxy;
 	}
 
+	void RenderProxy::setSubmitToRenderQueue(bool enable)
+	{ 
+		m_isSubmitToRenderQueue = enable;
+
+		Renderer::instance()->updateRenderProxyBvh(this);
+	}
+
 	void RenderProxy::submitToRenderQueue(RenderPipeline* pipeline)
 	{
 		if (m_mesh && m_mesh->isValid())
