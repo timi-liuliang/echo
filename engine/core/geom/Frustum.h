@@ -14,17 +14,16 @@ namespace Echo
 		Frustum();
 
 		// set perspective
-		void  setPerspective(const float fovH, const float fAspect, const float fNear, const float fFar);
+		void setPerspective(float fovH, float width, float height, float near, float far);
+		void setOrtho(float width, float height, float near, float far);
 
 		// build
 		void  build(const Vector3& vEye, const Vector3& vForward, const Vector3& vUp, bool haveNormalize = false);
 
 		// near plane
-		void  setNear(float near);
 		float getNear() const { return m_nearZ; }
 
 		// far plane
-		void  setFar(const float fFar);
 		float getFar() const { return m_farZ; }
 
 		// get right direction
@@ -38,9 +37,6 @@ namespace Echo
 
 		// get eight vertices
 		const Vector3*  getVertexs();
-
-		// build plane
-		bool buildPlane(vector<Vector3>::type& plane, float length);
 
 		// is point in this frustm
 		bool  isPointIn(const Vector3& point);
@@ -56,8 +52,10 @@ namespace Echo
 		Vector3			m_forward;
 		Vector3			m_right;
 		Vector3			m_up;
-		float			m_rFactor;		// right factor
-		float			m_fUfactor;		// up factor
+		float			m_rightFactorNear;
+		float			m_rightFactorFar;
+		float			m_upFactorNear;
+		float			m_upFactorFar;
 		float			m_nearZ;
 		float			m_farZ;
 		Vector3			m_vertexs[8];

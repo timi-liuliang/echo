@@ -26,7 +26,6 @@ namespace Echo
 	private:
 		Gizmos*		m_gizmo;
 		bool		m_isSelect;
-		Frustum		m_frustum;
 	};
 #endif
 }

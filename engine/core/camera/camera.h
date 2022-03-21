@@ -15,7 +15,6 @@ namespace Echo
 		{
 			PM_PERSPECTIVE,
 			PM_ORTHO,
-			PM_UI,
 		};
 
 	public:
@@ -30,13 +29,19 @@ namespace Echo
 		const Vector3& getPosition() const { return m_position; }
 		void setPosition(const Vector3& pos);
 
+		// scale
+		void setScale(Real scale);
+		float getScale() const { return m_scale; }
+
+		// Rotation
+		void setOrientation(const Quaternion& rotation);
+		const Quaternion& getRotation() const { return m_rotation; }
+
 		// direction
-		const Vector3& getDirection() const { return m_dir; }
-		void setDirection(const Vector3& dir);
+		const Vector3& getForward() const { return m_forward; }
 
 		// up 
 		const Vector3& getUp() const { return m_up; }
-		void setUp(const Vector3& vUp);
 
 		// right
 		const Vector3& getRight() const { return m_right; }
@@ -53,17 +58,13 @@ namespace Echo
 		ui32 getHeight() const;
 		void setHeight(ui32 height);
 
-		// scale
-		void setScale(Real scale);
-		float getScale() const { return m_scale; }
-
 		// near clip
 		const Real&	getNear() const;
-		void setNearClip(Real nearClip);
+		void setNear(Real nearClip);
 
 		// far clip
 		const Real&	getFar() const;
-		void setFarClip(Real farClip);
+		void setFar(Real farClip);
 
 		// update
 		void update();
@@ -71,19 +72,27 @@ namespace Echo
 		// calculate
 		void getCameraRay(Ray& ray, const Vector2& screenPos);
 
+		// Frustum
+		Frustum& getFrustum() { return m_frustum; }
+
 		// matrix
 		const Matrix4& getViewMatrix() const { return m_matView; }
 		const Matrix4& getProjMatrix() const { return m_matProj; }
 		const Matrix4& getViewProjMatrix() const { return m_matVP; }
 
-	public:
-		// render scene
-		void createRenderScene();
+	protected:
+		// Update matrix
+		void updateMatrix();
+
+		// Update Frustum
+		void updateFrustum();
 
 	protected:
 		ProjMode		m_projMode;
 		Vector3			m_position;
-		Vector3			m_dir;
+		Real			m_scale = 1.f;
+		Quaternion		m_rotation;
+		Vector3			m_forward;
 		Vector3			m_up = Vector3::UNIT_Y;
 		Vector3			m_right;
 		Matrix4			m_matView;
@@ -91,13 +100,11 @@ namespace Echo
 		Real			m_fov = Math::PI_DIV4;
 		ui32			m_width;
 		ui32			m_height;
-		Real			m_scale = 1.f;
-		Real			m_aspect;
 		Real			m_nearClip = 0.1f;
 		Real			m_farClip = 100.f;
 		Matrix4			m_matProj;
 		bool			m_projDirty = true;
 		Matrix4			m_matVP;
-		RenderScenePtr	m_renderScene;
+		Frustum			m_frustum;
 	};
 }

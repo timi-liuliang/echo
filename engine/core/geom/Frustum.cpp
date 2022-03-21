@@ -12,28 +12,31 @@ namespace Echo
 	{
 	}
 
-	void  Frustum::setNear(const float fNear)
+	void  Frustum::setPerspective(float fovH, float width, float height, float near, float far)
 	{
-		m_nearZ = fNear;
+		m_upFactorNear = tanf(fovH * 0.5f);
+		m_upFactorFar = m_upFactorNear;
+
+		m_rightFactorNear = m_upFactorNear * (width / height);
+		m_rightFactorFar = m_rightFactorNear;
+
+		m_nearZ = near;
+		m_farZ = far;
 
 		m_flags.set(FrustumDirtyFlags::Aabb);
 		m_flags.set(FrustumDirtyFlags::Vertex);
 	}
 
-	void  Frustum::setFar(const float fFar)
+	void Frustum::setOrtho(float width, float height, float near, float far)
 	{
-		m_farZ = fFar;
+		m_upFactorNear = height / near;
+		m_upFactorFar = height / far;
 
-		m_flags.set(FrustumDirtyFlags::Aabb);
-		m_flags.set(FrustumDirtyFlags::Vertex);
-	}
+		m_rightFactorNear = width / near;
+		m_rightFactorFar = width / far;
 
-	void  Frustum::setPerspective(const float fovH, const float fAspect, const float fNear, const float fFar)
-	{
-		m_fUfactor = tanf(fovH * 0.5f);
-		m_rFactor = m_fUfactor * fAspect;
-		m_nearZ = fNear;
-		m_farZ = fFar;
+		m_nearZ = near;
+		m_farZ = far;
 
 		m_flags.set(FrustumDirtyFlags::Aabb);
 		m_flags.set(FrustumDirtyFlags::Vertex);
@@ -64,11 +67,11 @@ namespace Echo
 		Vector3  n = m_forward * m_nearZ;
 		Vector3  f = m_forward * m_farZ;
 
-		Vector3  nr = m_right * m_nearZ * m_rFactor;
-		Vector3  nu = m_up * m_nearZ * m_fUfactor;
+		Vector3  nr = m_right * m_nearZ * m_rightFactorNear;
+		Vector3  nu = m_up * m_nearZ * m_upFactorNear;
 
-		Vector3  fr = m_right * m_farZ * m_rFactor;
-		Vector3  fu = m_up * m_farZ * m_fUfactor;
+		Vector3  fr = m_right * m_farZ * m_rightFactorFar;
+		Vector3  fu = m_up * m_farZ * m_upFactorFar;
 
 		m_vertexs[0] = n - nr - nu;		m_vertexs[4] = f - fr - fu;
 		m_vertexs[1] = n + nr - nu;		m_vertexs[5] = f + fr - fu;
@@ -94,25 +97,6 @@ namespace Echo
 		return m_vertexs;
 	}
 
-	bool Frustum::buildPlane(vector<Vector3>::type& plane, float length)
-	{
-		Vector3  n = m_forward * length;
-		Vector3	 nr = m_right * length * m_rFactor;
-		Vector3	 nu = m_up * length * m_fUfactor;
-
-		plane[0] = n - nr - nu;
-		plane[1] = n + nr - nu;
-		plane[2] = n + nr + nu;
-		plane[3] = n - nr + nu;
-
-		plane[0] += m_eyePosition;
-		plane[1] += m_eyePosition;
-		plane[2] += m_eyePosition;
-		plane[3] += m_eyePosition;
-
-		return true;
-	}
-
 	const AABB& Frustum::getAABB()
 	{
 		if (!m_flags.test(FrustumDirtyFlags::Aabb))
@@ -134,87 +118,87 @@ namespace Echo
 
 	bool  Frustum::isPointIn(const Vector3& point)
 	{
-		Vector3 op = point - m_eyePosition;
+		//Vector3 op = point - m_eyePosition;
 
-		// forward projection
-		float f = op.dot(m_forward);
-		if (f<m_nearZ || f > m_farZ) return false;
+		//// forward projection
+		//float f = op.dot(m_forward);
+		//if (f<m_nearZ || f > m_farZ) return false;
 
-		// right projection
-		float r = op.dot(m_right);
-		float rLimit = m_rFactor * f;
-		if (r < -rLimit || r > rLimit) return false;
+		//// right projection
+		//float r = op.dot(m_right);
+		//float rLimit = m_rightFactorNear * f;
+		//if (r < -rLimit || r > rLimit) return false;
 
-		// up projection
-		float u = op.dot(m_up);
-		float uLimit = m_fUfactor * f;
-		if (u < -uLimit || u > uLimit) return false;
+		//// up projection
+		//float u = op.dot(m_up);
+		//float uLimit = m_upFactorNear * f;
+		//if (u < -uLimit || u > uLimit) return false;
 
 		return true;
 	}
 
 	bool Frustum::isSphereIn(const Vector3& center, const float fRadius)
 	{
-		Vector3 op = center - m_eyePosition;
+		//Vector3 op = center - m_eyePosition;
 
-		// forward projection
-		float f = op.dot(m_forward);
-		if (f < m_nearZ - fRadius || f > m_farZ + fRadius) return false;
+		//// forward projection
+		//float f = op.dot(m_forward);
+		//if (f < m_nearZ - fRadius || f > m_farZ + fRadius) return false;
 
-		// right projection
-		float r = op.dot(m_right);
-		float rLimit = m_rFactor * f;
-		float rTop = rLimit + fRadius;
-		if (r < -rTop || r > rTop) return false;
+		//// right projection
+		//float r = op.dot(m_right);
+		//float rLimit = m_rightFactorNear * f;
+		//float rTop = rLimit + fRadius;
+		//if (r < -rTop || r > rTop) return false;
 
-		// up projection
-		float u = op.dot(m_right);
-		float uLimit = m_fUfactor * f;
-		float uTop = uLimit + fRadius;
-		if (u < -uTop || u > uTop) return false;
+		//// up projection
+		//float u = op.dot(m_right);
+		//float uLimit = m_upFactorNear * f;
+		//float uTop = uLimit + fRadius;
+		//if (u < -uTop || u > uTop) return false;
 
 		return true;
 	}
 
 	bool Frustum::isAABBIn(const Vector3& minPoint, const Vector3& maxPoint) const
 	{
-		Vector3 p;
-		int nOutofLeft = 0, nOutofRight = 0, nOutofNear = 0, nOutofFar = 0, nOutofTop = 0, nOutofBottom = 0;
-		bool bIsInRightTest, bIsInUpTest, bIsInFrontTest;
+		//Vector3 p;
+		//int nOutofLeft = 0, nOutofRight = 0, nOutofNear = 0, nOutofFar = 0, nOutofTop = 0, nOutofBottom = 0;
+		//bool bIsInRightTest, bIsInUpTest, bIsInFrontTest;
 
-		Vector3 corners[2];
-		corners[0] = minPoint - m_eyePosition;
-		corners[1] = maxPoint - m_eyePosition;
+		//Vector3 corners[2];
+		//corners[0] = minPoint - m_eyePosition;
+		//corners[1] = maxPoint - m_eyePosition;
 
-		for (int i = 0; i < 8; i++)
-		{
-			bIsInRightTest = bIsInUpTest = bIsInFrontTest = false;
+		//for (int i = 0; i < 8; i++)
+		//{
+		//	bIsInRightTest = bIsInUpTest = bIsInFrontTest = false;
 
-			p.x = corners[i & 1].x;
-			p.y = corners[(i >> 2) & 1].y;
-			p.z = corners[(i >> 1) & 1].z;
+		//	p.x = corners[i & 1].x;
+		//	p.y = corners[(i >> 2) & 1].y;
+		//	p.z = corners[(i >> 1) & 1].z;
 
-			// cross
-			float r = m_right.x * p.x + m_right.y * p.y + m_right.z * p.z;
-			float u = m_up.x * p.x + m_up.y * p.y + m_up.z * p.z;
-			float f = m_forward.x * p.x + m_forward.y * p.y + m_forward.z * p.z;
+		//	// cross
+		//	float r = m_right.x * p.x + m_right.y * p.y + m_right.z * p.z;
+		//	float u = m_up.x * p.x + m_up.y * p.y + m_up.z * p.z;
+		//	float f = m_forward.x * p.x + m_forward.y * p.y + m_forward.z * p.z;
 
-			if (r < -m_rFactor * f) ++nOutofLeft;
-			else if (r > m_rFactor * f) ++nOutofRight;
-			else bIsInRightTest = true;
+		//	if (r < -m_rightFactorNear * f) ++nOutofLeft;
+		//	else if (r > m_rightFactorNear * f) ++nOutofRight;
+		//	else bIsInRightTest = true;
 
-			if (u < -m_fUfactor * f) ++nOutofBottom;
-			else if (u > m_fUfactor*f) ++nOutofTop;
-			else bIsInUpTest = true;
+		//	if (u < -m_upFactorNear * f) ++nOutofBottom;
+		//	else if (u > m_upFactorNear*f) ++nOutofTop;
+		//	else bIsInUpTest = true;
 
-			if (f < m_nearZ) ++nOutofNear;
-			else if (f > m_farZ) ++nOutofFar;
-			else bIsInFrontTest = true;
+		//	if (f < m_nearZ) ++nOutofNear;
+		//	else if (f > m_farZ) ++nOutofFar;
+		//	else bIsInFrontTest = true;
 
-			if (bIsInRightTest && bIsInFrontTest && bIsInUpTest) return true;
-		}
+		//	if (bIsInRightTest && bIsInFrontTest && bIsInUpTest) return true;
+		//}
 
-		if (nOutofLeft == 8 || nOutofRight == 8 || nOutofFar == 8 || nOutofNear == 8 || nOutofTop == 8 || nOutofBottom == 8) return false;
+		//if (nOutofLeft == 8 || nOutofRight == 8 || nOutofFar == 8 || nOutofNear == 8 || nOutofTop == 8 || nOutofBottom == 8) return false;
 
 		return true;
 	}

@@ -42,8 +42,8 @@ namespace Studio
 		m_cameraForward.toHVAngle(m_horizonAngle, m_verticleAngle);
 
 		m_camera = Echo::NodeTree::instance()->get3dCamera();
-		m_camera->setNearClip(0.1f);
-		m_camera->setFarClip(2500.f);
+		m_camera->setNear(0.1f);
+		m_camera->setFar(2500.f);
 	}
 
 	InputController3d::~InputController3d()
@@ -181,17 +181,20 @@ namespace Studio
 	{
 		if (m_bNeedUpdateCamera)
 		{
-			m_camera->setNearClip(Echo::EditorCameraSettings::instance()->getNearClip());
-			m_camera->setFarClip(Echo::EditorCameraSettings::instance()->getFarClip());
+			m_camera->setNear(Echo::EditorCameraSettings::instance()->getNearClip());
+			m_camera->setFar(Echo::EditorCameraSettings::instance()->getFarClip());
 
 			float moveSpeed = Echo::EditorCameraSettings::instance()->getMoveSpeed();
 			m_cameraLookAt += m_cameraMoveDir * elapsedTime * moveSpeed;
 
 			m_cameraForward.normalize();
 			m_cameraPositon = m_cameraLookAt - m_cameraForward * m_cameraRadius;
-
 			m_camera->setPosition(m_cameraPositon);
-			m_camera->setDirection(m_cameraLookAt-m_cameraPositon);
+
+			Echo::Vector3 hForward(m_cameraForward.x, 0.0, m_cameraForward.z);
+			Echo::Quaternion xTohForward = Echo::Quaternion::fromVec3ToVec3(Echo::Vector3::UNIT_X, hForward);
+			Echo::Quaternion hToForward = Echo::Quaternion::fromVec3ToVec3(hForward, m_cameraForward);
+			m_camera->setOrientation(xTohForward * hToForward);
 
 			// save config
 			static float totalElapsed = 0.f;
@@ -302,12 +305,16 @@ namespace Studio
 		m_cameraForward = m_cameraLookAt - m_cameraPositon;
 		m_cameraForward.normalize();
 
+		Echo::Vector3 hForward(m_cameraForward.x, 0.0, m_cameraForward.z);
+		Echo::Quaternion xTohForward = Echo::Quaternion::fromVec3ToVec3(Echo::Vector3::UNIT_X, hForward);
+		Echo::Quaternion hToForward = Echo::Quaternion::fromVec3ToVec3(hForward, m_cameraForward);
+
 		m_cameraForward.toHVAngle(m_horizonAngle, m_verticleAngle);
 		m_verticleAngleGoal = m_verticleAngle;
 		m_horizonAngleGoal = m_horizonAngle;
 
 		m_camera->setPosition(m_cameraPositon);
-		m_camera->setDirection(m_cameraLookAt-m_cameraPositon);
+		m_camera->setOrientation(xTohForward * hToForward);
 	}
 
 	bool InputController3d::isCameraMoving() const
@@ -346,8 +353,13 @@ namespace Studio
 		m_cameraPositon = rotCenter + rotVec;
 		m_cameraLookAt = m_cameraPositon + m_cameraForward * m_cameraRadius;
 
+		Echo::Vector3 hForward(m_cameraForward.x, 0.0, m_cameraForward.z);
+		Echo::Quaternion xTohForward = Echo::Quaternion::fromVec3ToVec3(Echo::Vector3::UNIT_X, hForward);
+		Echo::Quaternion hToForward = Echo::Quaternion::fromVec3ToVec3(hForward, m_cameraForward);
+
 		m_camera->setPosition(m_cameraPositon);
-		m_camera->setDirection(m_cameraForward);
+		m_camera->setOrientation(xTohForward * hToForward);
+
 		m_camera->update();
 
 		m_cameraForward.toHVAngle(m_horizonAngle, m_verticleAngle);

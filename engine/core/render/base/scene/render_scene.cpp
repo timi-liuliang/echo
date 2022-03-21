@@ -16,6 +16,11 @@ namespace Echo
 		g_renderScenes.erase(std::remove(g_renderScenes.begin(), g_renderScenes.end(), this), g_renderScenes.end());
 	}
 
+	void RenderScene::update(const Frustum& frustum)
+	{
+		m_3dFrustum = frustum;
+	}
+
 	void RenderScene::renderAll()
 	{
 		for (RenderScene* renderScene : g_renderScenes)
@@ -26,7 +31,7 @@ namespace Echo
 
 	void RenderScene::render()
 	{
-		vector<RenderProxy*>::type visibleRenderProxies3D = Renderer::instance()->gatherRenderProxies(RenderProxy::RenderType3D, Frustum());
+		vector<RenderProxy*>::type visibleRenderProxies3D = Renderer::instance()->gatherRenderProxies(RenderProxy::RenderType3D, m_3dFrustum);
 		for (RenderProxy* renderproxy : visibleRenderProxies3D)
 		{
 			renderproxy->submitToRenderQueue(RenderPipeline::current());

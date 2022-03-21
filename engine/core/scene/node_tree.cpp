@@ -33,36 +33,29 @@ namespace Echo
 		// create main camera
 		m_3dCamera = EchoNew(Camera(Camera::ProjMode::PM_PERSPECTIVE));
 
-		Vector3 vCamPos(0.f, 3.f, 3.f);
-		Vector3 vCamDir = Vector3::ZERO - vCamPos;
-		vCamDir.normalize();
-
-		m_3dCamera->setPosition(vCamPos);
-		m_3dCamera->setUp(Vector3::UNIT_Y);
-		m_3dCamera->setDirection(vCamDir);
-		m_3dCamera->setNearClip(0.1f);
-		m_3dCamera->setFarClip(250.f);
-		m_3dCamera->createRenderScene();
+		m_3dCamera->setPosition(Vector3::ZERO);
+		m_3dCamera->setOrientation(Quaternion::IDENTITY);
+		m_3dCamera->setNear(0.1f);
+		m_3dCamera->setFar(250.f);
 
 		// create 2D camera
-		Vector3 vCam2DPos(0, 0, 0);
-		Vector3 vCam2DDir = -Vector3::UNIT_Z;
 		m_2dCamera = EchoNew(Camera(Camera::ProjMode::PM_ORTHO));
-
-		m_2dCamera->setPosition(vCam2DPos);
-		m_2dCamera->setDirection(vCam2DDir);
-		m_2dCamera->setNearClip(-256.f);
-		m_2dCamera->setFarClip(256.0f);
+		m_2dCamera->setPosition(Vector3(0, 0, -257));
+		m_2dCamera->setOrientation(Quaternion::fromAxisAngle(Vector3::UNIT_Y, Math::PI_DIV2));
+		m_2dCamera->setNear(1);
+		m_2dCamera->setFar(513.0f);
 		m_2dCamera->update();
 
 		// create gui camera
 		m_uiCamera = EchoNew(Camera(Camera::ProjMode::PM_ORTHO));
-
-		m_uiCamera->setPosition(vCam2DPos);
-		m_uiCamera->setDirection(vCam2DDir);
-		m_uiCamera->setNearClip(-256.f);
-		m_uiCamera->setFarClip(256.0f);
+		m_uiCamera->setPosition(Vector3(0, 0, -257));
+		m_uiCamera->setOrientation(Quaternion::fromAxisAngle(Vector3::UNIT_Y, Math::PI_DIV2));
+		m_uiCamera->setNear(1);
+		m_uiCamera->setFar(513.0f);
 		m_uiCamera->update();
+
+		// Main render scene
+		m_renderScene = EchoNew(RenderScene);
 
 		update(0.001f);
 
@@ -75,6 +68,8 @@ namespace Echo
 		m_2dCamera->update();
 		m_3dCamera->update();
 		m_uiCamera->update();
+
+		m_renderScene->update(m_3dCamera->getFrustum());
 		
 		// update nodes
 		m_invisibleRoot->update(elapsedTime, true);

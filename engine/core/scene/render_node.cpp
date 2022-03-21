@@ -79,7 +79,7 @@ namespace Echo
 			else if (name == "u_CameraPosition")
 				return (void*)(&camera->getPosition());
 			else if (name == "u_CameraDirection")
-				return (void*)(&camera->getDirection());
+				return (void*)(&camera->getForward());
 			else if (name == "u_CameraNear")
 				return (void*)(&camera->getNear());
 			else if (name == "u_CameraFar")

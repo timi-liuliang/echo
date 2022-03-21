@@ -164,7 +164,7 @@ namespace Echo
 			Camera* camera = getCamera();
 			if (camera)
 			{
-				Vector3 faceDir = m_billboardType == BillboardType::LookAt ? getWorldPosition() - camera->getPosition() : camera->getDirection();
+				Vector3 faceDir = m_billboardType == BillboardType::LookAt ? getWorldPosition() - camera->getPosition() : camera->getForward();
 				faceDir.normalize();
 
 				Vector3 hDir(faceDir.x, 0.f, faceDir.z);

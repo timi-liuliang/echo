@@ -176,7 +176,7 @@ namespace Studio
 			{
 				camera->setScale(m_cameraScale);
 				camera->setPosition(m_cameraPositon);
-				camera->setDirection(Echo::Vector3::NEG_UNIT_Z);
+				camera->setOrientation(Echo::Quaternion::fromAxisAngle(Echo::Vector3::UNIT_Y, Echo::Math::PI_DIV2));
 			}
 
 			// save config
@@ -281,7 +281,7 @@ namespace Studio
 				Echo::String preStr = Echo::Engine::instance()->getResPath() + ":" + resPath;
 
 				AStudio::instance()->getConfigMgr()->setValue((preStr + "camera2dposition").c_str(), Echo::StringUtil::ToString(camera2D->getPosition()).c_str());
-				AStudio::instance()->getConfigMgr()->setValue((preStr + "camera2ddirection").c_str(), Echo::StringUtil::ToString(camera2D->getDirection()).c_str());
+				AStudio::instance()->getConfigMgr()->setValue((preStr + "camera2ddirection").c_str(), Echo::StringUtil::ToString(camera2D->getForward()).c_str());
 				AStudio::instance()->getConfigMgr()->setValue((preStr + "camera2dscale").c_str(), Echo::StringUtil::ToString(camera2D->getScale()).c_str());
 			}
 		}

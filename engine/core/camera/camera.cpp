@@ -10,15 +10,15 @@ namespace Echo
 		: m_projMode(mode)
 	{
 		m_position = Vector3(-150.0f, 150.0f, -150.0f);
-		m_dir = Vector3::ZERO - m_position;
-		m_dir.normalize();
+		m_forward = Vector3::UNIT_X;
+		m_up = Vector3::UNIT_Y;
+		Vector3::Cross(m_right, m_forward, m_up);
 
 		m_matView.identity();
 		m_matProj.identity();
 
 		m_width = (Real)Renderer::instance()->getWindowWidth();
 		m_height = (Real)Renderer::instance()->getWindowHeight();
-		m_aspect = (Real)m_width / (Real)m_height;
 	}
 
 	Camera::~Camera()
@@ -31,18 +31,14 @@ namespace Echo
 		m_viewDirty = true;
 	}
 
-	void Camera::setDirection(const Vector3& dir)
+	void Camera::setOrientation(const Quaternion& rotation)
 	{
-		EchoAssert(dir != m_up);
+		m_rotation = rotation;
 
-		m_dir = dir;
-		m_dir.normalize();
-		m_viewDirty = true;
-	}
+		m_forward = m_rotation.rotateVec3(Vector3::UNIT_X);
+		m_up = m_rotation.rotateVec3(Vector3::UNIT_Y);
+		Vector3::Cross(m_right, m_forward, m_up);
 
-	void Camera::setUp(const Vector3& vUp)
-	{
-		m_up = vUp;
 		m_viewDirty = true;
 	}
 
@@ -85,14 +81,14 @@ namespace Echo
 		m_viewDirty = true;
 	}
 
-	void Camera::setNearClip(Real nearClip)
+	void Camera::setNear(Real nearClip)
 	{
 		m_nearClip = nearClip;
 		m_projDirty = true;
 		m_viewDirty = true;
 	}
 
-	void Camera::setFarClip(Real farClip)
+	void Camera::setFar(Real farClip)
 	{
 		m_farClip = farClip;
 		m_projDirty = true;
@@ -141,20 +137,23 @@ namespace Echo
 
 	void Camera::update()
 	{
-		if(m_viewDirty)
-		{
-			Vector3 xAxis;					// right
-			Vector3 yAxis;					// up axis
-			Vector3 zAxis = -m_dir;			// forward
+		updateMatrix();
+		updateFrustum();
+	}
 
-			Vector3::Cross(xAxis, m_up, zAxis);		xAxis.normalize();
-			Vector3::Cross(yAxis, zAxis, xAxis);	yAxis.normalize();
+	void Camera::updateMatrix()
+	{
+		if (m_viewDirty)
+		{
+			Vector3 xAxis = m_right;	// right
+			Vector3 yAxis = m_up;		// up axis
+			Vector3 zAxis = -m_forward;	// forward
 
 			m_matView = Matrix4(
-				xAxis.x,						  yAxis.x,							zAxis.x,							0,
-				xAxis.y,						  yAxis.y,						    zAxis.y,							0,
-				xAxis.z,						  yAxis.z,							zAxis.z,							0,
-				-Vector3::Dot(xAxis, m_position), -Vector3::Dot(yAxis, m_position), -Vector3::Dot(zAxis, m_position),	1
+				xAxis.x, yAxis.x, zAxis.x, 0,
+				xAxis.y, yAxis.y, zAxis.y, 0,
+				xAxis.z, yAxis.z, zAxis.z, 0,
+				-Vector3::Dot(xAxis, m_position), -Vector3::Dot(yAxis, m_position), -Vector3::Dot(zAxis, m_position), 1
 			);
 
 			m_right = xAxis;
@@ -162,27 +161,27 @@ namespace Echo
 			Renderer::instance()->convertMatView(m_matView);
 		}
 
-		if(m_projDirty)
+		if (m_projDirty)
 		{
 			switch (m_projMode)
 			{
 			case ProjMode::PM_PERSPECTIVE:
-				{
-					m_aspect = (Real)m_width / (Real)m_height;
-					Matrix4::PerspectiveFovRH(m_matProj, m_fov, m_aspect, m_nearClip, m_farClip);
-					Renderer::instance()->convertMatProj(m_matProj, m_matProj);
-				}
-				break;
+			{
+				float aspect = (Real)m_width / (Real)m_height;
+				Matrix4::PerspectiveFovRH(m_matProj, m_fov, aspect, m_nearClip, m_farClip);
+				Renderer::instance()->convertMatProj(m_matProj, m_matProj);
+			}
+			break;
 			case ProjMode::PM_ORTHO:
-				{
-					Matrix4::OrthoRH(m_matProj, (Real)m_width * m_scale, (Real)m_height * m_scale, m_nearClip, m_farClip);
-					Renderer::instance()->convertMatOrho(m_matProj, m_matProj, m_nearClip, m_farClip);
-				} break;
-			default: ;
+			{
+				Matrix4::OrthoRH(m_matProj, (Real)m_width * m_scale, (Real)m_height * m_scale, m_nearClip, m_farClip);
+				Renderer::instance()->convertMatOrho(m_matProj, m_matProj, m_nearClip, m_farClip);
+			} break;
+			default:;
 			}
 		}
 
-		if(m_viewDirty || m_projDirty)
+		if (m_viewDirty || m_projDirty)
 		{
 			m_matVP = m_matView * m_matProj;
 
@@ -191,8 +190,17 @@ namespace Echo
 		}
 	}
 
-	void Camera::createRenderScene()
+	void Camera::updateFrustum()
 	{
-		m_renderScene = EchoNew(RenderScene);
+		if (m_projMode == ProjMode::PM_PERSPECTIVE)
+		{
+			m_frustum.setPerspective(m_fov, m_width, m_height, m_nearClip, m_farClip);
+			m_frustum.build(m_position, m_forward, m_up);
+		}
+		else
+		{
+			m_frustum.setOrtho(m_width * m_scale, m_height * m_scale, m_nearClip, m_farClip);
+			m_frustum.build(m_position, m_forward, m_up);
+		}
 	}
 }

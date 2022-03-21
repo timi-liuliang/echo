@@ -62,7 +62,7 @@ namespace Echo
 				const  Vector3& position = camera->getPosition();
 				Vector3         velocity = elapsedTime > 1e-5f ? (position - lastPosition) / elapsedTime : Vector3::ZERO;
 				const Vector3&  up = camera->getUp();
-				const Vector3&  dir = camera->getDirection();
+				const Vector3&  dir = camera->getForward();
 
 				alListener3f(AL_POSITION, position.x, position.y, position.z);
                 //alListener3f(AL_POSITION, 0.f, 0.f, 0.f);

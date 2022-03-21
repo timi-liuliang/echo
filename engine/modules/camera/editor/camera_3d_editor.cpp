@@ -35,11 +35,10 @@ namespace Echo
 				Camera3D* camera3D = ECHO_DOWN_CAST<Camera3D*>(m_object);
 				camera3D->syncDataToCamera(&camera);
 
-				m_frustum.setPerspective(camera.getFov(), camera.getWidth() / camera.getHeight(), camera.getNear(), camera.getFar());
-				m_frustum.build(camera.getPosition(), camera.getDirection(), camera.getUp(), true);
+				camera.update();
 
 				// vertices
-				const Vector3* eightVertices = m_frustum.getVertexs();
+				const Vector3* eightVertices = camera.getFrustum().getVertexs();
 
 				m_gizmo->clear();
 				m_gizmo->drawLine(eightVertices[0], eightVertices[1], Color::BLUE);

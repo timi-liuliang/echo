@@ -46,6 +46,7 @@ namespace Echo
 		Camera*			    m_3dCamera = nullptr;
 		Camera*				m_2dCamera = nullptr;
 		Camera*				m_uiCamera = nullptr;
-        Node*				m_invisibleRoot = nullptr;	// invisible root node
+		RenderScenePtr		m_renderScene;				// Main render scene
+        Node*				m_invisibleRoot = nullptr;	// Invisible root node
 	};
 }

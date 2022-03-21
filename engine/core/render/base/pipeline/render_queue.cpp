@@ -44,8 +44,8 @@ namespace Echo
 							Vector3 vA = nodeA->getWorldPosition() - cameraA->getPosition();
 							Vector3 vB = nodeB->getWorldPosition() - cameraB->getPosition();
 
-							float lenA = vA.dot(cameraA->getDirection());
-							float lenB = vB.dot(cameraB->getDirection());
+							float lenA = vA.dot(cameraA->getForward());
+							float lenB = vB.dot(cameraB->getForward());
 
 							lenA += nodeA->getRenderType().getIdx() == 1 ? 1e6f : 0.f;
 							lenB += nodeB->getRenderType().getIdx() == 1 ? 1e6f : 0.f;

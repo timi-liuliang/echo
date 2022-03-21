@@ -34,12 +34,8 @@ namespace Echo
 
 	void Camera2D::syncDataToCamera(Camera* camera)
 	{
-		// position
 		camera->setPosition(getWorldPosition());
-
-		// rotation
-		Vector3 up = getWorldOrientation() * Vector3::UNIT_Y;
-		camera->setUp(up);
+		camera->setOrientation(getWorldOrientation());
 
 		camera->update();
 	}

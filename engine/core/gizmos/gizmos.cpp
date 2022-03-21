@@ -230,9 +230,9 @@ namespace Echo
 			float deltaDegree = 2.f * Math::PI / segments;
 			for (int i = 0; i < segments; i++)
 			{
-				Vector3 v0 = position - camera->getDirection() * radius;
-				Vector3 v1 = v0 + Quaternion::fromAxisAngle(camera->getDirection(), i * deltaDegree + Math::PI_DIV4).rotateVec3(camera->getRight()) * radius;
-				Vector3 v2 = v0 + Quaternion::fromAxisAngle(camera->getDirection(), (i + 1) * deltaDegree + Math::PI_DIV4).rotateVec3(camera->getRight()) * radius;
+				Vector3 v0 = position - camera->getForward() * radius;
+				Vector3 v1 = v0 + Quaternion::fromAxisAngle(camera->getForward(), i * deltaDegree + Math::PI_DIV4).rotateVec3(camera->getRight()) * radius;
+				Vector3 v2 = v0 + Quaternion::fromAxisAngle(camera->getForward(), (i + 1) * deltaDegree + Math::PI_DIV4).rotateVec3(camera->getRight()) * radius;
 
 				drawTriangle(v0, v1, v2, color);
 			}
@@ -359,10 +359,10 @@ namespace Echo
 			adjustPointSize(radius, position, flags);
 
 			Vector3 center = position;
-			Vector3 v0 = center + Quaternion::fromAxisAngle(camera->getDirection(), Math::PI_DIV2 * 0.f + Math::PI_DIV4).rotateVec3(camera->getRight()) * radius;
-			Vector3 v1 = center + Quaternion::fromAxisAngle(camera->getDirection(), Math::PI_DIV2 * 1.f + Math::PI_DIV4).rotateVec3(camera->getRight()) * radius;
-			Vector3 v2 = center + Quaternion::fromAxisAngle(camera->getDirection(), Math::PI_DIV2 * 2.f + Math::PI_DIV4).rotateVec3(camera->getRight()) * radius;
-			Vector3 v3 = center + Quaternion::fromAxisAngle(camera->getDirection(), Math::PI_DIV2 * 3.f + Math::PI_DIV4).rotateVec3(camera->getRight()) * radius;
+			Vector3 v0 = center + Quaternion::fromAxisAngle(camera->getForward(), Math::PI_DIV2 * 0.f + Math::PI_DIV4).rotateVec3(camera->getRight()) * radius;
+			Vector3 v1 = center + Quaternion::fromAxisAngle(camera->getForward(), Math::PI_DIV2 * 1.f + Math::PI_DIV4).rotateVec3(camera->getRight()) * radius;
+			Vector3 v2 = center + Quaternion::fromAxisAngle(camera->getForward(), Math::PI_DIV2 * 2.f + Math::PI_DIV4).rotateVec3(camera->getRight()) * radius;
+			Vector3 v3 = center + Quaternion::fromAxisAngle(camera->getForward(), Math::PI_DIV2 * 3.f + Math::PI_DIV4).rotateVec3(camera->getRight()) * radius;
 
 			Batch* spriteBatch = getSpriteBatch(texture);
 			if (spriteBatch)

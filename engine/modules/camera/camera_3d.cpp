@@ -29,11 +29,10 @@ namespace Echo
 
 	void Camera3D::syncDataToCamera(Camera* camera)
 	{
-		Vector3 direction = getWorldOrientation() * Vector3::UNIT_Z;
-		camera->setDirection(direction);
 		camera->setPosition(getWorldPosition());
-		camera->setNearClip(m_near);
-		camera->setFarClip(m_far);
+		camera->setOrientation(getWorldOrientation());
+		camera->setNear(m_near);
+		camera->setFar(m_far);
 	}
 
 	void Camera3D::updateInternal(float elapsedTime)
