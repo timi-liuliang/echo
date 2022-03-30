@@ -6,6 +6,7 @@ namespace Echo
 	{
 		Aabb = 0,	// is aabb bounding box need update
 		Vertex,		// is vertex need update
+		Planes,
 	};
 
 	Frustum::Frustum()
@@ -23,8 +24,7 @@ namespace Echo
 		m_nearZ = near;
 		m_farZ = far;
 
-		m_flags.set(FrustumDirtyFlags::Aabb);
-		m_flags.set(FrustumDirtyFlags::Vertex);
+		m_flags.set();
 	}
 
 	void Frustum::setOrtho(float width, float height, float near, float far)
@@ -38,8 +38,7 @@ namespace Echo
 		m_nearZ = near;
 		m_farZ = far;
 
-		m_flags.set(FrustumDirtyFlags::Aabb);
-		m_flags.set(FrustumDirtyFlags::Vertex);
+		m_flags.set();
 	}
 
 	void Frustum::build(const Vector3& vEye, const Vector3& vForward, const Vector3& vUp, bool haveNormalize/* =false */)
@@ -54,11 +53,10 @@ namespace Echo
 		m_right = m_up.cross(m_forward);		m_right.normalize();
 		m_up = m_forward.cross(m_right);		m_up.normalize();
 
-		m_flags.set(FrustumDirtyFlags::Aabb);
-		m_flags.set(FrustumDirtyFlags::Vertex);
+		m_flags.set();
 	}
 
-	const Vector3*  Frustum::getVertexs()
+	const Vector3*  Frustum::getVertexs() const
 	{
 		if (!m_flags.test(FrustumDirtyFlags::Vertex))
 			return m_vertexs;
@@ -97,7 +95,28 @@ namespace Echo
 		return m_vertexs;
 	}
 
-	const AABB& Frustum::getAABB()
+	const array<Plane, 6>& Frustum::getPlanes() const
+	{
+		if (!m_flags.test(FrustumDirtyFlags::Planes))
+			return m_planes;
+
+		getVertexs();
+
+		m_planes[0].set(m_vertexs[0], m_vertexs[3], m_vertexs[1]);
+		m_planes[1].set(m_vertexs[4], m_vertexs[5], m_vertexs[7]);
+
+		m_planes[2].set(m_vertexs[1], m_vertexs[2], m_vertexs[5]);
+		m_planes[3].set(m_vertexs[0], m_vertexs[4], m_vertexs[3]);
+
+		m_planes[4].set(m_vertexs[0], m_vertexs[4], m_vertexs[1]);
+		m_planes[5].set(m_vertexs[3], m_vertexs[2], m_vertexs[7]);
+
+		m_flags.reset(FrustumDirtyFlags::Planes);
+
+		return m_planes;
+	}
+
+	const AABB& Frustum::getAABB() const
 	{
 		if (!m_flags.test(FrustumDirtyFlags::Aabb))
 			return m_aabb;
@@ -116,89 +135,46 @@ namespace Echo
 		return m_aabb;
 	}
 
-	bool  Frustum::isPointIn(const Vector3& point)
+	bool  Frustum::isPointIn(const Vector3& point) const
 	{
-		//Vector3 op = point - m_eyePosition;
+		getPlanes();
 
-		//// forward projection
-		//float f = op.dot(m_forward);
-		//if (f<m_nearZ || f > m_farZ) return false;
-
-		//// right projection
-		//float r = op.dot(m_right);
-		//float rLimit = m_rightFactorNear * f;
-		//if (r < -rLimit || r > rLimit) return false;
-
-		//// up projection
-		//float u = op.dot(m_up);
-		//float uLimit = m_upFactorNear * f;
-		//if (u < -uLimit || u > uLimit) return false;
+		for (Plane& plane : m_planes)
+		{
+			if(plane.getSide(point)==Plane::POSITIVE_SIDE)
+				return false;
+		}
 
 		return true;
 	}
 
-	bool Frustum::isSphereIn(const Vector3& center, const float fRadius)
+	bool Frustum::isSphereIn(const Vector3& center, const float radius)
 	{
-		//Vector3 op = center - m_eyePosition;
+		getPlanes();
 
-		//// forward projection
-		//float f = op.dot(m_forward);
-		//if (f < m_nearZ - fRadius || f > m_farZ + fRadius) return false;
-
-		//// right projection
-		//float r = op.dot(m_right);
-		//float rLimit = m_rightFactorNear * f;
-		//float rTop = rLimit + fRadius;
-		//if (r < -rTop || r > rTop) return false;
-
-		//// up projection
-		//float u = op.dot(m_right);
-		//float uLimit = m_upFactorNear * f;
-		//float uTop = uLimit + fRadius;
-		//if (u < -uTop || u > uTop) return false;
+		for (Plane& plane : m_planes)
+		{
+			if (plane.getSide(center, radius) == Plane::POSITIVE_SIDE)
+				return false;
+		}
 
 		return true;
 	}
 
 	bool Frustum::isAABBIn(const Vector3& minPoint, const Vector3& maxPoint) const
 	{
-		//Vector3 p;
-		//int nOutofLeft = 0, nOutofRight = 0, nOutofNear = 0, nOutofFar = 0, nOutofTop = 0, nOutofBottom = 0;
-		//bool bIsInRightTest, bIsInUpTest, bIsInFrontTest;
+		getPlanes();
 
-		//Vector3 corners[2];
-		//corners[0] = minPoint - m_eyePosition;
-		//corners[1] = maxPoint - m_eyePosition;
+		AABB aabb(minPoint, maxPoint);
 
-		//for (int i = 0; i < 8; i++)
-		//{
-		//	bIsInRightTest = bIsInUpTest = bIsInFrontTest = false;
-
-		//	p.x = corners[i & 1].x;
-		//	p.y = corners[(i >> 2) & 1].y;
-		//	p.z = corners[(i >> 1) & 1].z;
-
-		//	// cross
-		//	float r = m_right.x * p.x + m_right.y * p.y + m_right.z * p.z;
-		//	float u = m_up.x * p.x + m_up.y * p.y + m_up.z * p.z;
-		//	float f = m_forward.x * p.x + m_forward.y * p.y + m_forward.z * p.z;
-
-		//	if (r < -m_rightFactorNear * f) ++nOutofLeft;
-		//	else if (r > m_rightFactorNear * f) ++nOutofRight;
-		//	else bIsInRightTest = true;
-
-		//	if (u < -m_upFactorNear * f) ++nOutofBottom;
-		//	else if (u > m_upFactorNear*f) ++nOutofTop;
-		//	else bIsInUpTest = true;
-
-		//	if (f < m_nearZ) ++nOutofNear;
-		//	else if (f > m_farZ) ++nOutofFar;
-		//	else bIsInFrontTest = true;
-
-		//	if (bIsInRightTest && bIsInFrontTest && bIsInUpTest) return true;
-		//}
-
-		//if (nOutofLeft == 8 || nOutofRight == 8 || nOutofFar == 8 || nOutofNear == 8 || nOutofTop == 8 || nOutofBottom == 8) return false;
+		for (Plane& plane : m_planes)
+		{
+			for (i32 i = 0; i < 8; i++)
+			{
+				if (plane.getSide(aabb.getCorner(AABB::Corner(i))) == Plane::POSITIVE_SIDE)
+					return false;
+			}
+		}
 
 		return true;
 	}

@@ -2,7 +2,9 @@
 
 #include <bitset>
 #include "engine/core/math/Vector3.h"
+#include "engine/core/util/Array.hpp"
 #include "AABB.h"
+#include "Plane.h"
 
 namespace Echo
 {
@@ -33,13 +35,16 @@ namespace Echo
 		const Vector3& getUp() const { return m_up; }
 
 		// get AABB
-		const AABB& getAABB();
+		const AABB& getAABB() const;
 
 		// get eight vertices
-		const Vector3*  getVertexs();
+		const Vector3*  getVertexs() const;
+
+		// Get planes
+		const array<Plane, 6>& getPlanes() const;
 
 		// is point in this frustm
-		bool  isPointIn(const Vector3& point);
+		bool  isPointIn(const Vector3& point) const;
 
 		// is sphere is this frustum
 		bool  isSphereIn(const Vector3& center, const float fRadius);
@@ -48,18 +53,19 @@ namespace Echo
 		bool  isAABBIn(const Vector3& minPoint, const Vector3& maxPoint) const;
 
 	private:
-		Vector3			m_eyePosition;
-		Vector3			m_forward;
-		Vector3			m_right;
-		Vector3			m_up;
-		float			m_rightFactorNear;
-		float			m_rightFactorFar;
-		float			m_upFactorNear;
-		float			m_upFactorFar;
-		float			m_nearZ;
-		float			m_farZ;
-		Vector3			m_vertexs[8];
-		AABB			m_aabb;
-		std::bitset<16> m_flags;
+		Vector3					m_eyePosition;
+		Vector3					m_forward;
+		Vector3					m_right;
+		Vector3					m_up;
+		float					m_rightFactorNear;
+		float					m_rightFactorFar;
+		float					m_upFactorNear;
+		float					m_upFactorFar;
+		float					m_nearZ;
+		float					m_farZ;
+		mutable Vector3			m_vertexs[8];
+		mutable AABB			m_aabb;
+		mutable array<Plane, 6>	m_planes;
+		mutable std::bitset<16>	m_flags;
 	};
 }

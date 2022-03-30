@@ -93,14 +93,14 @@ namespace Echo
 		return v * xform;
 	}
 
-	Plane::Side Plane::getSide( const Vector3& centre, const Vector3& halfSize ) const
+	Plane::Side Plane::getSide(const Vector3& center, float radius) const
 	{
 		// Calculate the distance between box centre and the plane
-		Real dist = n.dot(centre) + d;
+		Real dist = n.dot(center) + d;
 
 		// Calculate the maximise allows absolute distance for
-		// the distance between box centre and plane
-		Real maxAbsDist = n.absdot(halfSize);
+		// the distance between box center and plane
+		Real maxAbsDist = Math::Abs<Real>(radius);
 
 		if (dist < -maxAbsDist)
 			return Plane::NEGATIVE_SIDE;
@@ -122,5 +122,4 @@ namespace Echo
 		t = -(n.dot(p0) + d) / a;
 		return t > -Math::EPSILON && t < 1.0f + Math::EPSILON;
 	}
-
 }

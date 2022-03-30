@@ -28,6 +28,8 @@ namespace Echo
 		Matrix4				m_viewMatrix;
 		Matrix4				m_projMatrix;
 		Frustum				m_3dFrustum;
+		Frustum				m_2dFrustum;
+		Frustum				m_uiFrustum;
 		//RenderPipelinePtr	m_pipeline;
 	};
 	typedef ResRef<RenderScene> RenderScenePtr;
