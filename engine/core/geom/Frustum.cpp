@@ -163,17 +163,16 @@ namespace Echo
 
 	bool Frustum::isAABBIn(const Vector3& minPoint, const Vector3& maxPoint) const
 	{
+		return true;
+
 		getPlanes();
 
 		AABB aabb(minPoint, maxPoint);
 
 		for (Plane& plane : m_planes)
 		{
-			for (i32 i = 0; i < 8; i++)
-			{
-				if (plane.getSide(aabb.getCorner(AABB::Corner(i))) == Plane::POSITIVE_SIDE)
-					return false;
-			}
+			if (plane.getSide(aabb) == Plane::POSITIVE_SIDE)
+				return false;
 		}
 
 		return true;

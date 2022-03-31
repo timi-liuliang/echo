@@ -172,10 +172,10 @@ namespace Studio
 	}
 
 	//
-	void InputController3d::onAdaptCamera()
-	{
-		AdaptCamera();
-	}
+	//void InputController3d::onAdaptCamera()
+	//{
+	//	AdaptCamera();
+	//}
 
 	void InputController3d::UpdateCamera(float elapsedTime)
 	{
@@ -191,10 +191,7 @@ namespace Studio
 			m_cameraPositon = m_cameraLookAt - m_cameraForward * m_cameraRadius;
 			m_camera->setPosition(m_cameraPositon);
 
-			Echo::Vector3 hForward(m_cameraForward.x, 0.0, m_cameraForward.z);
-			Echo::Quaternion xTohForward = Echo::Quaternion::fromVec3ToVec3(Echo::Vector3::UNIT_X, hForward);
-			Echo::Quaternion hToForward = Echo::Quaternion::fromVec3ToVec3(hForward, m_cameraForward);
-			m_camera->setOrientation(xTohForward * hToForward);
+			m_camera->setOrientation(Echo::Quaternion::fromYawPitchRoll(m_horizonAngle, m_verticleAngle /*- Echo::Math::PI_DIV2*/, 0.0)/*xTohForward * hToForward*/);
 
 			// save config
 			static float totalElapsed = 0.f;
@@ -294,29 +291,6 @@ namespace Studio
         m_verticleAngleGoal = std::max<float>(m_verticleAngleGoal, 0.01f);		
 	}
 
-	void InputController3d::AdaptCamera()
-	{
-		Echo::Vector3 defaultPos = Echo::Vector3(0,10,10);
-		Echo::Vector3 defaultDir = Echo::Vector3(0,-1,-1);
-
-		m_cameraPositon = defaultPos;
-		m_cameraLookAt = m_cameraPositon + defaultDir * m_cameraRadius;
-
-		m_cameraForward = m_cameraLookAt - m_cameraPositon;
-		m_cameraForward.normalize();
-
-		Echo::Vector3 hForward(m_cameraForward.x, 0.0, m_cameraForward.z);
-		Echo::Quaternion xTohForward = Echo::Quaternion::fromVec3ToVec3(Echo::Vector3::UNIT_X, hForward);
-		Echo::Quaternion hToForward = Echo::Quaternion::fromVec3ToVec3(hForward, m_cameraForward);
-
-		m_cameraForward.toHVAngle(m_horizonAngle, m_verticleAngle);
-		m_verticleAngleGoal = m_verticleAngle;
-		m_horizonAngleGoal = m_horizonAngle;
-
-		m_camera->setPosition(m_cameraPositon);
-		m_camera->setOrientation(xTohForward * hToForward);
-	}
-
 	bool InputController3d::isCameraMoving() const
 	{
 		return m_keyADown ||
@@ -325,46 +299,6 @@ namespace Studio
 			m_keyDDown ||
 			m_keyQDown ||
 			m_keyEDown;
-	}
-
-	void InputController3d::rotateCameraAtPos(float xValue, float yValue, const Echo::Vector3& rotCenter)
-	{
-		Echo::Vector3 rotVec = m_cameraPositon - rotCenter;
-		Echo::Vector3 forward = m_cameraForward;
-		Echo::Vector3 camRight = m_camera->getRight();
-		float verticleAngle = acos(forward.y);
-		float vertRotAngle = verticleAngle + yValue;
-		vertRotAngle = Echo::Math::Clamp(vertRotAngle, 0.01f, Echo::Math::PI - 0.01f) - verticleAngle;
-		if (!Echo::Math::IsEqual(vertRotAngle, 0.0f))
-		{
-			Echo::Quaternion camRightQuat;
-			camRightQuat.fromAxisAngle(camRight, -vertRotAngle);
-			forward = camRightQuat.rotateVec3(forward);
-			rotVec = camRightQuat.rotateVec3(rotVec);
-			m_cameraForward = forward;
-		}
-
-		float sinv = Echo::Math::Sin(xValue);
-		float cosv = Echo::Math::Cos(xValue);
-		forward = m_cameraForward;
-		m_cameraForward = Echo::Vector3(forward.x*cosv - forward.z*sinv, forward.y, forward.x*sinv + forward.z*cosv);
-		rotVec = Echo::Vector3(rotVec.x*cosv - rotVec.z*sinv, rotVec.y, rotVec.x*sinv + rotVec.z*cosv);
-
-		m_cameraPositon = rotCenter + rotVec;
-		m_cameraLookAt = m_cameraPositon + m_cameraForward * m_cameraRadius;
-
-		Echo::Vector3 hForward(m_cameraForward.x, 0.0, m_cameraForward.z);
-		Echo::Quaternion xTohForward = Echo::Quaternion::fromVec3ToVec3(Echo::Vector3::UNIT_X, hForward);
-		Echo::Quaternion hToForward = Echo::Quaternion::fromVec3ToVec3(hForward, m_cameraForward);
-
-		m_camera->setPosition(m_cameraPositon);
-		m_camera->setOrientation(xTohForward * hToForward);
-
-		m_camera->update();
-
-		m_cameraForward.toHVAngle(m_horizonAngle, m_verticleAngle);
-		m_verticleAngleGoal = m_verticleAngle;
-		m_horizonAngleGoal = m_horizonAngle;
 	}
 
 	void InputController3d::onOpenNodeTree(const Echo::String& resPath)

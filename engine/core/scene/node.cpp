@@ -292,7 +292,7 @@ namespace Echo
 
 	void Node::setLocalYawPitchRoll(const Vector3& yawPitchRoll)
 	{
-		setLocalOrientation(Quaternion::fromPitchYawRoll(yawPitchRoll.x, yawPitchRoll.y, yawPitchRoll.z));
+		setLocalOrientation(Quaternion::fromYawPitchRoll(yawPitchRoll.x, yawPitchRoll.y, yawPitchRoll.z));
 	}
 
 	const Vector3& Node::getLocalPosition() const

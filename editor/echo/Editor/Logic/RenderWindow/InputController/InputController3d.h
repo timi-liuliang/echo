@@ -39,7 +39,7 @@ namespace Studio
 
 		// on size
 		virtual void onSizeCamera(unsigned int width, unsigned int height) override;
-		virtual void onAdaptCamera() override;
+		//virtual void onAdaptCamera() override;
 
 		// zoom
 		virtual void CameraZoom(const Echo::AABB& box, float scale);
@@ -69,9 +69,6 @@ namespace Studio
 		// rotation
 		void rotationCamera(float xValue, float yValue);
 
-		// adapt camera
-		void AdaptCamera();
-
 		// get camera
 		Echo::Camera* GetCamera() { return m_camera; }
 
@@ -81,8 +78,6 @@ namespace Studio
 	protected:
 		void updateMouseButtonPressedStatus(QMouseEvent* e, bool pressed);
 		void updateKeyPressedStatus(QKeyEvent* e, bool pressed);
-
-		void rotateCameraAtPos(float xValue, float yValue, const Echo::Vector3& rotCenter);
 
 	protected:
 		// on open node tree

@@ -466,7 +466,6 @@ namespace Echo
 			}
 		}
 
-
 		inline void toMat4(Matrix4& mat) const
 		{
 			Real xs = x * 2.0f;
@@ -660,7 +659,7 @@ namespace Echo
 		}
 
 		// convert between quaternion and PitchRawRoll
-		static Quaternion fromPitchYawRoll(Real pitch, Real yaw, Real roll);
+		static Quaternion fromYawPitchRoll(Real yaw, Real pitch, Real roll);
 		void toPitchYawRoll(Real& pitch, Real& yaw, Real& roll) const;
 
 	public:

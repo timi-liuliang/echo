@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/core/math/Math.h"
+#include "AABB.h"
 
 namespace Echo
 {
@@ -30,6 +31,7 @@ namespace Echo
 
 		// Which side is this point belone
 		Side getSide(const Vector3& center, float radius = 0.f) const;
+		Side getSide(const AABB& aabb);
 
 	public:
 		Plane& operator = (const Plane& src);

@@ -111,6 +111,20 @@ namespace Echo
 		return Plane::BOTH_SIDE;
 	}
 
+	Plane::Side Plane::getSide(const AABB& aabb)
+	{
+		Plane::Side preSide = getSide(aabb.getCorner(AABB::Corner(0)));
+
+		for (i32 i = 1; i < 8; i++)
+		{
+			Plane::Side curSide = getSide(aabb.getCorner(AABB::Corner(i)));
+			if(preSide!=curSide)
+				return Plane::BOTH_SIDE;
+		}
+
+		return preSide;
+	}
+
 	bool Plane::intersect(const Vector3& p0, const Vector3& p1, Real& t) const
 	{
 		Real a = (p1 - p0).dot(n);
