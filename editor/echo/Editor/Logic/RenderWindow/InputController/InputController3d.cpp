@@ -52,14 +52,18 @@ namespace Studio
 
 		// move camera
 		Echo::Vector3 cameraMoveDir = Echo::Vector3::ZERO;
-		if ( m_keyADown ) 
+		if (m_keyADown) 
 			cameraMoveDir.x += 1.f;
-		if ( m_keyDDown ) 
+		if (m_keyDDown) 
 			cameraMoveDir.x += -1.f;
-		if ( m_keyWDown ) 
+		if (m_keyWDown) 
 			cameraMoveDir.z += 1.f;
-		if ( m_keySDown && !m_keyCtrlDown) 
+		if (m_keySDown && !m_keyCtrlDown) 
 			cameraMoveDir.z += -1.f;
+		if(m_keyQDown)
+			cameraMoveDir.y += 1.f;
+		if(m_keyEDown)
+			cameraMoveDir.y -= 1.f;
 
 		SetCameraMoveDir(cameraMoveDir);
 
@@ -217,13 +221,7 @@ namespace Studio
 
 	void InputController3d::SetCameraMoveDir(const Echo::Vector3& dir)
 	{
-		Echo::Vector3 forward = m_camera->getForward(); forward.y = 0.f;
-		forward.normalize();
-
-		Echo::Vector3 right = forward.cross(Echo::Vector3::UNIT_Y);
-		right.normalize();
-
-		m_cameraMoveDir = m_camera->getForward() * dir.z - right * dir.x;
+		m_cameraMoveDir = m_camera->getForward() * dir.z - m_camera->getRight() * dir.x + Echo::Vector3::UNIT_Y * dir.y;
 		m_cameraMoveDir.normalize();
 		m_cameraMoveDir *= 5.f;
 	}
@@ -288,7 +286,8 @@ namespace Studio
 
 	bool InputController3d::isCameraMoving() const
 	{
-		return m_keyADown ||
+		return 
+			m_keyADown ||
 			m_keyWDown ||
 			m_keySDown ||
 			m_keyDDown ||
