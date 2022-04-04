@@ -106,7 +106,6 @@ namespace Studio
 		float				m_cameraRadius;
 		Echo::Vector3		m_cameraLookAt;
 		Echo::Vector3		m_cameraMoveDir;
-		Echo::Vector3		m_cameraForward;
 		Echo::Vector3		m_cameraPositon;
 		float				m_horizonAngle;
 		float				m_verticleAngle;

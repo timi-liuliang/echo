@@ -180,7 +180,7 @@ namespace Echo
 
 					const b2Vec2& pos = m_body->GetPosition();
 					this->setWorldPosition(Vector3(pos.x * pixelsPerUnit, pos.y * pixelsPerUnit, getWorldPosition().z));
-					this->setWorldOrientation(Quaternion::fromYawPitchRoll(0.f, 0.f, m_body->GetAngle()));
+					this->setWorldOrientation(Quaternion::fromPitchYawRoll(0.f, 0.f, m_body->GetAngle() * Math::RAD2DEG));
 				}
 			}
 			else

@@ -658,8 +658,8 @@ namespace Echo
 			return result;
 		}
 
-		// convert between quaternion and PitchRawRoll
-		static Quaternion fromYawPitchRoll(Real yaw, Real pitch, Real roll);
+		// convert between quaternion and PitchRawRoll (pitch:x,yaw:y,z:roll)
+		static Quaternion fromPitchYawRoll(Real pitch, Real yaw, Real roll);
 		void toPitchYawRoll(Real& pitch, Real& yaw, Real& roll) const;
 
 	public:

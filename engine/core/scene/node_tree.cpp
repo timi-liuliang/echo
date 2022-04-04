@@ -34,9 +34,10 @@ namespace Echo
 		m_3dCamera = EchoNew(Camera(Camera::ProjMode::PM_PERSPECTIVE));
 
 		m_3dCamera->setPosition(Vector3::ZERO);
-		m_3dCamera->setOrientation(Quaternion::IDENTITY);
+		m_3dCamera->setOrientation(Quaternion::fromPitchYawRoll(0.f, 0.f, 0.f));
 		m_3dCamera->setNear(0.1f);
 		m_3dCamera->setFar(250.f);
+		m_3dCamera->update();
 
 		// create 2D camera
 		m_2dCamera = EchoNew(Camera(Camera::ProjMode::PM_ORTHO));
@@ -79,11 +80,5 @@ namespace Echo
         
         // update channels
         Channel::syncAll();
-
-		// render & test
-		//Frustum frustum;
-		//m_2dBvh.query(nullptr, frustum);
-		//m_2dBvh.query(nullptr, AABB());
-		//m_2dBvh.rayCast(nullptr, Vector3::ZERO, Vector3::ONE);
     }
 }

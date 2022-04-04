@@ -124,16 +124,17 @@ namespace Echo
 		return result;
 	}
 
-	Quaternion Quaternion::fromYawPitchRoll(Real yaw, Real pitch,  Real roll)
+	// https://howthingsfly.si.edu/flight-dynamics/roll-pitch-and-yaw
+	Quaternion Quaternion::fromPitchYawRoll(Real pitch, Real yaw, Real roll)
 	{
 		Quaternion quat;
 
-		float fCosHRoll = Math::Cos(roll * 0.5f);
-		float fSinHRoll = Math::Sin(roll * 0.5f);
-		float fCosHPitch = Math::Cos(pitch * 0.5f);
-		float fSinHPitch = Math::Sin(pitch * 0.5f);
-		float fCosHYaw = Math::Cos(yaw * 0.5f);
-		float fSinHYaw = Math::Sin(yaw * 0.5f);
+		float fCosHRoll = Math::Cos(roll * Math::DEG2RAD * 0.5f);
+		float fSinHRoll = Math::Sin(roll * Math::DEG2RAD * 0.5f);
+		float fCosHPitch = Math::Cos(pitch * Math::DEG2RAD * 0.5f);
+		float fSinHPitch = Math::Sin(pitch * Math::DEG2RAD * 0.5f);
+		float fCosHYaw = Math::Cos(yaw * Math::DEG2RAD * 0.5f);
+		float fSinHYaw = Math::Sin(yaw * Math::DEG2RAD * 0.5f);
 
 		quat.w = fCosHRoll * fCosHPitch * fCosHYaw + fSinHRoll * fSinHPitch * fSinHYaw;
 		quat.x = fCosHRoll * fSinHPitch * fCosHYaw + fSinHRoll * fCosHPitch * fSinHYaw;

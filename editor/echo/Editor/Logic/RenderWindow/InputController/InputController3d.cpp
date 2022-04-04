@@ -30,17 +30,12 @@ namespace Studio
 		, m_cameraLookAt(Echo::Vector3::ZERO)
 		, m_cameraMoveDir(Echo::Vector3::ZERO)
 		, m_cameraPositon(Echo::Vector3::ZERO)
-		, m_horizonAngle(-Echo::Math::PI_DIV2)
-		, m_verticleAngle(Echo::Math::PI_DIV2)
-		, m_horizonAngleGoal(-Echo::Math::PI_DIV2)
- 		, m_verticleAngleGoal(Echo::Math::PI_DIV2)
+		, m_horizonAngle(0.f)
+		, m_verticleAngle(-Echo::Math::PI_DIV2)
+		, m_horizonAngleGoal(0.f)
+ 		, m_verticleAngleGoal(-Echo::Math::PI_DIV2)
 		, m_bNeedUpdateCamera(true)
 	{
-		m_cameraForward = Echo::Vector3( 0.f, -1.f, -1.f);
-		m_cameraForward.normalize();
-		m_cameraForward.toHVAngle(m_horizonAngleGoal, m_verticleAngleGoal);
-		m_cameraForward.toHVAngle(m_horizonAngle, m_verticleAngle);
-
 		m_camera = Echo::NodeTree::instance()->get3dCamera();
 		m_camera->setNear(0.1f);
 		m_camera->setFar(2500.f);
@@ -187,11 +182,8 @@ namespace Studio
 			float moveSpeed = Echo::EditorCameraSettings::instance()->getMoveSpeed();
 			m_cameraLookAt += m_cameraMoveDir * elapsedTime * moveSpeed;
 
-			m_cameraForward.normalize();
-			m_cameraPositon = m_cameraLookAt - m_cameraForward * m_cameraRadius;
+			m_cameraPositon = m_cameraLookAt - m_camera->getForward() * m_cameraRadius;
 			m_camera->setPosition(m_cameraPositon);
-
-			m_camera->setOrientation(Echo::Quaternion::fromYawPitchRoll(m_horizonAngle, m_verticleAngle /*- Echo::Math::PI_DIV2*/, 0.0)/*xTohForward * hToForward*/);
 
 			// save config
 			static float totalElapsed = 0.f;
@@ -220,18 +212,18 @@ namespace Studio
 		Echo::Vector3 center = ((box.vMin + box.vMax) * 0.5f);
 		m_cameraRadius = radius * scale;
 		m_cameraLookAt = center;
-		m_cameraPositon = m_cameraLookAt - m_cameraForward * m_cameraRadius;
+		m_cameraPositon = m_cameraLookAt - m_camera->getForward() * m_cameraRadius;
 	}
 
 	void InputController3d::SetCameraMoveDir(const Echo::Vector3& dir)
 	{
-		Echo::Vector3 forward = m_cameraForward; forward.y = 0.f;
+		Echo::Vector3 forward = m_camera->getForward(); forward.y = 0.f;
 		forward.normalize();
 
 		Echo::Vector3 right = forward.cross(Echo::Vector3::UNIT_Y);
 		right.normalize();
 
-		m_cameraMoveDir = m_cameraForward * dir.z - right * dir.x;
+		m_cameraMoveDir = m_camera->getForward() * dir.z - right * dir.x;
 		m_cameraMoveDir.normalize();
 		m_cameraMoveDir *= 5.f;
 	}
@@ -245,7 +237,7 @@ namespace Studio
 		}
 		else
 		{
-			m_cameraLookAt -= m_cameraForward * zValue;
+			m_cameraLookAt -= m_camera->getForward() * zValue;
 		}
 	}
 
@@ -274,8 +266,11 @@ namespace Studio
 
 		if (!Echo::Math::IsEqual(diffHorizonAngle, 0.0f) && !Echo::Math::IsEqual(diffVerticleAngle, 0.0f))
 		{
-			m_cameraForward.fromHVAngle(m_horizonAngle, m_verticleAngle);
-			m_cameraLookAt = m_cameraPositon + m_cameraForward * m_cameraRadius;
+			float pitch = -(m_verticleAngle - Echo::Math::PI_DIV2) * Echo::Math::RAD2DEG;
+			float yaw   = -m_horizonAngle * Echo::Math::RAD2DEG;
+			m_camera->setOrientation(Echo::Quaternion::fromPitchYawRoll(pitch, yaw, 0.0));
+
+			m_cameraLookAt = m_cameraPositon + m_camera->getForward() * m_cameraRadius;
 		}
 	}
 
@@ -318,7 +313,6 @@ namespace Studio
 			{
 				m_horizonAngle = m_horizonAngleGoal = Echo::StringUtil::ParseReal(hAngle);
 				m_verticleAngle = m_verticleAngleGoal = Echo::StringUtil::ParseReal(vAngle);
-				m_cameraForward.fromHVAngle(m_horizonAngle, m_verticleAngle);
 			}
 
 			Echo::String radius = AStudio::instance()->getConfigMgr()->getValue((preStr + "camera3dRadius").c_str());

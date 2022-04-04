@@ -10,7 +10,7 @@ namespace Echo
 		: m_projMode(mode)
 	{
 		m_position = Vector3(-150.0f, 150.0f, -150.0f);
-		m_forward = Vector3::UNIT_X;
+		m_forward = -Vector3::UNIT_Z;
 		m_up = Vector3::UNIT_Y;
 		Vector3::Cross(m_right, m_forward, m_up);
 
@@ -35,7 +35,7 @@ namespace Echo
 	{
 		m_rotation = rotation;
 
-		m_forward = m_rotation.rotateVec3(Vector3::UNIT_X);
+		m_forward = m_rotation.rotateVec3(-Vector3::UNIT_Z);
 		m_up = m_rotation.rotateVec3(Vector3::UNIT_Y);
 		Vector3::Cross(m_right, m_forward, m_up);
 
