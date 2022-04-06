@@ -65,20 +65,21 @@ namespace Echo
 
 	void NodeTree::update(float elapsedTime)
 	{
-		// update 3d camera
+		// Update 3d camera
 		m_2dCamera->update();
 		m_3dCamera->update();
 		m_uiCamera->update();
 
-		m_renderScene->update(m_3dCamera->getFrustum());
+		// Sync data to render scene
+		m_renderScene->update(m_3dCamera->getFrustum(), m_2dCamera->getFrustum(), m_uiCamera->getFrustum());
 		
-		// update nodes
+		// Update nodes
 		m_invisibleRoot->update(elapsedTime, true);
 
-		// update scripts
+		// Update scripts
 		LuaBinder::instance()->execString("update_all_nodes()", true);
         
-        // update channels
+        // Update channels
         Channel::syncAll();
     }
 }

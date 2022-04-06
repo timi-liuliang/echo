@@ -16,9 +16,11 @@ namespace Echo
 		g_renderScenes.erase(std::remove(g_renderScenes.begin(), g_renderScenes.end(), this), g_renderScenes.end());
 	}
 
-	void RenderScene::update(const Frustum& frustum)
+	void RenderScene::update(const Frustum& frustum3d, const Frustum& frustum2d, const Frustum& frustumUi)
 	{
-		m_3dFrustum = frustum;
+		m_3dFrustum = frustum3d;
+		m_2dFrustum = frustum2d;
+		m_uiFrustum = frustumUi;
 	}
 
 	void RenderScene::renderAll()
@@ -37,13 +39,13 @@ namespace Echo
 			renderproxy->submitToRenderQueue(RenderPipeline::current());
 		}
 
-		vector<RenderProxy*>::type visibleRenderProxies2D = Renderer::instance()->gatherRenderProxies(RenderProxy::RenderType2D, AABB(-Vector3::ONE, Vector3::ONE));
+		vector<RenderProxy*>::type visibleRenderProxies2D = Renderer::instance()->gatherRenderProxies(RenderProxy::RenderType2D, m_2dFrustum);
 		for (RenderProxy* renderproxy : visibleRenderProxies2D)
 		{
 			renderproxy->submitToRenderQueue(RenderPipeline::current());
 		}
 
-		vector<RenderProxy*>::type visibleRenderProxiesUI = Renderer::instance()->gatherRenderProxies(RenderProxy::RenderTypeUI, AABB(-Vector3::ONE, Vector3::ONE));
+		vector<RenderProxy*>::type visibleRenderProxiesUI = Renderer::instance()->gatherRenderProxies(RenderProxy::RenderTypeUI, m_uiFrustum);
 		for (RenderProxy* renderproxy : visibleRenderProxiesUI)
 		{
 			renderproxy->submitToRenderQueue(RenderPipeline::current());

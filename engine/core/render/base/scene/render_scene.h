@@ -14,7 +14,7 @@ namespace Echo
 		~RenderScene();
 
 		// Update
-		void update(const Frustum& frustum);
+		void update(const Frustum& frustum3d, const Frustum& frustum2d, const Frustum& frustumUi);
 
 		// render
 		static void renderAll();
