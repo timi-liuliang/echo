@@ -42,7 +42,7 @@ namespace Echo
 		// create 2D camera
 		m_2dCamera = EchoNew(Camera(Camera::ProjMode::PM_ORTHO));
 		m_2dCamera->setPosition(Vector3(0, 0, -257));
-		m_2dCamera->setOrientation(Quaternion::fromAxisAngle(Vector3::UNIT_Y, Math::PI_DIV2));
+		m_2dCamera->setOrientation(Quaternion::fromPitchYawRoll(0.f, 180.f, 0.f));
 		m_2dCamera->setNear(1);
 		m_2dCamera->setFar(513.0f);
 		m_2dCamera->update();
@@ -50,7 +50,7 @@ namespace Echo
 		// create gui camera
 		m_uiCamera = EchoNew(Camera(Camera::ProjMode::PM_ORTHO));
 		m_uiCamera->setPosition(Vector3(0, 0, -257));
-		m_uiCamera->setOrientation(Quaternion::fromAxisAngle(Vector3::UNIT_Y, Math::PI_DIV2));
+		m_uiCamera->setOrientation(Quaternion::fromPitchYawRoll(0.f, 180.f, 0.f));
 		m_uiCamera->setNear(1);
 		m_uiCamera->setFar(513.0f);
 		m_uiCamera->update();

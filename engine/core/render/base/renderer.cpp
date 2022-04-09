@@ -311,7 +311,7 @@ namespace Echo
 			{
 				worldAABB = worldAABB.transform(renderNode->getWorldMatrix());
 				renderProxy->m_bvh = bvh;
-				renderProxy->m_bvhNodeId = bvh->createProxy(worldAABB, getId());
+				renderProxy->m_bvhNodeId = bvh->createProxy(worldAABB, renderProxy->getIdentifier());
 			}
 		}
 		else
@@ -327,27 +327,32 @@ namespace Echo
 
 	vector<RenderProxy*>::type Renderer::gatherRenderProxies(RenderProxy::RenderType renderType, const Frustum& frustum)
 	{
-		BvhCbDefault cb;
+		vector<RenderProxy*>::type result;
+
+		auto gatherProxyId = [&](Bvh& bvh)
+		{
+			BvhCbDefault cb;
+			bvh.query(&cb, frustum);
+
+			for (i32 nodeId : cb.getQueryResults())
+			{
+				i32 renderProxyId = bvh.getUserData(nodeId);
+				RenderProxy* proxy = getRenderProxy(renderProxyId);
+				if (proxy && proxy->isSubmitToRenderQueue())
+				{
+					result.push_back(proxy);
+				}
+			}
+		};
 
 		if (renderType == RenderProxy::RenderType3D)
-			m_renderProxies3dBvh.query(&cb, frustum);
+			gatherProxyId(m_renderProxies3dBvh);
 
 		if (renderType == RenderProxy::RenderType2D)
-			m_renderProxies2dBvh.query(&cb, frustum);
+			gatherProxyId(m_renderProxies2dBvh);
 
 		if (renderType == RenderProxy::RenderTypeUI)
-			m_renderProxiesUiBvh.query(&cb, frustum);
-
-
-		vector<RenderProxy*>::type result;
-		for (i32 nodeId : cb.getQueryResults())
-		{
-			RenderProxy* proxy = getRenderProxy(nodeId);
-			if (proxy && proxy->isSubmitToRenderQueue())
-			{
-				result.push_back(proxy);
-			}
-		}
+			gatherProxyId(m_renderProxiesUiBvh);
 
 		return result;
 	}

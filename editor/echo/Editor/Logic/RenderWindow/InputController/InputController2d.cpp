@@ -176,7 +176,7 @@ namespace Studio
 			{
 				camera->setScale(m_cameraScale);
 				camera->setPosition(m_cameraPositon);
-				camera->setOrientation(Echo::Quaternion::fromAxisAngle(Echo::Vector3::UNIT_Y, Echo::Math::PI_DIV2));
+				camera->setOrientation(Echo::Quaternion::fromPitchYawRoll(0.0, 180.0, 0.0));
 			}
 
 			// save config
