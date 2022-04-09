@@ -95,7 +95,6 @@ namespace Studio
 	protected:
 		float				m_cameraScale;
 		Echo::Vector3		m_cameraMoveDir;
-		Echo::Vector3		m_cameraForward;
 		Echo::Vector3		m_cameraPositon;
 		bool				m_bNeedUpdateCamera = true;
 	};

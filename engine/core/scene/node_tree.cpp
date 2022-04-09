@@ -41,16 +41,16 @@ namespace Echo
 
 		// create 2D camera
 		m_2dCamera = EchoNew(Camera(Camera::ProjMode::PM_ORTHO));
-		m_2dCamera->setPosition(Vector3(0, 0, -257));
-		m_2dCamera->setOrientation(Quaternion::fromPitchYawRoll(0.f, 180.f, 0.f));
+		m_2dCamera->setPosition(Vector3(0, 0, 257));
+		m_2dCamera->setOrientation(Quaternion::fromPitchYawRoll(0.f, 0.f, 0.f));
 		m_2dCamera->setNear(1);
 		m_2dCamera->setFar(513.0f);
 		m_2dCamera->update();
 
 		// create gui camera
 		m_uiCamera = EchoNew(Camera(Camera::ProjMode::PM_ORTHO));
-		m_uiCamera->setPosition(Vector3(0, 0, -257));
-		m_uiCamera->setOrientation(Quaternion::fromPitchYawRoll(0.f, 180.f, 0.f));
+		m_uiCamera->setPosition(Vector3(0, 0, 257));
+		m_uiCamera->setOrientation(Quaternion::fromPitchYawRoll(0.f, 0.f, 0.f));
 		m_uiCamera->setNear(1);
 		m_uiCamera->setFar(513.0f);
 		m_uiCamera->update();

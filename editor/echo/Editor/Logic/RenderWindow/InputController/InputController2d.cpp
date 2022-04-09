@@ -25,8 +25,7 @@ namespace Studio
 		, m_keyShiftDown(false)
         , m_cameraScale(1.f)
 		, m_cameraMoveDir(Echo::Vector3::UNIT_X)
-		, m_cameraForward(-Echo::Vector3::UNIT_Z)
-		, m_cameraPositon(Echo::Vector3(0, 0, -257))
+		, m_cameraPositon(Echo::Vector3(0, 0, 257))
 	{
 		InitializeCameraSettings();
 	}
@@ -169,14 +168,12 @@ namespace Studio
 		{
 			m_cameraPositon += m_cameraMoveDir * elapsedTime * 300;
 
-			m_cameraForward.normalize();
-
 			std::vector<Echo::Camera*> cameras = { Echo::NodeTree::instance()->get2dCamera(), Echo::NodeTree::instance()->getUiCamera() };
 			for (Echo::Camera* camera : cameras)
 			{
 				camera->setScale(m_cameraScale);
 				camera->setPosition(m_cameraPositon);
-				camera->setOrientation(Echo::Quaternion::fromPitchYawRoll(0.0, 180.0, 0.0));
+				camera->setOrientation(Echo::Quaternion::fromPitchYawRoll(0.0, 0.0, 0.0));
 			}
 
 			// save config
@@ -259,10 +256,6 @@ namespace Studio
 			if (!camera2DPosition.empty())
 				m_cameraPositon = Echo::StringUtil::ParseVec3(camera2DPosition);
 
-			Echo::String camera2DDirection = AStudio::instance()->getConfigMgr()->getValue((preStr + "camera2ddirection").c_str());
-			if (!camera2DDirection.empty())
-				m_cameraForward = Echo::StringUtil::ParseVec3(camera2DDirection);
-
 			Echo::String camera2DScale = AStudio::instance()->getConfigMgr()->getValue((preStr + "camera2dscale").c_str());
 			if (!camera2DScale.empty())
 				m_cameraScale = (Echo::StringUtil::ParseReal(camera2DScale));
@@ -281,7 +274,6 @@ namespace Studio
 				Echo::String preStr = Echo::Engine::instance()->getResPath() + ":" + resPath;
 
 				AStudio::instance()->getConfigMgr()->setValue((preStr + "camera2dposition").c_str(), Echo::StringUtil::ToString(camera2D->getPosition()).c_str());
-				AStudio::instance()->getConfigMgr()->setValue((preStr + "camera2ddirection").c_str(), Echo::StringUtil::ToString(camera2D->getForward()).c_str());
 				AStudio::instance()->getConfigMgr()->setValue((preStr + "camera2dscale").c_str(), Echo::StringUtil::ToString(camera2D->getScale()).c_str());
 			}
 		}
