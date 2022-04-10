@@ -29,11 +29,11 @@ namespace Echo
 
 	void Frustum::setOrtho(float width, float height, float near, float far)
 	{
-		m_upFactorNear = height / near;
-		m_upFactorFar = height / far;
+		m_upFactorNear = height * 0.5 / near;
+		m_upFactorFar = height * 0.5 / far;
 
-		m_rightFactorNear = width / near;
-		m_rightFactorFar = width / far;
+		m_rightFactorNear = width * 0.5 / near;
+		m_rightFactorFar = width * 0.5 / far;
 
 		m_nearZ = near;
 		m_farZ = far;
@@ -50,8 +50,8 @@ namespace Echo
 		m_forward.normalize();
 		m_up.normalize();
 
-		m_right = m_up.cross(m_forward);		m_right.normalize();
-		m_up = m_forward.cross(m_right);		m_up.normalize();
+		m_right = m_forward.cross(m_up);		m_right.normalize();
+		m_up = m_right.cross(m_forward);		m_up.normalize();
 
 		m_flags.set();
 	}
@@ -82,13 +82,13 @@ namespace Echo
 		m_vertexs[3] += m_eyePosition;	m_vertexs[7] += m_eyePosition;
 
 		//     7+------+6
-		//     /|     /|         z
+		//     /|     /|         y
 		//    / |    / |         |
 		//   / 4+---/--+5		 |
 		// 3+------+2 /          *-----x
 		//  | /    | /          /
 		//  |/     |/          /
-		// 0+------+1		  y   	
+		// 0+------+1		  z   	
 
 		m_flags.reset(FrustumDirtyFlags::Vertex);
 
@@ -102,11 +102,13 @@ namespace Echo
 
 		getVertexs();
 
-		m_planes[0].set(m_vertexs[0], m_vertexs[3], m_vertexs[1]);
-		m_planes[1].set(m_vertexs[4], m_vertexs[5], m_vertexs[7]);
+		// Plane's normal facing box outer
 
-		m_planes[2].set(m_vertexs[1], m_vertexs[2], m_vertexs[5]);
-		m_planes[3].set(m_vertexs[0], m_vertexs[4], m_vertexs[3]);
+		m_planes[0].set(m_vertexs[0], m_vertexs[1], m_vertexs[3]);
+		m_planes[1].set(m_vertexs[4], m_vertexs[7], m_vertexs[5]);
+
+		m_planes[2].set(m_vertexs[1], m_vertexs[5], m_vertexs[2]);
+		m_planes[3].set(m_vertexs[0], m_vertexs[3], m_vertexs[4]);
 
 		m_planes[4].set(m_vertexs[0], m_vertexs[4], m_vertexs[1]);
 		m_planes[5].set(m_vertexs[3], m_vertexs[2], m_vertexs[7]);
@@ -163,8 +165,6 @@ namespace Echo
 
 	bool Frustum::isAABBIn(const Vector3& minPoint, const Vector3& maxPoint) const
 	{
-		return true;
-
 		getPlanes();
 
 		AABB aabb(minPoint, maxPoint);
