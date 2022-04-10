@@ -31,14 +31,16 @@ namespace Studio
 		, m_cameraMoveDir(Echo::Vector3::ZERO)
 		, m_cameraPositon(Echo::Vector3::ZERO)
 		, m_horizonAngle(0.f)
-		, m_verticleAngle(-Echo::Math::PI_DIV2)
+		, m_verticleAngle(Echo::Math::PI * 0.75)
 		, m_horizonAngleGoal(0.f)
- 		, m_verticleAngleGoal(-Echo::Math::PI_DIV2)
+ 		, m_verticleAngleGoal(Echo::Math::PI * 0.75)
 		, m_bNeedUpdateCamera(true)
 	{
 		m_camera = Echo::NodeTree::instance()->get3dCamera();
 		m_camera->setNear(0.1f);
 		m_camera->setFar(2500.f);
+
+		ApplyOrientation(m_horizonAngle, m_verticleAngle);
 	}
 
 	InputController3d::~InputController3d()
@@ -48,27 +50,13 @@ namespace Studio
 	void InputController3d::tick(const InputContext& ctx)
 	{
 		// rotation camera
-		SmoothRotation(ctx.elapsedTime);
+		UpdateCameraRotation(ctx.elapsedTime);
 
-		// move camera
-		Echo::Vector3 cameraMoveDir = Echo::Vector3::ZERO;
-		if (m_keyADown) 
-			cameraMoveDir.x += 1.f;
-		if (m_keyDDown) 
-			cameraMoveDir.x += -1.f;
-		if (m_keyWDown) 
-			cameraMoveDir.z += 1.f;
-		if (m_keySDown && !m_keyCtrlDown) 
-			cameraMoveDir.z += -1.f;
-		if(m_keyQDown)
-			cameraMoveDir.y += 1.f;
-		if(m_keyEDown)
-			cameraMoveDir.y -= 1.f;
-
-		SetCameraMoveDir(cameraMoveDir);
+		// Update movd dir
+		UpdateCameraMoveDir();
 
 		// update
-		UpdateCamera(ctx.elapsedTime);
+		UpdateCameraPosition(ctx.elapsedTime);
 	}
 
 	void InputController3d::wheelEvent(QWheelEvent* e)
@@ -170,13 +158,7 @@ namespace Studio
 	{
 	}
 
-	//
-	//void InputController3d::onAdaptCamera()
-	//{
-	//	AdaptCamera();
-	//}
-
-	void InputController3d::UpdateCamera(float elapsedTime)
+	void InputController3d::UpdateCameraPosition(float elapsedTime)
 	{
 		if (m_bNeedUpdateCamera)
 		{
@@ -219,9 +201,24 @@ namespace Studio
 		m_cameraPositon = m_cameraLookAt - m_camera->getForward() * m_cameraRadius;
 	}
 
-	void InputController3d::SetCameraMoveDir(const Echo::Vector3& dir)
+	void InputController3d::UpdateCameraMoveDir()
 	{
-		m_cameraMoveDir = m_camera->getForward() * dir.z - m_camera->getRight() * dir.x + Echo::Vector3::UNIT_Y * dir.y;
+		// move camera
+		Echo::Vector3 cameraMoveDir = Echo::Vector3::ZERO;
+		if (m_keyADown)
+			cameraMoveDir.x += 1.f;
+		if (m_keyDDown)
+			cameraMoveDir.x += -1.f;
+		if (m_keyWDown)
+			cameraMoveDir.z += 1.f;
+		if (m_keySDown && !m_keyCtrlDown)
+			cameraMoveDir.z += -1.f;
+		if (m_keyQDown)
+			cameraMoveDir.y += 1.f;
+		if (m_keyEDown)
+			cameraMoveDir.y -= 1.f;
+
+		m_cameraMoveDir = m_camera->getForward() * cameraMoveDir.z - m_camera->getRight() * cameraMoveDir.x + Echo::Vector3::UNIT_Y * cameraMoveDir.y;
 		m_cameraMoveDir.normalize();
 		m_cameraMoveDir *= 5.f;
 	}
@@ -239,7 +236,7 @@ namespace Studio
 		}
 	}
 
-	void InputController3d::SmoothRotation(float elapsedTime)
+	void InputController3d::UpdateCameraRotation(float elapsedTime)
 	{
 		float diffHorizonAngle = m_horizonAngleGoal - m_horizonAngle;
 		float diffVerticleAngle = m_verticleAngleGoal - m_verticleAngle;
@@ -264,12 +261,16 @@ namespace Studio
 
 		if (!Echo::Math::IsEqual(diffHorizonAngle, 0.0f) && !Echo::Math::IsEqual(diffVerticleAngle, 0.0f))
 		{
-			float pitch = -(m_verticleAngle - Echo::Math::PI_DIV2) * Echo::Math::RAD2DEG;
-			float yaw   = -m_horizonAngle * Echo::Math::RAD2DEG;
-			m_camera->setOrientation(Echo::Quaternion::fromPitchYawRoll(pitch, yaw, 0.0));
-
+			ApplyOrientation(m_horizonAngle, m_verticleAngle);
 			m_cameraLookAt = m_cameraPositon + m_camera->getForward() * m_cameraRadius;
 		}
+	}
+
+	void InputController3d::ApplyOrientation(float hAngle, float vAngle)
+	{
+		float pitch = -(vAngle - Echo::Math::PI_DIV2) * Echo::Math::RAD2DEG;
+		float yaw = -hAngle * Echo::Math::RAD2DEG;
+		m_camera->setOrientation(Echo::Quaternion::fromPitchYawRoll(pitch, yaw, 0.0));
 	}
 
 	void InputController3d::rotationCamera(float xValue, float yValue)

@@ -51,17 +51,17 @@ namespace Studio
 		bool isCameraMoving() const;
 
 		// need update camera
-		void setNeedUpdateCamera(bool need) { m_bNeedUpdateCamera = need; UpdateCamera(0.01f); }
+		void setNeedUpdateCamera(bool need) { m_bNeedUpdateCamera = need; UpdateCameraPosition(0.01f); }
 
 		// on focus node
 		virtual void onFocusNode(Echo::Node* node) override;
 
 	protected:
 		// update camera
-		void UpdateCamera(float elapsedTime);
+		void UpdateCameraPosition(float elapsedTime);
 
 		// set move dir
-		void SetCameraMoveDir(const Echo::Vector3& dir);
+		void UpdateCameraMoveDir();
 
 		// zoom
 		void CameraZoom(float zValue);
@@ -73,7 +73,10 @@ namespace Studio
 		Echo::Camera* GetCamera() { return m_camera; }
 
 		// rotation
-		void SmoothRotation(float elapsedTime);
+		void UpdateCameraRotation(float elapsedTime);
+
+		// Apply orientation
+		void ApplyOrientation(float hAngle, float vAngle);
 
 	protected:
 		void updateMouseButtonPressedStatus(QMouseEvent* e, bool pressed);
