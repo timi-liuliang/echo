@@ -1,6 +1,7 @@
 #include "render_scene.h"
 #include <vector>
 #include "../pipeline/render_pipeline.h"
+#include "engine/core/main/frame_state.h"
 
 namespace Echo
 {
@@ -25,29 +26,35 @@ namespace Echo
 
 	void RenderScene::renderAll()
 	{
+		i32 drawCalls = 0;
 		for (RenderScene* renderScene : g_renderScenes)
 		{
-			renderScene->render();
+			renderScene->render(drawCalls);
 		}
+
+		Echo::FrameState::instance()->setDrawCalls(drawCalls);
 	}
 
-	void RenderScene::render()
+	void RenderScene::render(i32& drawCalls)
 	{
 		vector<RenderProxy*>::type visibleRenderProxies3D = Renderer::instance()->gatherRenderProxies(RenderProxy::RenderType3D, m_3dFrustum);
 		for (RenderProxy* renderproxy : visibleRenderProxies3D)
 		{
+			drawCalls++;
 			renderproxy->submitToRenderQueue(RenderPipeline::current());
 		}
 
 		vector<RenderProxy*>::type visibleRenderProxies2D = Renderer::instance()->gatherRenderProxies(RenderProxy::RenderType2D, m_2dFrustum);
 		for (RenderProxy* renderproxy : visibleRenderProxies2D)
 		{
+			drawCalls++;
 			renderproxy->submitToRenderQueue(RenderPipeline::current());
 		}
 
 		vector<RenderProxy*>::type visibleRenderProxiesUI = Renderer::instance()->gatherRenderProxies(RenderProxy::RenderTypeUI, m_uiFrustum);
 		for (RenderProxy* renderproxy : visibleRenderProxiesUI)
 		{
+			drawCalls++;
 			renderproxy->submitToRenderQueue(RenderPipeline::current());
 		}
 

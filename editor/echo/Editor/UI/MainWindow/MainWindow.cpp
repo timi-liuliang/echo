@@ -824,7 +824,9 @@ namespace Studio
 
 	void MainWindow::onShowStatusMessage()
 	{
-		statusBar()->showMessage(Echo::StringUtil::Format("Fps:%d", Echo::FrameState::instance()->getFps()).c_str());
+		Echo::i32 fps = Echo::FrameState::instance()->getFps();
+		Echo::i32 drawcall = Echo::FrameState::instance()->getDrawCalls();
+		statusBar()->showMessage(Echo::StringUtil::Format("Fps:%d Drawcall:%d", fps, drawcall).c_str());
 
 		hideWhiteLineOfQTabBar();
 	}

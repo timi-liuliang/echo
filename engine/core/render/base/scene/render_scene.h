@@ -21,7 +21,7 @@ namespace Echo
 
 	protected:
 		// Render
-		void render();
+		void render(i32& drawCalls);
 
 	protected:
 		Vector3				m_location;

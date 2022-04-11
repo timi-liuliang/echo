@@ -46,7 +46,7 @@ namespace Echo
 		void decrRendertargetSize(const ui32 size) { m_rendertargetSize -= size; }
         
         // draw calls
-        void incrDrawCallTimes(ui32 _times) { m_drawCallTimes += _times; }
+        void setDrawCalls(ui32 _times) { m_drawCallTimes = _times; }
         ui32 getDrawCalls() const { return m_drawCallTimes; }
         
         // get current time
