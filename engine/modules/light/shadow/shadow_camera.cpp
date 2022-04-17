@@ -1,9 +1,9 @@
-#include "camera_shadow.h"
+#include "shadow_camera.h"
 #include "engine/core/main/Engine.h"
 
 namespace Echo
 {
-	CameraShadow::CameraShadow()
+	ShadowCamera::ShadowCamera()
 		: m_enable(true)
 		, m_Box(AABB::ZERO)
 		, m_CalcBox(AABB::ZERO)
@@ -12,12 +12,12 @@ namespace Echo
 		m_dir = Vector3::ZERO;
 	}
 
-	CameraShadow::~CameraShadow()
+	ShadowCamera::~ShadowCamera()
 	{
 
 	}
 
-	void CameraShadow::update(const AABB* visibleActorsAABB)
+	void ShadowCamera::update(const AABB* visibleActorsAABB)
 	{
 		m_enable = visibleActorsAABB->isValid();
 		m_Box = *visibleActorsAABB;
@@ -66,7 +66,7 @@ namespace Echo
 		}
 	}
 
-	void CameraShadow::calcOrthoRH(Matrix4& oOrth, const AABB& box, const Matrix4& viewMat)
+	void ShadowCamera::calcOrthoRH(Matrix4& oOrth, const AABB& box, const Matrix4& viewMat)
 	{
 		AABB orthAABB;
 		for (int i = AABB::CORNER_NLT; i < AABB::CORNER_FRT; i++)
@@ -82,7 +82,7 @@ namespace Echo
 		Matrix4::OrthoRH(oOrth, dx, dy, orthAABB.vMin.z, orthAABB.vMax.z);
 	}
 
-	void CameraShadow::setLightDir(const Vector3& dir)
+	void ShadowCamera::setLightDir(const Vector3& dir)
 	{
 		m_dir = dir;
 	}

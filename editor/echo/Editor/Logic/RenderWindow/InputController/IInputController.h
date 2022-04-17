@@ -67,7 +67,7 @@ namespace Studio
 		virtual void onSizeCamera(unsigned int width, unsigned int height) = 0;
 
 		// 相机自适应
-		virtual void onAdaptCamera() = 0; 
+		virtual void onAdaptCamera() {}
 
 		// on focuse node
 		virtual void onFocusNode(Echo::Node* node)=0;

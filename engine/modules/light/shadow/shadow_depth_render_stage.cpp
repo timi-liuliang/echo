@@ -26,6 +26,8 @@ namespace Echo
 
 	void ShadowDepthRenderStage::render()
 	{
+
+
 		RenderStage::render();
 	}
 }

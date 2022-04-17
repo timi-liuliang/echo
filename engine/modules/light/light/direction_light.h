@@ -1,6 +1,7 @@
 #pragma once
 
 #include "light.h"
+#include "../shadow/shadow_camera.h"
 
 namespace Echo
 {
@@ -13,6 +14,6 @@ namespace Echo
 		virtual ~DirectionLight();
 
 	protected:
-
+		ShadowCamera*		m_shadowCamera = nullptr;
 	};
 }

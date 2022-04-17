@@ -39,7 +39,6 @@ namespace Studio
 
 		// on size
 		virtual void onSizeCamera(unsigned int width, unsigned int height) override;
-		//virtual void onAdaptCamera() override;
 
 		// zoom
 		virtual void CameraZoom(const Echo::AABB& box, float scale);
