@@ -3,6 +3,7 @@
 namespace Echo
 {
 	DirectionLight::DirectionLight()
+		: Light(Light::Direction)
 	{
 
 	}

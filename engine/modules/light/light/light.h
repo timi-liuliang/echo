@@ -12,6 +12,7 @@ namespace Echo
 		// Type
 		enum Type
 		{
+			Unknow = 0,
 			Direction = 1 << 0,
 			Point = 1 << 1,
 			Spot = 1 << 2,
@@ -20,6 +21,10 @@ namespace Echo
 	public:
         virtual ~Light();
 		Light();
+		Light(Type type);
+
+		// Is type
+		bool isType(Type lightType) const { return m_lightType== lightType; }
 
 		// 2d
 		bool is2d() const { return m_2d; }
@@ -34,6 +39,7 @@ namespace Echo
 		virtual void updateInternal(float elapsedTime) override;
 
 	protected:
+		Type		m_lightType = Unknow;
 		bool		m_2d = false;
 		i32			m_bvhNodeId = -1;
 		class Bvh*	m_bvh = nullptr;

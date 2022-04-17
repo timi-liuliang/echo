@@ -1,15 +1,33 @@
 #include "light.h"
+#include "engine/core/log/Log.h"
 
 namespace Echo
 {
+	static std::unordered_map<i32, Light*> g_lights;
+
 	Light::Light()
 	{
+		g_lights[m_id] = this;
+	}
 
+	Light::Light(Type type)
+		: Node()
+		, m_lightType(type)
+	{
+		g_lights[m_id] = this;
 	}
 
 	Light::~Light()
 	{
-
+		auto it = g_lights.find(m_id);
+		if (it != g_lights.end())
+		{
+			g_lights.erase(it);
+		}
+		else
+		{
+			EchoLogError("Light isn't exist. destruct failed.");
+		}
 	}
 
 	void Light::bindMethods()
@@ -27,6 +45,15 @@ namespace Echo
 
 	vector<Light*>::type Light::gatherLights(i32 types)
 	{
-		return vector<Light*>::type();
+		vector<Light*>::type result;
+		for (auto it : g_lights)
+		{
+			if (it.second->isType(Type::Direction))
+			{
+				result.emplace_back(it.second);
+			}
+		}
+
+		return result;
 	}
 }
