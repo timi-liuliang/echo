@@ -1,4 +1,5 @@
 #include "shadow_depth_render_stage.h"
+#include "../light/light.h"
 
 namespace Echo
 {
@@ -26,8 +27,10 @@ namespace Echo
 
 	void ShadowDepthRenderStage::render()
 	{
+		vector<Light*>::type dirLights = Light::gatherLights(Light::Type::Direction);
+		for (Light* light : dirLights)
+		{
 
-
-		RenderStage::render();
+		}
 	}
 }

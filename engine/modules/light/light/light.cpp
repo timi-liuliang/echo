@@ -19,4 +19,14 @@ namespace Echo
 
 		CLASS_REGISTER_PROPERTY(Light, "Is2D", Variant::Type::Bool, is2d, set2d);
 	}
+
+	void Light::updateInternal(float elapsedTime)
+	{
+		Node::updateInternal(elapsedTime);
+	}
+
+	vector<Light*>::type Light::gatherLights(i32 types)
+	{
+		return vector<Light*>::type();
+	}
 }
