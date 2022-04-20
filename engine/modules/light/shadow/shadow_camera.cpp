@@ -4,12 +4,7 @@
 namespace Echo
 {
 	ShadowCamera::ShadowCamera()
-		: m_enable(true)
-		, m_Box(AABB::ZERO)
-		, m_CalcBox(AABB::ZERO)
 	{
-		m_viewProj = (Matrix4::IDENTITY);
-		m_dir = Vector3::ZERO;
 	}
 
 	ShadowCamera::~ShadowCamera()
@@ -19,18 +14,17 @@ namespace Echo
 
 	void ShadowCamera::update(const AABB* visibleActorsAABB)
 	{
-		m_enable = visibleActorsAABB->isValid();
-		m_Box = *visibleActorsAABB;
+		m_visibleActorsAABB = *visibleActorsAABB;
 
 		if (visibleActorsAABB && visibleActorsAABB->isValid())
 		{
-			const Vector3 cameraDir = /*m_dir == Vector3::ZERO ? -EchoSceneManager->getMainLightDir() :*/ m_dir;
+			const Vector3 cameraDir = /*m_dir == Vector3::ZERO ? -EchoSceneManager->getMainLightDir() :*/ m_forward;
 
 			float	halfLen = visibleActorsAABB->getDY() * 0.5f / Echo::Math::Abs(cameraDir.y) + 0.5f;
-			Vector3 eyePos = visibleActorsAABB->getCenter() - cameraDir * halfLen;
+			m_position = visibleActorsAABB->getCenter() - cameraDir * halfLen;
 
 			Matrix4 viewMat;
-			Matrix4::LookAtRH(viewMat, eyePos, eyePos + cameraDir, Vector3::UNIT_Y);
+			Matrix4::LookAtRH(viewMat, m_position, m_position + cameraDir, Vector3::UNIT_Y);
 
 			Matrix4 orthMat;
 			calcOrthoRH(orthMat, *visibleActorsAABB, viewMat);
@@ -40,29 +34,13 @@ namespace Echo
 
 			Vector3 zAxis = -cameraDir;
 			zAxis.normalize();
-			Vector3 _right;
-			Vector3 vUp = Vector3::UNIT_Y;
-			Vector3::Cross(_right, vUp, zAxis);
-			_right.normalize();
-			Vector3 vNearCenter = eyePos;
-			Vector3 vFarCenter = eyePos - zAxis * (visibleActorsAABB->getDZ() + 40.f);
-			float halfW = visibleActorsAABB->getDX() * 0.5f;
-			float halfH = visibleActorsAABB->getDY() * 0.5f;
-			Vector3 corner[8];
-			corner[0] = vNearCenter - _right * halfW + vUp * halfH;
-			corner[1] = vNearCenter + _right * halfW - vUp * halfH;
-			corner[2] = vNearCenter - _right * halfW - vUp * halfH;
-			corner[3] = vNearCenter + _right * halfW + vUp * halfH;
-			corner[4] = vFarCenter - _right * halfW + vUp * halfH;
-			corner[5] = vFarCenter + _right * halfW - vUp * halfH;
-			corner[6] = vFarCenter - _right * halfW - vUp * halfH;
-			corner[7] = vFarCenter + _right * halfW + vUp * halfH;
 
-			m_CalcBox.reset();
-			for (ui32 i = 0; i < 8; ++i)
-			{
-				m_CalcBox.addPoint(corner[i]);
-			}
+			m_up = Vector3::UNIT_Y;
+			Vector3::Cross(m_right, m_up, zAxis);
+			m_right.normalize();
+
+			m_frustum.setOrtho(m_width, m_height, m_near, m_far);
+			m_frustum.build(m_position, m_forward, m_up);
 		}
 	}
 
@@ -76,14 +54,16 @@ namespace Echo
 
 		orthAABB.vMax.z += 40.f;
 
-		float dx = orthAABB.getDX();
-		float dy = orthAABB.getDY();
+		m_width = orthAABB.getDX();
+		m_height = orthAABB.getDY();
+		m_near = orthAABB.vMin.z;
+		m_far = orthAABB.vMax.z;
 
-		Matrix4::OrthoRH(oOrth, dx, dy, orthAABB.vMin.z, orthAABB.vMax.z);
+		Matrix4::OrthoRH(oOrth, m_width, m_height, m_near, m_far);
 	}
 
-	void ShadowCamera::setLightDir(const Vector3& dir)
+	void ShadowCamera::setDirection(const Vector3& dir)
 	{
-		m_dir = dir;
+		m_forward = dir;
 	}
 }

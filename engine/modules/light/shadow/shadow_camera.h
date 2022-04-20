@@ -2,6 +2,7 @@
 
 #include <engine/core/math/Math.h>
 #include "engine/core/geom/AABB.h"
+#include "engine/core/geom/Frustum.h"
 
 namespace Echo
 {
@@ -11,33 +12,37 @@ namespace Echo
 		ShadowCamera();
 		~ShadowCamera();
 
-
+		// Update
 		void update(const AABB* visibleActorsAABB);
 
-		void setLightDir(const Vector3& dir);
+		// Set direction
+		void setDirection(const Vector3& dir);
 
-
+		// View|ViewProj Matrix
 		const Matrix4& getViewProjMatrix() const { return m_viewProj; }
-
 		const Matrix4& getViewMatrix() const { return m_view; }
 
+		// Visible actors's aabb
+		AABB& getVisibleActorsAABB() { return m_visibleActorsAABB; }
 
-		bool isEnable() { return m_enable; }
-
-
-		AABB& getBox() { return m_Box; }
-
-		const AABB& getCalcBox() { return m_CalcBox; }
+		// Get frustum
+		Frustum* getFrustum() { return &m_frustum; }
 
 	private:
 		void calcOrthoRH(Matrix4& oOrth, const AABB& box, const Matrix4& viewMat);
 
 	private:
-		bool		m_enable;
-		Matrix4		m_viewProj;
+		float		m_width;
+		float		m_height;
+		float		m_near;
+		float		m_far;
+		Vector3		m_position;
+		Vector3     m_forward = -Vector3::UNIT_Z;
+		Vector3		m_up;
+		Vector3		m_right;
+		Matrix4		m_viewProj = Matrix4::IDENTITY;
 		Matrix4		m_view;
-		Vector3     m_dir;
-		AABB 		m_Box;
-		AABB		m_CalcBox;
+		AABB 		m_visibleActorsAABB;
+		Frustum		m_frustum;
 	};
 }

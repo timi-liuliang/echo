@@ -1,7 +1,7 @@
 #pragma once
 
 #include "light.h"
-#include "../shadow/shadow_camera.h"
+#include "modules/light/shadow/shadow_camera.h"
 
 namespace Echo
 {
@@ -13,7 +13,22 @@ namespace Echo
 		DirectionLight();
 		virtual ~DirectionLight();
 
+		// Cast shadow
+		bool isCastShadow() const { return m_castShadow; }
+		void setCastShadow(bool castShadow);
+
+		// Direction
+		const Vector3 getDirection() const;
+
+		// Get frustum
+		Frustum* getFrustum();
+
 	protected:
+		// update self
+		virtual void updateInternal(float elapsedTime) override;
+
+	protected:
+		bool				m_castShadow = true;
 		ShadowCamera*		m_shadowCamera = nullptr;
 	};
 }

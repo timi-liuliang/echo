@@ -35,10 +35,6 @@ namespace Echo
 		static vector<Light*>::type gatherLights(i32 types);
 
 	protected:
-		// update self
-		virtual void updateInternal(float elapsedTime) override;
-
-	protected:
 		Type		m_lightType = Unknow;
 		bool		m_2d = false;
 		i32			m_bvhNodeId = -1;
