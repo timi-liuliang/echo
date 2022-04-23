@@ -1,19 +1,14 @@
 #include "shadow_depth_render_stage.h"
 #include "core/render/base/renderer.h"
 #include "modules/light/light/direction_light.h"
+#include "engine/core/main/Engine.h"
 
 namespace Echo
 {
 	ShadowDepthRenderStage::ShadowDepthRenderStage()
 		: RenderStage()
 	{
-		// Add default render queue
-		Echo::IRenderQueue* renderQueue = EchoNew(RenderQueue);
-		if (renderQueue)
-		{
-			renderQueue->setName("Shadow Depth");
-			addRenderQueue(renderQueue);
-		}
+
 	}
 
 	ShadowDepthRenderStage::~ShadowDepthRenderStage()
@@ -28,22 +23,42 @@ namespace Echo
 
 	void ShadowDepthRenderStage::render()
 	{
-		vector<Light*>::type dirLights = Light::gatherLights(Light::Type::Direction);
-		for (Light* light : dirLights)
-		{
-			DirectionLight* dirLight = ECHO_DOWN_CAST<DirectionLight*>(light);
-			Frustum*		frustum  = dirLight->getFrustum();
+		if (!m_enable)				return;
+		if (!m_frameBuffer)			return;
+		if (IsGame && m_editorOnly) return;
 
-			if (frustum)
+		if (m_frameBuffer->begin())
+		{
+			onRenderBegin();
 			{
-				vector<RenderProxy*>::type visibleRenderProxies3D = Renderer::instance()->gatherRenderProxies(RenderProxy::RenderType3D, *frustum);
-				if (!visibleRenderProxies3D.empty())
+				vector<Light*>::type dirLights = Light::gatherLights(Light::Type::Direction);
+				for (Light* light : dirLights)
 				{
-					int a = 10;
+					DirectionLight* dirLight = ECHO_DOWN_CAST<DirectionLight*>(light);
+					Frustum* frustum = dirLight->getFrustum();
+
+					if (frustum)
+					{
+						vector<RenderProxy*>::type visibleRenderProxies3D = Renderer::instance()->gatherRenderProxies(RenderProxy::RenderType3D, *frustum);
+						for (RenderProxy* renderproxy : visibleRenderProxies3D)
+						{
+							std::unordered_map<i32, RenderProxy*>::const_iterator it = m_shadowDepthRenderProxiers.find(renderproxy->getIdentifier());
+							if (it != m_shadowDepthRenderProxiers.end())
+							{
+								RenderProxy* shadowDepthRenderProxy = it->second;
+								Renderer::instance()->draw(shadowDepthRenderProxy, m_frameBuffer);
+							}
+							else
+							{
+
+							}
+						}
+					}
 				}
 			}
-		}
+			onRenderEnd();
 
-		RenderStage::render();
+			m_frameBuffer->end();
+		}
 	}
 }

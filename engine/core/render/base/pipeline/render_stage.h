@@ -49,7 +49,7 @@ namespace Echo
 		vector<IRenderQueue*>::type& getRenderQueues() { return m_renderQueues; }
 
 		// add
-		void addRenderQueue(IRenderQueue* queue, ui32 position=-1);
+		virtual void addRenderQueue(IRenderQueue* queue, ui32 position=-1);
 
 		// delete|remove
 		void removeRenderQueue(IRenderQueue* renderQueue);
