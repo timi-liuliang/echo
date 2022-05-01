@@ -264,12 +264,10 @@ namespace Echo
 				std::map<ui32, RenderProxy*>::iterator it = m_renderProxies.find(renderable->getIdentifier());
 				if(it != m_renderProxies.end())
                 {
+					if (renderable->m_bvh)
+						renderable->m_bvh->destroyProxy(renderable->m_bvhNodeId);
+
                     m_renderProxies.erase(it);
-                    
-					if (it->second->m_bvh)
-					{
-						it->second->m_bvh->destroyProxy(it->second->m_bvhNodeId);
-					}
 
                     EchoSafeDelete(renderable, RenderProxy);
                     renderables[i] = nullptr;

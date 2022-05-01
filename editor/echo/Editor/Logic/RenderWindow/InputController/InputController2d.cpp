@@ -25,7 +25,7 @@ namespace Studio
 		, m_keyShiftDown(false)
         , m_cameraScale(1.f)
 		, m_cameraMoveDir(Echo::Vector3::UNIT_X)
-		, m_cameraPositon(Echo::Vector3(0, 0, 257))
+		, m_cameraPositon(Echo::Vector3(0, 0, 0))
 	{
 		InitializeCameraSettings();
 	}
