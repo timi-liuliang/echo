@@ -9,8 +9,7 @@
 
 namespace Echo
 {
-	RenderProxy::RenderProxy(int identifier)
-		: m_identifier(identifier)
+	RenderProxy::RenderProxy()
 	{
 	}
 
@@ -30,7 +29,6 @@ namespace Echo
 
 	RenderProxy* RenderProxy::create(MeshPtr mesh, Material* material, Render* node, bool raytracing)
 	{
-		// bind shader param
 		RenderProxy* renderProxy = Renderer::instance()->createRenderProxy();
 		renderProxy->setRaytracing(raytracing);
 		renderProxy->setMaterial(material);
@@ -51,7 +49,7 @@ namespace Echo
 	{
 		if (m_mesh && m_mesh->isValid())
 		{
-			pipeline->addRenderable(m_material->getRenderStage(), getIdentifier());
+			pipeline->addRenderable(m_material->getRenderStage(), getId());
 		}
 	}
 }

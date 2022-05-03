@@ -9,7 +9,7 @@ namespace Echo
 	class VKRenderProxy : public RenderProxy
 	{
 	public:
-		VKRenderProxy(int identifier);
+		VKRenderProxy();
         virtual ~VKRenderProxy() {}
 
         // bind shader uniforms

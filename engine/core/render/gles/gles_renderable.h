@@ -33,7 +33,7 @@ namespace Echo
 		};
 
 	public:
-		GLESRenderable(int identifier);
+		GLESRenderable();
 		~GLESRenderable();
 
 		// bind geometry data

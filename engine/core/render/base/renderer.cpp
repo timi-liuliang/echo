@@ -261,7 +261,7 @@ namespace Echo
 			RenderProxy* renderable = renderables[i];
 			if (renderable)
 			{
-				std::map<ui32, RenderProxy*>::iterator it = m_renderProxies.find(renderable->getIdentifier());
+				std::map<ui32, RenderProxy*>::iterator it = m_renderProxies.find(renderable->getId());
 				if(it != m_renderProxies.end())
                 {
 					if (renderable->m_bvh)
@@ -309,7 +309,7 @@ namespace Echo
 			{
 				worldAABB = worldAABB.transform(renderNode->getWorldMatrix());
 				renderProxy->m_bvh = bvh;
-				renderProxy->m_bvhNodeId = bvh->createProxy(worldAABB, renderProxy->getIdentifier());
+				renderProxy->m_bvhNodeId = bvh->createProxy(worldAABB, renderProxy->getId());
 			}
 		}
 		else

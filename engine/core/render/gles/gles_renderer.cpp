@@ -9,6 +9,7 @@
 #include <engine/core/log/Log.h>
 #include <engine/core/util/Exception.h>
 #include "engine/core/render/base/mesh/mesh.h"
+#include "engine/core/main/frame_state.h"
 #include "base/pipeline/render_pipeline.h"
 #include "gles_gpu_buffer.h"
 #include "base/misc/view_port.h"
@@ -280,6 +281,8 @@ namespace Echo
 
 	void GLESRenderer::draw(RenderProxy* renderable, FrameBufferPtr& frameBuffer)
 	{
+		FrameState::instance()->increaseDrawCalls();
+
 #ifdef ECHO_EDITOR_MODE
 		if (drawWireframe(renderable))
 			return;
@@ -638,9 +641,8 @@ namespace Echo
 
 	RenderProxy* GLESRenderer::createRenderProxy()
 	{
-        static ui32 id = 0; id++;
-		RenderProxy* proxy = EchoNew(GLESRenderable(id));
-		m_renderProxies[id] = proxy;
+		RenderProxy* proxy = EchoNew(GLESRenderable);
+		m_renderProxies[proxy->getId()] = proxy;
 
 		return proxy;
 	}

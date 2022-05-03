@@ -94,9 +94,8 @@ namespace Echo
 
     RenderProxy* VKRenderer::createRenderProxy()
     {
-        static ui32 id = 0; id++;
-        RenderProxy* renderable = EchoNew(VKRenderProxy(id));
-        m_renderProxies[id] = renderable;
+        RenderProxy* renderable = EchoNew(VKRenderProxy);
+        m_renderProxies[renderable->getId()] = renderable;
 
         return renderable;
     }

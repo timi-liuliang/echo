@@ -8,8 +8,8 @@
 
 namespace Echo
 {
-    VKRenderProxy::VKRenderProxy(int identifier)
-        : RenderProxy( identifier)
+    VKRenderProxy::VKRenderProxy()
+        : RenderProxy()
     {
     }
 

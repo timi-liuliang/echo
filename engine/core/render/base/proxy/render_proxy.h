@@ -28,9 +28,6 @@ namespace Echo
 		};
 
 	public:
-		// Identifier
-		ui32 getIdentifier() const { return m_identifier; }
-
 		// Create method
 		static RenderProxy* create(MeshPtr mesh, Material* matInst, Render* node, bool raytracing);
 
@@ -65,11 +62,10 @@ namespace Echo
 		void submitToRenderQueue(class RenderPipeline* pipeline);
 
 	protected:
-		RenderProxy(int identifier);
+		RenderProxy();
 		virtual ~RenderProxy();
 
 	protected:
-		ui32			m_identifier;
 		Render*			m_node = nullptr;
 		i32				m_bvhNodeId = -1;
 		class Bvh*		m_bvh = nullptr;

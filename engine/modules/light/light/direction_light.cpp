@@ -55,7 +55,8 @@ namespace Echo
 
 		if (m_shadowCamera)
 		{
-			AABB aabb = NodeTree::instance()->get3dCamera()->getFrustum().getAABB();
+			Vector3 position = NodeTree::instance()->get3dCamera()->getPosition();
+			AABB aabb(position- Vector3(20,20,20), position+ Vector3(20, 20, 20));// = NodeTree::instance()->get3dCamera()->getFrustum().getAABB();
 
 			Vector3 dir = getDirection();
 			m_shadowCamera->setDirection(dir);

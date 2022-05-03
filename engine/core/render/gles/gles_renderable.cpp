@@ -15,8 +15,8 @@ namespace Echo
 {
 	extern GLESRenderer* g_renderer;
 
-	GLESRenderable::GLESRenderable(int identifier)
-		: RenderProxy(identifier)
+	GLESRenderable::GLESRenderable()
+		: RenderProxy()
 	{
 	}
 
