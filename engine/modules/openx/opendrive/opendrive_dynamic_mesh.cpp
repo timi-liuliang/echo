@@ -87,6 +87,7 @@ namespace Echo
 
 			// create render able
 			m_renderable = RenderProxy::create(m_mesh, m_material, this, true);
+			m_renderable->setCastShadow(true);
 
 			m_isRenderableDirty = false;
 		}

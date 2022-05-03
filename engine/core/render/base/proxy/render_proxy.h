@@ -47,12 +47,12 @@ namespace Echo
 		Render* getNode() { return m_node; }
 
 		// Is a part of raytracing
-		bool IsRaytracing() const { return m_raytracing; }
+		bool isRaytracing() const { return m_raytracing; }
 		void setRaytracing(bool raytracing) { m_raytracing = raytracing; }
 
 		// Cast shadow
-		bool IsCastShadow() const { return m_castShadow; }
-		void SetCastShadow(bool castShadow) { m_castShadow = castShadow; }
+		bool isCastShadow() const { return m_castShadow; }
+		void setCastShadow(bool castShadow) { m_castShadow = castShadow; }
 
 		// Is enable submit to render queues
 		bool isSubmitToRenderQueue() const { return m_isSubmitToRenderQueue; }

@@ -119,16 +119,19 @@ namespace Echo
 						vector<RenderProxy*>::type visibleRenderProxies3D = Renderer::instance()->gatherRenderProxies(RenderProxy::RenderType3D, *frustum);
 						for (RenderProxy* renderproxy : visibleRenderProxies3D)
 						{
-							std::unordered_map<i32, RenderProxy*>::const_iterator it = m_shadowDepthRenderProxiers.find(renderproxy->getId());
-							if (it != m_shadowDepthRenderProxiers.end())
+							if (renderproxy->isCastShadow())
 							{
-								RenderProxy* shadowDepthRenderProxy = it->second;
-								Renderer::instance()->draw(shadowDepthRenderProxy, m_frameBuffer);
-							}
-							else
-							{
-								RenderProxy* shadowDepthRenderProxy = RenderProxy::create(renderproxy->getMesh(), m_shadowDepthMaterial, renderproxy->getNode(), false);
-								m_shadowDepthRenderProxiers[renderproxy->getId()] = shadowDepthRenderProxy;
+								std::unordered_map<i32, RenderProxy*>::const_iterator it = m_shadowDepthRenderProxiers.find(renderproxy->getId());
+								if (it != m_shadowDepthRenderProxiers.end())
+								{
+									RenderProxy* shadowDepthRenderProxy = it->second;
+									Renderer::instance()->draw(shadowDepthRenderProxy, m_frameBuffer);
+								}
+								else
+								{
+									RenderProxy* shadowDepthRenderProxy = RenderProxy::create(renderproxy->getMesh(), m_shadowDepthMaterial, renderproxy->getNode(), false);
+									m_shadowDepthRenderProxiers[renderproxy->getId()] = shadowDepthRenderProxy;
+								}
 							}
 						}
 					}
