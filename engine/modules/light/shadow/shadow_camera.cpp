@@ -66,4 +66,20 @@ namespace Echo
 	{
 		m_forward = dir;
 	}
+
+	void* ShadowCamera::getGlobalUniformValue(const String& name)
+	{
+		if (name == "u_ViewProjMatrix")
+			return (void*)(&getViewProjMatrix());
+		else if (name == "u_CameraPosition")
+			return (void*)(&m_position);
+		else if (name == "u_CameraDirection")
+			return (void*)(&m_forward);
+		else if (name == "u_CameraNear")
+			return (void*)(&m_near);
+		else if (name == "u_CameraFar")
+			return (void*)(&m_far);
+
+		return nullptr;
+	}
 }

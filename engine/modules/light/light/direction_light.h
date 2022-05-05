@@ -20,6 +20,9 @@ namespace Echo
 		// Direction
 		const Vector3 getDirection() const;
 
+		// Shadow camera
+		ShadowCamera* getShadowCamera() { return m_shadowCamera; }
+
 		// Get frustum
 		Frustum* getFrustum();
 

@@ -125,6 +125,7 @@ namespace Echo
 								if (it != m_shadowDepthRenderProxiers.end())
 								{
 									RenderProxy* shadowDepthRenderProxy = it->second;
+									shadowDepthRenderProxy->setCamera(dirLight->getShadowCamera());
 									Renderer::instance()->draw(shadowDepthRenderProxy, m_frameBuffer);
 								}
 								else

@@ -3,6 +3,7 @@
 #include "node.h"
 #include "engine/core/gizmos/gizmos.h"
 #include "engine/core/camera/camera.h"
+#include "engine/core/render/base/scene/render_scene.h"
 
 namespace Echo
 {

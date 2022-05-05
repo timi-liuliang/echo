@@ -203,4 +203,20 @@ namespace Echo
 			m_frustum.build(m_position, m_forward, m_up);
 		}
 	}
+
+	void* Camera::getGlobalUniformValue(const String& name)
+	{
+		if (name == "u_ViewProjMatrix")
+			return (void*)(&getViewProjMatrix());
+		else if (name == "u_CameraPosition")
+			return (void*)(&getPosition());
+		else if (name == "u_CameraDirection")
+			return (void*)(&getForward());
+		else if (name == "u_CameraNear")
+			return (void*)(&getNear());
+		else if (name == "u_CameraFar")
+			return (void*)(&getFar());
+
+		return nullptr;
+	}
 }

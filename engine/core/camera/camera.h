@@ -3,12 +3,12 @@
 #include "engine/core/math/Quaternion.h"
 #include "engine/core/geom/Frustum.h"
 #include "engine/core/util/Array.hpp"
-#include "engine/core/render/base/scene/render_scene.h"
+#include "engine/core/render/base/camera/render_camera.h"
 
 namespace Echo
 {
 	class Ray;
-	class Camera
+	class Camera : public RenderCamera
 	{
 	public:
 		enum class ProjMode
@@ -79,6 +79,9 @@ namespace Echo
 		const Matrix4& getViewMatrix() const { return m_matView; }
 		const Matrix4& getProjMatrix() const { return m_matProj; }
 		const Matrix4& getViewProjMatrix() const { return m_matVP; }
+
+		// Global uniform value
+		virtual void* getGlobalUniformValue(const String& name) override;
 
 	protected:
 		// Update matrix

@@ -3,10 +3,11 @@
 #include <engine/core/math/Math.h>
 #include "engine/core/geom/AABB.h"
 #include "engine/core/geom/Frustum.h"
+#include "engine/core/render/base/camera/render_camera.h"
 
 namespace Echo
 {
-	class ShadowCamera
+	class ShadowCamera : public RenderCamera
 	{
 	public:
 		ShadowCamera();
@@ -27,6 +28,9 @@ namespace Echo
 
 		// Get frustum
 		Frustum* getFrustum() { return &m_frustum; }
+
+		// Global uniform value
+		virtual void* getGlobalUniformValue(const String& name) override;
 
 	private:
 		void calcOrthoRH(Matrix4& oOrth, const AABB& box, const Matrix4& viewMat);
