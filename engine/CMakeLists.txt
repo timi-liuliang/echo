@@ -32,7 +32,6 @@ INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/google)
 INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/google/flatbuffers/include)
 
 IF(${ECHO_PLATFORM_WINDOWS})
-    INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/engine/core/render/gles)
 	INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/openal-soft/include)
     INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/vulkan/vulkan-headers/include)
     INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/vulkan/vulkan-loader/loader/generated)
@@ -75,6 +74,7 @@ ENDIF(ECHO_EDITOR_MODE)
 
 # Remove render library
 IF(${ECHO_PLATFORM_WINDOWS})
+    EXCLUDE_FILES(ALL_FILES GLOB_RECURSE ${MODULE_PATH}/core/render/gles/*.*)
 	EXCLUDE_FILES(ALL_FILES GLOB_RECURSE ${MODULE_PATH}/core/render/metal/*.*)
 ELSEIF(${ECHO_PLATFORM_MAC})
     EXCLUDE_FILES(ALL_FILES GLOB_RECURSE ${MODULE_PATH}/core/render/gles/*.*)
