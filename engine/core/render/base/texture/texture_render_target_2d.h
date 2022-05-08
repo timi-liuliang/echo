@@ -26,7 +26,7 @@ namespace Echo
 		virtual void setHeight(ui32 height) override;
 
 		// set format
-		const StringOption& getPixelFormatName() { return m_pixelFormatName; }
+		const StringOption getPixelFormatName();
 		void setPixelFormatName(const StringOption& option);
 
 		// color
@@ -47,7 +47,6 @@ namespace Echo
 
 	protected:
 		Color			m_clearColor	  = Color::BLACK;
-		StringOption    m_pixelFormatName = StringOption("PF_RGBA8_UNORM", {"PF_RGBA8_UNORM", "PF_RGBA16_FLOAT" , "PF_D24_UNORM_S8_UINT"});
 	};
 	typedef ResRef<TextureRenderTarget2D> TextureRenderTarget2DPtr;
 }

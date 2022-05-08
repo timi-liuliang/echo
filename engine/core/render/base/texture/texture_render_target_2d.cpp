@@ -55,14 +55,22 @@ namespace Echo
 		}
 	}
 
+	const StringOption TextureRenderTarget2D::getPixelFormatName()
+	{
+		StringOption result;
+		result.fromEnum(m_pixFmt);
+
+		return result;
+	}
+
 	void TextureRenderTarget2D::setPixelFormatName(const StringOption& option)
 	{
-		if (m_pixelFormatName.getValue() != option.getValue() && m_pixelFormatName.setValue(option.getValue()))
+		PixelFormat format = option.toEnum(PixelFormat::PF_RGBA8_UNORM);
+		if (m_pixFmt != format)
 		{
 			unload();
+			m_pixFmt = format;
 		}
-
-		m_pixFmt = magic_enum::enum_cast<PixelFormat>(m_pixelFormatName.getValue()).value_or(PixelFormat::PF_UNKNOWN);
 	}
 
 	void TextureRenderTarget2D::setClearColor(const Color& color)

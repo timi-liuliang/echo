@@ -87,7 +87,7 @@ namespace Echo
 
     void VKFramebufferOffscreen::createVkRenderPass()
     {
-        //Assert(false);
+        assert(false);
     }
 
     VKFramebufferWindow::VKFramebufferWindow()
