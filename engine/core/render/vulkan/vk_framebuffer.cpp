@@ -3,6 +3,7 @@
 #include "vk_framebuffer.h"
 #include "vk_renderer.h"
 #include "vk_mapping.h"
+#include "vk_texture.h"
 
 namespace Echo
 {
@@ -62,32 +63,137 @@ namespace Echo
         m_vkViewportStateCreateInfo.pViewports = &m_vkViewport;
         m_vkViewportStateCreateInfo.scissorCount = 1;
         m_vkViewportStateCreateInfo.pScissors = &m_vkScissor;
+
+        createVkRenderPass();
+        createVkFramebuffers();
     }
 
     void VKFramebufferOffscreen::createVkFramebuffers()
     {
-        //VKRenderView* colorView = ECHO_DOWN_CAST<VKRenderView*>(m_views[ui8(Attachment::Color0)]);
-        //if (colorView)
-        //{
-        //    VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
-        //    VkImageView vkImageView = colorView->getVkImageView();
+        destroyVkFramebuffers();
 
-        //    VkFramebufferCreateInfo fbCreateInfo = {};
-        //    fbCreateInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-        //    fbCreateInfo.renderPass = m_vkRenderPass;
-        //    fbCreateInfo.attachmentCount = 1;
-        //    fbCreateInfo.pAttachments = &vkImageView;
-        //    fbCreateInfo.width = m_width;
-        //    fbCreateInfo.height = m_height;
-        //    fbCreateInfo.layers = 1;
+        VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
+        if(vkRenderer)
+        {
+            i32 width;
+            i32 height;
+            vector<VkImageView>::type vkImageViews;
 
-        //    VKDebug(vkCreateFramebuffer(vkRenderer->getVkDevice(), &fbCreateInfo, NULL, &m_vkFramebuffers));
-        //}
+            for (i32 i = i32(Attachment::ColorA); i <= i32(Attachment::DepthStencil); i++)
+            {
+                TextureRenderTarget2DPtr view = m_views[i];
+                if(view)
+                {
+                    VKTextureRender* vkTexture2D = dynamic_cast<VKTextureRender*>(view.ptr());
+                    vkImageViews.emplace_back(vkTexture2D->getVkImageView());
+
+                    width = view->getWidth();
+                    height = view->getHeight();
+                }
+            }
+
+            if(vkImageViews.size())
+            {
+                VkFramebufferCreateInfo fbCreateInfo = {};
+                fbCreateInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+                fbCreateInfo.renderPass = m_vkRenderPass;
+                fbCreateInfo.attachmentCount = vkImageViews.size();
+                fbCreateInfo.pAttachments = vkImageViews.data();
+                fbCreateInfo.width = width;
+                fbCreateInfo.height = height;
+                fbCreateInfo.layers = 1;
+
+                VKDebug(vkCreateFramebuffer(vkRenderer->getVkDevice(), &fbCreateInfo, NULL, m_vkFramebuffers.data()));
+            }
+        }
+    }
+
+    void VKFramebufferOffscreen::destroyVkFramebuffers()
+    {
+        for (VkFramebuffer frameBuffer : m_vkFramebuffers)
+            vkDestroyFramebuffer(VKRenderer::instance()->getVkDevice(), frameBuffer, nullptr);
+
+        m_vkFramebuffers.clear();
     }
 
     void VKFramebufferOffscreen::createVkRenderPass()
     {
-        assert(false);
+        destroyVkRenderPass();
+
+        if (!m_vkRenderPass)
+        {
+            vector<VkAttachmentReference>::type colorRefs;
+            vector<VkAttachmentReference>::type depthRefs;
+            vector<VkAttachmentDescription>::type attachDescs;
+
+            for (i32 i = i32(Attachment::ColorA); i <= i32(Attachment::DepthStencil); i++)
+            {
+                TextureRenderTarget2DPtr colorView = m_views[i];
+                if (colorView)
+                {
+                    VkAttachmentReference attachRef = {};
+                    attachRef.attachment = attachDescs.size();
+                    
+                    if (i != Attachment::DepthStencil)
+                    {
+                        attachRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+                        colorRefs.emplace_back(attachRef);
+                    }
+                    else
+                    {
+                        attachRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+                        depthRefs.emplace_back(attachRef);
+                    }
+
+                    VkAttachmentDescription  attachDesc;
+                    attachDesc.flags = 0;
+                    attachDesc.format = VKMapping::mapPixelFormat(colorView->getPixelFormat());
+                    attachDesc.samples = VK_SAMPLE_COUNT_1_BIT;
+                    attachDesc.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+                    attachDesc.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+                    attachDesc.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+                    attachDesc.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+                    attachDesc.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+                    attachDesc.finalLayout = (i==i32(Attachment::DepthStencil)) ? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL : VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+                    attachDescs.emplace_back(attachDesc);
+                }
+            }
+
+            // The pipelineBindPoint member is meant to indicate if this is a graphics or a compute subpass
+            VkSubpassDescription subpassDesc = {};
+            subpassDesc.flags = 0;
+            subpassDesc.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+            subpassDesc.inputAttachmentCount = 0;
+            subpassDesc.pInputAttachments = nullptr;
+            subpassDesc.colorAttachmentCount = colorRefs.size();
+            subpassDesc.pColorAttachments = colorRefs.data();
+            subpassDesc.pResolveAttachments = nullptr;
+            subpassDesc.pDepthStencilAttachment = depthRefs.data();
+            subpassDesc.preserveAttachmentCount = 0;
+            subpassDesc.pPreserveAttachments = nullptr;
+
+            VkSubpassDependency subpassDependency = {};
+            subpassDependency.srcSubpass = VK_SUBPASS_EXTERNAL;
+            subpassDependency.dstSubpass = 0;
+            subpassDependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+            subpassDependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+            subpassDependency.srcAccessMask = 0;
+            subpassDependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+            subpassDependency.dependencyFlags = 0;
+
+            VkRenderPassCreateInfo renderPassCreateInfo = {};
+            renderPassCreateInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+            renderPassCreateInfo.pNext = nullptr;
+            renderPassCreateInfo.flags = 0;
+            renderPassCreateInfo.attachmentCount = attachDescs.size();
+            renderPassCreateInfo.pAttachments = attachDescs.data();
+            renderPassCreateInfo.subpassCount = 1;
+            renderPassCreateInfo.pSubpasses = &subpassDesc;
+            renderPassCreateInfo.dependencyCount = 1;
+            renderPassCreateInfo.pDependencies = &subpassDependency;
+
+            VKDebug(vkCreateRenderPass(VKRenderer::instance()->getVkDevice(), &renderPassCreateInfo, nullptr, &m_vkRenderPass));
+        }
     }
 
     VKFramebufferWindow::VKFramebufferWindow()

@@ -45,6 +45,9 @@ namespace Echo
         vector<VkFramebuffer>::type         m_vkFramebuffers;
     };
 
+    /**
+     * Reference : https://github.com/SaschaWillems/Vulkan/blob/master/examples/offscreen/offscreen.cpp
+     */
     class VKFramebufferOffscreen : public FrameBufferOffScreen, public VKFramebuffer
     {
     public:
@@ -61,9 +64,13 @@ namespace Echo
     protected:
         // create vk frame buffer
         void createVkFramebuffers();
+        void destroyVkFramebuffers();
 
         // create render pass
         virtual void createVkRenderPass() override;
+
+    protected:
+        vector<VkCommandBuffer>::type   m_vkCommandBuffers;
     };
 
     class VKFramebufferWindow : public FrameBufferWindow, public VKFramebuffer
