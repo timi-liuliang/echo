@@ -35,11 +35,45 @@ namespace Echo
 
     bool VKFramebufferOffscreen::begin()
     {
-        return true;
+        VkCommandBufferBeginInfo commandBufferBeginInfo = {};
+        commandBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+        commandBufferBeginInfo.pNext = nullptr;
+        commandBufferBeginInfo.flags = 0;
+        commandBufferBeginInfo.pInheritanceInfo = nullptr;
+
+        if (VK_SUCCESS == vkBeginCommandBuffer(getVkCommandbuffer(), &commandBufferBeginInfo))
+        {
+            array<VkClearValue, 2> clearValues;
+            clearValues[0].color = { m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a };
+            clearValues[1].depthStencil = { m_clearDepth, m_clearStencil };
+
+            VkRenderPassBeginInfo renderPassBeginInfo = {};
+            renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+            renderPassBeginInfo.pNext = nullptr;
+            renderPassBeginInfo.renderPass = m_vkRenderPass;
+            renderPassBeginInfo.renderArea.offset.x = 0;
+            renderPassBeginInfo.renderArea.offset.y = 0;
+            renderPassBeginInfo.renderArea.extent.width = m_vkViewport.width;
+            renderPassBeginInfo.renderArea.extent.height = m_vkViewport.height;
+            renderPassBeginInfo.clearValueCount = clearValues.size();
+            renderPassBeginInfo.pClearValues = clearValues.data();
+            renderPassBeginInfo.framebuffer = getVkFramebuffer();
+
+            vkCmdBeginRenderPass(getVkCommandbuffer(), &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
+
+            return true;
+        }
+
+        return false;
     }
 
     bool VKFramebufferOffscreen::end()
     {
+        vkCmdEndRenderPass(getVkCommandbuffer());
+
+        // end command buffer before submit
+        VKDebug(vkEndCommandBuffer(getVkCommandbuffer()));
+
         return true;
     }
 
@@ -66,6 +100,7 @@ namespace Echo
 
         createVkRenderPass();
         createVkFramebuffers();
+        createVkCommandBuffers();
     }
 
     void VKFramebufferOffscreen::createVkFramebuffers()
@@ -194,6 +229,23 @@ namespace Echo
 
             VKDebug(vkCreateRenderPass(VKRenderer::instance()->getVkDevice(), &renderPassCreateInfo, nullptr, &m_vkRenderPass));
         }
+    }
+
+    void VKFramebufferOffscreen::createVkCommandBuffers()
+    {
+        destroyVkCommandBuffers();
+
+        m_vkCommandBuffers.resize(1);
+        for (size_t i = 0; i < m_vkCommandBuffers.size(); i++)
+        {
+            m_vkCommandBuffers[i] = VKRenderer::instance()->createVkCommandBuffer();
+        }
+    }
+
+    void VKFramebufferOffscreen::destroyVkCommandBuffers()
+    {
+        if (m_vkCommandBuffers.empty())
+            vkFreeCommandBuffers(VKRenderer::instance()->getVkDevice(), VKRenderer::instance()->getVkCommandPool(), m_vkCommandBuffers.size(), m_vkCommandBuffers.data());
     }
 
     VKFramebufferWindow::VKFramebufferWindow()

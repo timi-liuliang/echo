@@ -62,9 +62,17 @@ namespace Echo
         virtual void onSize(ui32 width, ui32 height) override;
 
     protected:
+        // get vk command buffer
+        virtual VkCommandBuffer getVkCommandbuffer() override { return m_vkCommandBuffers[0]; }
+
+    protected:
         // create vk frame buffer
         void createVkFramebuffers();
         void destroyVkFramebuffers();
+
+        // vk command buffer
+        void createVkCommandBuffers();
+        void destroyVkCommandBuffers();
 
         // create render pass
         virtual void createVkRenderPass() override;
