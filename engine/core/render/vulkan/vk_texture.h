@@ -14,7 +14,7 @@ namespace Echo
         virtual ~VKTexture();
 
 		// get vk image view
-		VkImageView getVkImageView() { return m_vkImageView; }
+		virtual VkImageView getVkImageView() { return m_vkImageView; }
 
         // get vk descriptor image info
         VkDescriptorImageInfo* getVkDescriptorImageInfo() { return m_vkDescriptorImageInfo.sampler ? &m_vkDescriptorImageInfo : nullptr; }
@@ -77,6 +77,13 @@ namespace Echo
     public:
         VKTextureRender(const String& name);
         virtual ~VKTextureRender();
+
+        // get vk image view
+        virtual VkImageView getVkImageView() override;
+
+    public:
+        // unload
+        virtual bool unload() override;
 
 		// update texture by rect
         virtual bool updateTexture2D(PixelFormat format, TexUsage usage, i32 width, i32 height, void* data, ui32 size) override;

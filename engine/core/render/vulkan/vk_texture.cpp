@@ -335,6 +335,23 @@ namespace Echo
 
     }
 
+	VkImageView VKTextureRender::getVkImageView()
+	{ 
+		if (!m_vkImageView)
+		{
+			updateTexture2D(m_pixFmt, Texture::TU_GPU_READ, m_width, m_height, nullptr, 0);
+		}
+
+		return m_vkImageView; 
+	}
+
+	bool VKTextureRender::unload()
+	{
+		
+
+		return true;
+	}
+
     bool VKTextureRender::updateTexture2D(PixelFormat format, TexUsage usage, i32 width, i32 height, void* data, ui32 size)
     {
         m_width = width;

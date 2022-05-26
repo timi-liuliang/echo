@@ -71,8 +71,19 @@ namespace Echo
     {
         vkCmdEndRenderPass(getVkCommandbuffer());
 
-        // end command buffer before submit
+        // End command buffer before submit
         VKDebug(vkEndCommandBuffer(getVkCommandbuffer()));
+
+        // Submit command buffer
+        VkSubmitInfo submitInfo = {};
+        submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+        submitInfo.commandBufferCount = 1;
+        submitInfo.pCommandBuffers = &m_vkCommandBuffers[0];
+
+        VKDebug(vkQueueSubmit(VKRenderer::instance()->getVkGraphicsQueue(), 1, &submitInfo, 0));
+
+        // Wait command buffer finished
+        VKDebug(vkQueueWaitIdle(VKRenderer::instance()->getVkGraphicsQueue()));
 
         return true;
     }
