@@ -15,7 +15,7 @@ namespace Echo
 	LogDefault::LogDefault(const String& name)
 		: LogOutput(name)
 		, m_bConsoleOutput(true)
-		, m_bVSOutput(true)
+		, m_outputToVisualStudio(true)
 		, m_bFileOutput(false)
 		, m_bTimeStamp(true)
 	{
@@ -54,7 +54,7 @@ namespace Echo
 		: LogOutput(config.logName)
 		, m_logFilename(config.logFilename)
 		, m_bConsoleOutput(config.bConsoleOutput)
-		, m_bVSOutput(config.bVSOutput)
+		, m_outputToVisualStudio(config.bVSOutput)
 		, m_bFileOutput(config.bFileOutput)
 		, m_bTimeStamp(config.bTimeStamp)
 		, m_path(config.path)
@@ -145,7 +145,7 @@ namespace Echo
 
 	void LogDefault::enableVSConsoleOutput(bool bEnable)
 	{
-		m_bVSOutput = bEnable;
+		m_outputToVisualStudio = bEnable;
 	}
 
 	void LogDefault::enableTimeStamp(bool bEnable)
@@ -229,11 +229,10 @@ namespace Echo
 
 #if defined(_WIN32) || defined(WIN32)
 		// Write time to vs console
-		if(m_bVSOutput)
+		if(m_outputToVisualStudio)
 		{
 			OutputDebugStringA(msgStr.c_str());
 		}
-
 
 		// (Release && Windows only)
 #ifndef ECHO_EDITOR_MODE

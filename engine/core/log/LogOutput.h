@@ -81,7 +81,7 @@ namespace Echo
 		String				m_logFilename;
 		OFStream			m_logStream;
 		bool				m_bConsoleOutput;
-		bool				m_bVSOutput;
+		bool				m_outputToVisualStudio;
 		bool				m_bFileOutput;
 		bool				m_bTimeStamp;
 		String				m_path;

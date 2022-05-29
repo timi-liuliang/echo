@@ -121,8 +121,6 @@ namespace Echo
         VKRenderer* vkRenderer = ECHO_DOWN_CAST<VKRenderer*>(Renderer::instance());
         if(vkRenderer)
         {
-            i32 width;
-            i32 height;
             vector<VkImageView>::type vkImageViews;
 
             for (i32 i = i32(Attachment::ColorA); i <= i32(Attachment::DepthStencil); i++)
@@ -132,12 +130,11 @@ namespace Echo
                 {
                     VKTextureRender* vkTexture2D = dynamic_cast<VKTextureRender*>(view.ptr());
                     vkImageViews.emplace_back(vkTexture2D->getVkImageView());
-
-                    width = view->getWidth();
-                    height = view->getHeight();
                 }
             }
 
+            m_vkFrameBufferCreateInfos.resize(1);
+            m_vkFramebuffers.resize(1);
             if(vkImageViews.size())
             {
                 VkFramebufferCreateInfo fbCreateInfo = {};
@@ -145,11 +142,12 @@ namespace Echo
                 fbCreateInfo.renderPass = m_vkRenderPass;
                 fbCreateInfo.attachmentCount = vkImageViews.size();
                 fbCreateInfo.pAttachments = vkImageViews.data();
-                fbCreateInfo.width = width;
-                fbCreateInfo.height = height;
+                fbCreateInfo.width = m_vkViewport.width;
+                fbCreateInfo.height = m_vkViewport.height;
                 fbCreateInfo.layers = 1;
+                m_vkFrameBufferCreateInfos[0] = fbCreateInfo;
 
-                VKDebug(vkCreateFramebuffer(vkRenderer->getVkDevice(), &fbCreateInfo, NULL, m_vkFramebuffers.data()));
+                VKDebug(vkCreateFramebuffer(vkRenderer->getVkDevice(), &fbCreateInfo, NULL, &m_vkFramebuffers[0]));
             }
         }
     }

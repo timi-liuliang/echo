@@ -37,12 +37,13 @@ namespace Echo
         virtual void destroyVkRenderPass();
 
     protected:
-        VkRenderPass                        m_vkRenderPass = VK_NULL_HANDLE;
-		VkRenderPassBeginInfo               m_vkRenderPassBeginInfo;
-        VkViewport                          m_vkViewport;
-        VkRect2D                            m_vkScissor;
-        VkPipelineViewportStateCreateInfo   m_vkViewportStateCreateInfo;
-        vector<VkFramebuffer>::type         m_vkFramebuffers;
+        VkRenderPass                            m_vkRenderPass = VK_NULL_HANDLE;
+		VkRenderPassBeginInfo                   m_vkRenderPassBeginInfo;
+        VkViewport                              m_vkViewport;
+        VkRect2D                                m_vkScissor;
+        VkPipelineViewportStateCreateInfo       m_vkViewportStateCreateInfo;
+        vector<VkFramebufferCreateInfo>::type   m_vkFrameBufferCreateInfos;
+        vector<VkFramebuffer>::type             m_vkFramebuffers;
     };
 
     /**
@@ -64,6 +65,9 @@ namespace Echo
     protected:
         // get vk command buffer
         virtual VkCommandBuffer getVkCommandbuffer() override { return m_vkCommandBuffers[0]; }
+
+        // get vk frame buffer
+        virtual VkFramebuffer getVkFramebuffer() override { return m_vkFramebuffers[0]; }
 
     protected:
         // create vk frame buffer

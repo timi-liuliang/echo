@@ -76,6 +76,7 @@ namespace Studio
 		logConfig.path = "./cache/";
 		logConfig.logFilename = "echo.log";
 		logConfig.bFileOutput = true;
+		logConfig.bVSOutput = true;
 
 		Echo::Log::instance()->setOutputLeve(logConfig.logLevel);
 
