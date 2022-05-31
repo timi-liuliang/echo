@@ -33,6 +33,23 @@ namespace Echo
     {
     }
 
+    void VKFramebufferOffscreen::prepareVkClearValues(vector<VkClearValue>::type& clearValues)
+    {
+        for (i32 i = i32(Attachment::ColorA); i <= i32(Attachment::DepthStencil); i++)
+        {
+            if (m_views[i])
+            {
+                VkClearValue clearValue;
+                if (i == i32(Attachment::DepthStencil))
+                    clearValue.color = { m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a };
+                else
+                    clearValue.depthStencil = { m_clearDepth, m_clearStencil };
+
+                clearValues.emplace_back(clearValue);
+            }
+        }
+    };
+
     bool VKFramebufferOffscreen::begin()
     {
         VkCommandBufferBeginInfo commandBufferBeginInfo = {};
@@ -43,9 +60,8 @@ namespace Echo
 
         if (VK_SUCCESS == vkBeginCommandBuffer(getVkCommandbuffer(), &commandBufferBeginInfo))
         {
-            array<VkClearValue, 2> clearValues;
-            clearValues[0].color = { m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a };
-            clearValues[1].depthStencil = { m_clearDepth, m_clearStencil };
+            vector<VkClearValue>::type clearValues;
+            prepareVkClearValues(clearValues);
 
             VkRenderPassBeginInfo renderPassBeginInfo = {};
             renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -109,9 +125,22 @@ namespace Echo
         m_vkViewportStateCreateInfo.scissorCount = 1;
         m_vkViewportStateCreateInfo.pScissors = &m_vkScissor;
 
-        createVkRenderPass();
-        createVkFramebuffers();
-        createVkCommandBuffers();
+        recreateVkResources();
+    }
+
+    void VKFramebufferOffscreen::recreateVkResources()
+    {
+        VkDevice vkDevice = VKRenderer::instance()->getVkDevice();
+        if (vkDevice)
+        {
+            VKDebug(vkDeviceWaitIdle(vkDevice));
+
+            createVkRenderPass();
+            createVkFramebuffers();
+            createVkCommandBuffers();
+
+            VKDebug(vkDeviceWaitIdle(vkDevice));
+        }
     }
 
     void VKFramebufferOffscreen::createVkFramebuffers()
@@ -253,8 +282,10 @@ namespace Echo
 
     void VKFramebufferOffscreen::destroyVkCommandBuffers()
     {
-        if (m_vkCommandBuffers.empty())
+        if (!m_vkCommandBuffers.empty())
             vkFreeCommandBuffers(VKRenderer::instance()->getVkDevice(), VKRenderer::instance()->getVkCommandPool(), m_vkCommandBuffers.size(), m_vkCommandBuffers.data());
+
+        m_vkCommandBuffers.clear();
     }
 
     VKFramebufferWindow::VKFramebufferWindow()
@@ -462,7 +493,7 @@ namespace Echo
 
     void VKFramebufferWindow::destroyVkCommandBuffers()
     {
-        if (m_vkCommandBuffers.empty())
+        if (!m_vkCommandBuffers.empty())
             vkFreeCommandBuffers(VKRenderer::instance()->getVkDevice(), VKRenderer::instance()->getVkCommandPool(), m_vkCommandBuffers.size(), m_vkCommandBuffers.data());
     }
 

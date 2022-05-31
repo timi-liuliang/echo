@@ -69,7 +69,13 @@ namespace Echo
         // get vk frame buffer
         virtual VkFramebuffer getVkFramebuffer() override { return m_vkFramebuffers[0]; }
 
+        // Prepare clear values
+        void prepareVkClearValues(vector<VkClearValue>::type& clearValues);
+
     protected:
+        // Recreate vk resources
+        void recreateVkResources();
+
         // create vk frame buffer
         void createVkFramebuffers();
         void destroyVkFramebuffers();
