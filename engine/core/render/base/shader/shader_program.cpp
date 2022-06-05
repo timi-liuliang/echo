@@ -345,21 +345,24 @@ namespace Echo
 				PropertyHintArray hints;
 				hints.emplace_back( PropertyHintType::Category, "Uniforms");
 
-				for (auto& it : m_uniforms)
-				{
-					if (!isGlobalUniform(it.first))
-					{
-						switch (it.second->m_type)
-						{
-						case ShaderParamType::SPT_INT: registerProperty(ECHO_CLASS_NAME(ShaderProgram), "Uniforms." + it.first, Variant::Type::Int, hints); break;
-						case ShaderParamType::SPT_FLOAT:registerProperty(ECHO_CLASS_NAME(ShaderProgram), "Uniforms." + it.first, Variant::Type::Real, hints); break;
-						case ShaderParamType::SPT_VEC3: registerProperty(ECHO_CLASS_NAME(ShaderProgram), "Uniforms." + it.first, Variant::Type::Vector3, hints); break;
-						case ShaderParamType::SPT_VEC4: registerProperty(ECHO_CLASS_NAME(ShaderProgram), "Uniforms." + it.first, Variant::Type::Color, hints); break;
-						case ShaderParamType::SPT_TEXTURE: registerProperty(ECHO_CLASS_NAME(ShaderProgram), "Uniforms." + it.first, Variant::Type::ResourcePath, hints); break;
-						default: break;
-						}
-					}
-				}
+                for (ShaderProgram::UniformMap& uniformMap : m_uniforms)
+                {
+                    for (auto& it : uniformMap)
+                    {
+                        if (!isGlobalUniform(it.first))
+                        {
+                            switch (it.second->m_type)
+                            {
+                            case ShaderParamType::SPT_INT: registerProperty(ECHO_CLASS_NAME(ShaderProgram), "Uniforms." + it.first, Variant::Type::Int, hints); break;
+                            case ShaderParamType::SPT_FLOAT:registerProperty(ECHO_CLASS_NAME(ShaderProgram), "Uniforms." + it.first, Variant::Type::Real, hints); break;
+                            case ShaderParamType::SPT_VEC3: registerProperty(ECHO_CLASS_NAME(ShaderProgram), "Uniforms." + it.first, Variant::Type::Vector3, hints); break;
+                            case ShaderParamType::SPT_VEC4: registerProperty(ECHO_CLASS_NAME(ShaderProgram), "Uniforms." + it.first, Variant::Type::Color, hints); break;
+                            case ShaderParamType::SPT_TEXTURE: registerProperty(ECHO_CLASS_NAME(ShaderProgram), "Uniforms." + it.first, Variant::Type::ResourcePath, hints); break;
+                            default: break;
+                            }
+                        }
+                    }
+                }
 
 				onShaderChanged();
             }
@@ -505,23 +508,25 @@ namespace Echo
     
     void ShaderProgram::setUniform( const char* name, const void* value, ShaderParamType uniformType, ui32 count)
     {
-		UniformMap::iterator it = m_uniforms.find(name);
-		if (it != m_uniforms.end())
-		{
-			UniformPtr uniform = it->second;
-			uniform->setValue(value);
-		}
-		else
-		{
-			EchoLogError("ShaderProgram uniform [%d] not exist!", name);
-		}
+        for (UniformMap& unfiromMap : m_uniforms)
+        {
+            UniformMap::iterator it = unfiromMap.find(name);
+            if (it != unfiromMap.end())
+            {
+                UniformPtr uniform = it->second;
+                uniform->setValue(value);
+            }
+        }
     }
 
     ShaderProgram::UniformPtr ShaderProgram::getUniform(const String& name)
 	{
-        UniformMap::iterator it = m_uniforms.find(name);
-        if (it != m_uniforms.end())
-            return it->second;
+        for (UniformMap& unfiromMap : m_uniforms)
+        {
+            UniformMap::iterator it = unfiromMap.find(name);
+            if (it != unfiromMap.end())
+                return it->second;
+        }
 
 		return nullptr;
 	}

@@ -100,6 +100,7 @@ namespace Echo
 
         typedef ResRef<Uniform> UniformPtr;
         typedef map<String, UniformPtr>::type UniformMap;
+        typedef array<UniformMap, ShaderType::Total> UniformMaps;
 
 	public:
 		ShaderProgram();
@@ -126,7 +127,7 @@ namespace Echo
         UniformPtr getUniform(const String& name);
 
         // get all uniforms
-        UniformMap& getUniforms(){ return m_uniforms; }
+        UniformMaps& getUniforms(){ return m_uniforms; }
 
 		// ByteSize
 		static int mapUniformTypeSize(ShaderParamType uniformType);
@@ -212,7 +213,7 @@ namespace Echo
 		DepthStencilStatePtr    m_depthState;
 		RasterizerStatePtr	    m_rasterizerState;
         MultisampleStatePtr     m_multiSampleState;
-        UniformMap              m_uniforms;
+        UniformMaps             m_uniforms;
 
     protected:
         StringOption        m_cullMode = StringOption("CULL_BACK", { "CULL_NONE", "CULL_FRONT", "CULL_BACK"});

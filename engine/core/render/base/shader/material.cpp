@@ -392,31 +392,34 @@ namespace Echo
 			UniformValueMap oldUniforms = m_uniformValues;
 			m_uniformValues.clear();
 
-			for (auto& it : m_shaderProgram->getUniforms())
+			for (ShaderProgram::UniformMap& uniformMap : m_shaderProgram->getUniforms())
 			{
-				// create
-				ShaderProgram::UniformPtr& suniform = it.second;
-				UniformValue* uniform = nullptr;
-				if (suniform->m_type == SPT_TEXTURE)
-					uniform = EchoNew(UniformTextureValue(suniform, this));
-				else
-					uniform = EchoNew(UniformNormalValue(suniform));
-
-				// copy data
-				UniformValueMap::iterator itv = oldUniforms.find(suniform->m_name);
-				if (itv != oldUniforms.end())
+				for (auto& it : uniformMap)
 				{
-					UniformValue* oldUniform = itv->second;
-					if (oldUniform && suniform->m_count == oldUniform->m_uniform->m_count && suniform->m_type == oldUniform->m_uniform->m_type)
-					{
-						if (suniform->m_type == SPT_TEXTURE)
-							uniform->setTexture(oldUniform->getTexturePath().getPath());
-						else
-							uniform->setValue(oldUniform->isEmpty() ? nullptr : oldUniform->getValue());
-					}
-				}
+					// create
+					ShaderProgram::UniformPtr& suniform = it.second;
+					UniformValue* uniform = nullptr;
+					if (suniform->m_type == SPT_TEXTURE)
+						uniform = EchoNew(UniformTextureValue(suniform, this));
+					else
+						uniform = EchoNew(UniformNormalValue(suniform));
 
-				m_uniformValues[suniform->m_name] = uniform;
+					// copy data
+					UniformValueMap::iterator itv = oldUniforms.find(suniform->m_name);
+					if (itv != oldUniforms.end())
+					{
+						UniformValue* oldUniform = itv->second;
+						if (oldUniform && suniform->m_count == oldUniform->m_uniform->m_count && suniform->m_type == oldUniform->m_uniform->m_type)
+						{
+							if (suniform->m_type == SPT_TEXTURE)
+								uniform->setTexture(oldUniform->getTexturePath().getPath());
+							else
+								uniform->setValue(oldUniform->isEmpty() ? nullptr : oldUniform->getValue());
+						}
+					}
+
+					m_uniformValues[suniform->m_name] = uniform;
+				}
 			}
 		}
 	}

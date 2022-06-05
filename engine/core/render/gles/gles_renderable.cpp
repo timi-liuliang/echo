@@ -30,37 +30,40 @@ namespace Echo
 		if (shaderProgram)
 		{
 			i32 textureCount = 0;
-			for (auto& it : shaderProgram->getUniforms())
+			for(ShaderProgram::UniformMap& uniformMap : shaderProgram->getUniforms())
 			{
-				ShaderProgram::UniformPtr uniform = it.second;
-				Material::UniformValue* uniformValue = m_material->getUniform(uniform->m_name);
-				if (uniform->m_type != SPT_TEXTURE)
+				for (auto& it : uniformMap)
 				{
-					const void* value = nullptr;
-					if (!value && m_camera)
-						value = m_camera->getGlobalUniformValue(uniform->m_name);
-
-					if(!value && m_node)
-						value = m_node->getGlobalUniformValue(uniform->m_name);
-
-					if (!value) 
-						value = uniformValue->getValue();
-
-					shaderProgram->setUniform(uniform->m_name.c_str(), value, uniform->m_type, uniform->m_count);
-				}
-				else
-				{
-					if (uniformValue)
+					ShaderProgram::UniformPtr uniform = it.second;
+					Material::UniformValue* uniformValue = m_material->getUniform(uniform->m_name);
+					if (uniform->m_type != SPT_TEXTURE)
 					{
-						Texture* texture = uniformValue->getTexture();
-						if (texture)
-						{
-							Renderer::instance()->setTexture(textureCount, texture);
-						}
-					}
+						const void* value = nullptr;
+						if (!value && m_camera)
+							value = m_camera->getGlobalUniformValue(uniform->m_name);
 
-					shaderProgram->setUniform(uniform->m_name.c_str(), &textureCount, uniform->m_type, uniform->m_count);
-					textureCount++;
+						if (!value && m_node)
+							value = m_node->getGlobalUniformValue(uniform->m_name);
+
+						if (!value)
+							value = uniformValue->getValue();
+
+						shaderProgram->setUniform(uniform->m_name.c_str(), value, uniform->m_type, uniform->m_count);
+					}
+					else
+					{
+						if (uniformValue)
+						{
+							Texture* texture = uniformValue->getTexture();
+							if (texture)
+							{
+								Renderer::instance()->setTexture(textureCount, texture);
+							}
+						}
+
+						shaderProgram->setUniform(uniform->m_name.c_str(), &textureCount, uniform->m_type, uniform->m_count);
+						textureCount++;
+					}
 				}
 			}
 		}

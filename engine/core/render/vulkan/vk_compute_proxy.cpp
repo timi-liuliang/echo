@@ -151,30 +151,33 @@ namespace Echo
 		if (vkShaderProgram)
 		{
             i32 textureCount = 0;
-			for (auto& it : vkShaderProgram->getUniforms())
-			{
-				ShaderProgram::UniformPtr uniform = it.second;
-                Material::UniformValue* uniformValue = m_material->getUniform(uniform->m_name);
-				if (uniform->m_type != SPT_TEXTURE)
-				{
-					const void* value = m_node ? m_node->getGlobalUniformValue(uniform->m_name) : nullptr;
-					if (!value) value = uniformValue->getValue();
+            for (ShaderProgram::UniformMap& uniformMap : vkShaderProgram->getUniforms())
+            {
+                for (auto& it : uniformMap)
+                {
+                    ShaderProgram::UniformPtr uniform = it.second;
+                    Material::UniformValue* uniformValue = m_material->getUniform(uniform->m_name);
+                    if (uniform->m_type != SPT_TEXTURE)
+                    {
+                        const void* value = m_node ? m_node->getGlobalUniformValue(uniform->m_name) : nullptr;
+                        if (!value) value = uniformValue->getValue();
 
-                    vkShaderProgram->setUniform(uniform->m_name.c_str(), value, uniform->m_type, uniform->m_count);
-				}
-				else
-				{
-					Texture* texture = uniformValue->getTexture();
-					if (texture)
-					{
-						Renderer::instance()->setTexture(textureCount, texture);
-					}
+                        vkShaderProgram->setUniform(uniform->m_name.c_str(), value, uniform->m_type, uniform->m_count);
+                    }
+                    else
+                    {
+                        Texture* texture = uniformValue->getTexture();
+                        if (texture)
+                        {
+                            Renderer::instance()->setTexture(textureCount, texture);
+                        }
 
-                    vkShaderProgram->setUniform(uniform->m_name.c_str(), &textureCount, uniform->m_type, uniform->m_count);
+                        vkShaderProgram->setUniform(uniform->m_name.c_str(), &textureCount, uniform->m_type, uniform->m_count);
 
-					textureCount++;
-				}
-			}
+                        textureCount++;
+                    }
+                }
+            }
 
 			vkShaderProgram->bindUniforms(vkCommandbuffer, m_vkUniformsInstance);
 		}

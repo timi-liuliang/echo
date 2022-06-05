@@ -100,21 +100,24 @@ namespace Echo
     {
         if (!m_isLinked) return;
 
-        // organize uniform bytes
-        for (UniformMap::iterator it = m_uniforms.begin(); it != m_uniforms.end(); it++)
+        for (UniformMap& uniformMap : m_uniforms)
         {
-            UniformPtr uniform = it->second;
-            void* value = uniform->m_value.empty() ? uniform->getValueDefault().data() : uniform->m_value.data();
-            if (value && uniform->m_type != SPT_UNKNOWN)
+            // organize uniform bytes
+            for (UniformMap::iterator it = uniformMap.begin(); it != uniformMap.end(); it++)
             {
-                vector<Byte>::type& uniformBytes = uniform->m_shader == ShaderType::VS ? m_vertexShaderUniformBytes : m_fragmentShaderUniformBytes;
-                if (uniform->m_type != SPT_TEXTURE)
+                UniformPtr uniform = it->second;
+                void* value = uniform->m_value.empty() ? uniform->getValueDefault().data() : uniform->m_value.data();
+                if (value && uniform->m_type != SPT_UNKNOWN)
                 {
-                    std::memcpy(uniformBytes.data() + uniform->m_location, value, uniform->m_sizeInBytes * sizeof(Byte));
-                }
-                else
-                {
+                    vector<Byte>::type& uniformBytes = uniform->m_shader == ShaderType::VS ? m_vertexShaderUniformBytes : m_fragmentShaderUniformBytes;
+                    if (uniform->m_type != SPT_TEXTURE)
+                    {
+                        std::memcpy(uniformBytes.data() + uniform->m_location, value, uniform->m_sizeInBytes * sizeof(Byte));
+                    }
+                    else
+                    {
 
+                    }
                 }
             }
         }
@@ -171,27 +174,30 @@ namespace Echo
                 }
             }
 
-            for (auto& it : m_uniforms)
+            for (UniformMap& uniformMap : m_uniforms)
             {
-                if (it.second->m_type == SPT_TEXTURE)
+                for (auto& it : uniformMap)
                 {
-                    i32 textureIdx = *(i32*)(it.second->getValue().data());
-                    VKTexture* texture = VKRenderer::instance()->getTexture(textureIdx);
-                    if (texture && texture->getVkDescriptorImageInfo())
+                    if (it.second->m_type == SPT_TEXTURE)
                     {
-						VkWriteDescriptorSet writeDescriptorSet;
-						writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-						writeDescriptorSet.pNext = nullptr;
-						writeDescriptorSet.dstSet = uniformsInstance.m_vkDescriptorSets[ShaderType::FS];
-						writeDescriptorSet.dstBinding = it.second->m_location;
-						writeDescriptorSet.dstArrayElement = 0;
-						writeDescriptorSet.descriptorCount = 1;
-						writeDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-						writeDescriptorSet.pImageInfo = texture->getVkDescriptorImageInfo();
-						writeDescriptorSet.pBufferInfo = nullptr;
-						writeDescriptorSet.pTexelBufferView = nullptr;
+                        i32 textureIdx = *(i32*)(it.second->getValue().data());
+                        VKTexture* texture = VKRenderer::instance()->getTexture(textureIdx);
+                        if (texture && texture->getVkDescriptorImageInfo())
+                        {
+                            VkWriteDescriptorSet writeDescriptorSet;
+                            writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                            writeDescriptorSet.pNext = nullptr;
+                            writeDescriptorSet.dstSet = uniformsInstance.m_vkDescriptorSets[ShaderType::FS];
+                            writeDescriptorSet.dstBinding = it.second->m_location;
+                            writeDescriptorSet.dstArrayElement = 0;
+                            writeDescriptorSet.descriptorCount = 1;
+                            writeDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+                            writeDescriptorSet.pImageInfo = texture->getVkDescriptorImageInfo();
+                            writeDescriptorSet.pBufferInfo = nullptr;
+                            writeDescriptorSet.pTexelBufferView = nullptr;
 
-						writeDescriptorSets.emplace_back(writeDescriptorSet);
+                            writeDescriptorSets.emplace_back(writeDescriptorSet);
+                        }
                     }
                 }
             }
@@ -206,32 +212,43 @@ namespace Echo
 
     void VKShaderProgram::createVkDescriptorSetLayout(ShaderType type)
     {
+        auto isHaveNormalUniform = [](UniformMap& uniformMap)->bool
+        {
+            for (auto& it : uniformMap)
+            {
+                if (it.second->m_type != SPT_TEXTURE)
+                    return true;
+            }
+
+            return false;
+        };
+
 		vector<VkDescriptorSetLayoutBinding>::type layoutBindings;
 
-		VkDescriptorSetLayoutBinding uboLayoutBinding;
-		uboLayoutBinding.binding = 0;
-		uboLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-		uboLayoutBinding.descriptorCount = 1;
-		uboLayoutBinding.stageFlags = type == ShaderType::VS ? VK_SHADER_STAGE_VERTEX_BIT : VK_SHADER_STAGE_FRAGMENT_BIT;
-		uboLayoutBinding.pImmutableSamplers = nullptr;
-		layoutBindings.emplace_back(uboLayoutBinding);
-
-        if (type == ShaderType::FS)
+        if (isHaveNormalUniform(m_uniforms[type]))
         {
-			for (auto& it : m_uniforms)
-			{
-				if (it.second->m_type == SPT_TEXTURE)
-				{
-					VkDescriptorSetLayoutBinding samplerLayoutBinding;
-					samplerLayoutBinding.binding = it.second->m_location;
-					samplerLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-					samplerLayoutBinding.descriptorCount = 1;
-					samplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-					samplerLayoutBinding.pImmutableSamplers = nullptr;
-					layoutBindings.emplace_back(samplerLayoutBinding);
-				}
-			}
+            VkDescriptorSetLayoutBinding uboLayoutBinding;
+            uboLayoutBinding.binding = 0;
+            uboLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+            uboLayoutBinding.descriptorCount = 1;
+            uboLayoutBinding.stageFlags = type == ShaderType::VS ? VK_SHADER_STAGE_VERTEX_BIT : VK_SHADER_STAGE_FRAGMENT_BIT;
+            uboLayoutBinding.pImmutableSamplers = nullptr;
+            layoutBindings.emplace_back(uboLayoutBinding);
         }
+
+		for (auto& it : m_uniforms[type])
+		{
+			if (it.second->m_type == SPT_TEXTURE)
+			{
+				VkDescriptorSetLayoutBinding samplerLayoutBinding;
+				samplerLayoutBinding.binding = it.second->m_location;
+				samplerLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+				samplerLayoutBinding.descriptorCount = 1;
+				samplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+				samplerLayoutBinding.pImmutableSamplers = nullptr;
+				layoutBindings.emplace_back(samplerLayoutBinding);
+			}
+		}
 
 		// create a descriptor set layout based on layout bindings
 		VkDescriptorSetLayoutCreateInfo dslCreateInfo = {};
@@ -262,7 +279,8 @@ namespace Echo
     // https://www.khronos.org/assets/uploads/developers/library/2016-vulkan-devday-uk/4-Using-spir-v-with-spirv-cross.pdf
     bool VKShaderProgram::parseUniforms()
     {
-        m_uniforms.clear();
+        for (ShaderProgram::UniformMap& uniformMap : m_uniforms)
+            uniformMap.clear();
 
         // vertex uniforms
         SPIRV_CROSS_NAMESPACE::ShaderResources vsResources = m_vertexShaderCompiler->get_shader_resources();
@@ -299,7 +317,7 @@ namespace Echo
 			desc->m_count = 1;
             desc->m_sizeInBytes = 4;
             desc->m_location = compiler->get_decoration(resource.id, spv::DecorationBinding);
-			m_uniforms[desc->m_name] = desc;
+			m_uniforms[shaderType][desc->m_name] = desc;
         }
         else
         {
@@ -313,7 +331,7 @@ namespace Echo
 				desc->m_type = VKMapping::mapUniformType(compiler->get_type(type.member_types[i]));
 				desc->m_count = desc->m_sizeInBytes / mapUniformTypeSize(desc->m_type);
 				desc->m_location = compiler->type_struct_member_offset(type, i);
-				m_uniforms[desc->m_name] = desc;
+				m_uniforms[shaderType][desc->m_name] = desc;
 			}
         }
     }
@@ -323,14 +341,17 @@ namespace Echo
         m_vertexShaderUniformBytes.clear();
         m_fragmentShaderUniformBytes.clear();
 
-        for (auto& it : m_uniforms)
+        for (ShaderProgram::UniformMap& uniformMap : m_uniforms)
         {
-            UniformPtr uniform = it.second;
-            vector<Byte>::type& uniformBytes = uniform->m_shader == ShaderType::VS ? m_vertexShaderUniformBytes : m_fragmentShaderUniformBytes;
-            i32 bytes = uniform->m_location + uniform->m_sizeInBytes;
-            while (uniformBytes.size() < bytes)
+            for (auto& it : uniformMap)
             {
-                uniformBytes.emplace_back(0);
+                UniformPtr uniform = it.second;
+                vector<Byte>::type& uniformBytes = uniform->m_shader == ShaderType::VS ? m_vertexShaderUniformBytes : m_fragmentShaderUniformBytes;
+                i32 bytes = uniform->m_location + uniform->m_sizeInBytes;
+                while (uniformBytes.size() < bytes)
+                {
+                    uniformBytes.emplace_back(0);
+                }
             }
         }
     }

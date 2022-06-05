@@ -62,7 +62,8 @@ namespace Echo
 
 	bool GLESShaderProgram::linkShaders()
 	{
-		m_uniforms.clear();
+		for (UniformMap& uniformMap : m_uniforms)
+			uniformMap.clear();
 
 		OGLESDebug(glLinkProgram(m_glesProgram));
 
@@ -123,7 +124,7 @@ namespace Echo
 			desc->m_count = uniformSize;
 			desc->m_sizeInBytes = desc->m_count * mapUniformTypeSize(desc->m_type);
 			desc->m_location = glGetUniformLocation(m_glesProgram, origUniformName.c_str());
-			m_uniforms[desc->m_name] = desc;
+			m_uniforms[0][desc->m_name] = desc;
 		}
 
 		for (ui32 i = 0; i < VS_MAX; ++i)
@@ -143,16 +144,18 @@ namespace Echo
 
 	void GLESShaderProgram::bindUniforms()
 	{
-		for (UniformMap::iterator it = m_uniforms.begin(); it != m_uniforms.end(); it++)
+		for (UniformMap& uniformMap : m_uniforms)
 		{
-			UniformPtr uniform = it->second;
-			void* value = uniform->m_value.empty() ? uniform->getValueDefault().data() : uniform->m_value.data();
-			if (value)
+			for (UniformMap::iterator it = uniformMap.begin(); it != uniformMap.end(); it++)
 			{
-				if (uniform->m_type != SPT_UNKNOWN)
+				UniformPtr uniform = it->second;
+				void* value = uniform->m_value.empty() ? uniform->getValueDefault().data() : uniform->m_value.data();
+				if (value)
 				{
-					switch (uniform->m_type)
+					if (uniform->m_type != SPT_UNKNOWN)
 					{
+						switch (uniform->m_type)
+						{
 						case SPT_VEC4:		OGLESDebug(glUniform4fv(uniform->m_location, uniform->m_count, (GLfloat*)value));				break;
 						case SPT_MAT4:		OGLESDebug(glUniformMatrix4fv(uniform->m_location, uniform->m_count, false, (GLfloat*)value));	break;
 						case SPT_INT:		OGLESDebug(glUniform1iv(uniform->m_location, uniform->m_count, (GLint*)value));					break;
@@ -161,12 +164,13 @@ namespace Echo
 						case SPT_VEC3:		OGLESDebug(glUniform3fv(uniform->m_location, uniform->m_count, (GLfloat*)value));				break;
 						case SPT_TEXTURE:	OGLESDebug(glUniform1i(uniform->m_location, *(ui32*)value));									break;
 						default:			EchoAssertX(0, "unknow shader param format!");													break;
+						}
 					}
 				}
-			}
-			else
-			{
-				EchoLogError("Shader param [%s] is NULL, Material", uniform->m_name.c_str());
+				else
+				{
+					EchoLogError("Shader param [%s] is NULL, Material", uniform->m_name.c_str());
+				}
 			}
 		}
 	}
