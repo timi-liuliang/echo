@@ -39,6 +39,8 @@ namespace Echo
 		{
 			uniformNames.emplace_back("Uniforms." + getVariableName());
 			uniformValues.emplace_back(m_value);
+
+			return true;
 		}
 
 		return false;
