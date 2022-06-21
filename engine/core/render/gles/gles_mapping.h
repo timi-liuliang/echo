@@ -202,7 +202,7 @@ namespace Echo
 				//case PF_R16_SNORM:
 				//case PF_R16_UINT:
 				//case PF_R16_SINT:
-			case PF_R16_FLOAT:				return GL_LUMINANCE;
+			case PF_R16_FLOAT:				return GL_R16F;
 
 				//case PF_RG16_UNORM:
 				//case PF_RG16_SNORM:
@@ -214,7 +214,7 @@ namespace Echo
 				//case PF_RGB16_SNORM:
 				//case PF_RGB16_UINT:
 				//case PF_RGB16_SINT:
-			case PF_RGB16_FLOAT:			return GL_RGB;
+			case PF_RGB16_FLOAT:			return GL_RGB16F;
 
 				//case PF_RGBA16_UNORM:
 				//case PF_RGBA16_SNORM:
@@ -231,19 +231,19 @@ namespace Echo
 				//case PF_R32_SNORM:
 				//case PF_R32_UINT:
 				//case PF_R32_SINT:
-			case PF_R32_FLOAT:				return GL_LUMINANCE;
+			case PF_R32_FLOAT:				return GL_R32F;
 
 				//case PF_RG32_UNORM:
 				//case PF_RG32_SNORM:
 				//case PF_RG32_UINT:
 				//case PF_RG32_SINT:
-			case PF_RG32_FLOAT:				return GL_LUMINANCE_ALPHA;
+			case PF_RG32_FLOAT:				return GL_RG32F;
 
 				//case PF_RGB32_UNORM:
 				//case PF_RGB32_SNORM:
 				//case PF_RGB32_UINT:
 				//case PF_RGB32_SINT:
-			case PF_RGB32_FLOAT:			return GL_RGB;
+			case PF_RGB32_FLOAT:			return GL_RGB32F;
 
 				//case PF_RGBA32_UNORM:
 				//case PF_RGBA32_SNORM:

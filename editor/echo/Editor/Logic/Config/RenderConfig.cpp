@@ -27,11 +27,12 @@ namespace Echo
 		{
             auto name = magic_enum::enum_name<Renderer::Type>(renderer->getType());
 			EchoLogInfo("Init %s Renderer success.", std::string(name).c_str());
-
-			return renderer;
+		}
+		else
+		{
+			EchoLogError("Root::initRenderer failed...");
 		}
 
-		EchoLogError("Root::initRenderer failed...");
 		return renderer;
 	}
 }
