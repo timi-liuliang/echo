@@ -77,6 +77,9 @@ namespace Echo
 		// load
 		static Res* load(const ResourcePath& path);
 
+		// Instance res
+		static Res* Res::instanceRes(void* pugiNode, const ResourcePath& path);
+
 	protected:
 		int								m_refCount;
 		bool							m_isLoaded;

@@ -198,6 +198,34 @@ namespace Echo
 		}
 	}
 
+	Res* Res::instanceRes(void* pugiNode, const ResourcePath& path)
+	{
+		pugi::xml_node* xmlNode = (pugi::xml_node*)pugiNode;
+
+		Echo::String className = xmlNode->attribute("class").value();
+		Object* obj = Echo::Class::create<Object*>(className);
+		if (obj)
+		{
+			Res* res = ECHO_DOWN_CAST<Res*>(obj);
+			if (res)
+			{
+				res->setPath(path.getPath());
+
+				loadPropertyRecursive(pugiNode, res, className);
+				loadSignalSlotConnects(xmlNode, res, className);
+				loadChannels(xmlNode, res);
+
+				return res;
+			}
+		}
+		else
+		{
+			EchoLogError("Class::create failed. Class [%s] not exist", className.c_str());
+		}
+
+		return  nullptr;
+	}
+
 	Res* Res::load(const ResourcePath& path)
 	{
 		MemoryReader reader(path.getPath());
@@ -209,9 +237,7 @@ namespace Echo
 				pugi::xml_node root = doc.child("res");
 				if (root)
 				{
-					Res* res = ECHO_DOWN_CAST<Res*>(instanceObject(&root));
-					res->setPath(path.getPath());
-
+					Res* res = instanceRes(&root, path);
 					g_ress[path.getPath()] = res;
 
 					return res;
