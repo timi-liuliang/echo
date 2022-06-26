@@ -347,7 +347,7 @@ namespace Echo
 
 	bool VKTextureRender::unload()
 	{
-		
+		destroyVkImageView();
 
 		return true;
 	}

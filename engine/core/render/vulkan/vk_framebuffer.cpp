@@ -106,6 +106,12 @@ namespace Echo
 
     void VKFramebufferOffscreen::onSize(ui32 width, ui32 height)
     {
+        for (TextureRenderTarget2D* colorView : m_views)
+        {
+            if (colorView)
+                colorView->onSize(width, height);
+        }
+
         m_vkViewport.x = 0.f;
         m_vkViewport.y = 0.0f;
         m_vkViewport.width = width;
