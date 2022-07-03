@@ -76,6 +76,7 @@ namespace Echo
         spirv_cross::Compiler*              m_vertexShaderCompiler = nullptr;
         spirv_cross::Compiler*              m_fragmentShaderCompiler = nullptr;
         array<VkPipelineSSCI, 2>            m_vkShaderStagesCreateInfo = {};
+        array<vector<VkDescriptorSetLayoutBinding>::type, 2> m_layoutBindings;
         array<VkDescriptorSetLayout, 2>     m_vkDescriptorSetLayouts = { VK_NULL_HANDLE, VK_NULL_HANDLE };
         VkPipelineLayout                    m_vkPipelineLayout = VK_NULL_HANDLE;
         vector<Byte>::type                  m_vertexShaderUniformBytes;

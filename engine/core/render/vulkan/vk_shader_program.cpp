@@ -223,7 +223,7 @@ namespace Echo
             return false;
         };
 
-		vector<VkDescriptorSetLayoutBinding>::type layoutBindings;
+        m_layoutBindings[type].clear();
 
         if (isHaveNormalUniform(m_uniforms[type]))
         {
@@ -233,7 +233,7 @@ namespace Echo
             uboLayoutBinding.descriptorCount = 1;
             uboLayoutBinding.stageFlags = type == ShaderType::VS ? VK_SHADER_STAGE_VERTEX_BIT : VK_SHADER_STAGE_FRAGMENT_BIT;
             uboLayoutBinding.pImmutableSamplers = nullptr;
-            layoutBindings.emplace_back(uboLayoutBinding);
+            m_layoutBindings[type].emplace_back(uboLayoutBinding);
         }
 
 		for (auto& it : m_uniforms[type])
@@ -246,34 +246,34 @@ namespace Echo
 				samplerLayoutBinding.descriptorCount = 1;
 				samplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 				samplerLayoutBinding.pImmutableSamplers = nullptr;
-				layoutBindings.emplace_back(samplerLayoutBinding);
+                m_layoutBindings[type].emplace_back(samplerLayoutBinding);
 			}
 		}
 
 		// create a descriptor set layout based on layout bindings
-		VkDescriptorSetLayoutCreateInfo dslCreateInfo = {};
-		dslCreateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-		dslCreateInfo.pNext = nullptr;
-		dslCreateInfo.flags = 0;
-		dslCreateInfo.bindingCount = layoutBindings.size();
-		dslCreateInfo.pBindings = layoutBindings.data();
+		VkDescriptorSetLayoutCreateInfo descriptorSetLayoutCreateInfo = {};
+        descriptorSetLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+        descriptorSetLayoutCreateInfo.pNext = nullptr;
+        descriptorSetLayoutCreateInfo.flags = 0;
+        descriptorSetLayoutCreateInfo.bindingCount = m_layoutBindings[type].size();
+        descriptorSetLayoutCreateInfo.pBindings = m_layoutBindings[type].data();
 
-		VKDebug(vkCreateDescriptorSetLayout(VKRenderer::instance()->getVkDevice(), &dslCreateInfo, nullptr, &m_vkDescriptorSetLayouts[type]));
+		VKDebug(vkCreateDescriptorSetLayout(VKRenderer::instance()->getVkDevice(), &descriptorSetLayoutCreateInfo, nullptr, &m_vkDescriptorSetLayouts[type]));
     }
 
     // https://vulkan.lunarg.com/doc/view/1.2.162.1/mac/tutorial/html/08-init_pipeline_layout.html
     void VKShaderProgram::createVkPipelineLayout()
     {
-        VkPipelineLayoutCreateInfo plCreateInfo = {};
-        plCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-        plCreateInfo.pNext = nullptr;
-        plCreateInfo.flags = 0;
-		plCreateInfo.setLayoutCount = m_vkDescriptorSetLayouts.size();
-		plCreateInfo.pSetLayouts = m_vkDescriptorSetLayouts.data();
-        plCreateInfo.pushConstantRangeCount = 0;
-        plCreateInfo.pPushConstantRanges = nullptr;
+        VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo = {};
+        pipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+        pipelineLayoutCreateInfo.pNext = nullptr;
+        pipelineLayoutCreateInfo.flags = 0;
+        pipelineLayoutCreateInfo.setLayoutCount = m_vkDescriptorSetLayouts.size();
+        pipelineLayoutCreateInfo.pSetLayouts = m_vkDescriptorSetLayouts.data();
+        pipelineLayoutCreateInfo.pushConstantRangeCount = 0;
+        pipelineLayoutCreateInfo.pPushConstantRanges = nullptr;
 
-        VKDebug(vkCreatePipelineLayout(VKRenderer::instance()->getVkDevice(), &plCreateInfo, nullptr, &m_vkPipelineLayout));
+        VKDebug(vkCreatePipelineLayout(VKRenderer::instance()->getVkDevice(), &pipelineLayoutCreateInfo, nullptr, &m_vkPipelineLayout));
     }
 
     // https://www.khronos.org/assets/uploads/developers/library/2016-vulkan-devday-uk/4-Using-spir-v-with-spirv-cross.pdf
