@@ -23,3 +23,7 @@ bin/editor/Debug/echo
 /build
 /cmake-build-debug
 /.idea
+bin/editor/Win64/Debug/cache/echo.log
+bin/editor/Win64/Debug/cache/echo.cache
+bin/editor/Win64/Debug/Echo.pdb
+bin/editor/Win64/Debug/Echo.exe
