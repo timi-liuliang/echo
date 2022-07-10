@@ -176,13 +176,12 @@ namespace Echo
                         }
 
                         vkShaderProgram->setUniform(uniform->m_name.c_str(), &textureCount, uniform->m_type, uniform->m_count);
-
                         textureCount++;
                     }
                 }
-
-                vkShaderProgram->bindUniforms(vkCommandbuffer, m_vkUniformsInstance);
             }
+
+            vkShaderProgram->bindUniforms(vkCommandbuffer, m_vkUniformsInstance);
 		}
     }
 

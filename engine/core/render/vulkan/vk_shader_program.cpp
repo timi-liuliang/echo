@@ -178,17 +178,18 @@ namespace Echo
             {
                 for (auto& it : uniformMap)
                 {
-                    if (it.second->m_type == SPT_TEXTURE)
+                    UniformPtr& uniform = it.second;
+                    if (uniform->m_type == SPT_TEXTURE)
                     {
-                        i32 textureIdx = *(i32*)(it.second->getValue().data());
+                        i32 textureIdx = *(i32*)(uniform->getValue().data());
                         VKTexture* texture = VKRenderer::instance()->getTexture(textureIdx);
                         if (texture && texture->getVkDescriptorImageInfo())
                         {
                             VkWriteDescriptorSet writeDescriptorSet;
                             writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
                             writeDescriptorSet.pNext = nullptr;
-                            writeDescriptorSet.dstSet = uniformsInstance.m_vkDescriptorSets[ShaderType::FS];
-                            writeDescriptorSet.dstBinding = it.second->m_location;
+                            writeDescriptorSet.dstSet = uniformsInstance.m_vkDescriptorSets[uniform->m_shader];
+                            writeDescriptorSet.dstBinding = uniform->m_location;
                             writeDescriptorSet.dstArrayElement = 0;
                             writeDescriptorSet.descriptorCount = 1;
                             writeDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
@@ -197,6 +198,10 @@ namespace Echo
                             writeDescriptorSet.pTexelBufferView = nullptr;
 
                             writeDescriptorSets.emplace_back(writeDescriptorSet);
+                        }
+                        else
+                        {
+                            EchoLogError("vulkan write descriptor set have empty image info.");
                         }
                     }
                 }
