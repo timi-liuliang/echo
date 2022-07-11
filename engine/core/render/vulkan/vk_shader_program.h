@@ -18,7 +18,7 @@ namespace Echo
 			VKBuffer*                       m_vkVertexShaderUniformBuffer = nullptr;
 			VKBuffer*                       m_vkFragmentShaderUniformBuffer = nullptr;
 			array<VkDescriptorBufferInfo, 2>m_vkShaderUniformBufferDescriptors;
-			array<VkDescriptorSet, 2>       m_vkDescriptorSets = {};
+			VkDescriptorSet                 m_vkDescriptorSet = VK_NULL_HANDLE;
         };
 
     public:
@@ -55,7 +55,7 @@ namespace Echo
         void createVkDescriptorSet(UniformsInstance& uniformData);
 
         // create vk descriptor set layout
-        void createVkDescriptorSetLayout(ShaderType type);
+        void createVkDescriptorSetLayout();
 
         // create descriptor and pipeline layouts
         void createVkPipelineLayout();
@@ -70,16 +70,16 @@ namespace Echo
         bool parseUniforms();
 
 	private:
-		bool			                    m_isLinked = false;
-		VkShaderModule	                    m_vkVertexShader = VK_NULL_HANDLE;
-		VkShaderModule	                    m_vkFragmentShader = VK_NULL_HANDLE;
-        spirv_cross::Compiler*              m_vertexShaderCompiler = nullptr;
-        spirv_cross::Compiler*              m_fragmentShaderCompiler = nullptr;
-        array<VkPipelineSSCI, 2>            m_vkShaderStagesCreateInfo = {};
-        array<vector<VkDescriptorSetLayoutBinding>::type, 2> m_layoutBindings;
-        array<VkDescriptorSetLayout, 2>     m_vkDescriptorSetLayouts = { VK_NULL_HANDLE, VK_NULL_HANDLE };
-        VkPipelineLayout                    m_vkPipelineLayout = VK_NULL_HANDLE;
-        vector<Byte>::type                  m_vertexShaderUniformBytes;
-        vector<Byte>::type                  m_fragmentShaderUniformBytes;
+		bool			                            m_isLinked = false;
+		VkShaderModule	                            m_vkVertexShader = VK_NULL_HANDLE;
+		VkShaderModule	                            m_vkFragmentShader = VK_NULL_HANDLE;
+        spirv_cross::Compiler*                      m_vertexShaderCompiler = nullptr;
+        spirv_cross::Compiler*                      m_fragmentShaderCompiler = nullptr;
+        array<VkPipelineSSCI, 2>                    m_vkShaderStagesCreateInfo = {};
+        vector<VkDescriptorSetLayoutBinding>::type  m_layoutBindings;
+        VkDescriptorSetLayout                       m_vkDescriptorSetLayout = VK_NULL_HANDLE;
+        VkPipelineLayout                            m_vkPipelineLayout = VK_NULL_HANDLE;
+        vector<Byte>::type                          m_vertexShaderUniformBytes;
+        vector<Byte>::type                          m_fragmentShaderUniformBytes;
 	};
 }

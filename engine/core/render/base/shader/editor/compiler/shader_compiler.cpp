@@ -377,7 +377,7 @@ namespace Echo
 	{
 		if (!m_fsUniformsCode.empty())
 		{
-			m_fsUniformsCode = "layout(binding = 0) uniform UBO \n{\n" + m_fsUniformsCode + "} fs_ubo;";
+			m_fsUniformsCode = "layout(binding = 1) uniform UBO \n{\n" + m_fsUniformsCode + "} fs_ubo;";
 		}
 
 		Echo::String vsCode = g_VsTemplate;
@@ -448,7 +448,7 @@ namespace Echo
 	void ShaderCompiler::addTextureUniform(const Echo::String& uniformName)
 	{
 		m_texturesCount++;
-		m_fsTextureUniforms += Echo::StringUtil::Format("layout(binding = %d) uniform sampler2D %s;\n", m_texturesCount, uniformName.c_str());
+		m_fsTextureUniforms += Echo::StringUtil::Format("layout(binding = %d) uniform sampler2D %s;\n", m_texturesCount+1, uniformName.c_str());
 	}
 
 	void ShaderCompiler::addFunction(ui32 id, String& name, const String& code)

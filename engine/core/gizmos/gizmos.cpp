@@ -39,7 +39,7 @@ void main(void)
 static const char* g_gizmoPsCode = R"(#version 450
 
 // uniforms
-layout(binding = 0) uniform UBO
+layout(binding = 1) uniform UBO
 {
     vec3  u_CameraPosition;
     float u_CameraFar;
