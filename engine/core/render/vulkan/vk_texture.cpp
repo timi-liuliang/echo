@@ -363,7 +363,10 @@ namespace Echo
         m_pixFmt = format;
         m_numMipmaps = 1;
 
-		VkImageUsageFlags vkUsageFlags = PixelUtil::IsDepth(format) ? VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT : VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+		VkImageUsageFlags vkUsageFlags = !PixelUtil::IsDepth(format) ? 
+			VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT :
+			VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
+
 		VkFlags requirementsMask = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
 		VkImageTiling tiling = VK_IMAGE_TILING_OPTIMAL;
 		VkImageLayout initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
