@@ -274,9 +274,9 @@ namespace Echo
 	void ShaderProgram::clear()
 	{
         m_depthState.reset();
+        m_rasterizerState.reset();
 
 		EchoSafeDelete(m_blendState, BlendState);
-		EchoSafeDelete(m_rasterizerState, RasterizerState);
 	}
     
     Res* ShaderProgram::create()

@@ -174,7 +174,7 @@ namespace Echo
 
 	class RasterizerState : public RenderState
 	{
-		ECHO_RES(DepthStencilState, RenderState, ".RasterizerState", RasterizerState::create, Res::load)
+		ECHO_RES(RasterizerState, RenderState, ".RasterizerState", RasterizerState::create, Res::load)
 
 	public:
 		enum PolygonMode

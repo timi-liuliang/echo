@@ -98,6 +98,11 @@ namespace Echo
 	{
 	}
 
+	void RasterizerState::bindMethods()
+	{
+
+	}
+
 	Res* RasterizerState::create()
 	{
 		return Renderer::instance()->createRasterizerState();
