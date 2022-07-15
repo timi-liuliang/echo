@@ -145,72 +145,73 @@ namespace Echo
         allocInfo.pSetLayouts = &m_vkDescriptorSetLayout;
 
         VkResult result = vkAllocateDescriptorSets(VKRenderer::instance()->getVkDevice(), &allocInfo, &uniformsInstance.m_vkDescriptorSet);
-        if (VK_SUCCESS == result)
-        {
-            // Update the descriptor set determining the shader binding points
-            // For every binding point used in a shader there needs to be one
-            // descriptor set matching that binding point
-            vector<VkWriteDescriptorSet>::type writeDescriptorSets;
-            for (size_t i = 0; i < uniformsInstance.m_vkShaderUniformBufferDescriptors.size(); i++)
-            {
-                if (uniformsInstance.m_vkShaderUniformBufferDescriptors[i].buffer)
-                {
-					// Binding 0 : Uniform buffer
-					VkWriteDescriptorSet writeDescriptorSet;
-					writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-                    writeDescriptorSet.pNext = nullptr;
-					writeDescriptorSet.dstSet = uniformsInstance.m_vkDescriptorSet;
-                    writeDescriptorSet.dstBinding = i;
-                    writeDescriptorSet.dstArrayElement = 0;
-					writeDescriptorSet.descriptorCount = 1;
-					writeDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-                    writeDescriptorSet.pImageInfo = nullptr;
-					writeDescriptorSet.pBufferInfo = &uniformsInstance.m_vkShaderUniformBufferDescriptors[i];
-                    writeDescriptorSet.pTexelBufferView = nullptr;
-
-					writeDescriptorSets.emplace_back(writeDescriptorSet);
-                }
-            }
-
-            for (UniformMap& uniformMap : m_uniforms)
-            {
-                for (auto& it : uniformMap)
-                {
-                    UniformPtr& uniform = it.second;
-                    if (uniform->m_type == SPT_TEXTURE)
-                    {
-                        i32 textureIdx = *(i32*)(uniform->getValue().data());
-                        VKTexture* texture = VKRenderer::instance()->getTexture(textureIdx);
-                        if (texture && texture->getVkDescriptorImageInfo())
-                        {
-                            VkWriteDescriptorSet writeDescriptorSet;
-                            writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-                            writeDescriptorSet.pNext = nullptr;
-                            writeDescriptorSet.dstSet = uniformsInstance.m_vkDescriptorSet;
-                            writeDescriptorSet.dstBinding = uniform->m_location;
-                            writeDescriptorSet.dstArrayElement = 0;
-                            writeDescriptorSet.descriptorCount = 1;
-                            writeDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-                            writeDescriptorSet.pImageInfo = texture->getVkDescriptorImageInfo();
-                            writeDescriptorSet.pBufferInfo = nullptr;
-                            writeDescriptorSet.pTexelBufferView = nullptr;
-
-                            writeDescriptorSets.emplace_back(writeDescriptorSet);
-                        }
-                        else
-                        {
-                            EchoLogError("vulkan write descriptor set have empty image info.");
-                        }
-                    }
-                }
-            }
-
-            vkUpdateDescriptorSets(VKRenderer::instance()->getVkDevice(), writeDescriptorSets.size(), writeDescriptorSets.data(), 0, nullptr);
-        }
-        else
+        if (VK_SUCCESS != result)
         {
             EchoLogError("vulkan set descriptor set failed.");
         }
+    }
+
+    void VKShaderProgram::updateDescriptorSet(UniformsInstance& uniformsInstance)
+    {
+        // Update the descriptor set determining the shader binding points
+        // For every binding point used in a shader there needs to be one
+        // descriptor set matching that binding point
+        vector<VkWriteDescriptorSet>::type writeDescriptorSets;
+        for (size_t i = 0; i < uniformsInstance.m_vkShaderUniformBufferDescriptors.size(); i++)
+        {
+            if (uniformsInstance.m_vkShaderUniformBufferDescriptors[i].buffer)
+            {
+                // Binding 0 : Uniform buffer
+                VkWriteDescriptorSet writeDescriptorSet;
+                writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                writeDescriptorSet.pNext = nullptr;
+                writeDescriptorSet.dstSet = uniformsInstance.m_vkDescriptorSet;
+                writeDescriptorSet.dstBinding = i;
+                writeDescriptorSet.dstArrayElement = 0;
+                writeDescriptorSet.descriptorCount = 1;
+                writeDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+                writeDescriptorSet.pImageInfo = nullptr;
+                writeDescriptorSet.pBufferInfo = &uniformsInstance.m_vkShaderUniformBufferDescriptors[i];
+                writeDescriptorSet.pTexelBufferView = nullptr;
+
+                writeDescriptorSets.emplace_back(writeDescriptorSet);
+            }
+        }
+
+        for (UniformMap& uniformMap : m_uniforms)
+        {
+            for (auto& it : uniformMap)
+            {
+                UniformPtr& uniform = it.second;
+                if (uniform->m_type == SPT_TEXTURE)
+                {
+                    i32 textureIdx = *(i32*)(uniform->getValue().data());
+                    VKTexture* texture = VKRenderer::instance()->getTexture(textureIdx);
+                    if (texture && texture->getVkDescriptorImageInfo())
+                    {
+                        VkWriteDescriptorSet writeDescriptorSet;
+                        writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                        writeDescriptorSet.pNext = nullptr;
+                        writeDescriptorSet.dstSet = uniformsInstance.m_vkDescriptorSet;
+                        writeDescriptorSet.dstBinding = uniform->m_location;
+                        writeDescriptorSet.dstArrayElement = 0;
+                        writeDescriptorSet.descriptorCount = 1;
+                        writeDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+                        writeDescriptorSet.pImageInfo = texture->getVkDescriptorImageInfo();
+                        writeDescriptorSet.pBufferInfo = nullptr;
+                        writeDescriptorSet.pTexelBufferView = nullptr;
+
+                        writeDescriptorSets.emplace_back(writeDescriptorSet);
+                    }
+                    else
+                    {
+                        EchoLogError("vulkan write descriptor set have empty image info.");
+                    }
+                }
+            }
+        }
+
+        vkUpdateDescriptorSets(VKRenderer::instance()->getVkDevice(), writeDescriptorSets.size(), writeDescriptorSets.data(), 0, nullptr);
     }
 
     void VKShaderProgram::createVkDescriptorSetLayout()
@@ -379,6 +380,7 @@ namespace Echo
     {
         // update uniform VkBuffer by memory
         updateVkUniformBuffer(uniformsInstance);
+        updateDescriptorSet(uniformsInstance);
 
         // Bind descriptor sets describing shader binding points
         vkCmdBindDescriptorSets(vkCommandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_vkPipelineLayout, 0, 1, &uniformsInstance.m_vkDescriptorSet, 0, nullptr);

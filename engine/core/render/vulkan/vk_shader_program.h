@@ -53,6 +53,7 @@ namespace Echo
 
         // setup descriptor set
         void createVkDescriptorSet(UniformsInstance& uniformData);
+        void updateDescriptorSet(UniformsInstance& uniformsInstance);
 
         // create vk descriptor set layout
         void createVkDescriptorSetLayout();
