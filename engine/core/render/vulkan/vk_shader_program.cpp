@@ -160,7 +160,7 @@ namespace Echo
 					writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
                     writeDescriptorSet.pNext = nullptr;
 					writeDescriptorSet.dstSet = uniformsInstance.m_vkDescriptorSet;
-                    writeDescriptorSet.dstBinding = 0;
+                    writeDescriptorSet.dstBinding = i;
                     writeDescriptorSet.dstArrayElement = 0;
 					writeDescriptorSet.descriptorCount = 1;
 					writeDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
