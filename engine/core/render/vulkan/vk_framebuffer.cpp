@@ -233,7 +233,7 @@ namespace Echo
                     attachDesc.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
                     attachDesc.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
                     attachDesc.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-                    attachDesc.finalLayout = (i==i32(Attachment::DepthStencil)) ? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL : VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+                    attachDesc.finalLayout = (i==i32(Attachment::DepthStencil)) ? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL : VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
                     attachDescs.emplace_back(attachDesc);
                 }
             }
