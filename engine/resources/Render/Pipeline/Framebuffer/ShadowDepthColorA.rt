@@ -1,5 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<res class="TextureRenderTarget2D" path="Engine://Render/Pipeline/Framebuffer/ShadowDepthColor0.rt" MipMap="true" Width="2799" Height="909" ClearColor="0 0 0 1 " Format="PF_R32_FLOAT">
-	<channel name="Height" expression="Renderer:getWindowHeight()" />
-	<channel name="Width" expression="Renderer:getWindowWidth()" />
-</res>
+<res class="TextureRenderTarget2D" path="Engine://Render/Pipeline/Framebuffer/ShadowDepthColorA.rt" MipMap="true" Width="2048" Height="2048" ClearColor="0 0 0 1 " Format="PF_R32_FLOAT" OnSize="Static" />

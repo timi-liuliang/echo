@@ -24,9 +24,12 @@ namespace Echo
 		CLASS_BIND_METHOD(TextureRenderTarget2D, setClearColor);
 		CLASS_BIND_METHOD(TextureRenderTarget2D, getPixelFormatName);
 		CLASS_BIND_METHOD(TextureRenderTarget2D, setPixelFormatName);
+		CLASS_BIND_METHOD(TextureRenderTarget2D, getOnSizeType);
+		CLASS_BIND_METHOD(TextureRenderTarget2D, setOnSizeType);
 
 		CLASS_REGISTER_PROPERTY(TextureRenderTarget2D, "ClearColor", Variant::Type::Color, getClearColor, setClearColor);
 		CLASS_REGISTER_PROPERTY(TextureRenderTarget2D, "Format", Variant::Type::StringOption, getPixelFormatName, setPixelFormatName);
+		CLASS_REGISTER_PROPERTY(TextureRenderTarget2D, "OnSize", Variant::Type::StringOption, getOnSizeType, setOnSizeType);
 	}
 
 	Res* TextureRenderTarget2D::create()
@@ -73,6 +76,23 @@ namespace Echo
 		}
 	}
 
+	const StringOption TextureRenderTarget2D::getOnSizeType()
+	{
+		StringOption result;
+		result.fromEnum(m_onSizeType);
+
+		return result;
+	}
+
+	void TextureRenderTarget2D::setOnSizeType(const StringOption& option)
+	{
+		OnSizeType onSizeType = option.toEnum(OnSizeType::Dynamic);
+		if (m_onSizeType != onSizeType)
+		{
+			m_onSizeType = onSizeType;
+		}
+	}
+
 	void TextureRenderTarget2D::setClearColor(const Color& color)
 	{ 
 		if (m_clearColor != color)
@@ -84,7 +104,14 @@ namespace Echo
 
 	void TextureRenderTarget2D::onSize(ui32 width, ui32 height)
 	{
-		setWidth(width);
-		setHeight(height);
+		if (m_onSizeType != OnSizeType::Static)
+		{
+			setWidth(width);
+			setHeight(height);
+		}
+		else
+		{
+			unload();
+		}
 	}
 }

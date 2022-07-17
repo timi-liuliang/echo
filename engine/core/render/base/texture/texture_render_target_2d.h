@@ -11,6 +11,13 @@ namespace Echo
 		ECHO_RES(TextureRenderTarget2D, Texture, ".rt", TextureRenderTarget2D::create, Res::load)
 
 	public:
+		enum OnSizeType
+		{
+			Static,
+			Dynamic,
+		};
+
+	public:
 		TextureRenderTarget2D();
 		TextureRenderTarget2D(const String& name);
 		virtual ~TextureRenderTarget2D();
@@ -33,6 +40,10 @@ namespace Echo
 		const Color& getClearColor() const { return m_clearColor; }
 		void setClearColor(const Color& color);
 
+		// OnSize type
+		const StringOption getOnSizeType();
+		void setOnSizeType(const StringOption& option);
+
         // on resize
 		virtual void onSize(ui32 width, ui32 height);
 
@@ -46,7 +57,8 @@ namespace Echo
 		virtual bool unload() { return false; }
 
 	protected:
-		Color			m_clearColor	  = Color::BLACK;
+		OnSizeType		m_onSizeType = OnSizeType::Dynamic;
+		Color			m_clearColor = Color::BLACK;
 	};
 	typedef ResRef<TextureRenderTarget2D> TextureRenderTarget2DPtr;
 }

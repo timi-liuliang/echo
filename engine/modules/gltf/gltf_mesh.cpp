@@ -66,9 +66,7 @@ namespace Echo
 		m_castShadow = castShadow;
 
 		if (m_renderable)
-		{
 			m_renderable->setCastShadow(m_castShadow);
-		}
 	}
 
 	void GltfMesh::setSkeletonPath(const NodePath& skeletonPath)
