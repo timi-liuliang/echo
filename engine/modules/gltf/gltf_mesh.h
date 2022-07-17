@@ -34,6 +34,10 @@ namespace Echo
 		Material* getMaterial() const { return m_material; }
 		void setMaterial( Object* material);
 
+		// Cast shadow
+		bool isCastShadow() const { return m_castShadow; }
+		void setCastShadow(bool castShadow);
+
 		// skeleton
 		const NodePath& getSkeletonPath() { return m_skeletonPath; }
 		void setSkeletonPath(const NodePath& skeletonPath);
@@ -70,6 +74,7 @@ namespace Echo
 		i32						m_skinIdx;
 		int						m_primitiveIdx;		                        // sub mesh index
 		MaterialPtr				m_material;			                        // custom material
+		bool					m_castShadow = true;
 		NodePath				m_skeletonPath;
 		bool					m_skeletonDirty;	                        // dirty flag
 		GltfSkeleton*			m_skeleton;

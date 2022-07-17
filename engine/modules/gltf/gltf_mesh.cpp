@@ -38,6 +38,8 @@ namespace Echo
 		CLASS_BIND_METHOD(GltfMesh, setPrimitiveIdx);
 		CLASS_BIND_METHOD(GltfMesh, getMaterial);
 		CLASS_BIND_METHOD(GltfMesh, setMaterial);
+		CLASS_BIND_METHOD(GltfMesh, isCastShadow);
+		CLASS_BIND_METHOD(GltfMesh, setCastShadow);
 		CLASS_BIND_METHOD(GltfMesh, getSkeletonPath);
 		CLASS_BIND_METHOD(GltfMesh, setSkeletonPath);
 
@@ -46,16 +48,26 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(GltfMesh, "Primitive", Variant::Type::Int, getPrimitiveIdx, setPrimitiveIdx);
 		CLASS_REGISTER_PROPERTY(GltfMesh, "Material", Variant::Type::Object, getMaterial, setMaterial);
         CLASS_REGISTER_PROPERTY_HINT(GltfMesh, "Material", PropertyHintType::ObjectType, "Material");
+		CLASS_REGISTER_PROPERTY(GltfMesh, "CastShadow", Variant::Type::Bool, isCastShadow, setCastShadow);
         CLASS_REGISTER_PROPERTY(GltfMesh, "Skeleton", Variant::Type::NodePath, getSkeletonPath, setSkeletonPath);
 	}
 
-	// set gltf resource
 	void GltfMesh::setGltfRes(const ResourcePath& path)
 	{
 		if (m_assetPath.setPath(path.getPath()))
 		{
 			m_asset = (GltfRes*)Res::get(m_assetPath);
 			m_renderableDirty = true;
+		}
+	}
+
+	void GltfMesh::setCastShadow(bool castShadow) 
+	{ 
+		m_castShadow = castShadow;
+
+		if (m_renderable)
+		{
+			m_renderable->setCastShadow(m_castShadow);
 		}
 	}
 
@@ -87,7 +99,6 @@ namespace Echo
 		m_renderableDirty = true;
 	}
 
-	// set primitive index
 	void GltfMesh::setPrimitiveIdx(int primitiveIdx) 
 	{
 		m_primitiveIdx = primitiveIdx;
@@ -111,6 +122,7 @@ namespace Echo
 
 				MeshPtr mesh = m_asset->m_meshes[m_meshIdx].m_primitives[m_primitiveIdx].m_mesh;
 				m_renderable = RenderProxy::create(mesh, material, this, true);
+				m_renderable->setCastShadow(m_castShadow);
 
 				m_localAABB = mesh->getLocalBox();
 
