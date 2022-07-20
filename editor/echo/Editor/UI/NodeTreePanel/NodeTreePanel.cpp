@@ -332,7 +332,7 @@ namespace Studio
 
     void NodeTreePanel::showPropertyMenu(const QPoint& point)
     {
-		Echo::Node* currentNode = getCurrentSelectNode();
+		Echo::Object* currentEditObject = getCurrentEditObject();
 
         QModelIndex index = m_propertyTreeView->indexAt(point);
         if(index.isValid())
@@ -345,7 +345,7 @@ namespace Studio
                 
                 m_propertyMenu->addAction(m_actionPropertyReference);
 
-				if(currentNode && currentNode->isChannelExist(m_propertyTarget))
+				if(currentEditObject && currentEditObject->isChannelExist(m_propertyTarget))
 					m_propertyMenu->addAction(m_actionDeletePropertyReference);
 
 				m_propertyMenu->addSeparator();
@@ -376,10 +376,10 @@ namespace Studio
 
 	void NodeTreePanel::onDeletePropertyReference()
 	{
-		Echo::Node* currentNode = getCurrentSelectNode();
-		if (currentNode)
+		Echo::Object* currentEditObject = getCurrentEditObject();
+		if (currentEditObject)
 		{
-			currentNode->unregisterChannel(m_propertyTarget);
+			currentEditObject->unregisterChannel(m_propertyTarget);
 
 			// refresh property display
 			showSelectedObjectProperty();
