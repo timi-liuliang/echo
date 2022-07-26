@@ -318,10 +318,6 @@ namespace Echo
 			if (parentClassName == "Object")
             {
                 xmlNode->append_attribute("class").set_value(classPtr->getClassName().c_str());
-				if (!classPtr->getPath().empty())
-				{
-					xmlNode->append_attribute("path").set_value(classPtr->getPath().c_str());
-				}
             }
             else
             {
