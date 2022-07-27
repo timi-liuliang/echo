@@ -20,6 +20,7 @@
 	<stage class="RenderStage" Name="Post Processing" Enable="true" EditorOnly="false">
 		<queue class="ImageFilter" Name="Fog" Enable="true" />
 		<queue class="ImageFilter" Name="Antialiasing" Enable="true" />
+		<queue class="PostProcessMaterials" Name="Post Process Materials" Enable="true" />
 	</stage>
 	<stage class="RenderStage" Name="Screen Window" Enable="true" EditorOnly="false">
 		<property name="FrameBuffer" path="Engine://Render/Pipeline/Framebuffer/ScreenWindow.fbws" />
