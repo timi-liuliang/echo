@@ -4,22 +4,16 @@
 
 namespace Echo
 {
-	class ShadowDepthRenderStage : public RenderStage
+	class ShadowDepthRenderQueue : public IRenderQueue
 	{
-		ECHO_CLASS(ShadowDepthRenderStage, RenderStage)
+		ECHO_CLASS(ShadowDepthRenderQueue, IRenderQueue)
 
 	public:
-		ShadowDepthRenderStage();
-		virtual ~ShadowDepthRenderStage();
-
-		// Name
-		virtual void setName(const String& name) override { m_name = "Shadow Depth"; }
-
-		// Shdow depth render stage don't need renderqueue
-		virtual void addRenderQueue(IRenderQueue* queue, ui32 position = -1) override {}
+		ShadowDepthRenderQueue();
+		virtual ~ShadowDepthRenderQueue();
 
 		// Process
-		virtual void render() override;
+		virtual void render(FrameBufferPtr& frameBuffer) override;
 
 	protected:
 		// Init default shadow depth shader

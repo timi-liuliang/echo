@@ -117,13 +117,15 @@ namespace Pipeline
 			{
 				EditorApi.showObjectProperty(m_renderQueue->getStage());
 				m_renderQueue->getStage()->deleteRenderQueue(m_renderQueue);
+				m_renderQueue = nullptr;
 			}
 		}
 	}
 
 	void RenderQueueNodePainter::reset()
 	{
-		m_renderQueue->onRenderEnd.disconnectAll();
+		if(m_renderQueue)
+			m_renderQueue->onRenderEnd.disconnectAll();
 
 		if (m_rect)
 			m_graphicsScene->removeItem(m_rect);

@@ -1,4 +1,4 @@
-#include "shadow_depth_render_stage.h"
+#include "shadow_depth_render_queue.h"
 #include "core/render/base/renderer.h"
 #include "modules/light/light/direction_light.h"
 #include "engine/core/main/Engine.h"
@@ -53,8 +53,8 @@ void main(void)
 
 namespace Echo
 {
-	ShadowDepthRenderStage::ShadowDepthRenderStage()
-		: RenderStage()
+	ShadowDepthRenderQueue::ShadowDepthRenderQueue()
+		: IRenderQueue()
 	{
 		m_shadowDepthShader = initShadowDepthShader();
 
@@ -66,17 +66,17 @@ namespace Echo
 		m_shadowDepthMaterial->setRasterizerState(m_shadowDepthRasterizerState);
 	}
 
-	ShadowDepthRenderStage::~ShadowDepthRenderStage()
+	ShadowDepthRenderQueue::~ShadowDepthRenderQueue()
 	{
 
 	}
 
-	void ShadowDepthRenderStage::bindMethods()
+	void ShadowDepthRenderQueue::bindMethods()
 	{
 
 	}
 
-	ShaderProgramPtr ShadowDepthRenderStage::initShadowDepthShader()
+	ShaderProgramPtr ShadowDepthRenderQueue::initShadowDepthShader()
 	{
 		ResourcePath shaderVirtualPath = ResourcePath("echo_shadow_depth");
 		ShaderProgramPtr shader = ECHO_DOWN_CAST<ShaderProgram*>(ShaderProgram::get(shaderVirtualPath));
@@ -98,49 +98,40 @@ namespace Echo
 		return shader;
 	}
 
-	void ShadowDepthRenderStage::render()
+	void ShadowDepthRenderQueue::render(FrameBufferPtr& frameBuffer)
 	{
-		if (!m_enable)				return;
-		if (!m_frameBuffer)			return;
-		if (IsGame && m_editorOnly) return;
+		onRenderBegin();
 
-		if (m_frameBuffer->begin())
+		vector<Light*>::type dirLights = Light::gatherLights(Light::Type::Direction);
+		for (Light* light : dirLights)
 		{
-			onRenderBegin();
-			{
-				vector<Light*>::type dirLights = Light::gatherLights(Light::Type::Direction);
-				for (Light* light : dirLights)
-				{
-					DirectionLight* dirLight = ECHO_DOWN_CAST<DirectionLight*>(light);
-					Frustum* frustum = dirLight->getFrustum();
+			DirectionLight* dirLight = ECHO_DOWN_CAST<DirectionLight*>(light);
+			Frustum* frustum = dirLight->getFrustum();
 
-					if (frustum)
+			if (frustum)
+			{
+				vector<RenderProxy*>::type visibleRenderProxies3D = Renderer::instance()->gatherRenderProxies(RenderProxy::RenderType3D, *frustum);
+				for (RenderProxy* renderproxy : visibleRenderProxies3D)
+				{
+					if (renderproxy->isCastShadow())
 					{
-						vector<RenderProxy*>::type visibleRenderProxies3D = Renderer::instance()->gatherRenderProxies(RenderProxy::RenderType3D, *frustum);
-						for (RenderProxy* renderproxy : visibleRenderProxies3D)
+						std::unordered_map<i32, RenderProxy*>::const_iterator it = m_shadowDepthRenderProxiers.find(renderproxy->getId());
+						if (it != m_shadowDepthRenderProxiers.end())
 						{
-							if (renderproxy->isCastShadow())
-							{
-								std::unordered_map<i32, RenderProxy*>::const_iterator it = m_shadowDepthRenderProxiers.find(renderproxy->getId());
-								if (it != m_shadowDepthRenderProxiers.end())
-								{
-									RenderProxy* shadowDepthRenderProxy = it->second;
-									shadowDepthRenderProxy->setCamera(dirLight->getShadowCamera());
-									Renderer::instance()->draw(shadowDepthRenderProxy, m_frameBuffer);
-								}
-								else
-								{
-									RenderProxy* shadowDepthRenderProxy = RenderProxy::create(renderproxy->getMesh(), m_shadowDepthMaterial, renderproxy->getNode(), false);
-									m_shadowDepthRenderProxiers[renderproxy->getId()] = shadowDepthRenderProxy;
-								}
-							}
+							RenderProxy* shadowDepthRenderProxy = it->second;
+							shadowDepthRenderProxy->setCamera(dirLight->getShadowCamera());
+							Renderer::instance()->draw(shadowDepthRenderProxy, frameBuffer);
+						}
+						else
+						{
+							RenderProxy* shadowDepthRenderProxy = RenderProxy::create(renderproxy->getMesh(), m_shadowDepthMaterial, renderproxy->getNode(), false);
+							m_shadowDepthRenderProxiers[renderproxy->getId()] = shadowDepthRenderProxy;
 						}
 					}
 				}
 			}
-			onRenderEnd();
-
-			m_frameBuffer->end();
 		}
+
+		onRenderEnd();
 	}
 }

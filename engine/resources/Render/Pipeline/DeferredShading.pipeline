@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <pipeline>
-	<stage class="ShadowDepthRenderStage" Name="Shadow Depth" Enable="true" EditorOnly="false">
+	<stage class="RenderStage" Name="Shadow Depth" Enable="true" EditorOnly="false">
 		<property name="FrameBuffer" path="Engine://Render/Pipeline/Framebuffer/ShadowDepth.fbos" />
-		<queue class="RenderQueue" Name="Shadow Depth" Enable="true" Sort="true" CameraFilter="-1" />
+		<queue class="ShadowDepthRenderQueue" Name="ShadowDepth" Enable="true" />
 	</stage>
 	<stage class="RenderStage" Name="GBuffer" Enable="true" EditorOnly="false">
 		<property name="FrameBuffer" path="Engine://Render/Pipeline/Framebuffer/GBuffer.fbos" />
