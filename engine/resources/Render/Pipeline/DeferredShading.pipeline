@@ -2,7 +2,7 @@
 <pipeline>
 	<stage class="RenderStage" Name="Shadow Depth" Enable="true" EditorOnly="false">
 		<property name="FrameBuffer" path="Engine://Render/Pipeline/Framebuffer/ShadowDepth.fbos" />
-		<queue class="ShadowDepthRenderQueue" Name="ShadowDepth" Enable="true" />
+		<queue class="ShadowDepthRenderQueue" Name="Shadow Depth" Enable="true" />
 	</stage>
 	<stage class="RenderStage" Name="GBuffer" Enable="true" EditorOnly="false">
 		<property name="FrameBuffer" path="Engine://Render/Pipeline/Framebuffer/GBuffer.fbos" />
@@ -10,10 +10,11 @@
 	</stage>
 	<stage class="RenderStage" Name="Lighting" Enable="true" EditorOnly="false">
 		<property name="FrameBuffer" path="Engine://Render/Pipeline/Framebuffer/Lighting/Lighting.fbos" />
-		<queue class="RenderQueue" Name="Direct Lighting" Enable="true" Sort="true" CameraFilter="-1" />
+		<queue class="DeferredLightingRenderQueue" Name="Deferred Lighting" Enable="true" />
 	</stage>
 	<stage class="RenderStage" Name="Translucency" Enable="true" EditorOnly="false">
 		<property name="FrameBuffer" path="Engine://Render/Pipeline/Framebuffer/Translucency.fbos" />
+		<queue class="ImageFilter" Name="Lighting Combine" Enable="true" />
 		<queue class="RenderQueue" Name="Transparent" Enable="true" Sort="true" CameraFilter="-1" />
 	</stage>
 	<stage class="RenderStage" Name="Post Processing" Enable="true" EditorOnly="false">

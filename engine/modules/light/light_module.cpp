@@ -5,6 +5,7 @@
 #include "light/direction_light.h"
 #include "light/cube_light_custom.h"
 #include "light/cube_light_capture.h"
+#include "light/deferred_lighting_render_queue.h"
 #include "shadow/shadow_depth_render_queue.h"
 #include "editor/point_light_editor.h"
 #include "editor/spot_light_editor.h"
@@ -50,6 +51,7 @@ namespace Echo
         Class::registerType<DirectionLight>();
 		Class::registerType<CubeLightCustom>();
 		Class::registerType<CubeLightCapture>();
+        Class::registerType<DeferredLightingRenderQueue>();
         Class::registerType<ShadowDepthRenderQueue>();
 
         CLASS_REGISTER_EDITOR(PointLight, PointLightEditor)
