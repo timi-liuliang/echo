@@ -91,10 +91,13 @@ namespace Pipeline
 			Echo::Class::getChildClasses(childClasses, "IRenderQueue", true);
 			for (const Echo::String& className : childClasses)
 			{
-				QAction* renderQueueAction = new QAction(className.c_str());
-				m_addMenu->addAction(renderQueueAction);
+				if (!Echo::Class::isVirtual(className))
+				{
+					QAction* renderQueueAction = new QAction(className.c_str());
+					m_addMenu->addAction(renderQueueAction);
 
-				EditorApi.qConnectAction(renderQueueAction, QSIGNAL(triggered()), this, Echo::createMethodBind(&StageNodePainter::onNewRenderQueue));
+					EditorApi.qConnectAction(renderQueueAction, QSIGNAL(triggered()), this, Echo::createMethodBind(&StageNodePainter::onNewRenderQueue));
+				}
 			}
 		}
 

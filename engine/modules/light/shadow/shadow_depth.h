@@ -4,13 +4,13 @@
 
 namespace Echo
 {
-	class DeferredLightingRenderQueue : public IRenderQueue
+	class ShadowDepth : public IRenderQueue
 	{
-		ECHO_CLASS(DeferredLightingRenderQueue, IRenderQueue)
+		ECHO_CLASS(ShadowDepth, IRenderQueue)
 
 	public:
-		DeferredLightingRenderQueue();
-		virtual ~DeferredLightingRenderQueue();
+		ShadowDepth();
+		virtual ~ShadowDepth();
 
 		// Process
 		virtual void render(FrameBufferPtr& frameBuffer) override;
