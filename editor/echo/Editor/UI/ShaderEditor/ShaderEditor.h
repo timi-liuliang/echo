@@ -9,7 +9,8 @@
 #include <engine/core/render/base/shader/shader_program.h>
 #include "Scene/ShaderScene.h"
 #include "Scene/ShaderView.h"
-#include <engine/core/render/base/shader/editor/compiler/shader_compiler.h>
+#include <engine/core/render/base/shader/editor/compiler/shader_compiler_surface.h>
+#include <engine/core/render/base/shader/editor/compiler/shader_compiler_lighting.h>
 #include "ui_ShaderEditor.h"
 
 namespace Studio
@@ -44,6 +45,6 @@ namespace Studio
         Echo::ShaderProgramPtr              m_shaderProgram;
 		DataFlowProgramming::ShaderScene*	m_graphicsScene = nullptr;
 		DataFlowProgramming::ShaderView*	m_graphicsView = nullptr;
-        Echo::ShaderCompiler                m_shaderCompiler;
+        Echo::ShaderCompilerSurface         m_shaderCompiler;
 	};
 }

@@ -11,6 +11,13 @@ namespace Echo
         ECHO_CLASS(ShaderNodeTemplate, ShaderNode)
 
     public:
+        enum Domain
+        {
+            Surface,
+            Lighting,
+        };
+
+    public:
         ShaderNodeTemplate();
         virtual ~ShaderNodeTemplate() {}
 
@@ -28,6 +35,14 @@ namespace Echo
 
 		// generate code
 		virtual bool generateCode(Echo::ShaderCompiler& compiler) override;
+
+    public:
+        // Domain
+        StringOption getDomain();
+        void setDomain(const StringOption& domain);
+
+    private:
+        Domain      m_domain = Domain::Surface;
     };
 }
 

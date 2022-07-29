@@ -44,7 +44,7 @@ namespace Echo
 		void reset();
 
 		// compile
-		bool compile();
+		virtual bool compile() { return false; }
 
 		// code
 		Echo::String getVsCode();
@@ -61,7 +61,7 @@ namespace Echo
 		void addFunction(ui32 id, String& name, const String& code);
 		void addCode(const Echo::String& codeChunk);
 
-	private:
+	protected:
 		i32				m_texturesCount = 0;
 		String			m_macros;
 		UniformArray	m_fsUniforms;

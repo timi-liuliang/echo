@@ -6,23 +6,59 @@ namespace Echo
 {
     ShaderNodeTemplate::ShaderNodeTemplate()
     {
-        m_inputDataTypes = 
-        {
-            {"vec3", "Diffuse"},
-            {"float", "Opacity"},
-            {"vec3", "Normal"},
-            {"float", "Metallic"},
-            {"float", "Roughness"},
-            {"float", "Occlusion"},
-            {"vec3", "Emissive"}
-        };
-
-        m_inputs.resize(m_inputDataTypes.size());
+		setDomain(EnumToString(Surface));
     }
 
 	void ShaderNodeTemplate::bindMethods()
 	{
+		CLASS_BIND_METHOD(ShaderNodeTemplate, getDomain);
+		CLASS_BIND_METHOD(ShaderNodeTemplate, setDomain);
 
+		CLASS_REGISTER_PROPERTY(ShaderNodeTemplate, "Domain", Variant::Type::StringOption, getDomain, setDomain);
+	}
+
+	StringOption ShaderNodeTemplate::getDomain()
+	{
+		StringOption result;
+		result.fromEnum(m_domain);
+
+		return result;
+	}
+
+	void ShaderNodeTemplate::setDomain(const StringOption& domain)
+	{
+		m_domain = domain.toEnum(Domain::Surface);
+
+		switch (m_domain)
+		{
+		case Domain::Surface:
+			{
+				m_inputDataTypes =
+				{
+					{"vec3", "Diffuse"},
+					{"float", "Opacity"},
+					{"vec3", "Normal"},
+					{"float", "Metallic"},
+					{"float", "Roughness"},
+					{"float", "Occlusion"},
+					{"vec3", "Emissive"}
+				};
+			}
+			break;
+		case Domain::Lighting:
+			{
+				m_inputDataTypes =
+				{
+					{"vec3", "Diffuse"},
+					{"vec3", "Specular"}
+				};
+			}
+			break;
+		default :
+			break;
+		}
+
+		m_inputs.resize(m_inputDataTypes.size());
 	}
 
     bool ShaderNodeTemplate::generateCode(Echo::ShaderCompiler& compiler)

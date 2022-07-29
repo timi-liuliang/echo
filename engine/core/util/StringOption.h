@@ -65,3 +65,5 @@ namespace Echo
 		}
 	};
 }
+
+#define EnumToString(value) std::string(magic_enum::enum_name(value)).c_str()
