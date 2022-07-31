@@ -59,6 +59,10 @@ namespace Echo
 		bool isCastShadow() const { return m_castShadow; }
 		void setCastShadow(bool castShadow) { m_castShadow = castShadow; }
 
+		// Custom depth stencil
+		bool isCustomDepth() const { return m_customDepth; }
+		void setCustomDepth( bool customDepth) { m_customDepth = customDepth; }
+
 		// Is enable submit to render queues
 		bool isSubmitToRenderQueue() const { return m_isSubmitToRenderQueue; }
 		void setSubmitToRenderQueue(bool enable);
@@ -79,6 +83,7 @@ namespace Echo
 		MaterialPtr		m_material;
 		bool			m_raytracing = false;
 		bool			m_castShadow = false;
+		bool			m_customDepth = false;
 		bool			m_isSubmitToRenderQueue = false;
 	};
 	typedef ResRef<RenderProxy> RenderProxyPtr;

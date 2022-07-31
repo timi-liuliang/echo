@@ -12,6 +12,7 @@
 #include "pipeline/image_filter.h"
 #include "pipeline/post_process_materials.h"
 #include "pipeline/render_queue.h"
+#include "pipeline/custom_depth.h"
 #include "pipeline/render_pipeline.h"
 #include "base/pipeline/editor/render_pipeline_editor.h"
 #include "base/shader/editor/shader_editor.h"
@@ -88,6 +89,7 @@ namespace Echo
 	{
 		Class::registerType<IRenderQueue>();
 		Class::registerType<ImageFilter>();
+		Class::registerType<CustomDepth>();
 		Class::registerType<PostProcessMaterials>();
 		Class::registerType<RenderQueue>();
 		Class::registerType<RenderStage>();
