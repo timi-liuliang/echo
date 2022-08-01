@@ -22,6 +22,7 @@ namespace Echo
 		REGISTER_MODULE(LightModule)
 		REGISTER_MODULE(ModelModule)
 		REGISTER_MODULE(OpenDriveModule)
+		REGISTER_MODULE(OpenLabelModule)
 		REGISTER_MODULE(PhysxModule)
         REGISTER_MODULE(PCGModule)
 		REGISTER_MODULE(RaytracingModule)
