@@ -44,6 +44,7 @@ namespace Echo
 	extern ObjectPool<Quaternion>	LuaQuaternionPool;
 	extern ObjectPool<String>		LuaStrPool;
 	extern ObjectPool<StringOption> LuaStrOptionPool;
+	extern ObjectPool<ResourcePath>	LuaResourcePathPool;
 	extern ObjectPool<RealVector>	LuaRealVectorPool;
 	extern ObjectPool<Matrix>		LuaMatrixPool;
 
@@ -124,6 +125,19 @@ namespace Echo
 	{
 		StringOption* ptr = (StringOption*)&value;
 		LuaStrOptionPool.deleteObj(ptr);
+	}
+
+	template<> INLINE const ResourcePath& lua_getvalue<const ResourcePath&>(lua_State* L, int index)
+	{
+		ResourcePath* result = LuaResourcePathPool.newObj();
+		(*result).setPath(lua_tostring(L, index), true);
+		return *result;
+	}
+
+	template<> INLINE void lua_freevalue<const ResourcePath&>(const ResourcePath& value)
+	{
+		ResourcePath* ptr = (ResourcePath*)&value;
+		LuaResourcePathPool.deleteObj(ptr);
 	}
 
 	template<> INLINE const Vector3& lua_getvalue<const Vector3&>(lua_State* state, int idx) 

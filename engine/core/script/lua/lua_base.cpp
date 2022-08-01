@@ -9,6 +9,7 @@ namespace Echo
 	ObjectPool<Quaternion>	LuaQuaternionPool = ObjectPool<Quaternion>(32);
 	ObjectPool<String>		LuaStrPool  = ObjectPool<String>(32);
 	ObjectPool<StringOption>LuaStrOptionPool = ObjectPool<StringOption>(32);
+	ObjectPool<ResourcePath>LuaResourcePathPool = ObjectPool<ResourcePath>(32);
 	ObjectPool<RealVector>	LuaRealVectorPool = ObjectPool<RealVector>(32);
 	ObjectPool<Matrix>		LuaMatrixPool = ObjectPool<Matrix>(32);
 
