@@ -82,6 +82,12 @@ namespace Studio
 		if (dialog.exec() == QDialog::Accepted)
 		{
 			Echo::String selectFile = dialog.getSelectFile().c_str();
+			Echo::String selectExt = Echo::PathUtil::GetFileExt(selectFile, false);
+			if (selectExt.empty())
+			{
+				selectFile += ext;
+			}
+
 			Echo::PathUtil::FormatPath(selectFile);
 
 			return selectFile.c_str();
