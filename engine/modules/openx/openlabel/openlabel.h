@@ -1,12 +1,16 @@
 #pragma once
 
-#include "engine/core/base/object.h"
+#include "engine/core/scene/node.h"
 #include <nlohmann/json.hpp>
 
 namespace Echo
 {
-	class OpenLabel : public Object
+	class OpenLabelDebugDraw;
+
+	class OpenLabel : public Node
 	{
+		ECHO_CLASS(OpenLabel, Node)
+
 	public:
 		struct LabelRegion
 		{
@@ -37,7 +41,7 @@ namespace Echo
 
 			vector<Vector2>::type	m_values;
 			vector<bool>::type		m_visibles;
-			bool					m_closed;
+			bool					m_closed = true;
 
 			// Type
 			virtual String getType() { return "poly2d"; }
@@ -54,8 +58,10 @@ namespace Echo
 
 		struct LabelObject
 		{
-			String	m_name;
-			String	m_type;
+			String					m_name;
+			String					m_type;
+			vector<Poly2d>::type	m_poly2ds;
+			vector<Cuboid2d>::type	m_cuboid2ds;
 		};
 		typedef vector<LabelObject>::type LabelObjectArray;
 
@@ -63,17 +69,43 @@ namespace Echo
 		OpenLabel();
 		~OpenLabel();
 
+		// Xodr file
+		void setRes(const ResourcePath& path);
+		const ResourcePath& getRes() { return m_resPath; }
+
+		// Debug draw
+		OpenLabelDebugDraw* getDebugDraw() { return m_debugDraw; }
+		void setDebugDraw(Object* debugDraw);
+
+		// Objects
+		LabelObjectArray& getObjects() { return m_objects; }
+
+		// Reset
+		void reset();
+
+	public:
 		// Parse
 		void parse();
 
 		// Save
-		void save();
+		void save(const char* savePath);
 
 	protected:
 		// Save
 		void saveObjects(nlohmann::json& parent);
+		void savePoly2ds(nlohmann::json& parentJson, LabelObject& object);
+		void saveCuboid2ds(nlohmann::json& parentJson, LabelObject& object);
+
+	private:
+		// Refresh debug draw
+		void refreshDebugDraw();
+
+		// Update
+		virtual void updateInternal(float elapsedTime) override;
 
 	protected:
+		ResourcePath			m_resPath = ResourcePath("", ".json");
 		LabelObjectArray		m_objects;
+		OpenLabelDebugDraw*		m_debugDraw = nullptr;
 	};
 }
