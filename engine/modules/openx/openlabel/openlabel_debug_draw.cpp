@@ -82,13 +82,22 @@ namespace Echo
 
 	void OpenLabelDebugDraw::drawCuboid2d(OpenLabel::Cuboid2d& cuboid2d)
 	{
-		for (size_t i = 0; i < cuboid2d.m_values.size() - 1; i++)
-		{
-			Vector2 start = cuboid2d.m_values[i];
-			Vector2 end = cuboid2d.m_values[i + 1];
+		const vector<Vector2>::type& vertices = cuboid2d.m_values;
 
-			m_gizmo->drawLine(Vector3(start.x, start.y, 0.0), Vector3(end.x, end.y, 0.0), m_poly2dColor);
-		}
+		m_gizmo->drawLine(Vector3(vertices[0].x, -vertices[0].y, 0.0), Vector3(vertices[1].x, -vertices[1].y, 0.0), m_poly2dColor);
+		m_gizmo->drawLine(Vector3(vertices[1].x, -vertices[1].y, 0.0), Vector3(vertices[2].x, -vertices[2].y, 0.0), m_poly2dColor);
+		m_gizmo->drawLine(Vector3(vertices[2].x, -vertices[2].y, 0.0), Vector3(vertices[3].x, -vertices[3].y, 0.0), m_poly2dColor);
+		m_gizmo->drawLine(Vector3(vertices[3].x, -vertices[3].y, 0.0), Vector3(vertices[0].x, -vertices[0].y, 0.0), m_poly2dColor);
+
+		m_gizmo->drawLine(Vector3(vertices[4].x, -vertices[4].y, 0.0), Vector3(vertices[5].x, -vertices[5].y, 0.0), m_poly2dColor);
+		m_gizmo->drawLine(Vector3(vertices[5].x, -vertices[5].y, 0.0), Vector3(vertices[6].x, -vertices[6].y, 0.0), m_poly2dColor);
+		m_gizmo->drawLine(Vector3(vertices[6].x, -vertices[6].y, 0.0), Vector3(vertices[7].x, -vertices[7].y, 0.0), m_poly2dColor);
+		m_gizmo->drawLine(Vector3(vertices[7].x, -vertices[7].y, 0.0), Vector3(vertices[4].x, -vertices[4].y, 0.0), m_poly2dColor);
+
+		m_gizmo->drawLine(Vector3(vertices[0].x, -vertices[0].y, 0.0), Vector3(vertices[4].x, -vertices[4].y, 0.0), m_poly2dColor);
+		m_gizmo->drawLine(Vector3(vertices[1].x, -vertices[1].y, 0.0), Vector3(vertices[5].x, -vertices[5].y, 0.0), m_poly2dColor);
+		m_gizmo->drawLine(Vector3(vertices[2].x, -vertices[2].y, 0.0), Vector3(vertices[6].x, -vertices[6].y, 0.0), m_poly2dColor);
+		m_gizmo->drawLine(Vector3(vertices[3].x, -vertices[3].y, 0.0), Vector3(vertices[7].x, -vertices[7].y, 0.0), m_poly2dColor);
 	}
 
 	void OpenLabelDebugDraw::update(float elapsedTime, class OpenLabel* label)
