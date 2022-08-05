@@ -6,9 +6,7 @@ namespace Echo
 {
 	OpenLabelDebugDraw::OpenLabelDebugDraw()
 	{
-		m_gizmo = ECHO_DOWN_CAST<Echo::Gizmos*>(Echo::Class::create("Gizmos"));
-		m_gizmo->setName("gizmo_openlabel_debug_draw");
-		m_gizmo->setRenderType("2d");
+
 	}
 
 	OpenLabelDebugDraw::~OpenLabelDebugDraw()
@@ -19,6 +17,20 @@ namespace Echo
 	void OpenLabelDebugDraw::bindMethods()
 	{
 
+	}
+
+	void OpenLabelDebugDraw::initGizmo(OpenLabel* label)
+	{
+		if (!m_gizmo)
+		{
+			m_gizmo = dynamic_cast<Gizmos*>(label->getChild("OpenLabelDebugDraw"));
+			if (!m_gizmo)
+			{
+				m_gizmo = ECHO_DOWN_CAST<Echo::Gizmos*>(Echo::Class::create("Gizmos"));
+				m_gizmo->setName("OpenLabelDebugDraw");
+				m_gizmo->setRenderType("2d");
+			}
+		}
 	}
 
 	void OpenLabelDebugDraw::setEnable(bool isEnable)
@@ -35,6 +47,8 @@ namespace Echo
 
 	void OpenLabelDebugDraw::onOpenLabelChanged(OpenLabel* label)
 	{
+		initGizmo(label);
+
 		m_gizmo->clear();
 
 		// line width
@@ -56,12 +70,13 @@ namespace Echo
 
 	void OpenLabelDebugDraw::drawPoly2d(OpenLabel::Poly2d& poly2d)
 	{
-		for (size_t i = 0; i < poly2d.m_values.size()-1; i++)
+		size_t maxIdx = poly2d.m_closed ? poly2d.m_values.size() : (poly2d.m_values.size() - 1);
+		for (size_t i = 0; i < maxIdx; i++)
 		{
 			Vector2 start = poly2d.m_values[i];
-			Vector2 end   = poly2d.m_values[i+1];
+			Vector2 end = poly2d.m_values[(i + 1) % poly2d.m_values.size()];
 
-			m_gizmo->drawLine(Vector3(start.x, start.y, 0.0), Vector3(end.x, end.y, 0.0), m_poly2dColor);
+			m_gizmo->drawLine(Vector3(start.x, -start.y, 0.0), Vector3(end.x, -end.y, 0.0), m_poly2dColor);
 		}
 	}
 
@@ -76,10 +91,13 @@ namespace Echo
 		}
 	}
 
-	void OpenLabelDebugDraw::update(float elapsedTime)
+	void OpenLabelDebugDraw::update(float elapsedTime, class OpenLabel* label)
 	{
-		if (m_isEnable)
+		if (m_isEnable && m_gizmo)
 		{
+			m_gizmo->setWorldPosition(label->getWorldPosition());
+			m_gizmo->setWorldOrientation(label->getWorldOrientation());
+			m_gizmo->setLocalScaling(label->getWorldScaling());
 			m_gizmo->update(Engine::instance()->getFrameTime(), true);
 		}
 	}

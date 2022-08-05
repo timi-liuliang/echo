@@ -1,12 +1,12 @@
 #include "openlabel.h"
 #include "openlabel_debug_draw.h"
+#include "engine/core/io/io.h"
 #include "engine/core/util/StringUtil.h"
 
 namespace Echo
 {
 	OpenLabel::OpenLabel()
 	{
-		m_debugDraw = EchoNew(OpenLabelDebugDraw);
 	}
 
 	OpenLabel::~OpenLabel()
@@ -23,14 +23,9 @@ namespace Echo
 		CLASS_BIND_METHOD(OpenLabel, getDebugDraw);
 		CLASS_BIND_METHOD(OpenLabel, setDebugDraw);
 
-		CLASS_REGISTER_PROPERTY(OpenDrive, "Res", Variant::Type::ResourcePath, getRes, setRes);
-		CLASS_REGISTER_PROPERTY(OpenDrive, "DebugDraw", Variant::Type::Object, getDebugDraw, setDebugDraw);
-		CLASS_REGISTER_PROPERTY_HINT(OpenDrive, "DebugDraw", PropertyHintType::ObjectType, "OpenLabelDebugDraw");
-	}
-
-	void OpenLabel::parse()
-	{
-
+		CLASS_REGISTER_PROPERTY(OpenLabel, "Res", Variant::Type::ResourcePath, getRes, setRes);
+		CLASS_REGISTER_PROPERTY(OpenLabel, "DebugDraw", Variant::Type::Object, getDebugDraw, setDebugDraw);
+		CLASS_REGISTER_PROPERTY_HINT(OpenLabel, "DebugDraw", PropertyHintType::ObjectType, "OpenLabelDebugDraw");
 	}
 
 	void OpenLabel::reset()
@@ -42,8 +37,16 @@ namespace Echo
 	{
 		if (m_resPath.setPath(path.getPath()))
 		{
-
+			m_dirty = true;
 		}
+	}
+
+	OpenLabelDebugDraw* OpenLabel::getDebugDraw() 
+	{
+		if (!m_debugDraw)
+			m_debugDraw = EchoNew(OpenLabelDebugDraw);
+
+		return m_debugDraw; 
 	}
 
 	void OpenLabel::setDebugDraw(Object* debugDraw)
@@ -56,7 +59,7 @@ namespace Echo
 
 	void OpenLabel::refreshDebugDraw()
 	{
-		if (m_debugDraw)
+		if (getDebugDraw())
 		{
 			m_debugDraw->setEnable(true);
 			m_debugDraw->onOpenLabelChanged(this);
@@ -65,16 +68,103 @@ namespace Echo
 
 	void OpenLabel::updateInternal(float elapsedTime)
 	{
-		//if (m_xodrDirty)
-		//{
-		//	reset();
-		//	parseXodr(IO::instance()->loadFileToString(m_xodrRes.getPath()));
+		if (m_dirty)
+		{
+			reset();
+			parse(IO::instance()->loadFileToString(m_resPath.getPath()));
 
-		//	m_xodrDirty = false;
-		//}
+			m_dirty = false;
+		}
 
 		if (m_debugDraw)
-			m_debugDraw->update(elapsedTime);
+			m_debugDraw->update(elapsedTime, this);
+	}
+
+	void OpenLabel::parse(const String& content)
+	{
+		if (!content.empty())
+		{
+			nlohmann::json j = nlohmann::json::parse(content);
+
+			if (j.find("openlabel") != j.end())
+			{
+				parseObjects(j["openlabel"]);
+			}
+		}
+
+		refreshDebugDraw();
+	}
+
+	void OpenLabel::parseObjects(nlohmann::json& json)
+	{
+		if (json.find("objects") != json.end())
+		{
+			nlohmann::json& objects = json["objects"];
+
+			for (i32 i = 0; i < objects.size(); i++)
+			{
+				nlohmann::json& object = objects[StringUtil::ToString(i).c_str()];
+
+				LabelObject labelObject;
+				labelObject.m_name = object["name"].get<std::string>().c_str();
+				labelObject.m_type = object["type"].get<std::string>().c_str();
+
+				parsePoly2ds(object["poly2d"], labelObject);
+				parseCuboid2ds(object["cuboid2d"], labelObject);
+
+				m_objects.push_back(labelObject);
+			}
+		}
+	}
+
+	void OpenLabel::parsePoly2ds(nlohmann::json& parentJson, LabelObject& object)
+	{
+		for (i32 i = 0; i < parentJson.size(); i++)
+		{
+			nlohmann::json poly2dJson = parentJson[i];
+
+			Poly2d poly2d;
+
+			i32 pointCount = poly2dJson["val"].size() / 2;
+			for (i32 j = 0; j < pointCount; j++)
+			{
+				Vector2 uv;
+				uv.x = poly2dJson["val"][j * 2 + 0].get<float>();
+				uv.y = poly2dJson["val"][j * 2 + 1].get<float>();
+
+				bool visible = poly2dJson["visible"][j];
+
+				poly2d.m_values.push_back(uv);
+				poly2d.m_visibles.push_back(visible);
+			}
+
+			object.m_poly2ds.push_back(poly2d);
+		}
+	}
+
+	void OpenLabel::parseCuboid2ds(nlohmann::json& parentJson, LabelObject& object)
+	{
+		for (i32 i = 0; i < parentJson.size(); i++)
+		{
+			nlohmann::json cuboid2dJson = parentJson[i];
+
+			Cuboid2d cuboid2d;
+
+			i32 pointCount = cuboid2dJson["val"].size() / 2;
+			for (i32 j = 0; j < pointCount; j++)
+			{
+				Vector2 uv;
+				uv.x = cuboid2dJson["val"][j * 2 + 0].get<float>();
+				uv.y = cuboid2dJson["val"][j * 2 + 1].get<float>();
+
+				bool visible = cuboid2dJson["visible"][j];
+
+				cuboid2d.m_values.push_back(uv);
+				cuboid2d.m_visibles.push_back(visible);
+			}
+
+			object.m_cuboid2ds.push_back(cuboid2d);
+		}
 	}
 
 	void OpenLabel::save(const char* savePath)

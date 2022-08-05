@@ -74,7 +74,7 @@ namespace Echo
 		const ResourcePath& getRes() { return m_resPath; }
 
 		// Debug draw
-		OpenLabelDebugDraw* getDebugDraw() { return m_debugDraw; }
+		OpenLabelDebugDraw* getDebugDraw();
 		void setDebugDraw(Object* debugDraw);
 
 		// Objects
@@ -85,12 +85,17 @@ namespace Echo
 
 	public:
 		// Parse
-		void parse();
+		void parse(const String& content);
 
 		// Save
 		void save(const char* savePath);
 
 	protected:
+		// Parse
+		void parseObjects(nlohmann::json& parent);
+		void parsePoly2ds(nlohmann::json& parentJson, LabelObject& object);
+		void parseCuboid2ds(nlohmann::json& parentJson, LabelObject& object);
+
 		// Save
 		void saveObjects(nlohmann::json& parent);
 		void savePoly2ds(nlohmann::json& parentJson, LabelObject& object);
@@ -105,6 +110,7 @@ namespace Echo
 
 	protected:
 		ResourcePath			m_resPath = ResourcePath("", ".json");
+		bool					m_dirty = true;
 		LabelObjectArray		m_objects;
 		OpenLabelDebugDraw*		m_debugDraw = nullptr;
 	};

@@ -24,6 +24,8 @@ namespace Echo
         CLASS_BIND_METHOD(UiImage, setWidth);
         CLASS_BIND_METHOD(UiImage, getHeight);
         CLASS_BIND_METHOD(UiImage, setHeight);
+        CLASS_BIND_METHOD(UiImage, getAnchor);
+        CLASS_BIND_METHOD(UiImage, setAnchor);
         CLASS_BIND_METHOD(UiImage, getTextureRes);
         CLASS_BIND_METHOD(UiImage, setTextureRes);
         CLASS_BIND_METHOD(UiImage, getColor);
@@ -33,6 +35,7 @@ namespace Echo
         
         CLASS_REGISTER_PROPERTY(UiImage, "Width", Variant::Type::Int, getWidth, setWidth);
         CLASS_REGISTER_PROPERTY(UiImage, "Height", Variant::Type::Int, getHeight, setHeight);
+        CLASS_REGISTER_PROPERTY(UiImage, "Anchor", Variant::Type::Vector2, getAnchor, setAnchor);
         CLASS_REGISTER_PROPERTY(UiImage, "Texture", Variant::Type::ResourcePath, getTextureRes, setTextureRes);
         CLASS_REGISTER_PROPERTY(UiImage, "Color", Variant::Type::Color, getColor, setColor);
         CLASS_REGISTER_PROPERTY(UiImage, "Material", Variant::Type::Object, getMaterial, setMaterial);
@@ -55,6 +58,16 @@ namespace Echo
         {
             m_height = height;
             
+            clearRenderable();
+        }
+    }
+
+    void UiImage::setAnchor(const Vector2& anchor)
+    {
+        if (m_anchor != anchor)
+        {
+            m_anchor = anchor;
+
             clearRenderable();
         }
     }
@@ -136,12 +149,14 @@ namespace Echo
     {    
         float hw = m_width * 0.5f;
         float hh = m_height * 0.5f;
+
+        Vector3 offset = Vector3(m_anchor.x, m_anchor.y, 0.0);
         
         // vertices
-        oVertices.emplace_back(Vector3(-hw, -hh, 0.f), Vector2(0.f, 1.f));
-        oVertices.emplace_back(Vector3(-hw,  hh, 0.f), Vector2(0.f, 0.f));
-        oVertices.emplace_back(Vector3(hw,   hh, 0.f), Vector2(1.f, 0.f));
-        oVertices.emplace_back(Vector3(hw,  -hh, 0.f), Vector2(1.f, 1.f));
+        oVertices.emplace_back(Vector3(-hw, -hh, 0.f) + offset, Vector2(0.f, 1.f));
+        oVertices.emplace_back(Vector3(-hw,  hh, 0.f) + offset, Vector2(0.f, 0.f));
+        oVertices.emplace_back(Vector3(hw,   hh, 0.f) + offset, Vector2(1.f, 0.f));
+        oVertices.emplace_back(Vector3(hw,  -hh, 0.f) + offset, Vector2(1.f, 1.f));
         
         // calc aabb
         m_localAABB.reset();

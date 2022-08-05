@@ -31,6 +31,10 @@ namespace Echo
         // width
         i32 getHeight() const { return m_height; }
         void setHeight(i32 height);
+
+        // Anchor
+        const Vector2& getAnchor() const { return m_anchor; }
+        void setAnchor(const Vector2& anchor);
         
         // material
         Material* getMaterial() const { return m_material; }
@@ -62,5 +66,6 @@ namespace Echo
         Matrix4                 m_matWVP;
         i32                     m_width = 128;
         i32                     m_height = 128;
+        Vector2                 m_anchor = Vector2::ZERO;
     };
 }

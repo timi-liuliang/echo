@@ -22,9 +22,12 @@ namespace Echo
 		void onOpenLabelChanged(class OpenLabel* label);
 
 		// Update
-		void update(float elapsedTime);
+		void update(float elapsedTime, class OpenLabel* label);
 
 	protected:
+		// Init
+		void initGizmo(class OpenLabel* label);
+
 		// Draw reference line
 		void drawPoly2d(OpenLabel::Poly2d& poly2d);
 		void drawCuboid2d(OpenLabel::Cuboid2d& cuboid2d);
