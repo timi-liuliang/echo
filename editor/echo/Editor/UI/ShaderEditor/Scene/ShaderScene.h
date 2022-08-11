@@ -1,6 +1,7 @@
 #pragma once
 
 #include <nodeeditor/FlowScene>
+#include <engine/core/render/base/shader/editor/node/template/shader_node_template.h>
 
 namespace Studio { class ShaderEditor; }
 
@@ -22,7 +23,7 @@ namespace DataFlowProgramming
         void compile();
 
         // get shader template node
-        QtNodes::Node* getShaderTemplateNode();
+        Echo::ShaderNodeTemplate* getShaderTemplateNode();
 
     public:
         // override remove node

@@ -81,7 +81,7 @@ namespace Studio
 		if (shaderNode)
 		{
             shaderNode->checkValidation();
-            shaderNode->generateCode(m_shaderCompiler);
+            shaderNode->generateCode(*m_shaderCompiler);
 		}
     }
 
@@ -110,20 +110,23 @@ namespace Studio
         QtNodes::FlowScene* flowScene = (QtNodes::FlowScene*)m_graphicsScene;
         if(flowScene)
         {
-            m_shaderCompiler.reset();
-            
+            EchoSafeDelete(m_shaderCompiler, ShaderCompiler);
+
+            m_shaderCompiler = m_graphicsScene->getShaderTemplateNode()->getCompiler();
+            m_shaderCompiler->reset();
+   
             using namespace std::placeholders;
             flowScene->iterateOverNodeDataDependentOrder(std::bind(&ShaderEditor::visitorAllNodes, this, _1));
 
-            if (m_shaderCompiler.compile())
+            if (m_shaderCompiler->compile())
             {
-				if (m_shaderCompiler.isValid() && m_shaderProgram)
+				if (m_shaderCompiler->isValid() && m_shaderProgram)
 				{
 					Echo::String graph = flowScene->saveToMemory().toStdString().c_str();
 					m_shaderProgram->setGraph(graph);
 
-					m_shaderProgram->setVsCode(m_shaderCompiler.getVsCode());
-					m_shaderProgram->setPsCode(m_shaderCompiler.getPsCode());
+					m_shaderProgram->setVsCode(m_shaderCompiler->getVsCode());
+					m_shaderProgram->setPsCode(m_shaderCompiler->getPsCode());
 
                     flowScene->iterateOverNodeDataDependentOrder(std::bind(&ShaderEditor::visitorUniformDefaultValues, this, _1));
 				}

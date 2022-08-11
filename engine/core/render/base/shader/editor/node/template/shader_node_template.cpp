@@ -29,36 +29,27 @@ namespace Echo
 	{
 		m_domain = domain.toEnum(Domain::Surface);
 
-		switch (m_domain)
+		m_inputDataTypes =
 		{
-		case Domain::Surface:
-			{
-				m_inputDataTypes =
-				{
-					{"vec3", "Diffuse"},
-					{"float", "Opacity"},
-					{"vec3", "Normal"},
-					{"float", "Metallic"},
-					{"float", "Roughness"},
-					{"float", "Occlusion"},
-					{"vec3", "Emissive"}
-				};
-			}
-			break;
-		case Domain::Lighting:
-			{
-				m_inputDataTypes =
-				{
-					{"vec3", "Diffuse"},
-					{"vec3", "Specular"}
-				};
-			}
-			break;
-		default :
-			break;
-		}
+			{"vec3", "Diffuse"},
+			{"vec3", "Specular"},
+			{"float", "Opacity"},
+			{"vec3", "Normal"},
+			{"float", "Metallic"},
+			{"float", "Roughness"},
+			{"float", "Occlusion"},
+			{"vec3", "Emissive"}
+		};
 
 		m_inputs.resize(m_inputDataTypes.size());
+	}
+
+	ShaderCompiler* ShaderNodeTemplate::getCompiler()
+	{
+		if(m_domain == Domain::Lighting)
+			return &m_compilerLighting;
+
+		return &m_compilerSurface;
 	}
 
     bool ShaderNodeTemplate::generateCode(Echo::ShaderCompiler& compiler)

@@ -45,6 +45,6 @@ namespace Studio
         Echo::ShaderProgramPtr              m_shaderProgram;
 		DataFlowProgramming::ShaderScene*	m_graphicsScene = nullptr;
 		DataFlowProgramming::ShaderView*	m_graphicsView = nullptr;
-        Echo::ShaderCompilerSurface         m_shaderCompiler;
+        Echo::ShaderCompiler*               m_shaderCompiler = nullptr;
 	};
 }

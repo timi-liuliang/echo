@@ -24,6 +24,11 @@ namespace Echo
 	{
 		onRenderBegin();
 
+		vector<Light*>::type dirLights = Light::gatherLights(Light::Type::Direction);
+		for (Light* light : dirLights)
+		{
+			
+		}
 
 		onRenderEnd();
 	}

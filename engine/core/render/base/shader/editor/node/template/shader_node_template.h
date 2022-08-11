@@ -1,6 +1,8 @@
 #pragma once
 
 #include "engine/core/render/base/shader/editor/node/shader_node.h"
+#include "engine/core/render/base/shader/editor/compiler/shader_compiler_lighting.h"
+#include "engine/core/render/base/shader/editor/compiler/shader_compiler_surface.h"
 
 #ifdef ECHO_EDITOR_MODE
 
@@ -37,12 +39,18 @@ namespace Echo
 		virtual bool generateCode(Echo::ShaderCompiler& compiler) override;
 
     public:
+        // Get compiler
+        ShaderCompiler* getCompiler();
+
+    public:
         // Domain
         StringOption getDomain();
         void setDomain(const StringOption& domain);
 
     private:
-        Domain      m_domain = Domain::Surface;
+        Domain                  m_domain = Domain::Surface;
+        ShaderCompilerSurface   m_compilerSurface;
+        ShaderCompilerLighting  m_compilerLighting;
     };
 }
 

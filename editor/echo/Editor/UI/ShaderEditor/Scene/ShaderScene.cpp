@@ -1,6 +1,5 @@
 #include "ShaderScene.h"
 #include "ShaderEditor.h"
-#include <engine/core/render/base/shader/editor/node/template/shader_node_template.h>
 #include "nodeeditor/internal/node/Node.hpp"
 
 namespace DataFlowProgramming
@@ -40,7 +39,7 @@ namespace DataFlowProgramming
 		}
 	}
 
-	QtNodes::Node* ShaderScene::getShaderTemplateNode()
+	Echo::ShaderNodeTemplate* ShaderScene::getShaderTemplateNode()
 	{
 		for (QtNodes::Node* node : allNodes())
 		{
@@ -48,7 +47,7 @@ namespace DataFlowProgramming
 			Echo::ShaderNodeTemplate* shaderTempateNode = dynamic_cast<Echo::ShaderNodeTemplate*>(node->nodeDataModel());
 			if (shaderTempateNode)
 			{
-				return node;
+				return shaderTempateNode;
 			}
 		}
 
@@ -57,6 +56,11 @@ namespace DataFlowProgramming
 
 	void ShaderScene::onShowShaderNodeMenu(QtNodes::Node& node, const QPointF& pos)
 	{
+		Echo::ShaderNodeTemplate* shaderTempateNode = dynamic_cast<Echo::ShaderNodeTemplate*>(node.nodeDataModel());
+		if (shaderTempateNode)
+		{
+			
+		}
 	}
 
 	void ShaderScene::nodePressed(QtNodes::Node& node)
