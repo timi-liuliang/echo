@@ -45,17 +45,19 @@ namespace Echo
 
 		// enum
 		template <typename T>
-		StringOption fromEnum(T value)
+		static StringOption fromEnum(T value)
 		{
+			StringOption result;
+
 			for (T enumValue : magic_enum::enum_values<T>())
 			{
-				m_options.push_back(std::string(magic_enum::enum_name(enumValue)).c_str());
+				result.m_options.push_back(std::string(magic_enum::enum_name(enumValue)).c_str());
 			}
 
 			std::string valueName(magic_enum::enum_name(value));
-			setValue(valueName.c_str());
+			result.setValue(valueName.c_str());
 
-			return *this;
+			return result;
 		}
 
 		template<typename T>

@@ -19,7 +19,6 @@
 #include "base/texture/texture_atla.h"
 #include "base/texture/texture_atlas.h"
 #include "base/texture/editor/atlas/texture_atla_editor.h"
-#include "base/shader/shader_template.h"
 #include "base/shader/editor/node/shader_node.h"
 #include "base/shader/editor/node/template/shader_node_template.h"
 #include "base/shader/editor/node/input/shader_node_layer_blend.h"
@@ -98,7 +97,6 @@ namespace Echo
 		Class::registerType<TextureCube>();
 		Class::registerType<TextureRenderTarget2D>();
 		Class::registerType<ShaderProgram>();
-		Class::registerType<ShaderTemplate>();
 		Class::registerType<FrameBuffer>();
 		Class::registerType<FrameBufferOffScreen>();
 		Class::registerType<FrameBufferWindow>();

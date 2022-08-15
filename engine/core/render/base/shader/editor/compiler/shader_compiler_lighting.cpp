@@ -168,15 +168,15 @@ void main(void)
 {
 ${FS_SHADER_CODE}
 
-#ifndef ENABLE_BASE_COLOR 
-    vec3 __BaseColor = vec3(1.0);
+#ifndef ENABLE_DIFFUSE 
+    vec3 __Diffuse = vec3(1.0);
 #endif
 
 #ifndef ENABLE_SPECULAR
     vec3 __Specular = vec3(0.0);
 #endif
 
-    o_FragDiffuse = vec4(__BaseColor.rgb, 1.0);
+    o_FragDiffuse = vec4(__Diffuse.rgb, 1.0);
 	o_FragSpecular = vec4(__Specular.rgb, 1.0);
 )";
 

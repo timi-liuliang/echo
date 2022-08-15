@@ -1,5 +1,6 @@
 #pragma once
 
+#include "engine/core/render/base/shader/shader_program.h"
 #include "engine/core/render/base/shader/editor/node/shader_node.h"
 #include "engine/core/render/base/shader/editor/compiler/shader_compiler_lighting.h"
 #include "engine/core/render/base/shader/editor/compiler/shader_compiler_surface.h"
@@ -11,13 +12,6 @@ namespace Echo
     class ShaderNodeTemplate : public ShaderNode
     {
         ECHO_CLASS(ShaderNodeTemplate, ShaderNode)
-
-    public:
-        enum Domain
-        {
-            Surface,
-            Lighting,
-        };
 
     public:
         ShaderNodeTemplate();
@@ -44,11 +38,10 @@ namespace Echo
 
     public:
         // Domain
-        StringOption getDomain();
-        void setDomain(const StringOption& domain);
+        void setDomain(const ShaderProgram::Domain domain);
 
     private:
-        Domain                  m_domain = Domain::Surface;
+        ShaderProgram::Domain   m_domain = ShaderProgram::Domain::Surface;
         ShaderCompilerSurface   m_compilerSurface;
         ShaderCompilerLighting  m_compilerLighting;
     };

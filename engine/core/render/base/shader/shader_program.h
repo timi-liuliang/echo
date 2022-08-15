@@ -31,6 +31,13 @@ namespace Echo
 		ECHO_RES(ShaderProgram, Res, ".shader", ShaderProgram::create, ShaderProgram::load);
 
 	public:
+        // Domain 
+        enum Domain
+        {
+            Surface,
+            Lighting,
+        };
+
 		// ShaderType
 		enum ShaderType
 		{
@@ -39,6 +46,12 @@ namespace Echo
 			CS,
 			Total,
 		};
+
+        enum BlendMode
+        {
+            Opaque,
+            Transparent,
+        };
 
         // enum texture type
         enum TextureType
@@ -136,6 +149,10 @@ namespace Echo
         // type
         const String& getType() const { return m_type; }
         void setType(const String& type) { m_type = type; }
+
+        // Domain
+        StringOption getDomain();
+        void setDomain(const StringOption& domain);
         
         // vs code
         const String& getVsCode() const;
@@ -173,11 +190,11 @@ namespace Echo
 
     public:
 		// cull mode
-		const StringOption& getCullMode() const { return m_cullMode; }
+		const StringOption getCullMode() const { return StringOption::fromEnum(m_cullMode); }
         void setCullMode(const StringOption& option);
 
         // blend mode
-		const StringOption& getBlendMode() const { return m_blendMode; }
+		const StringOption getBlendMode() const { return StringOption::fromEnum(m_blendMode); }
 		void setBlendMode(const StringOption& option);
         
     public:
@@ -204,20 +221,19 @@ namespace Echo
         void insertMacros(String& code);
 
 	protected:
-		StringArray			    m_macros;
-        String                  m_type = "glsl";
-        String                  m_vsCode;
-        String                  m_psCode;
-        String                  m_graph;
-		BlendState*             m_blendState = nullptr;
-		DepthStencilStatePtr    m_depthState;
-		RasterizerStatePtr	    m_rasterizerState;
-        MultisampleStatePtr     m_multiSampleState;
-        UniformMaps             m_uniforms;
-
-    protected:
-        StringOption        m_cullMode = StringOption("CULL_BACK", { "CULL_NONE", "CULL_FRONT", "CULL_BACK"});
-        StringOption        m_blendMode = StringOption("Opaque", { "Opaque", "Transparent" });
+        Domain                      m_domain = Domain::Surface;
+		StringArray			        m_macros;
+        String                      m_type = "glsl";
+        String                      m_vsCode;
+        String                      m_psCode;
+        String                      m_graph;
+        BlendMode                   m_blendMode = BlendMode::Opaque;
+		BlendState*                 m_blendState = nullptr;
+		DepthStencilStatePtr        m_depthState;
+        RasterizerState::CullMode   m_cullMode = RasterizerState::CullMode::CULL_BACK;
+		RasterizerStatePtr	        m_rasterizerState;
+        MultisampleStatePtr         m_multiSampleState;
+        UniformMaps                 m_uniforms;
 	};
 	typedef ResRef<ShaderProgram> ShaderProgramPtr;
 }

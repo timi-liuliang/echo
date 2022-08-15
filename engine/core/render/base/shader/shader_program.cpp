@@ -284,6 +284,19 @@ namespace Echo
         return Renderer::instance()->createShaderProgram();
     }
 
+    StringOption ShaderProgram::getDomain()
+    {
+        StringOption result;
+        result.fromEnum(m_domain);
+
+        return result;
+    }
+
+    void ShaderProgram::setDomain(const StringOption& domain)
+    {
+        m_domain = domain.toEnum(Domain::Surface);
+    }
+
 	const String& ShaderProgram::getVsCode() const
     { 
         return m_vsCode.empty() ? g_3dVsCode : m_vsCode;
@@ -445,18 +458,12 @@ namespace Echo
 
     void ShaderProgram::setCullMode(const StringOption& option)
     { 
-        if (m_cullMode.setValue(option.getValue()))
-        {
-            m_rasterizerState = nullptr;
-        }
+        m_cullMode = option.toEnum(m_cullMode);
     }
 
 	void ShaderProgram::setBlendMode(const StringOption& option)
 	{
-		if (m_blendMode.setValue(option.getValue()))
-		{
-			m_blendState = nullptr;
-		}
+        m_blendMode = option.toEnum(m_blendMode);
 	}
 
     BlendState* ShaderProgram::getBlendState()
@@ -464,7 +471,7 @@ namespace Echo
         if (!m_blendState)
         {
             m_blendState = Renderer::instance()->createBlendState();
-            if (m_blendMode.getIdx() == 1)
+            if (m_blendMode == BlendMode::Transparent)
             {
                 m_blendState->setBlendEnable(true);
                 m_blendState->setSrcBlend(BlendState::BF_SRC_ALPHA);
@@ -490,7 +497,7 @@ namespace Echo
         if (!m_rasterizerState)
         {
             m_rasterizerState = Renderer::instance()->createRasterizerState();
-            m_rasterizerState->setCullMode(magic_enum::enum_cast<RasterizerState::CullMode>(m_cullMode.getValue().c_str()).value_or(RasterizerState::CullMode::CULL_NONE));
+            m_rasterizerState->setCullMode(m_cullMode);
         }
 
         return m_rasterizerState; 

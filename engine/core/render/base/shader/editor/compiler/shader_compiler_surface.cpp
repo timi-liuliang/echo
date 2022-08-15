@@ -314,8 +314,8 @@ void main(void)
 {
 ${FS_SHADER_CODE}
 
-#ifndef ENABLE_BASE_COLOR 
-    vec3 __BaseColor = vec3(0.6);
+#ifndef ENABLE_DIFFUSE 
+    vec3 __Diffuse = vec3(0.6);
 #endif
 
 #ifndef ENABLE_OPACITY
@@ -331,20 +331,20 @@ ${FS_SHADER_CODE}
 #endif
 
 #ifdef ENABLE_LIGHTING_CALCULATION
-	__BaseColor = PbrLighting(v_Position.world, __BaseColor, __Normal, __Metalic, __PerceptualRoughness, fs_ubo.u_CameraPosition);
+	vec3 FinalColor = PbrLighting(v_Position.world, __Diffuse, __Normal, __Metalic, __PerceptualRoughness, fs_ubo.u_CameraPosition);
 
 	o_FragNormal.xyz = __Normal;
 #endif
 
 #ifdef ENABLE_OCCLUSION
-	__BaseColor.rgb = __BaseColor.rgb * __AmbientOcclusion;
+	FinalColor.rgb = FinalColor.rgb * __AmbientOcclusion;
 #endif
 
 #ifdef ENABLE_EMISSIVE
-	__BaseColor.rgb += __Emissive;
+	FinalColor.rgb += __Emissive;
 #endif  
 
-    o_FragColor = vec4(__BaseColor.rgb, __Opacity);
+    o_FragColor = vec4(FinalColor.rgb, __Opacity);
 }
 )";
 

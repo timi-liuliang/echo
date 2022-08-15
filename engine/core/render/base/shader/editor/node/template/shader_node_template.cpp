@@ -6,28 +6,16 @@ namespace Echo
 {
     ShaderNodeTemplate::ShaderNodeTemplate()
     {
-		setDomain(EnumToString(Surface));
+		setDomain(ShaderProgram::Domain::Surface);
     }
 
 	void ShaderNodeTemplate::bindMethods()
 	{
-		CLASS_BIND_METHOD(ShaderNodeTemplate, getDomain);
-		CLASS_BIND_METHOD(ShaderNodeTemplate, setDomain);
-
-		CLASS_REGISTER_PROPERTY(ShaderNodeTemplate, "Domain", Variant::Type::StringOption, getDomain, setDomain);
 	}
 
-	StringOption ShaderNodeTemplate::getDomain()
+	void ShaderNodeTemplate::setDomain(const ShaderProgram::Domain domain)
 	{
-		StringOption result;
-		result.fromEnum(m_domain);
-
-		return result;
-	}
-
-	void ShaderNodeTemplate::setDomain(const StringOption& domain)
-	{
-		m_domain = domain.toEnum(Domain::Surface);
+		m_domain = domain;
 
 		m_inputDataTypes =
 		{
@@ -46,7 +34,7 @@ namespace Echo
 
 	ShaderCompiler* ShaderNodeTemplate::getCompiler()
 	{
-		if(m_domain == Domain::Lighting)
+		if(m_domain == ShaderProgram::Domain::Lighting)
 			return &m_compilerLighting;
 
 		return &m_compilerSurface;
@@ -60,8 +48,8 @@ namespace Echo
             {
 				if (m_inputDataTypes[i].name == "Diffuse")
 				{
-					compiler.addMacro("ENABLE_BASE_COLOR");
-					compiler.addCode(Echo::StringUtil::Format("\tvec3 __BaseColor = %s;\n", dynamic_cast<ShaderData*>(m_inputs[i].get())->getVariableName().c_str()));
+					compiler.addMacro("ENABLE_DIFFUSE");
+					compiler.addCode(Echo::StringUtil::Format("\tvec3 __Diffuse = %s;\n", dynamic_cast<ShaderData*>(m_inputs[i].get())->getVariableName().c_str()));
 				}
 
 				if (m_inputDataTypes[i].name == "Specular")

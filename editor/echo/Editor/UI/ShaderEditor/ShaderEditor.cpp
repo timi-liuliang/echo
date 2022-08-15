@@ -112,24 +112,29 @@ namespace Studio
         {
             EchoSafeDelete(m_shaderCompiler, ShaderCompiler);
 
-            m_shaderCompiler = m_graphicsScene->getShaderTemplateNode()->getCompiler();
-            m_shaderCompiler->reset();
-   
-            using namespace std::placeholders;
-            flowScene->iterateOverNodeDataDependentOrder(std::bind(&ShaderEditor::visitorAllNodes, this, _1));
-
-            if (m_shaderCompiler->compile())
+            Echo::ShaderNodeTemplate* shaderTemplateNode  = m_graphicsScene->getShaderTemplateNode();
+            if (shaderTemplateNode)
             {
-				if (m_shaderCompiler->isValid() && m_shaderProgram)
-				{
-					Echo::String graph = flowScene->saveToMemory().toStdString().c_str();
-					m_shaderProgram->setGraph(graph);
+                shaderTemplateNode->setDomain(m_shaderProgram->getDomain().toEnum(ShaderProgram::Domain::Surface));
+                m_shaderCompiler = shaderTemplateNode->getCompiler();
+                m_shaderCompiler->reset();
 
-					m_shaderProgram->setVsCode(m_shaderCompiler->getVsCode());
-					m_shaderProgram->setPsCode(m_shaderCompiler->getPsCode());
+                using namespace std::placeholders;
+                flowScene->iterateOverNodeDataDependentOrder(std::bind(&ShaderEditor::visitorAllNodes, this, _1));
 
-                    flowScene->iterateOverNodeDataDependentOrder(std::bind(&ShaderEditor::visitorUniformDefaultValues, this, _1));
-				}
+                if (m_shaderCompiler->compile())
+                {
+                    if (m_shaderCompiler->isValid() && m_shaderProgram)
+                    {
+                        Echo::String graph = flowScene->saveToMemory().toStdString().c_str();
+                        m_shaderProgram->setGraph(graph);
+
+                        m_shaderProgram->setVsCode(m_shaderCompiler->getVsCode());
+                        m_shaderProgram->setPsCode(m_shaderCompiler->getPsCode());
+
+                        flowScene->iterateOverNodeDataDependentOrder(std::bind(&ShaderEditor::visitorUniformDefaultValues, this, _1));
+                    }
+                }
             }
         }
     }
