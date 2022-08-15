@@ -64,6 +64,12 @@ namespace Echo
 					compiler.addCode(Echo::StringUtil::Format("\tvec3 __BaseColor = %s;\n", dynamic_cast<ShaderData*>(m_inputs[i].get())->getVariableName().c_str()));
 				}
 
+				if (m_inputDataTypes[i].name == "Specular")
+				{
+					compiler.addMacro("ENABLE_SPECULAR");
+					compiler.addCode(Echo::StringUtil::Format("\tvec3 __Specular = %s;\n", dynamic_cast<ShaderData*>(m_inputs[i].get())->getVariableName().c_str()));
+				}
+
 				if (m_inputDataTypes[i].name == "Opacity")
 				{
 					compiler.addMacro("ENABLE_OPACITY");
