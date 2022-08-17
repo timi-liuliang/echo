@@ -30,6 +30,10 @@ namespace Echo
 		bool is2d() const { return m_2d; }
 		void set2d(bool is2d) { m_2d = is2d; }
 
+		// Color
+		const Color& getColor() const { return m_color; }
+		void setColor(const Color& color) { m_color = color; }
+
 	public:
 		// Gather lights
 		static vector<Light*>::type gatherLights(i32 types);
@@ -39,5 +43,6 @@ namespace Echo
 		bool		m_2d = false;
 		i32			m_bvhNodeId = -1;
 		class Bvh*	m_bvh = nullptr;
+		Color		m_color = Color::WHITE;
 	};
 }
