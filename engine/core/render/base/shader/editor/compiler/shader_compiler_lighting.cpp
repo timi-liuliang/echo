@@ -83,17 +83,8 @@ void main(void)
 	gl_Position = clipPosition;
 
 #ifdef ENABLE_VERTEX_NORMAL
-	#ifdef HAS_TANGENTS
-		vec3 normalW = normalize(vec3(vs_ubo.u_WorldMatrix * vec4(a_Normal.xyz, 0.0)));
-		vec3 tangentW = normalize(vec3(vs_ubo.u_WorldMatrix * vec4(a_Tangent.xyz, 0.0)));
-		vec3 bitangentW = cross(normalW, tangentW) * a_Tangent.w;
-		v_Normal = normalW;
-		v_TBN = mat3(tangentW, bitangentW, normalW);
-	#else // HAS_TANGENTS != 1
-		v_Normal = normalize(vec3(vs_ubo.u_WorldMatrix * vec4(a_Normal.xyz, 0.0)));
-	#endif
-
 	v_NormalLocal = a_Normal;
+	v_Normal = normalize(vec3(vs_ubo.u_WorldMatrix * vec4(a_Normal.xyz, 0.0)));
 #endif
 
 #ifdef ENABLE_VERTEX_COLOR
@@ -138,10 +129,6 @@ layout(location = 0) in Position  v_Position;
 #ifdef ENABLE_VERTEX_NORMAL
 layout(location = 3) in vec3 v_Normal;
 layout(location = 4) in vec3 v_NormalLocal;
-#ifdef HAS_TANGENTS
-	layout(location = 5) in mat3 v_TBN;
-#endif
-layout(location=1) out vec4 o_FragNormal;
 #endif
 
 #ifdef ENABLE_VERTEX_COLOR
@@ -178,6 +165,7 @@ ${FS_SHADER_CODE}
 
     o_FragDiffuse = vec4(__Diffuse.rgb, 1.0);
 	o_FragSpecular = vec4(__Specular.rgb, 1.0);
+}
 )";
 
 namespace Echo

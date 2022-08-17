@@ -15,6 +15,7 @@
 #include "editor/direction_light_editor.h"
 #include "editor/cube_light_capture_editor.h"
 #include "editor/cube_light_custom_editor.h"
+#include "editor/queue/shader_node_direction_light_attribute.h"
 
 namespace Echo
 {
@@ -59,6 +60,10 @@ namespace Echo
         Class::registerType<PointLighting>();
         Class::registerType<SpotLighting>();
         Class::registerType<ShadowDepth>();
+
+    #ifdef ECHO_EDITOR_MODE
+        Class::registerType<ShaderNodeDirectionLightAttribute>();
+    #endif
 
         CLASS_REGISTER_EDITOR(PointLight, PointLightEditor)
         CLASS_REGISTER_EDITOR(SpotLight, SpotLightEditor)

@@ -126,10 +126,7 @@ namespace Echo
 
 	StringOption Spine::getBillboardType()
 	{
-		StringOption result;
-		result.fromEnum(m_billboardType);
-
-		return result;
+		return StringOption::fromEnum(m_billboardType);
 	}
 
 	void Spine::setBillobardType(const StringOption& type)

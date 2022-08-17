@@ -42,10 +42,7 @@ namespace Echo
 
 	StringOption RvoModule::getDebugDrawOption() const
 	{
-		StringOption result;
-		result.fromEnum(m_debugDrawOption);
-
-		return result;
+		return StringOption::fromEnum(m_debugDrawOption);
 	}
 
 	void RvoModule::setDebugDrawOption(const StringOption& option)

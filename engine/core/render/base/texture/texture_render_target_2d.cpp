@@ -60,10 +60,7 @@ namespace Echo
 
 	const StringOption TextureRenderTarget2D::getPixelFormatName()
 	{
-		StringOption result;
-		result.fromEnum(m_pixFmt);
-
-		return result;
+		return StringOption::fromEnum(m_pixFmt);
 	}
 
 	void TextureRenderTarget2D::setPixelFormatName(const StringOption& option)
@@ -78,10 +75,7 @@ namespace Echo
 
 	const StringOption TextureRenderTarget2D::getOnSizeType()
 	{
-		StringOption result;
-		result.fromEnum(m_onSizeType);
-
-		return result;
+		return StringOption::fromEnum(m_onSizeType);
 	}
 
 	void TextureRenderTarget2D::setOnSizeType(const StringOption& option)

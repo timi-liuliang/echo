@@ -240,6 +240,8 @@ namespace Echo
 	{
         CLASS_BIND_METHOD(ShaderProgram, getType);
         CLASS_BIND_METHOD(ShaderProgram, setType);
+        CLASS_BIND_METHOD(ShaderProgram, getDomain);
+        CLASS_BIND_METHOD(ShaderProgram, setDomain);
         CLASS_BIND_METHOD(ShaderProgram, getVsCode);
         CLASS_BIND_METHOD(ShaderProgram, setVsCode);
         CLASS_BIND_METHOD(ShaderProgram, getPsCode);
@@ -254,6 +256,7 @@ namespace Echo
 		CLASS_BIND_METHOD(ShaderProgram, setDepthStencilState);
 
         CLASS_REGISTER_PROPERTY(ShaderProgram, "Type", Variant::Type::String, getType, setType);
+        CLASS_REGISTER_PROPERTY(ShaderProgram, "Domain", Variant::Type::StringOption, getDomain, setDomain);
         CLASS_REGISTER_PROPERTY(ShaderProgram, "VertexShader", Variant::Type::String, getVsCode, setVsCode);
         CLASS_REGISTER_PROPERTY(ShaderProgram, "FragmentShader", Variant::Type::String, getPsCode, setPsCode);
         CLASS_REGISTER_PROPERTY(ShaderProgram, "Graph", Variant::Type::String, getGraph, setGraph);
@@ -286,10 +289,7 @@ namespace Echo
 
     StringOption ShaderProgram::getDomain()
     {
-        StringOption result;
-        result.fromEnum(m_domain);
-
-        return result;
+        return StringOption::fromEnum(m_domain);
     }
 
     void ShaderProgram::setDomain(const StringOption& domain)
