@@ -291,7 +291,7 @@ namespace Echo
 		GLESRenderable* glesRenderable = (GLESRenderable*)renderable;
 
         GLESShaderProgram* shaderProgram = ECHO_DOWN_CAST<GLESShaderProgram*>(renderable->getMaterial()->getShader());
-		if (shaderProgram)
+		if (shaderProgram && shaderProgram->isLinked())
 		{
 			shaderProgram->bind();
 			glesRenderable->bindRenderState();

@@ -23,8 +23,8 @@ namespace Echo
 		bool attachShader(GLESShader* pShader);
 		GLESShader*	detachShader(ShaderProgram::ShaderType type);
 
-		// link shader
-		bool linkShaders();
+		// Is linked
+		bool isLinked() const { return m_isLinked; }
 
 		// bind Uniforms
 		void bindUniforms();
@@ -46,6 +46,10 @@ namespace Echo
 	public:
 		// get shader
 		GLESShader* getShader(ShaderType type) const { return m_shaders[(ui32)type]; }
+
+	protected:
+		// link shader
+		bool linkShaders();
 	
 	private:
         bool                m_isLinked = false;

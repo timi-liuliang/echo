@@ -110,8 +110,6 @@ namespace Studio
         QtNodes::FlowScene* flowScene = (QtNodes::FlowScene*)m_graphicsScene;
         if(flowScene)
         {
-            EchoSafeDelete(m_shaderCompiler, ShaderCompiler);
-
             Echo::ShaderNodeTemplate* shaderTemplateNode  = m_graphicsScene->getShaderTemplateNode();
             if (shaderTemplateNode)
             {
