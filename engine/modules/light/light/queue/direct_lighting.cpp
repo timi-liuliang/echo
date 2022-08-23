@@ -27,8 +27,8 @@ namespace Echo
 		Renderer* render = Renderer::instance();
 		if (render)
 		{
-			if (buildRenderable())
-				render->draw(m_renderable, frameBuffer);
+			//if (buildRenderable())
+			//	render->draw(m_renderable, frameBuffer);
 		}
 
 		onRenderEnd();
@@ -59,7 +59,7 @@ namespace Echo
 			updateMeshBuffer();
 		}
 
-		return m_renderable ? true : false;
+		return m_renderable && m_mesh->getPrimitiveCount() ? true : false;
 	}
 
 	void DirectLighting::buildMeshData(VertexArray& oVertices, IndiceArray& oIndices)

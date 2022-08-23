@@ -84,7 +84,7 @@ namespace Echo
 		ShaderProgram* getShader();
 
 		// render stage
-		const String& getRenderStage();
+		String getRenderStage();
 
 		// set shader
 		void setShaderPath(const ResourcePath& path);

@@ -1,0 +1,20 @@
+#compile thread count
+is_component_build = false         #(links dependencies into the build targets)
+
+#target_cpu = "x86"                 #(default is "x64")
+target_cpu = "x64"                 #(default is "x64")
+
+is_clang = true                    #(NOT RECOMMENDED) (to use system default compiler instead of clang)
+is_debug = false                   #(for release builds. is_debug = true is the default)
+angle_assert_always_on = false     #
+
+
+#angle_enable_d3d9    = false      # here
+#angle_enable_d3d11   = false
+#angle_enable_gl      = false
+#angle_enable_metal   = false      # here
+#angle_enable_null    = false      # here
+#angle_enable_vulkan  = false      # here
+#angle_enable_essl    = false
+#angle_enable_glsl    = false
+    

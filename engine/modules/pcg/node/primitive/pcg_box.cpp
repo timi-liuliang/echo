@@ -15,10 +15,10 @@ namespace Echo
 
 	void PCGBox::bindMethods()
 	{
-		CLASS_BIND_METHOD(PCGBox, getSize, DEF_METHOD("getSize"));
-		CLASS_BIND_METHOD(PCGBox, setSize, DEF_METHOD("setSize"));
+		CLASS_BIND_METHOD(PCGBox, getSize);
+		CLASS_BIND_METHOD(PCGBox, setSize);
 
-		CLASS_REGISTER_PROPERTY(PCGBox, "Size", Variant::Type::Vector3, "getSize", "setSize");
+		CLASS_REGISTER_PROPERTY(PCGBox, "Size", Variant::Type::Vector3, getSize, setSize);
 	}
 
 	void PCGBox::setSize(const Vector3& size)

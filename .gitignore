@@ -28,3 +28,9 @@ bin/editor/Win64/Debug/cache/echo.cache
 bin/editor/Win64/Debug/Echo.pdb
 bin/editor/Win64/Debug/Echo.exe
 /bin/editor/Win64/Debug/cache
+/bin/editor/Win64/Debug/user
+/bin/editor/Win64/Debug/libGLESv2.dll
+/bin/editor/Win64/Debug/libEGL.dll
+/bin/editor/Win64/Release/libGLESv2.dll
+/bin/editor/Win64/Release/libEGL.dll
+/bin/editor/Win64/Release/Echo.exe

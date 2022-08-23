@@ -204,7 +204,7 @@ namespace Echo
 		}
 	}
 
-	const String& Material::getRenderStage()
+	String Material::getRenderStage()
 	{ 
 		return m_shaderProgram ? m_shaderProgram->getBlendMode().getValue() : StringUtil::BLANK;
 	}

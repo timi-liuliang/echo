@@ -18,10 +18,10 @@ LINK_DIRECTORIES(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 
 IF(${ECHO_PLATFORM_WINDOWS})
 	IF(CMAKE_SIZEOF_VOID_P EQUAL 4)
-		LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/opengles/mali/lib/win32)
+		LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/opengles/angle/lib/win32)
 		LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/live2d/Cubism31SdkNative-EAP5/Core/lib/windows/x86)
 	ELSEIF(CMAKE_SIZEOF_VOID_P EQUAL 8)
-		LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/opengles/mali/lib/win64)
+		LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/opengles/angle/lib/win64)
 		LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/live2d/Cubism31SdkNative-EAP5/Core/lib/windows/x86_64)
 		LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/opencl/windows/lib/x64)
 	ENDIF()
@@ -146,13 +146,39 @@ TARGET_LINK_QTLIBRARIES(${MODULE_NAME})
 
 IF(${ECHO_PLATFORM_WINDOWS})
 	TARGET_LINK_LIBRARIES(${MODULE_NAME} winmm.lib imm32.lib dxgi.lib Shlwapi.lib CfgMgr32.lib)
-	TARGET_LINK_LIBRARIES(${MODULE_NAME} libEGL.lib libGLESv2.lib libMaliEmulator.lib)
+	TARGET_LINK_LIBRARIES(${MODULE_NAME} libEGL.lib libGLESv2.lib)
 	TARGET_LINK_LIBRARIES(${MODULE_NAME} dbghelp.lib Psapi.lib)
 	TARGET_LINK_LIBRARIES(${MODULE_NAME} openal-soft)
     TARGET_LINK_LIBRARIES(${MODULE_NAME} OpenCL)
 	TARGET_LINK_LIBRARIES(${MODULE_NAME} vulkan-loader)
     TARGET_LINK_LIBRARIES(${MODULE_NAME} jplayer)
     TARGET_LINK_LIBRARIES(${MODULE_NAME} Live2DCubismCore)
+
+	# Copy dlls &{CMAKE_BUILD_TYPE} is empty!!!
+	ADD_CUSTOM_COMMAND(
+		TARGET ${MODULE_NAME} PRE_BUILD 
+		COMMAND ${CMAKE_COMMAND} -E copy 
+		${ECHO_ROOT_PATH}/thirdparty/opengles/angle/lib/win64/libEGL.dll
+		${ECHO_ROOT_PATH}/bin/editor//${PLATFORM}/Debug/libEGL.dll)
+
+	ADD_CUSTOM_COMMAND(
+		TARGET ${MODULE_NAME} PRE_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy 
+		${ECHO_ROOT_PATH}/thirdparty/opengles/angle/lib/win64/libGLESv2.dll
+		${ECHO_ROOT_PATH}/bin/editor/${PLATFORM}/Debug/libGLESv2.dll)
+
+	ADD_CUSTOM_COMMAND(
+		TARGET ${MODULE_NAME} PRE_BUILD 
+		COMMAND ${CMAKE_COMMAND} -E copy 
+		${ECHO_ROOT_PATH}/thirdparty/opengles/angle/lib/win64/libEGL.dll
+		${ECHO_ROOT_PATH}/bin/editor//${PLATFORM}/Release/libEGL.dll)
+
+	ADD_CUSTOM_COMMAND(
+		TARGET ${MODULE_NAME} PRE_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy 
+		${ECHO_ROOT_PATH}/thirdparty/opengles/angle/lib/win64/libGLESv2.dll
+		${ECHO_ROOT_PATH}/bin/editor/${PLATFORM}/Release/libGLESv2.dll)
+
 ELSE()
 	# AddFrameWork Macro
 	MACRO(ADD_FRAMEWORK fwname)
