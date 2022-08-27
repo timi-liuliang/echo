@@ -27,8 +27,8 @@ namespace Echo
 		Renderer* render = Renderer::instance();
 		if (render)
 		{
-			//if (buildRenderable())
-			//	render->draw(m_renderable, frameBuffer);
+			if (buildRenderable())
+				render->draw(m_renderable, frameBuffer);
 		}
 
 		onRenderEnd();
@@ -46,11 +46,11 @@ namespace Echo
 		{
 			clearRenderable();
 
-			updateMeshBuffer();
-
-			// create render able
-			m_renderable = RenderProxy::create(m_mesh, m_material, nullptr, false);
-			m_renderable->setSubmitToRenderQueue(false);
+			if (updateMeshBuffer())
+			{
+				m_renderable = RenderProxy::create(m_mesh, m_material, nullptr, false);
+				m_renderable->setSubmitToRenderQueue(false);
+			}
 
 			m_dirty = false;
 		}
@@ -59,7 +59,7 @@ namespace Echo
 			updateMeshBuffer();
 		}
 
-		return m_renderable && m_mesh->getPrimitiveCount() ? true : false;
+		return m_renderable && m_mesh && m_mesh->getPrimitiveCount() ? true : false;
 	}
 
 	void DirectLighting::buildMeshData(VertexArray& oVertices, IndiceArray& oIndices)
@@ -93,7 +93,7 @@ namespace Echo
 		}
 	}
 
-	void DirectLighting::updateMeshBuffer()
+	bool DirectLighting::updateMeshBuffer()
 	{
 		// create mesh
 		if (!m_mesh) m_mesh = Mesh::create(true, true);
@@ -102,12 +102,19 @@ namespace Echo
 		VertexArray    vertices;
 		IndiceArray    indices;
 		buildMeshData(vertices, indices);
+		
+		if (vertices.size() && indices.size())
+		{
+			MeshVertexFormat define;
+			define.m_isUseNormal = true;
+			define.m_isUseVertexColor = true;
 
-		MeshVertexFormat define;
-		define.m_isUseNormal = true;
-		define.m_isUseVertexColor = true;
+			m_mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(ui16), indices.data());
+			m_mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data());
 
-		m_mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(ui16), indices.data());
-		m_mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data());
+			return true;
+		}
+
+		return false;
 	}
 }

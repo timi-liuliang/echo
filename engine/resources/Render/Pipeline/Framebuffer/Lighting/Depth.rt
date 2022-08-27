@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<res class="TextureRenderTarget2D" MipMap="false" Width="2828" Height="909" ClearColor="0 0 0 1 " Format="PF_D24_UNORM_S8_UINT">
+<res class="TextureRenderTarget2D" MipMap="false" Width="2828" Height="909" ClearColor="0 0 0 1 " Format="PF_D32_FLOAT">
 	<channel name="Width" expression="Renderer:getWindowWidth()" />
 	<channel name="Height" expression="Renderer:getWindowHeight()" />
 </res>

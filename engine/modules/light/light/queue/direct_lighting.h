@@ -34,7 +34,7 @@ namespace Echo
 		bool buildRenderable();
 
 		// update mesh buffer
-		void updateMeshBuffer();
+		bool updateMeshBuffer();
 
 		// build mesh data by Draw ables data
 		void buildMeshData(VertexArray& oVertices, IndiceArray& oIndices);
