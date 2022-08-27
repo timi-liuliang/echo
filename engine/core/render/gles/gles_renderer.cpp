@@ -562,7 +562,8 @@ namespace Echo
 		}
 
 		GLint context_attr_list[] = {
-			EGL_CONTEXT_CLIENT_VERSION, 3,
+			EGL_CONTEXT_MAJOR_VERSION, 3,
+			EGL_CONTEXT_MINOR_VERSION, 1,
 			EGL_NONE
 		};
 
