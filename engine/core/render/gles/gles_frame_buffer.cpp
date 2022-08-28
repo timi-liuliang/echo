@@ -23,6 +23,26 @@ namespace Echo
 
 	bool GLESFrameBufferOffScreen::bind(i32& width, i32& height)
 	{
+		if (checkScreenSize(width, height))
+		{
+			// Bind framebuffer
+			OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
+
+			// Attach textures to frame buffer
+			attach();
+
+			// Specifies a list of color buffers to be drawn into
+			specifyColorBuffers();
+
+			// Return result
+			return checkFramebufferStatus();
+		}
+
+		return false;
+	}
+
+	bool GLESFrameBufferOffScreen::checkScreenSize(i32& width, i32& height)
+	{
 		if (!hasColorAttachment()) return false;
 		if (!hasDepthAttachment()) return false;
 
@@ -39,15 +59,7 @@ namespace Echo
 			}
 		}
 
-		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
-		attach();
-
-#ifdef ECHO_EDITOR_MODE
-		GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-		return status == GL_FRAMEBUFFER_COMPLETE ? true : false;
-#else
 		return true;
-#endif
 	}
 
     void GLESFrameBufferOffScreen::attach()
@@ -71,6 +83,32 @@ namespace Echo
 			}
 		}
     }
+
+	void GLESFrameBufferOffScreen::specifyColorBuffers()
+	{
+		m_attachments.clear();
+
+		for (i32 i = i32(Attachment::ColorA); i < i32(Attachment::DepthStencil); i++)
+		{
+			GLESTextureRender* texture = dynamic_cast<GLESTextureRender*>(m_views[i].ptr());
+			if (texture && texture->getGlesTexture())
+			{
+				m_attachments.emplace_back(GL_COLOR_ATTACHMENT0 + i);
+			}
+		}
+
+		OGLESDebug(glDrawBuffers(m_attachments.size(), m_attachments.data()));
+	}
+
+	bool GLESFrameBufferOffScreen::checkFramebufferStatus()
+	{
+#ifdef ECHO_EDITOR_MODE
+		GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+		return status == GL_FRAMEBUFFER_COMPLETE ? true : false;
+#else
+		return true;
+#endif
+	}
 
 	bool GLESFrameBufferOffScreen::begin()
 	{

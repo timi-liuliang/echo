@@ -20,6 +20,10 @@ namespace Echo
 		virtual void render(FrameBufferPtr& frameBuffer) override;
 
 	protected:
+		// set material global uniforms
+		void setGlobalUniforms();
+
+	protected:
 		bool			m_dirty = true;
 		MaterialPtr		m_material;
 	};

@@ -29,13 +29,18 @@ namespace Echo
 
 	RenderProxy* RenderProxy::create(MeshPtr mesh, Material* material, Render* node, bool raytracing)
 	{
-		RenderProxy* renderProxy = Renderer::instance()->createRenderProxy();
-		renderProxy->setRaytracing(raytracing);
-		renderProxy->setMaterial(material);
-		renderProxy->setNode(node);
-		renderProxy->setMesh(mesh);
+		if (mesh->isValid())
+		{
+			RenderProxy* renderProxy = Renderer::instance()->createRenderProxy();
+			renderProxy->setRaytracing(raytracing);
+			renderProxy->setMaterial(material);
+			renderProxy->setNode(node);
+			renderProxy->setMesh(mesh);
 
-		return renderProxy;
+			return renderProxy;
+		}
+
+		return nullptr;
 	}
 
 	void RenderProxy::setSubmitToRenderQueue(bool enable)

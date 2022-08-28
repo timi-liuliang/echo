@@ -42,21 +42,18 @@ namespace Echo
 
 	bool DirectLighting::buildRenderable()
 	{
-		if (m_dirty && m_material)
+		if (m_dirty)
 		{
 			clearRenderable();
-
-			if (updateMeshBuffer())
-			{
-				m_renderable = RenderProxy::create(m_mesh, m_material, nullptr, false);
-				m_renderable->setSubmitToRenderQueue(false);
-			}
-
 			m_dirty = false;
 		}
-		else
+
+		updateMeshBuffer();
+
+		if (!m_renderable && m_material && m_mesh && m_mesh->isValid())
 		{
-			updateMeshBuffer();
+			m_renderable = RenderProxy::create(m_mesh, m_material, nullptr, false);
+			m_renderable->setSubmitToRenderQueue(false);
 		}
 
 		return m_renderable && m_mesh && m_mesh->getPrimitiveCount() ? true : false;
@@ -95,9 +92,6 @@ namespace Echo
 
 	bool DirectLighting::updateMeshBuffer()
 	{
-		// create mesh
-		if (!m_mesh) m_mesh = Mesh::create(true, true);
-
 		// update data
 		VertexArray    vertices;
 		IndiceArray    indices;
@@ -108,6 +102,9 @@ namespace Echo
 			MeshVertexFormat define;
 			define.m_isUseNormal = true;
 			define.m_isUseVertexColor = true;
+
+			// create mesh
+			if (!m_mesh) m_mesh = Mesh::create(true, true);
 
 			m_mesh->updateIndices(static_cast<ui32>(indices.size()), sizeof(ui16), indices.data());
 			m_mesh->updateVertexs(define, static_cast<ui32>(vertices.size()), (const Byte*)vertices.data());

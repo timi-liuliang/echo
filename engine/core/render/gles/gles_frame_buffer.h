@@ -26,15 +26,25 @@ namespace Echo
 		static void clear(bool clear_color, const Color& color, bool clear_depth, float depth_value, bool clear_stencil, ui8 stencil_value);
 
 	protected:
-		// prepare
+		// Prepare
 		bool bind(i32& width, i32& height);
 
-		// attach render view
+		// Check screen size
+		bool checkScreenSize(i32& width, i32& height);
+
+		// Attach render view
 		void attach();
 
+		// Specify color buffers will be use
+		void specifyColorBuffers();
+
+		// Check frame buffer status
+		bool checkFramebufferStatus();
+
 	private:
-		GLuint			  m_fbo;
-		array<GLuint, 9>  m_esTextures;
+		GLuint					m_fbo;
+		array<GLuint, 9>		m_esTextures;
+		vector<GLenum>::type	m_attachments;
 	};
 
 	class GLESFramebufferWindow : public FrameBufferWindow

@@ -29,9 +29,20 @@ namespace Echo
 		m_material = (Material*)material;
 		if (m_material)
 		{
+			setGlobalUniforms();
+			m_material->onShaderChanged.connectClassMethod(this, createMethodBind(&DeferredLighting::setGlobalUniforms));
 		}
 
 		m_dirty = true;
+	}
+
+	void DeferredLighting::setGlobalUniforms()
+	{
+		if (m_material)
+		{
+			m_material->setUniformValue("u_WorldMatrix", &Matrix4::IDENTITY);
+			m_material->setUniformValue("u_ViewProjMatrix", &Matrix4::IDENTITY);
+		}
 	}
 
 	void DeferredLighting::render(FrameBufferPtr& frameBuffer)
