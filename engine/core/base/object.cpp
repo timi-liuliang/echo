@@ -293,6 +293,28 @@ namespace Echo
 					}
 				}
 			}
+			else if (prop->m_type == Variant::Type::String && prop->IsHaveHint(PropertyHintType::XmlCData))
+			{
+				for (pugi::xml_node propertyNode = xmlNode->child("property"); propertyNode; propertyNode = propertyNode.next_sibling("property"))
+				{
+					String propertyName = propertyNode.attribute("name").as_string();
+					if (propertyName == prop->m_name)
+					{
+						Echo::Variant var;
+
+						// https://pugixml.org/docs/manual.html
+						// child_value() returns the value of the first child with type node_pcdata or node_cdata;
+						String valueStr = propertyNode.child_value();
+						if (!valueStr.empty())
+						{
+							var.fromString(prop->m_type, valueStr);
+							Class::setPropertyValue(classPtr, prop->m_name, var);
+						}
+
+						break;
+					}
+				}
+			}
 			else
 			{
 				Echo::Variant var;
@@ -350,6 +372,14 @@ namespace Echo
 							savePropertyRecursive(&objNode, obj, obj->getClassName());
 						}
 					}
+				}
+				else if (var.getType() == Variant::Type::String && prop->IsHaveHint(PropertyHintType::XmlCData))
+				{
+					Echo::String varStr = var.toString();
+					pugi::xml_node propertyNode = xmlNode->append_child("property");
+					propertyNode.append_attribute("name").set_value(prop->m_name.c_str());
+
+					propertyNode.append_child(pugi::node_cdata).set_value(varStr.c_str());
 				}
 				else
 				{

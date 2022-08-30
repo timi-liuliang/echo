@@ -3,6 +3,17 @@
 
 namespace Echo
 {
+	bool PropertyInfo::IsHaveHint(PropertyHintType hintType) const
+	{
+		for (const PropertyHint& hint : m_hints)
+		{
+			if (hint.m_type == hintType)
+				return true;
+		}
+
+		return false;
+	}
+
     const String& PropertyInfo::getHint(PropertyHintType hintType) const
     {
         for(const PropertyHint& hint : m_hints)

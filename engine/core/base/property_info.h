@@ -19,6 +19,7 @@ namespace Echo
 		ResourceBehavior,	// load|save
 		ReadOnly,
 		Language,
+		XmlCData,				// Xml CDATA
 	};
 
     struct PropertyHint
@@ -58,6 +59,9 @@ namespace Echo
 
 		// get flag
 		virtual i32 getPropertyFlag(Object* classPtr, const String& propertyName) { return PropertyFlag::All; }
+
+		// Is have hint
+		bool IsHaveHint(PropertyHintType hintType) const;
 
         // get property hint
         const String& getHint(PropertyHintType hintType) const;
