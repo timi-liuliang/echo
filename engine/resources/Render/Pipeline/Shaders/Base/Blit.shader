@@ -1,5 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<res class="ShaderProgram" path="Engine://Render/Pipeline/Shaders/Base/Blit.shader" Type="glsl" VertexShader="#version 450&#10;&#10;layout(binding = 0, std140) uniform UBO&#10;{&#10;    mat4 u_WorldMatrix;&#10;    mat4 u_ViewProjMatrix;&#10;} vs_ubo;&#10;&#10;layout(location = 0) in vec3 a_Position;&#10;layout(location = 7) out vec2 v_UV;&#10;layout(location = 4) in vec2 a_UV;&#10;&#10;void main()&#10;{&#10;    vec4 worldPosition = vs_ubo.u_WorldMatrix * vec4(a_Position, 1.0);&#10;    vec4 clipPosition = vs_ubo.u_ViewProjMatrix * worldPosition;&#10;    gl_Position = clipPosition;&#10;    v_UV = a_UV;&#10;}&#10;&#10;" FragmentShader="#version 450&#10;&#10;layout(binding = 1, std140) uniform UBO&#10;{&#10;    vec3 Albedo;&#10;} fs_ubo;&#10;&#10;layout(binding = 2) uniform sampler2D Input;&#10;&#10;layout(location = 7) in vec2 v_UV;&#10;layout(location = 0) out vec4 o_FragColor;&#10;&#10;void main()&#10;{&#10;    vec4 Input_Color = texture(Input, v_UV);&#10;    vec3 Albedo_Value = fs_ubo.Albedo;&#10;    vec3 Multiplication_278 = Albedo_Value * Input_Color.xyz;&#10;    vec3 _BaseColor = Multiplication_278;&#10;    float _Opacity = Input_Color.w;&#10;    float _Metalic = 0.20000000298023223876953125;&#10;    float _PerceptualRoughness = 0.5;&#10;    o_FragColor = vec4(_BaseColor, _Opacity);&#10;}&#10;&#10;" Graph="{&#10;    &quot;connections&quot;: [&#10;        {&#10;            &quot;in_id&quot;: &quot;{887347ba-db3c-4ccd-9bff-9e7fd2cb45bb}&quot;,&#10;            &quot;in_index&quot;: 0,&#10;            &quot;out_id&quot;: &quot;{3a94c9a5-2a7d-44ff-bd22-8f85db7bde17}&quot;,&#10;            &quot;out_index&quot;: 0&#10;        },&#10;        {&#10;            &quot;in_id&quot;: &quot;{887347ba-db3c-4ccd-9bff-9e7fd2cb45bb}&quot;,&#10;            &quot;in_index&quot;: 1,&#10;            &quot;out_id&quot;: &quot;{9f6999e9-fe37-48d2-b99d-f2e6da80637e}&quot;,&#10;            &quot;out_index&quot;: 2&#10;        },&#10;        {&#10;            &quot;converter&quot;: {&#10;                &quot;in&quot;: {&#10;                    &quot;id&quot;: &quot;any&quot;,&#10;                    &quot;name&quot;: &quot;B&quot;&#10;                },&#10;                &quot;out&quot;: {&#10;                    &quot;id&quot;: &quot;vec3&quot;,&#10;                    &quot;name&quot;: &quot;rgb&quot;&#10;                }&#10;            },&#10;            &quot;in_id&quot;: &quot;{3a94c9a5-2a7d-44ff-bd22-8f85db7bde17}&quot;,&#10;            &quot;in_index&quot;: 1,&#10;            &quot;out_id&quot;: &quot;{9f6999e9-fe37-48d2-b99d-f2e6da80637e}&quot;,&#10;            &quot;out_index&quot;: 1&#10;        },&#10;        {&#10;            &quot;converter&quot;: {&#10;                &quot;in&quot;: {&#10;                    &quot;id&quot;: &quot;any&quot;,&#10;                    &quot;name&quot;: &quot;A&quot;&#10;                },&#10;                &quot;out&quot;: {&#10;                    &quot;id&quot;: &quot;vec3&quot;,&#10;                    &quot;name&quot;: &quot;vec3&quot;&#10;                }&#10;            },&#10;            &quot;in_id&quot;: &quot;{3a94c9a5-2a7d-44ff-bd22-8f85db7bde17}&quot;,&#10;            &quot;in_index&quot;: 0,&#10;            &quot;out_id&quot;: &quot;{6b08f011-1903-4a97-b40f-7293a6d45830}&quot;,&#10;            &quot;out_index&quot;: 0&#10;        }&#10;    ],&#10;    &quot;nodes&quot;: [&#10;        {&#10;            &quot;id&quot;: &quot;{3a94c9a5-2a7d-44ff-bd22-8f85db7bde17}&quot;,&#10;            &quot;model&quot;: {&#10;                &quot;Variable&quot;: &quot;Multiplication_278&quot;,&#10;                &quot;name&quot;: &quot;Multiplication&quot;&#10;            },&#10;            &quot;position&quot;: {&#10;                &quot;x&quot;: -169,&#10;                &quot;y&quot;: 218&#10;            }&#10;        },&#10;        {&#10;            &quot;id&quot;: &quot;{887347ba-db3c-4ccd-9bff-9e7fd2cb45bb}&quot;,&#10;            &quot;model&quot;: {&#10;                &quot;Variable&quot;: &quot;ShaderTemplate_210&quot;,&#10;                &quot;name&quot;: &quot;ShaderTemplate&quot;&#10;            },&#10;            &quot;position&quot;: {&#10;                &quot;x&quot;: 0,&#10;                &quot;y&quot;: 269&#10;            }&#10;        },&#10;        {&#10;            &quot;id&quot;: &quot;{9f6999e9-fe37-48d2-b99d-f2e6da80637e}&quot;,&#10;            &quot;model&quot;: {&#10;                &quot;Atla&quot;: &quot;false&quot;,&#10;                &quot;Texture&quot;: &quot;&quot;,&#10;                &quot;Type&quot;: &quot;General&quot;,&#10;                &quot;Variable&quot;: &quot;Input&quot;,&#10;                &quot;name&quot;: &quot;Texture&quot;&#10;            },&#10;            &quot;position&quot;: {&#10;                &quot;x&quot;: -408,&#10;                &quot;y&quot;: 236&#10;            }&#10;        },&#10;        {&#10;            &quot;id&quot;: &quot;{6b08f011-1903-4a97-b40f-7293a6d45830}&quot;,&#10;            &quot;model&quot;: {&#10;                &quot;Uniform&quot;: &quot;true&quot;,&#10;                &quot;Value&quot;: &quot;1 1 1&quot;,&#10;                &quot;Variable&quot;: &quot;Albedo&quot;,&#10;                &quot;name&quot;: &quot;Vector3&quot;&#10;            },&#10;            &quot;position&quot;: {&#10;                &quot;x&quot;: -327,&#10;                &quot;y&quot;: 156&#10;            }&#10;        }&#10;    ]&#10;}&#10;" CullMode="CULL_BACK" BlendMode="Opaque" Uniforms.Albedo="1 1 1" Uniforms.Input="">
+<res class="ShaderProgram" Type="glsl" Domain="Surface" CullMode="CULL_BACK" BlendMode="Opaque" Uniforms.Input="">
+	<property name="VertexShader"><![CDATA[#version 450
+
+layout(binding = 0, std140) uniform UBO
+{
+    mat4 u_WorldMatrix;
+    mat4 u_ViewProjMatrix;
+} vs_ubo;
+
+layout(location = 0) in vec3 a_Position;
+layout(location = 7) out vec2 v_UV;
+layout(location = 4) in vec2 a_UV;
+
+void main()
+{
+    vec4 worldPosition = vs_ubo.u_WorldMatrix * vec4(a_Position, 1.0);
+    vec4 clipPosition = vs_ubo.u_ViewProjMatrix * worldPosition;
+    gl_Position = clipPosition;
+    v_UV = a_UV;
+}
+
+]]></property>
+	<property name="FragmentShader"><![CDATA[#version 450
+
+layout(binding = 2) uniform sampler2D Input;
+
+layout(location = 7) in vec2 v_UV;
+layout(location = 0) out vec4 o_FragColor;
+
+void main()
+{
+    vec4 Input_Color = texture(Input, v_UV);
+    float _Opacity = Input_Color.w;
+    vec3 _Emissive = Input_Color.xyz;
+    vec3 _Diffuse = vec3(0.0);
+    float _Metalic = 0.20000000298023223876953125;
+    float _PerceptualRoughness = 0.5;
+    vec3 FinalColor = _Diffuse;
+    FinalColor += _Emissive;
+    o_FragColor = vec4(FinalColor, _Opacity);
+}
+
+]]></property>
+	<property name="Graph"><![CDATA[{
+    "connections": [
+        {
+            "in_id": "{9825764a-31d2-4948-8352-daa5cfe2bb6e}",
+            "in_index": 7,
+            "out_id": "{e05840ec-0410-4ba0-9f27-5e5d85d144f4}",
+            "out_index": 1
+        },
+        {
+            "in_id": "{9825764a-31d2-4948-8352-daa5cfe2bb6e}",
+            "in_index": 2,
+            "out_id": "{e05840ec-0410-4ba0-9f27-5e5d85d144f4}",
+            "out_index": 2
+        }
+    ],
+    "nodes": [
+        {
+            "id": "{9825764a-31d2-4948-8352-daa5cfe2bb6e}",
+            "model": {
+                "Variable": "ShaderTemplate_628",
+                "name": "ShaderTemplate"
+            },
+            "position": {
+                "x": 0,
+                "y": 288
+            }
+        },
+        {
+            "id": "{e05840ec-0410-4ba0-9f27-5e5d85d144f4}",
+            "model": {
+                "Atla": "false",
+                "Texture": "",
+                "Type": "General",
+                "Variable": "Input",
+                "name": "Texture"
+            },
+            "position": {
+                "x": -311,
+                "y": 477
+            }
+        }
+    ]
+}
+]]></property>
 	<property name="DepthStencilState">
 		<obj class="DepthStencilState" DepthEnable="true" WriteDepth="true" />
 	</property>

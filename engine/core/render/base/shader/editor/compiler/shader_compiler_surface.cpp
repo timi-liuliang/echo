@@ -315,7 +315,7 @@ void main(void)
 ${FS_SHADER_CODE}
 
 #ifndef ENABLE_DIFFUSE 
-    vec3 __Diffuse = vec3(0.6);
+    vec3 __Diffuse = vec3(0.0);
 #endif
 
 #ifndef ENABLE_OPACITY
@@ -334,6 +334,8 @@ ${FS_SHADER_CODE}
 	vec3 FinalColor = PbrLighting(v_Position.world, __Diffuse, __Normal, __Metalic, __PerceptualRoughness, fs_ubo.u_CameraPosition);
 
 	o_FragNormal.xyz = __Normal;
+#else
+	vec3 FinalColor = __Diffuse;
 #endif
 
 #ifdef ENABLE_OCCLUSION
