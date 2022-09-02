@@ -22,8 +22,12 @@
 		<queue class="SpotLighting" Name="Spot Lighting" Enable="true" />
 	</stage>
 	<stage class="RenderStage" Name="Translucency" Enable="true" EditorOnly="false">
-		<property name="FrameBuffer" path="Engine://Render/Pipeline/Framebuffer/Translucency.fbos" />
-		<queue class="ImageFilter" Name="Lighting Composition" Enable="true" />
+		<property name="FrameBuffer" path="Engine://Render/Pipeline/Framebuffer/Translucency/Translucency.fbos" />
+		<queue class="ImageFilter" Name="Lighting Composition" Enable="true">
+			<property name="Material">
+				<obj class="Material" Shader="Engine://Render/Pipeline/Shaders/Light/LightingComposition.shader" Uniforms.BaseColor="Engine://Render/Pipeline/Framebuffer/GBufferColorA.rt" Uniforms.LightDiffuse="Engine://Render/Pipeline/Framebuffer/Lighting/Diffuse.rt" Uniforms.LightSpecular="Engine://Render/Pipeline/Framebuffer/Lighting/Specular.rt" />
+			</property>
+		</queue>
 		<queue class="RenderQueue" Name="Transparent" Enable="true" Sort="true" CameraFilter="-1" />
 	</stage>
 	<stage class="RenderStage" Name="Post Processing" Enable="true" EditorOnly="false">
@@ -35,7 +39,7 @@
 		<property name="FrameBuffer" path="Engine://Render/Pipeline/Framebuffer/ScreenWindow.fbws" />
 		<queue class="ImageFilter" Name="3D" Enable="true">
 			<property name="Material">
-				<obj class="Material" Shader="Engine://Render/Pipeline/Shaders/Base/Blit.shader" Uniforms.Input="Engine://Render/Pipeline/Framebuffer/GBufferColorA.rt" />
+				<obj class="Material" Shader="Engine://Render/Pipeline/Shaders/Base/Blit.shader" Uniforms.Input="Engine://Render/Pipeline/Framebuffer/Translucency/Color.rt" />
 			</property>
 		</queue>
 		<queue class="RenderQueue" Name="2D" Enable="true" Sort="true" CameraFilter="-1" />

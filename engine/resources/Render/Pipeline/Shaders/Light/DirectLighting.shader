@@ -38,14 +38,14 @@ void main()
     "connections": [
         {
             "in_id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
-            "in_index": 0,
-            "out_id": "{c731144d-4f4c-495c-b87a-80b2798926cd}",
+            "in_index": 1,
+            "out_id": "{e2eb8b65-65fd-425d-93c8-944c74cd8c75}",
             "out_index": 0
         },
         {
             "in_id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
-            "in_index": 1,
-            "out_id": "{e2eb8b65-65fd-425d-93c8-944c74cd8c75}",
+            "in_index": 0,
+            "out_id": "{c731144d-4f4c-495c-b87a-80b2798926cd}",
             "out_index": 0
         }
     ],
