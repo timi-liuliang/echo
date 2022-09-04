@@ -1,4 +1,4 @@
-#include "shader_compiler_surface.h"
+#include "shader_compiler_transparent.h"
 #include "engine/core/render/base/glslcc/glsl_cross_compiler.h"
 
 #ifdef ECHO_EDITOR_MODE
@@ -352,17 +352,17 @@ ${FS_SHADER_CODE}
 
 namespace Echo
 {
-	ShaderCompilerSurface::ShaderCompilerSurface()
+	ShaderCompilerTransparent::ShaderCompilerTransparent()
 	{
 
 	}
 
-	ShaderCompilerSurface::~ShaderCompilerSurface()
+	ShaderCompilerTransparent::~ShaderCompilerTransparent()
 	{
 
 	}
 
-	bool ShaderCompilerSurface::compile()
+	bool ShaderCompilerTransparent::compile()
 	{
 		if (!m_fsUniformsCode.empty())
 		{

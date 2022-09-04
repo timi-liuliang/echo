@@ -5,11 +5,11 @@
 namespace Echo
 {
 #ifdef ECHO_EDITOR_MODE
-	class ShaderCompilerSurface : public ShaderCompiler
+	class ShaderCompilerOpaque : public ShaderCompiler
 	{
 	public:
-		ShaderCompilerSurface();
-		~ShaderCompilerSurface();
+		ShaderCompilerOpaque();
+		~ShaderCompilerOpaque();
 
 		// compile
 		virtual bool compile();

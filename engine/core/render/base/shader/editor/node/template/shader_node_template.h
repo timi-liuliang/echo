@@ -3,7 +3,8 @@
 #include "engine/core/render/base/shader/shader_program.h"
 #include "engine/core/render/base/shader/editor/node/shader_node.h"
 #include "engine/core/render/base/shader/editor/compiler/shader_compiler_lighting.h"
-#include "engine/core/render/base/shader/editor/compiler/shader_compiler_surface.h"
+#include "engine/core/render/base/shader/editor/compiler/shader_compiler_opaque.h"
+#include "engine/core/render/base/shader/editor/compiler/shader_compiler_transparent.h"
 
 #ifdef ECHO_EDITOR_MODE
 
@@ -41,9 +42,10 @@ namespace Echo
         void setDomain(const ShaderProgram::Domain domain);
 
     private:
-        ShaderProgram::Domain   m_domain = ShaderProgram::Domain::Surface;
-        ShaderCompilerSurface   m_compilerSurface;
-        ShaderCompilerLighting  m_compilerLighting;
+        ShaderProgram::Domain       m_domain = ShaderProgram::Domain::Surface;
+        ShaderCompilerOpaque        m_compilerOpaque;
+        ShaderCompilerTransparent   m_compilerTransparent;
+        ShaderCompilerLighting      m_compilerLighting;
     };
 }
 

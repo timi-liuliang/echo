@@ -37,7 +37,7 @@ namespace Echo
 		if(m_domain == ShaderProgram::Domain::Lighting)
 			return &m_compilerLighting;
 
-		return &m_compilerSurface;
+		return &m_compilerOpaque;
 	}
 
     bool ShaderNodeTemplate::generateCode(Echo::ShaderCompiler& compiler)

@@ -9,7 +9,8 @@
 #include <engine/core/render/base/shader/shader_program.h>
 #include "Scene/ShaderScene.h"
 #include "Scene/ShaderView.h"
-#include <engine/core/render/base/shader/editor/compiler/shader_compiler_surface.h>
+#include <engine/core/render/base/shader/editor/compiler/shader_compiler_opaque.h>
+#include <engine/core/render/base/shader/editor/compiler/shader_compiler_transparent.h>
 #include <engine/core/render/base/shader/editor/compiler/shader_compiler_lighting.h>
 #include "ui_ShaderEditor.h"
 
