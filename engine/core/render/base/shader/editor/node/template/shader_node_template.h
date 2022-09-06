@@ -18,34 +18,13 @@ namespace Echo
         ShaderNodeTemplate();
         virtual ~ShaderNodeTemplate() {}
 
-		// name
-		virtual QString name() const override { return QStringLiteral("ShaderTemplate"); }
-
-        // caption
-        virtual QString caption() const override { return QStringLiteral("Shader Template"); }
-
-		// category
-		virtual QString category() const override { return "skip me"; }
-
-        // is caption visible
-        virtual bool captionVisible() const override { return true; }
-
-		// generate code
-		virtual bool generateCode(Echo::ShaderCompiler& compiler) override;
-
-    public:
         // Get compiler
-        ShaderCompiler* getCompiler();
+        virtual ShaderCompiler* getCompiler() { return nullptr; }
 
-    public:
-        // Domain
-        void setDomain(const ShaderProgram::Domain domain);
+        // Generate code
+        virtual bool generateCode(Echo::ShaderCompiler& compiler) override { return false; }
 
     private:
-        ShaderProgram::Domain       m_domain = ShaderProgram::Domain::Surface;
-        ShaderCompilerOpaque        m_compilerOpaque;
-        ShaderCompilerTransparent   m_compilerTransparent;
-        ShaderCompilerLighting      m_compilerLighting;
     };
 }
 

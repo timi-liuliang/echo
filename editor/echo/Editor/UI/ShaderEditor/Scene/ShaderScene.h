@@ -23,7 +23,10 @@ namespace DataFlowProgramming
         void compile();
 
         // get shader template node
-        Echo::ShaderNodeTemplate* getShaderTemplateNode();
+        Echo::ShaderNodeTemplate* getShaderTemplate();
+
+        // Get shader template node
+        QtNodes::Node* getShaderTemplateNode();
 
     public:
         // override remove node

@@ -64,6 +64,9 @@ namespace Studio
 		m_graphicsView = new DataFlowProgramming::ShaderView((QtNodes::FlowScene*)m_graphicsScene, dockWidgetContents);
 		m_graphicsView->setFrameShape(QFrame::NoFrame);
 		verticalLayout->addWidget(m_graphicsView);
+
+        QObject::connect(&m_timer, SIGNAL(timeout()), this, SLOT(replaceTemplate()));
+        m_timer.start(200);
 	}
 
 	ShaderEditor::~ShaderEditor()
@@ -102,6 +105,59 @@ namespace Studio
         }
     }
 
+    Echo::String ShaderEditor::getTemplateName()
+    {
+        Echo::String templateName;
+        if (m_shaderProgram->getDomain().getValue() == "Lighting")
+        {
+            templateName = "ShaderTemplateLighting";
+        }
+        else
+        {
+            if (m_shaderProgram->getBlendMode().getValue() == "Opaque")
+            {
+                templateName = "ShaderTemplateOpaque";
+            }
+            else
+            {
+                templateName = "ShaderTemplateTransparent";
+            }
+        }
+
+        return templateName;
+    }
+
+    void ShaderEditor::replaceTemplate()
+    {
+        QtNodes::FlowScene* flowScene = (QtNodes::FlowScene*)m_graphicsScene;
+        if (flowScene)
+        {
+            QtNodes::Node* shaderTemplateNode = m_graphicsScene->getShaderTemplateNode();
+            if (shaderTemplateNode)
+            {
+                Echo::ShaderNodeTemplate* shaderTempate = dynamic_cast<Echo::ShaderNodeTemplate*>(shaderTemplateNode->nodeDataModel());
+                if (shaderTempate && shaderTempate->name() != getTemplateName().c_str())
+                {
+                    Echo::Time::instance()->addDelayTask(200, [&]()
+                        {
+                            QPointF pos = shaderTemplateNode->nodeGraphicsObject().pos();
+
+                            flowScene->nodeDeleted(*shaderTemplateNode);
+
+                            std::unique_ptr<QtNodes::NodeDataModel> type = flowScene->registry().create(getTemplateName().c_str());
+                            if (type)
+                            {
+                                auto& node = flowScene->createNode(std::move(type));
+                                node.nodeGraphicsObject().setPos(QPointF(pos.x(), pos.y()));
+
+                                flowScene->nodePlaced(node);
+                            }
+                        });
+                }
+            }
+        }
+    }
+
     void ShaderEditor::compile()
     {
         if (m_isLoading)
@@ -110,10 +166,9 @@ namespace Studio
         QtNodes::FlowScene* flowScene = (QtNodes::FlowScene*)m_graphicsScene;
         if(flowScene)
         {
-            Echo::ShaderNodeTemplate* shaderTemplateNode  = m_graphicsScene->getShaderTemplateNode();
+            Echo::ShaderNodeTemplate* shaderTemplateNode  = m_graphicsScene->getShaderTemplate();
             if (shaderTemplateNode)
             {
-                shaderTemplateNode->setDomain(m_shaderProgram->getDomain().toEnum(ShaderProgram::Domain::Surface));
                 m_shaderCompiler = shaderTemplateNode->getCompiler();
                 m_shaderCompiler->reset();
 
@@ -162,17 +217,18 @@ namespace Studio
 
                     // Create one ShaderTemplate node
 					QtNodes::FlowView* flowView = m_graphicsView;
-					Echo::Time::instance()->addDelayTask(200, [flowScene, flowView]() 
+					Echo::Time::instance()->addDelayTask(200, [&]() 
                     {
-						std::unique_ptr<QtNodes::NodeDataModel> type = flowScene->registry().create("ShaderTemplate");
+						std::unique_ptr<QtNodes::NodeDataModel> type = flowScene->registry().create(getTemplateName().c_str());
 						if (type)
 						{
                             QRectF sceneRect = flowView->sceneRect();
 
 							auto& node = flowScene->createNode(std::move(type));
-							QPoint pos(node.nodeGraphicsObject().x(), sceneRect.center().y() - node.nodeGraphicsObject().boundingRect().height() * 0.5f);
 
+							QPoint pos(node.nodeGraphicsObject().x(), sceneRect.center().y() - node.nodeGraphicsObject().boundingRect().height() * 0.5f);
 							node.nodeGraphicsObject().setPos(QPointF(pos.x(), pos.y()));
+
 							flowScene->nodePlaced(node);
 						}
 					});

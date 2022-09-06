@@ -21,6 +21,9 @@
 #include "base/texture/editor/atlas/texture_atla_editor.h"
 #include "base/shader/editor/node/shader_node.h"
 #include "base/shader/editor/node/template/shader_node_template.h"
+#include "base/shader/editor/node/template/shader_node_template_opaque.h"
+#include "base/shader/editor/node/template/shader_node_template_transparent.h"
+#include "base/shader/editor/node/template/shader_node_template_lighting.h"
 #include "base/shader/editor/node/input/shader_node_layer_blend.h"
 #include "base/shader/editor/node/input/shader_node_shared.h"
 #include "base/shader/editor/node/input/shader_node_vertex_attribute.h"
@@ -113,6 +116,9 @@ namespace Echo
 		Class::registerType<ShaderNode>();
 		Class::registerType<ShaderNodeGLSL>();
 		Class::registerType<ShaderNodeTemplate>();
+		Class::registerType<ShaderNodeTemplateOpaque>();
+		Class::registerType<ShaderNodeTemplateTransparent>();
+		Class::registerType<ShaderNodeTemplateLighting>();
 
 		// blur
 		Class::registerType<ShaderNodeGaussianBlur>();

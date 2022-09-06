@@ -39,7 +39,22 @@ namespace DataFlowProgramming
 		}
 	}
 
-	Echo::ShaderNodeTemplate* ShaderScene::getShaderTemplateNode()
+	QtNodes::Node* ShaderScene::getShaderTemplateNode()
+	{
+		for (QtNodes::Node* node : allNodes())
+		{
+			// Can't delete ShaderTemplate
+			Echo::ShaderNodeTemplate* shaderTempateNode = dynamic_cast<Echo::ShaderNodeTemplate*>(node->nodeDataModel());
+			if (shaderTempateNode)
+			{
+				return node;
+			}
+		}
+
+		return nullptr;
+	}
+
+	Echo::ShaderNodeTemplate* ShaderScene::getShaderTemplate()
 	{
 		for (QtNodes::Node* node : allNodes())
 		{
