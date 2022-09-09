@@ -138,13 +138,13 @@ namespace Studio
                 Echo::ShaderNodeTemplate* shaderTempate = dynamic_cast<Echo::ShaderNodeTemplate*>(shaderTemplateNode->nodeDataModel());
                 if (shaderTempate && shaderTempate->name() != getTemplateName().c_str())
                 {
-                    Echo::Time::instance()->addDelayTask(200, [&]()
-                        {
+                    Echo::String templateName = getTemplateName();
+
+                    //Echo::Time::instance()->addDelayTask(200, [shaderTemplateNode, flowScene, templateName]()
+                    //    {
                             QPointF pos = shaderTemplateNode->nodeGraphicsObject().pos();
 
-                            flowScene->nodeDeleted(*shaderTemplateNode);
-
-                            std::unique_ptr<QtNodes::NodeDataModel> type = flowScene->registry().create(getTemplateName().c_str());
+                            std::unique_ptr<QtNodes::NodeDataModel> type = flowScene->registry().create(templateName.c_str());
                             if (type)
                             {
                                 auto& node = flowScene->createNode(std::move(type));
@@ -152,7 +152,9 @@ namespace Studio
 
                                 flowScene->nodePlaced(node);
                             }
-                        });
+
+                            flowScene->removeNodeForcely(*shaderTemplateNode);
+                      //  });
                 }
             }
         }
@@ -217,9 +219,11 @@ namespace Studio
 
                     // Create one ShaderTemplate node
 					QtNodes::FlowView* flowView = m_graphicsView;
-					Echo::Time::instance()->addDelayTask(200, [&]() 
+                    Echo::String templateName = getTemplateName();
+
+					Echo::Time::instance()->addDelayTask(200, [flowScene, flowView, templateName]() 
                     {
-						std::unique_ptr<QtNodes::NodeDataModel> type = flowScene->registry().create(getTemplateName().c_str());
+						std::unique_ptr<QtNodes::NodeDataModel> type = flowScene->registry().create(templateName.c_str());
 						if (type)
 						{
                             QRectF sceneRect = flowView->sceneRect();

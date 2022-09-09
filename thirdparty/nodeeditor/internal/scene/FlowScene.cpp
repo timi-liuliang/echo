@@ -202,6 +202,11 @@ namespace QtNodes
 
 	void FlowScene::removeNode(Node& node)
 	{
+		removeNodeForcely(node);
+	}
+
+	void FlowScene::removeNodeForcely(Node& node)
+	{
 		// call signal
 		nodeDeleted(node);
 

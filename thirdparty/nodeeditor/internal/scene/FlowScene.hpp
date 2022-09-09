@@ -49,6 +49,9 @@ namespace QtNodes
 
         virtual void removeNode(Node& node);
 
+        // Remove node forcely
+        virtual void removeNodeForcely(Node& node);
+
         DataModelRegistry& registry() const;
 
         void setRegistry(std::shared_ptr<DataModelRegistry> registry);

@@ -12,7 +12,7 @@ namespace Echo
 {
     class ShaderNodeTemplate : public ShaderNode
     {
-        ECHO_CLASS(ShaderNodeTemplate, ShaderNode)
+        ECHO_VIRTUAL_CLASS(ShaderNodeTemplate, ShaderNode)
 
     public:
         ShaderNodeTemplate();
