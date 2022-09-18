@@ -141,7 +141,6 @@ layout(location = 4) in vec3 v_NormalLocal;
 #ifdef HAS_TANGENTS
 	layout(location = 5) in mat3 v_TBN;
 #endif
-layout(location=1) out vec4 o_FragNormal;
 #endif
 
 #ifdef ENABLE_VERTEX_COLOR
@@ -159,6 +158,7 @@ layout(location = 9) in vec4 v_Joint;
 
 // outputs
 layout(location = 0) out vec4 o_FragColor;
+layout(location = 1) out vec4 o_FragNormal;
 
 // custom functions
 ${FS_FUNCTIONS}
@@ -168,8 +168,8 @@ void main(void)
 {
 ${FS_SHADER_CODE}
 
-#ifndef ENABLE_DIFFUSE 
-    vec3 __Diffuse = vec3(0.0);
+#ifndef ENABLE_BASECOLOR 
+    vec3 __BaseColor = vec3(0.0);
 #endif
 
 #ifndef ENABLE_OPACITY
@@ -184,12 +184,12 @@ ${FS_SHADER_CODE}
 	float __PerceptualRoughness = 0.5;
 #endif
 
-#ifdef ENABLE_LIGHTING_CALCULATION
-	vec3 FinalColor = __Diffuse;
-
-	o_FragNormal.xyz = __Normal;
-#else
-	vec3 FinalColor = __Diffuse;
+#ifndef ENABLE_NORMAL
+	#ifdef ENABLE_VERTEX_NORMAL
+		vec3 __Normal = v_Normal;
+	#else
+		vec3 __Normal = vec3(0.0, 0.0, 0.0);
+	#endif
 #endif
 
 #ifdef ENABLE_OCCLUSION
@@ -200,7 +200,8 @@ ${FS_SHADER_CODE}
 	FinalColor.rgb += __Emissive;
 #endif  
 
-    o_FragColor = vec4(FinalColor.rgb, __Opacity);
+    o_FragColor = vec4(__BaseColor.rgb, __Opacity);
+	o_FragNormal.xyz = (__Normal + vec3(1.0, 1.0, 1.0)) * 0.5;
 }
 )";
 

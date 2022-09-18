@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<res class="TextureRenderTarget2D" path="Engine://Render/Pipeline/Framebuffer/GBufferColor0.rt" MipMap="true" Width="2799" Height="909" ClearColor="0 0 0 1 " Format="PF_RGBA16_FLOAT">
-	<channel name="Height" expression="Renderer:getWindowHeight()" />
-	<channel name="Width" expression="Renderer:getWindowWidth()" />
-</res>

@@ -17,7 +17,7 @@ namespace Echo
 	{
 		m_inputDataTypes =
 		{
-			{"vec3", "Diffuse"},
+			{"vec3", "BaseColor"},
 			{"vec3", "Specular"},
 			{"float", "Opacity"},
 			{"vec3", "Normal"},
@@ -41,10 +41,10 @@ namespace Echo
         {
             if (m_inputs[i])
             {
-				if (m_inputDataTypes[i].name == "Diffuse")
+				if (m_inputDataTypes[i].name == "BaseColor")
 				{
-					compiler.addMacro("ENABLE_DIFFUSE");
-					compiler.addCode(Echo::StringUtil::Format("\tvec3 __Diffuse = %s;\n", dynamic_cast<ShaderData*>(m_inputs[i].get())->getVariableName().c_str()));
+					compiler.addMacro("ENABLE_BASECOLOR");
+					compiler.addCode(Echo::StringUtil::Format("\tvec3 __BaseColor = %s;\n", dynamic_cast<ShaderData*>(m_inputs[i].get())->getVariableName().c_str()));
 				}
 
 				if (m_inputDataTypes[i].name == "Specular")
@@ -64,7 +64,7 @@ namespace Echo
                     compiler.addUniform("vec3", "u_CameraPosition");
 
                     compiler.addMacro("ENABLE_VERTEX_POSITION");
-					compiler.addMacro("ENABLE_LIGHTING_CALCULATION");
+					compiler.addMacro("ENABLE_NORMAL");
 
                     compiler.addCode(Echo::StringUtil::Format("\tvec3 __Normal = %s;\n", dynamic_cast<ShaderData*>(m_inputs[i].get())->getVariableName().c_str()));
 				}
