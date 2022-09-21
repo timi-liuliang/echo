@@ -46,7 +46,7 @@ extern "C" {
 #ifdef _WIN32
 #include <winsock2.h>
 #endif
-#include <compat/sys/queue.h>
+#include <sys/queue.h>
 
 /* Minimum allocation for a chain.  We define this so that we're burning no
  * more than 5% of each allocation on overhead.  It would be nice to lose even
@@ -92,7 +92,7 @@ struct evbuffer {
 	 * If the buffer has no chains, it is NULL.
 	 *
 	 * The last_with_datap pointer points at _whatever 'next' pointer_
-	 * points at the last_with_datap chain.  If the last_with_data chain
+	 * pointing at the last_with_data chain. If the last_with_data chain
 	 * is the first chain, or it is NULL, then the last_with_datap pointer
 	 * is &buf->first.
 	 */

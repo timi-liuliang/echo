@@ -45,6 +45,8 @@
 struct bufferevent_pair {
 	struct bufferevent_private bev;
 	struct bufferevent_pair *partner;
+	/* For ->destruct() lock checking */
+	struct bufferevent_pair *unlinked_partner;
 };
 
 
@@ -54,10 +56,10 @@ static inline struct bufferevent_pair *
 upcast(struct bufferevent *bev)
 {
 	struct bufferevent_pair *bev_p;
-	if (bev->be_ops != &bufferevent_ops_pair)
+	if (!BEV_IS_PAIR(bev))
 		return NULL;
 	bev_p = EVUTIL_UPCAST(bev, struct bufferevent_pair, bev.bev);
-	EVUTIL_ASSERT(bev_p->bev.bev.be_ops == &bufferevent_ops_pair);
+	EVUTIL_ASSERT(BEV_IS_PAIR(&bev_p->bev.bev));
 	return bev_p;
 }
 
@@ -265,9 +267,38 @@ be_pair_unlink(struct bufferevent *bev)
 	struct bufferevent_pair *bev_p = upcast(bev);
 
 	if (bev_p->partner) {
+		bev_p->unlinked_partner = bev_p->partner;
 		bev_p->partner->partner = NULL;
 		bev_p->partner = NULL;
 	}
+}
+
+/* Free *shared* lock in the latest be (since we share it between two of them). */
+static void
+be_pair_destruct(struct bufferevent *bev)
+{
+	struct bufferevent_pair *bev_p = upcast(bev);
+
+	/* Transfer ownership of the lock into partner, otherwise we will use
+	 * already free'd lock during freeing second bev, see next example:
+	 *
+	 * bev1->own_lock = 1
+	 * bev2->own_lock = 0
+	 * bev2->lock = bev1->lock
+	 *
+	 * bufferevent_free(bev1) # refcnt == 0 -> unlink
+	 * bufferevent_free(bev2) # refcnt == 0 -> unlink
+	 *
+	 * event_base_free() -> finilizers -> EVTHREAD_FREE_LOCK(bev1->lock)
+	 *                                 -> BEV_LOCK(bev2->lock) <-- already freed
+	 *
+	 * Where bev1 == pair[0], bev2 == pair[1].
+	 */
+	if (bev_p->unlinked_partner && bev_p->bev.own_lock) {
+		bev_p->unlinked_partner->bev.own_lock = 1;
+		bev_p->bev.own_lock = 0;
+	}
+	bev_p->unlinked_partner = NULL;
 }
 
 static int
@@ -276,14 +307,16 @@ be_pair_flush(struct bufferevent *bev, short iotype,
 {
 	struct bufferevent_pair *bev_p = upcast(bev);
 	struct bufferevent *partner;
-	incref_and_lock(bev);
+
 	if (!bev_p->partner)
 		return -1;
 
-	partner = downcast(bev_p->partner);
-
 	if (mode == BEV_NORMAL)
 		return 0;
+
+	incref_and_lock(bev);
+
+	partner = downcast(bev_p->partner);
 
 	if ((iotype & EV_READ) != 0)
 		be_pair_transfer(partner, bev, 1);
@@ -292,7 +325,12 @@ be_pair_flush(struct bufferevent *bev, short iotype,
 		be_pair_transfer(bev, partner, 1);
 
 	if (mode == BEV_FINISHED) {
-		bufferevent_run_eventcb_(partner, iotype|BEV_EVENT_EOF, 0);
+		short what = BEV_EVENT_EOF;
+		if (iotype & EV_READ)
+			what |= BEV_EVENT_WRITING;
+		if (iotype & EV_WRITE)
+			what |= BEV_EVENT_READING;
+		bufferevent_run_eventcb_(partner, what, 0);
 	}
 	decref_and_unlock(bev);
 	return 0;
@@ -320,7 +358,7 @@ const struct bufferevent_ops bufferevent_ops_pair = {
 	be_pair_enable,
 	be_pair_disable,
 	be_pair_unlink,
-	NULL, /* be_pair_destruct, */
+	be_pair_destruct,
 	bufferevent_generic_adj_timeouts_,
 	be_pair_flush,
 	NULL, /* ctrl */

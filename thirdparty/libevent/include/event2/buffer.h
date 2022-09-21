@@ -726,7 +726,8 @@ int evbuffer_write_atmost(struct evbuffer *buffer, evutil_socket_t fd,
 
   @param buffer the evbuffer to store the result
   @param fd the file descriptor to read from
-  @param howmuch the number of bytes to be read
+  @param howmuch the number of bytes to be read. If the given number is negative
+  or out of maximum bytes per one read, as many bytes as we can will be read.
   @return the number of bytes read, or -1 if an error occurred
   @see evbuffer_write()
  */
@@ -782,7 +783,7 @@ enum evbuffer_ptr_how {
    There are two ways to use this function: you can call
       evbuffer_ptr_set(buf, &pos, N, EVBUFFER_PTR_SET)
    to move 'pos' to a position 'N' bytes after the start of the buffer, or
-      evbuffer_ptr_set(buf, &pos, N, EVBUFFER_PTR_SET)
+      evbuffer_ptr_set(buf, &pos, N, EVBUFFER_PTR_ADD)
    to move 'pos' forward by 'N' bytes.
 
    If evbuffer_ptr is not initialized, this function can only be called
