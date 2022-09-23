@@ -34,6 +34,7 @@ SET(CORE_SRC
 	evutil_time.c
 	listener.c
 	log.c
+	signal.c
 	${SYS_SRC}
 	)
 	
