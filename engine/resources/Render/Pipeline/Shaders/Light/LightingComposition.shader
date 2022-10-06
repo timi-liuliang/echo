@@ -133,7 +133,7 @@ void main()
             "id": "{2ec4509f-f789-4e40-813e-d0fc579b2193}",
             "model": {
                 "Variable": "ShaderTemplate_642",
-                "name": "ShaderTemplate"
+                "name": "ShaderNodeTemplateTransparent"
             },
             "position": {
                 "x": 41,
