@@ -12,12 +12,12 @@ namespace Echo
 		struct VertexFormat
 		{
 			Vector3       m_position;
-			Vector2       m_uv;
 			Vector3       m_lightDir;
 			Dword		  m_lightColor;
+			Vector2       m_uv;
 
-			VertexFormat(const Vector3& pos, const Vector2& uv, const Vector3& dir, const Dword& color)
-				: m_position(pos), m_uv(uv), m_lightDir(dir), m_lightColor(color)
+			VertexFormat(const Vector3& pos, const Vector3& dir, const Dword& color, const Vector2& uv)
+				: m_position(pos), m_lightDir(dir), m_lightColor(color), m_uv(uv)
 			{}
 		};
 		typedef vector<VertexFormat>::type  VertexArray;
