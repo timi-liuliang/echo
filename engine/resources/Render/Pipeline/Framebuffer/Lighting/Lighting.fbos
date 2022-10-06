@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<res class="FrameBufferOffScreen" IsClearColor="true" ClearColor="0.298 0.298 0.322 1 " IsClearDepth="true" ColorA="Engine://Render/Pipeline/Framebuffer/Lighting/Diffuse.rt" ColorB="Engine://Render/Pipeline/Framebuffer/Lighting/Specular.rt" DepthStencil="Engine://Render/Pipeline/Framebuffer/Lighting/Depth.rt" />
+<res class="FrameBufferOffScreen" IsClearColor="true" ClearColor="0 0 0 1 " IsClearDepth="true" ColorA="Engine://Render/Pipeline/Framebuffer/Lighting/Diffuse.rt" ColorB="Engine://Render/Pipeline/Framebuffer/Lighting/Specular.rt" DepthStencil="Engine://Render/Pipeline/Framebuffer/Lighting/Depth.rt" />

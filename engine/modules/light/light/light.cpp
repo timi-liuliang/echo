@@ -34,8 +34,11 @@ namespace Echo
 	{
 		CLASS_BIND_METHOD(Light, is2d);
 		CLASS_BIND_METHOD(Light, set2d);
+		CLASS_BIND_METHOD(Light, getColor);
+		CLASS_BIND_METHOD(Light, setColor);
 
 		CLASS_REGISTER_PROPERTY(Light, "Is2D", Variant::Type::Bool, is2d, set2d);
+		CLASS_REGISTER_PROPERTY(Light, "Color", Variant::Type::Color, getColor, setColor);
 	}
 
 	vector<Light*>::type Light::gatherLights(i32 types)

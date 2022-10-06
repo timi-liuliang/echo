@@ -19,7 +19,6 @@ namespace Echo
 		{
 			{"vec3", "BaseColor"},
 			{"vec3", "Specular"},
-			{"float", "Opacity"},
 			{"vec3", "Normal"},
 			{"float", "Metallic"},
 			{"float", "Roughness"},

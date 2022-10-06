@@ -73,10 +73,10 @@ namespace Echo
 			Dword lightColor = dirLight->getColor();
 
 			// vertices
-			oVertices.emplace_back(Vector3(-hw, -hh, 0.f), lightDir, lightColor);
-			oVertices.emplace_back(Vector3(hw, -hh, 0.f), lightDir, lightColor);
-			oVertices.emplace_back(Vector3(hw, hh, 0.f), lightDir, lightColor);
-			oVertices.emplace_back(Vector3(-hw, hh, 0.f), lightDir, lightColor);
+			oVertices.emplace_back(Vector3(-hw, -hh, 0.f), Vector2(1.f, 0.f), lightDir, lightColor);
+			oVertices.emplace_back(Vector3(hw, -hh, 0.f), Vector2(0.f, 0.f), lightDir, lightColor);
+			oVertices.emplace_back(Vector3(hw, hh, 0.f), Vector2(0.f, 1.f), lightDir, lightColor);
+			oVertices.emplace_back(Vector3(-hw, hh, 0.f), Vector2(1.f, 1.f), lightDir, lightColor);
 
 			// https://www.khronos.org/opengl/wiki/Face_Culling
 			// On a freshly created OpenGL Context, the default front face is Counter-Clockwise(CL_CCW)
@@ -100,6 +100,7 @@ namespace Echo
 		if (vertices.size() && indices.size())
 		{
 			MeshVertexFormat define;
+			define.m_isUseUV = true;
 			define.m_isUseNormal = true;
 			define.m_isUseVertexColor = true;
 
