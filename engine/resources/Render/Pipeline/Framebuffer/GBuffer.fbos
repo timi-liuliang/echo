@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<res class="FrameBufferOffScreen" IsClearColor="true" ClearColor="0.298 0.298 0.322 1 " IsClearDepth="true" ColorA="Engine://Render/Pipeline/Framebuffer/GBufferBaseColor.rt" ColorB="Engine://Render/Pipeline/Framebuffer/GBufferNormal.rt" DepthStencil="Engine://Render/Pipeline/Framebuffer/GBufferDepth.rt" />

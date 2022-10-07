@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<res class="ShaderProgram" Type="glsl" Domain="Lighting" CullMode="CULL_BACK" BlendMode="Opaque" Uniforms.GBuffer_Normal="Engine://Render/Pipeline/Framebuffer/GBufferNormal.rt">
+<res class="ShaderProgram" Type="glsl" Domain="Lighting" CullMode="CULL_BACK" BlendMode="Opaque" Uniforms.GBuffer_Normal="Engine://Render/Pipeline/Framebuffer/GBuffer/GBufferNormal.rt">
 	<property name="VertexShader"><![CDATA[#version 450
 
 struct Position
@@ -154,7 +154,7 @@ void main()
             "id": "{1b18812f-5203-4858-9e11-64f3a3df9a09}",
             "model": {
                 "Atla": "false",
-                "Texture": "Engine://Render/Pipeline/Framebuffer/GBufferNormal.rt",
+                "Texture": "Engine://Render/Pipeline/Framebuffer/GBuffer/GBufferNormal.rt",
                 "Type": "General",
                 "Variable": "GBuffer_Normal",
                 "name": "Texture"

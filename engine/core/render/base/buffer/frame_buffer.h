@@ -99,6 +99,10 @@ namespace Echo
 		ResourcePath getColorB();
 		void setColorB(const ResourcePath& path);
 
+		// Attachment colorB
+		ResourcePath getColorC();
+		void setColorC(const ResourcePath& path);
+
         // Attachment depth
         ResourcePath getDepth();
         void setDepth(const ResourcePath& path);
