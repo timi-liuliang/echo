@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<res class="FrameBufferWindow" path="Engine://Render/Pipeline/Framebuffer/ScreenWindowDebug.fbws" IsClearColor="false" ClearColor="0.298 0.298 0.322 1 " IsClearDepth="false" />

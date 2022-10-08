@@ -4,7 +4,7 @@
 		<queue class="CustomDepth" Name="Custom Depth" Enable="true" />
 	</stage>
 	<stage class="RenderStage" Name="Shadow Depth" Enable="true" EditorOnly="false">
-		<property name="FrameBuffer" path="Engine://Render/Pipeline/Framebuffer/ShadowDepth.fbos" />
+		<property name="FrameBuffer" path="Engine://Render/Pipeline/Framebuffer/ShadowDepth/ShadowDepth.fbos" />
 		<queue class="ShadowDepth" Name="Shadow Depth" Enable="true" />
 	</stage>
 	<stage class="RenderStage" Name="GBuffer" Enable="true" EditorOnly="false">
@@ -36,7 +36,7 @@
 		<queue class="PostProcessMaterials" Name="Post Process Materials" Enable="true" />
 	</stage>
 	<stage class="RenderStage" Name="Screen Window" Enable="true" EditorOnly="false">
-		<property name="FrameBuffer" path="Engine://Render/Pipeline/Framebuffer/ScreenWindow.fbws" />
+		<property name="FrameBuffer" path="Engine://Render/Pipeline/Framebuffer/ScreenWindow/ScreenWindow.fbws" />
 		<queue class="ImageFilter" Name="3D" Enable="true">
 			<property name="Material">
 				<obj class="Material" Shader="Engine://Render/Pipeline/Shaders/Base/Blit.shader" Uniforms.Input="Engine://Render/Pipeline/Framebuffer/Translucency/Color.rt" />
@@ -46,7 +46,7 @@
 		<queue class="ImageFilter" Name="Ui" Enable="true" />
 	</stage>
 	<stage class="RenderStage" Name="Debug" Enable="true" EditorOnly="true">
-		<property name="FrameBuffer" path="Engine://Render/Pipeline/Framebuffer/ScreenWindowDebug.fbws" />
+		<property name="FrameBuffer" path="Engine://Render/Pipeline/Framebuffer/ScreenWindow/ScreenWindowDebug.fbws" />
 		<queue class="ImageFilter" Name="Buffer Visualizer" Enable="true" />
 	</stage>
 </pipeline>

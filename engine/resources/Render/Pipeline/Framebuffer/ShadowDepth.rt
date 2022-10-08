@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<res class="TextureRenderTarget2D" path="Engine://Render/Pipeline/Framebuffer/ShadowDepth.rt" MipMap="true" Width="2048" Height="2048" ClearColor="0 0 0 1 " Format="PF_D32_FLOAT" OnSize="Static" />
