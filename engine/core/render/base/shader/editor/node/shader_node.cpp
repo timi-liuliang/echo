@@ -58,7 +58,8 @@ namespace Echo
 
 	void ShaderNode::setInData(std::shared_ptr<NodeData> nodeData, int portIndex)
 	{
-		m_inputs[portIndex] = std::dynamic_pointer_cast<ShaderData>(nodeData);
+		if(portIndex<m_inputs.size())
+			m_inputs[portIndex] = std::dynamic_pointer_cast<ShaderData>(nodeData);
 	}
 
 	bool ShaderNode::checkValidation()

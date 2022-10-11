@@ -159,6 +159,7 @@ layout(location = 9) in vec4 v_Joint;
 // outputs
 layout(location = 0) out vec4 o_FragColor;
 layout(location = 1) out vec4 o_FragNormal;
+layout(location = 2) out vec4 o_FragMetalicRoughnessShadingModelID;
 
 // custom functions
 ${FS_FUNCTIONS}
@@ -202,6 +203,7 @@ ${FS_SHADER_CODE}
 
     o_FragColor = vec4(__BaseColor.rgb, __Opacity);
 	o_FragNormal.xyz = (__Normal + vec3(1.0, 1.0, 1.0)) * 0.5;
+	o_FragMetalicRoughnessShadingModelID = vec4(__Metalic, __PerceptualRoughness, 1.0, 1.0);
 }
 )";
 

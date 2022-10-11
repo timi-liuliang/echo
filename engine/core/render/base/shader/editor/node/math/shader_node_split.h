@@ -35,6 +35,9 @@ namespace Echo
     private:
         // invalid all outputs
         void invalidAllOutputs();
+
+        // referesh inputs
+        void refreshVariableNames();
     };
 }
 

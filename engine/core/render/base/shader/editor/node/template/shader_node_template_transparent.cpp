@@ -19,8 +19,7 @@ namespace Echo
 		{
 			{"vec3", "Base"},
 			{"vec3", "Emissive"},
-			{"float", "Opacity"},
-			{"float", "Occlusion"}
+			{"float", "Opacity"}
 		};
 
 		m_inputs.resize(m_inputDataTypes.size());
@@ -53,12 +52,6 @@ namespace Echo
 				{
 					compiler.addMacro("ENABLE_OPACITY");
 					compiler.addCode(Echo::StringUtil::Format("\tfloat __Opacity = %s;\n", dynamic_cast<ShaderData*>(m_inputs[i].get())->getVariableName().c_str()));
-				}
-
-				if (m_inputDataTypes[i].name == "Occlusion")
-				{
-					compiler.addMacro("ENABLE_OCCLUSION");
-					compiler.addCode(Echo::StringUtil::Format("\tfloat __AmbientOcclusion = %s;\n", dynamic_cast<ShaderData*>(m_inputs[i].get())->getVariableName().c_str()));
 				}
             }
         }

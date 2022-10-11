@@ -56,7 +56,11 @@ namespace QtNodes
 
 	void NodeState::eraseConnection(PortType portType, PortIndex portIndex, QUuid id)
 	{
-		getEntries(portType)[portIndex].erase(id);
+		std::vector<NodeState::ConnectionPtrSet>& entries = getEntries(portType);
+		if (portIndex < entries.size())
+		{
+			entries[portIndex].erase(id);
+		}
 	}
 
 	NodeState::ReactToConnectionState NodeState::reaction() const
