@@ -29,6 +29,10 @@ namespace Echo
 	void MeshRender::setMesh(Object* mesh)
 	{
 		m_mesh = (Mesh*)mesh;
+		if(m_mesh)
+		{
+			m_localAABB = m_mesh->getLocalBox();
+		}
 
 		m_isRenderableDirty = true;
 	}
