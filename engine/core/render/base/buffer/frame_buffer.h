@@ -95,9 +95,25 @@ namespace Echo
         ResourcePath getColorA();
         void setColorA(const ResourcePath& path);
 
+		// clear color
+		bool isClearColorB() const { return m_isClearColorB; }
+		void setClearColorB(bool isClearColor) { m_isClearColorB = isClearColor; }
+
+		// background color
+		const Color& getClearColorBValue() const { return m_clearColorB; }
+		void setClearColorBValue(const Color& color) { m_clearColorB= color; }
+
 		// Attachment colorB
 		ResourcePath getColorB();
 		void setColorB(const ResourcePath& path);
+
+		// clear color
+		bool isClearColorC() const { return m_isClearColorC; }
+		void setClearColorC(bool isClearColor) { m_isClearColorC = isClearColor; }
+
+		// background color
+		const Color& getClearColorCValue() const { return m_clearColorC; }
+		void setClearColorCValue(const Color& color) { m_clearColorC = color; }
 
 		// Attachment colorB
 		ResourcePath getColorC();
@@ -112,6 +128,10 @@ namespace Echo
         bool hasDepthAttachment() { return m_views[int(Attachment::DepthStencil)]; }
 
 	protected:
+		bool	m_isClearColorB = true;
+		Color	m_clearColorB = Color::BLACK;
+		bool	m_isClearColorC = true;
+		Color	m_clearColorC = Color::BLACK;
         array<TextureRenderTarget2DPtr, 9>  m_views;
 	};
 

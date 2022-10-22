@@ -20,14 +20,11 @@ namespace Echo
 
 	void TextureRenderTarget2D::bindMethods()
 	{
-		CLASS_BIND_METHOD(TextureRenderTarget2D, getClearColor);
-		CLASS_BIND_METHOD(TextureRenderTarget2D, setClearColor);
 		CLASS_BIND_METHOD(TextureRenderTarget2D, getPixelFormatName);
 		CLASS_BIND_METHOD(TextureRenderTarget2D, setPixelFormatName);
 		CLASS_BIND_METHOD(TextureRenderTarget2D, getOnSizeType);
 		CLASS_BIND_METHOD(TextureRenderTarget2D, setOnSizeType);
 
-		CLASS_REGISTER_PROPERTY(TextureRenderTarget2D, "ClearColor", Variant::Type::Color, getClearColor, setClearColor);
 		CLASS_REGISTER_PROPERTY(TextureRenderTarget2D, "Format", Variant::Type::StringOption, getPixelFormatName, setPixelFormatName);
 		CLASS_REGISTER_PROPERTY(TextureRenderTarget2D, "OnSize", Variant::Type::StringOption, getOnSizeType, setOnSizeType);
 	}
@@ -87,14 +84,14 @@ namespace Echo
 		}
 	}
 
-	void TextureRenderTarget2D::setClearColor(const Color& color)
-	{ 
-		if (m_clearColor != color)
-		{
-			m_clearColor = color;
-			unload();
-		}
-	}
+	//void TextureRenderTarget2D::setClearColor(const Color& color)
+	//{ 
+	//	if (m_clearColor != color)
+	//	{
+	//		m_clearColor = color;
+	//		unload();
+	//	}
+	//}
 
 	void TextureRenderTarget2D::onSize(ui32 width, ui32 height)
 	{

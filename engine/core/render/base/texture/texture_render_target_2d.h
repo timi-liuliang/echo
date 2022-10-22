@@ -36,10 +36,6 @@ namespace Echo
 		const StringOption getPixelFormatName();
 		void setPixelFormatName(const StringOption& option);
 
-		// color
-		const Color& getClearColor() const { return m_clearColor; }
-		void setClearColor(const Color& color);
-
 		// OnSize type
 		const StringOption getOnSizeType();
 		void setOnSizeType(const StringOption& option);
@@ -58,7 +54,6 @@ namespace Echo
 
 	protected:
 		OnSizeType		m_onSizeType = OnSizeType::Dynamic;
-		Color			m_clearColor = Color::BLACK;
 	};
 	typedef ResRef<TextureRenderTarget2D> TextureRenderTarget2DPtr;
 }
