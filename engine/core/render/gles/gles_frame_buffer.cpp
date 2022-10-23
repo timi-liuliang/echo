@@ -118,7 +118,7 @@ namespace Echo
 		{
 			OGLESDebug(glViewport(0, 0, width, height));
 
-			clear(m_isClearColor, m_clearColor, m_isClearDepth, m_clearDepth, m_isClearStencil, m_clearStencil);
+			clear(m_isClearDepth, m_clearDepth, m_isClearStencil, m_clearStencil);
 
 			return true;
 		}
@@ -131,22 +131,25 @@ namespace Echo
 		return true;
 	}
 
-	void GLESFrameBufferOffScreen::clear(bool clearColor, const Color& color, bool clearDepth, float depth_value, bool clear_stencil, ui8 stencil_value)
+	void GLESFrameBufferOffScreen::clear(bool clearDepth, float depth_value, bool clear_stencil, ui8 stencil_value)
 	{
-		GLbitfield mask = 0;
-		if (clearColor)
+		for (i32 i = i32(Attachment::ColorA); i < i32(Attachment::DepthStencil); i++)
 		{
-			OGLESDebug(glClearColor(color.r, color.g, color.b, color.a));
-			mask |= GL_COLOR_BUFFER_BIT;
+			if (m_isClearColor[i] && m_views[i])
+			{
+				float bgColor[4] = { m_clearColor[i].r, m_clearColor[i].g, m_clearColor[i].b, m_clearColor[i].a };
+				OGLESDebug(glClearBufferfv(GL_COLOR, i, bgColor));
+			}
 		}
 
+		GLbitfield mask = 0;
 		if (clearDepth)
 		{
 			OGLESDebug(glClearDepthf(depth_value));
 			mask |= GL_DEPTH_BUFFER_BIT;
 		}
 
-		OGLESDebug(glDepthMask(clearColor));
+		OGLESDebug(glDepthMask(clearDepth));
 
 		if (clear_stencil)
 		{
@@ -219,7 +222,7 @@ namespace Echo
 		OGLESDebug(glViewport(0, 0, width, height));
 
 		// clear
-		GLESFrameBufferOffScreen::clear(m_isClearColor, m_clearColor, m_isClearDepth, m_clearDepth, m_isClearStencil, m_clearStencil);
+		clear(isClearColor(), getClearColorValue(), m_isClearDepth, m_clearDepth, m_isClearStencil, m_clearStencil);
 
 		return true;
 	}
@@ -231,6 +234,37 @@ namespace Echo
 
 	void GLESFramebufferWindow::onSize(ui32 width, ui32 height)
 	{
+	}
+
+	void GLESFramebufferWindow::clear(bool clearColor, const Color& color, bool clearDepth, float depth_value, bool clear_stencil, ui8 stencil_value)
+	{
+		GLbitfield mask = 0;
+		if (clearColor)
+		{
+			OGLESDebug(glClearColor(color.r, color.g, color.b, color.a));
+			mask |= GL_COLOR_BUFFER_BIT;
+		}
+
+		if (clearDepth)
+		{
+			OGLESDebug(glClearDepthf(depth_value));
+			mask |= GL_DEPTH_BUFFER_BIT;
+		}
+
+		OGLESDebug(glDepthMask(clearDepth));
+
+		if (clear_stencil)
+		{
+			OGLESDebug(glClearStencil(stencil_value));
+			mask |= GL_STENCIL_BUFFER_BIT;
+		}
+
+		OGLESDebug(glStencilMask(clear_stencil));
+
+		if (mask != 0)
+		{
+			OGLESDebug(glClear(mask));
+		}
 	}
 
 	bool GLESFramebufferWindow::readPixels(Attachment attach, Pixels& pixels)

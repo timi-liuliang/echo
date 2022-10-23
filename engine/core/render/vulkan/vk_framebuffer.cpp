@@ -41,7 +41,7 @@ namespace Echo
             {
                 VkClearValue clearValue;
                 if (i == i32(Attachment::DepthStencil))
-                    clearValue.color = { m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a };
+                    clearValue.color = { m_clearColor[i].r, m_clearColor[i].g, m_clearColor[i].b, m_clearColor[i].a };
                 else
                     clearValue.depthStencil = { m_clearDepth, m_clearStencil };
 
@@ -331,7 +331,7 @@ namespace Echo
 		if (VK_SUCCESS == vkBeginCommandBuffer(getVkCommandbuffer(), &commandBufferBeginInfo))
 		{
 			array<VkClearValue, 2> clearValues;
-			clearValues[0].color = { m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a };
+			clearValues[0].color = { m_clearColor[0].r, m_clearColor[0].g, m_clearColor[0].b, m_clearColor[0].a };
 			clearValues[1].depthStencil = { m_clearDepth, m_clearStencil };
 
 			VkRenderPassBeginInfo renderPassBeginInfo = {};

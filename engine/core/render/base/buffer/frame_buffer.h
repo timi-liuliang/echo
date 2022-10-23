@@ -24,7 +24,7 @@ namespace Echo
 			ColorF,
 			ColorG,
 			ColorH,
-			DepthStencil
+			DepthStencil,
 		};
 
 		// Pixels
@@ -45,6 +45,8 @@ namespace Echo
 		};
 
     public:
+		FrameBuffer();
+
 		// begin|end render
 		virtual bool begin() { return false; }
 		virtual bool end() { return false; }
@@ -54,12 +56,12 @@ namespace Echo
 
 	public:
 		// clear color
-		bool isClearColor() const { return m_isClearColor; }
-		void setClearColor(bool isClearColor) { m_isClearColor = isClearColor; }
+		bool isClearColor() const { return m_isClearColor[Attachment::ColorA]; }
+		void setClearColor(bool isClearColor) { m_isClearColor[Attachment::ColorA] = isClearColor; }
 
 		// background color
-		const Color& getClearColorValue() const { return m_clearColor; }
-		void setClearColorValue(const Color& color) { m_clearColor = color; }
+		const Color& getClearColorValue() const { return m_clearColor[Attachment::ColorA]; }
+		void setClearColorValue(const Color& color) { m_clearColor[Attachment::ColorA] = color; }
 
 		// clear depth
 		bool isClearDepth() const { return m_isClearDepth; }
@@ -69,8 +71,9 @@ namespace Echo
 		virtual bool readPixels(Attachment attach, Pixels& pixels) { return false; }
 
     protected:
-		bool	m_isClearColor = true;
-		Color	m_clearColor = Color(0.298f, 0.298f, 0.322f);
+		array<bool, Attachment::DepthStencil>	m_isClearColor;
+		array<Color, Attachment::DepthStencil>	m_clearColor;
+
 		bool	m_isClearDepth = true;
 		float	m_clearDepth = 1.f;
 		bool	m_isClearStencil = true; 
@@ -96,24 +99,24 @@ namespace Echo
         void setColorA(const ResourcePath& path);
 
 		// clear color
-		bool isClearColorB() const { return m_isClearColorB; }
-		void setClearColorB(bool isClearColor) { m_isClearColorB = isClearColor; }
+		bool isClearColorB() const { return m_isClearColor[Attachment::ColorB]; }
+		void setClearColorB(bool isClearColor) { m_isClearColor[Attachment::ColorB] = isClearColor; }
 
 		// background color
-		const Color& getClearColorBValue() const { return m_clearColorB; }
-		void setClearColorBValue(const Color& color) { m_clearColorB= color; }
+		const Color& getClearColorBValue() const { return m_clearColor[Attachment::ColorB]; }
+		void setClearColorBValue(const Color& color) { m_clearColor[Attachment::ColorB] = color; }
 
 		// Attachment colorB
 		ResourcePath getColorB();
 		void setColorB(const ResourcePath& path);
 
 		// clear color
-		bool isClearColorC() const { return m_isClearColorC; }
-		void setClearColorC(bool isClearColor) { m_isClearColorC = isClearColor; }
+		bool isClearColorC() const { return m_isClearColor[Attachment::ColorC]; }
+		void setClearColorC(bool isClearColor) { m_isClearColor[Attachment::ColorC] = isClearColor; }
 
 		// background color
-		const Color& getClearColorCValue() const { return m_clearColorC; }
-		void setClearColorCValue(const Color& color) { m_clearColorC = color; }
+		const Color& getClearColorCValue() const { return m_clearColor[Attachment::ColorC]; }
+		void setClearColorCValue(const Color& color) { m_clearColor[Attachment::ColorC] = color; }
 
 		// Attachment colorB
 		ResourcePath getColorC();
@@ -128,10 +131,6 @@ namespace Echo
         bool hasDepthAttachment() { return m_views[int(Attachment::DepthStencil)]; }
 
 	protected:
-		bool	m_isClearColorB = true;
-		Color	m_clearColorB = Color::BLACK;
-		bool	m_isClearColorC = true;
-		Color	m_clearColorC = Color::BLACK;
         array<TextureRenderTarget2DPtr, 9>  m_views;
 	};
 

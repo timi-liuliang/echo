@@ -23,7 +23,7 @@ namespace Echo
 
     public:
 		// clear render target
-		static void clear(bool clear_color, const Color& color, bool clear_depth, float depth_value, bool clear_stencil, ui8 stencil_value);
+		void clear(bool clear_depth, float depth_value, bool clear_stencil, ui8 stencil_value);
 
 	protected:
 		// Prepare
@@ -62,5 +62,8 @@ namespace Echo
 
 		// read pixels
 		virtual bool readPixels(Attachment attach, Pixels& pixels) override;
+
+		// clear render target
+		void clear(bool clear_color, const Color& color, bool clear_depth, float depth_value, bool clear_stencil, ui8 stencil_value);
 	};
 }

@@ -5,6 +5,29 @@
 
 namespace Echo
 {
+	FrameBuffer::FrameBuffer()
+	{
+		m_isClearColor = { 
+			true, 
+			true, 
+			true, 
+			true, 		
+			true, 
+			true, 
+			true, 
+			true};
+
+		m_clearColor = {
+			Color(0.298f, 0.298f, 0.322f),
+			Color::BLACK,
+			Color::BLACK,
+			Color::BLACK,
+			Color::BLACK,
+			Color::BLACK,
+			Color::BLACK,
+			Color::BLACK};
+	}
+
 	void FrameBuffer::bindMethods()
 	{
 		CLASS_BIND_METHOD(FrameBuffer, isClearColor);
