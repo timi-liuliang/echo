@@ -50,6 +50,7 @@ struct Position
 };
 
 layout(binding = 2) uniform sampler2D GBuffer_Normal;
+layout(binding = 3) uniform sampler2D GBuffer_Depth;
 
 layout(location = 7) in vec2 v_UV;
 layout(location = 3) in vec3 v_Normal;
@@ -83,15 +84,15 @@ void main()
 	<property name="Graph"><![CDATA[{
     "connections": [
         {
-            "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
-            "in_index": 2,
-            "out_id": "{7028fed8-7e12-4907-aa83-5d7b810b388e}",
-            "out_index": 0
-        },
-        {
             "in_id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
             "in_index": 1,
             "out_id": "{e2eb8b65-65fd-425d-93c8-944c74cd8c75}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
+            "in_index": 2,
+            "out_id": "{7028fed8-7e12-4907-aa83-5d7b810b388e}",
             "out_index": 0
         },
         {
@@ -189,6 +190,20 @@ void main()
             "position": {
                 "x": -783,
                 "y": 314
+            }
+        },
+        {
+            "id": "{b06a016b-ddaf-45fe-8b7f-8ffeffce3549}",
+            "model": {
+                "Atla": "false",
+                "Texture": "Engine://Render/Pipeline/Framebuffer/GBuffer/GBufferDepth.rt",
+                "Type": "General",
+                "Variable": "GBuffer_Depth",
+                "name": "Texture"
+            },
+            "position": {
+                "x": -742,
+                "y": 566
             }
         }
     ]
