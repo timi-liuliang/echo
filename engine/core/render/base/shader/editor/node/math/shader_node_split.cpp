@@ -37,37 +37,39 @@ namespace Echo
         if (m_inputs[0])
         {
             std::shared_ptr<ShaderData> internalData = DataAny::getInternalData(m_inputs[0]);
+            Echo::String variableName = internalData->getVariableName();
+
             if (internalData->type().id == "float")
             {
                 m_outputs[0] = std::make_shared<DataFloat>(this, "r");
-                m_outputs[0]->setVariableName(internalData->getVariableName());
+                m_outputs[0]->setVariableName(variableName);
             }
             else if (internalData->type().id == "vec2")
             {
                 m_outputs[0] = std::make_shared<DataFloat>(this, "r");
-                m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s.x", internalData->getVariableName().c_str()));
+                m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s.x", variableName.c_str()));
                 m_outputs[1] = std::make_shared<DataFloat>(this, "g");
-                m_outputs[1]->setVariableName(Echo::StringUtil::Format("%s.y", internalData->getVariableName().c_str()));
+                m_outputs[1]->setVariableName(Echo::StringUtil::Format("%s.y", variableName.c_str()));
             }
             else if (internalData->type().id == "vec3")
             {
                 m_outputs[0] = std::make_shared<DataFloat>(this, "r");
-                m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s.x", internalData->getVariableName().c_str()));
+                m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s.x", variableName.c_str()));
                 m_outputs[1] = std::make_shared<DataFloat>(this, "g");
-                m_outputs[1]->setVariableName(Echo::StringUtil::Format("%s.y", internalData->getVariableName().c_str()));
+                m_outputs[1]->setVariableName(Echo::StringUtil::Format("%s.y", variableName.c_str()));
                 m_outputs[2] = std::make_shared<DataFloat>(this, "b");
-                m_outputs[2]->setVariableName(Echo::StringUtil::Format("%s.z", internalData->getVariableName().c_str()));
+                m_outputs[2]->setVariableName(Echo::StringUtil::Format("%s.z", variableName.c_str()));
             }
             else if (internalData->type().id == "vec4")
             {
                 m_outputs[0] = std::make_shared<DataFloat>(this, "r");
-                m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s.x", internalData->getVariableName().c_str()));
+                m_outputs[0]->setVariableName(Echo::StringUtil::Format("%s.x", variableName.c_str()));
                 m_outputs[1] = std::make_shared<DataFloat>(this, "g");
-                m_outputs[1]->setVariableName(Echo::StringUtil::Format("%s.y", internalData->getVariableName().c_str()));
+                m_outputs[1]->setVariableName(Echo::StringUtil::Format("%s.y", variableName.c_str()));
                 m_outputs[2] = std::make_shared<DataFloat>(this, "b");
-                m_outputs[2]->setVariableName(Echo::StringUtil::Format("%s.z", internalData->getVariableName().c_str()));
+                m_outputs[2]->setVariableName(Echo::StringUtil::Format("%s.z", variableName.c_str()));
                 m_outputs[3] = std::make_shared<DataFloat>(this, "a");
-                m_outputs[3]->setVariableName(Echo::StringUtil::Format("%s.w", internalData->getVariableName().c_str()));
+                m_outputs[3]->setVariableName(Echo::StringUtil::Format("%s.w", variableName.c_str()));
             }
         }
     }

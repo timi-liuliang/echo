@@ -57,6 +57,10 @@ namespace Echo
 		m_outputs[0]->setVariableName(variableName.c_str());
 		m_outputs[1]->setVariableName(Echo::StringUtil::Format("%s_Color.rgb", variableName.c_str()));
 		m_outputs[2]->setVariableName(Echo::StringUtil::Format("%s_Color.a", variableName.c_str()));
+
+		Q_EMIT dataUpdated(0);
+		Q_EMIT dataUpdated(1);
+		Q_EMIT dataUpdated(2);
 	}
 
 	void ShaderNodeTexture::setInData(std::shared_ptr<NodeData> nodeData, int portIndex)
