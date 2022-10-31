@@ -32,8 +32,7 @@ void main()
 {
     vec4 Depth_Color = texture(Depth, v_UV);
     float Float_284_Value = 1.0;
-    vec4 Color_279_Value = vec4(1.0, 0.0, 0.0, 1.0);
-    vec3 _Emissive = Color_279_Value.xyz;
+    vec3 _Emissive = vec3(Depth_Color.x);
     float _Opacity = Float_284_Value;
     vec3 _Diffuse = vec3(0.0);
     float _Metalic = 0.20000000298023223876953125;
@@ -69,9 +68,19 @@ void main()
             "out_index": 0
         },
         {
+            "converter": {
+                "in": {
+                    "id": "vec3",
+                    "name": "Emissive"
+                },
+                "out": {
+                    "id": "float",
+                    "name": "r"
+                }
+            },
             "in_id": "{7029286d-3a95-4bf8-8869-c5a65488fe85}",
             "in_index": 1,
-            "out_id": "{2e23d112-5e2c-40d9-bb8a-cd151e535baa}",
+            "out_id": "{07de2d2b-8bdb-48b3-87ae-0668a0344a5a}",
             "out_index": 0
         }
     ],
@@ -123,19 +132,6 @@ void main()
             "position": {
                 "x": -323,
                 "y": 515
-            }
-        },
-        {
-            "id": "{2e23d112-5e2c-40d9-bb8a-cd151e535baa}",
-            "model": {
-                "Color": "1 0 0 1 ",
-                "Uniform": "false",
-                "Variable": "Color_279",
-                "name": "Color"
-            },
-            "position": {
-                "x": -269,
-                "y": 613
             }
         }
     ]

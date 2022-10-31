@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<res class="ShaderProgram" Type="glsl" Domain="Lighting" CullMode="CULL_BACK" BlendMode="Opaque" Uniforms.GBuffer_Normal="Engine://Render/Pipeline/Framebuffer/GBuffer/GBufferNormal.rt">
+<res class="ShaderProgram" Type="glsl" Domain="Lighting" CullMode="CULL_BACK" BlendMode="Opaque" Uniforms.GBuffer_Depth="Engine://Render/Pipeline/Framebuffer/GBuffer/GBufferDepth.rt" Uniforms.GBuffer_Normal="Engine://Render/Pipeline/Framebuffer/GBuffer/GBufferNormal.rt">
 	<property name="VertexShader"><![CDATA[#version 450
 
 struct Position
@@ -70,11 +70,14 @@ void main()
 {
     vec4 Color_627_Value = vec4(0.0, 0.0, 0.0, 1.0);
     vec4 GBuffer_Normal_Color = texture(GBuffer_Normal, v_UV);
+    vec4 GBuffer_Depth_Color = texture(GBuffer_Depth, v_UV);
     vec3 param = GBuffer_Normal_Color.xyz;
     vec3 param_1 = v_Normal;
     vec4 param_2 = v_Color;
     vec3 GLSL_569 = Diffuse(param, param_1, param_2);
-    vec3 _Diffuse = GLSL_569;
+    float OneMinus_274 = 1.0 - GBuffer_Depth_Color.x;
+    vec3 Multiplication_276 = GLSL_569 * OneMinus_274;
+    vec3 _Diffuse = Multiplication_276;
     vec3 _Specular = Color_627_Value.xyz;
     o_FragDiffuse = vec4(_Diffuse, 1.0);
     o_FragSpecular = vec4(_Specular, 1.0);
@@ -90,9 +93,63 @@ void main()
             "out_index": 0
         },
         {
+            "converter": {
+                "in": {
+                    "id": "any",
+                    "name": "B"
+                },
+                "out": {
+                    "id": "float",
+                    "name": "float"
+                }
+            },
+            "in_id": "{02fd125d-ef50-4254-a2f9-019e5d7467a3}",
+            "in_index": 1,
+            "out_id": "{bd1c5e15-1bc0-47a7-be16-0871328001cb}",
+            "out_index": 0
+        },
+        {
+            "converter": {
+                "in": {
+                    "id": "any",
+                    "name": "A"
+                },
+                "out": {
+                    "id": "vec3",
+                    "name": "vec3"
+                }
+            },
+            "in_id": "{02fd125d-ef50-4254-a2f9-019e5d7467a3}",
+            "in_index": 0,
+            "out_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
+            "out_index": 0
+        },
+        {
             "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
             "in_index": 2,
             "out_id": "{7028fed8-7e12-4907-aa83-5d7b810b388e}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
+            "in_index": 1,
+            "out_id": "{be8c8bd3-7694-4adc-8762-9f2645122d0f}",
+            "out_index": 0
+        },
+        {
+            "converter": {
+                "in": {
+                    "id": "any",
+                    "name": "A"
+                },
+                "out": {
+                    "id": "float",
+                    "name": "r"
+                }
+            },
+            "in_id": "{bd1c5e15-1bc0-47a7-be16-0871328001cb}",
+            "in_index": 0,
+            "out_id": "{7ba10bef-3a96-4a39-ad0f-26a3dbcf47a2}",
             "out_index": 0
         },
         {
@@ -102,16 +159,26 @@ void main()
             "out_index": 1
         },
         {
-            "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
-            "in_index": 1,
-            "out_id": "{be8c8bd3-7694-4adc-8762-9f2645122d0f}",
+            "in_id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
+            "in_index": 0,
+            "out_id": "{02fd125d-ef50-4254-a2f9-019e5d7467a3}",
             "out_index": 0
         },
         {
-            "in_id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
+            "converter": {
+                "in": {
+                    "id": "any",
+                    "name": "any"
+                },
+                "out": {
+                    "id": "vec3",
+                    "name": "rgb"
+                }
+            },
+            "in_id": "{7ba10bef-3a96-4a39-ad0f-26a3dbcf47a2}",
             "in_index": 0,
-            "out_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
-            "out_index": 0
+            "out_id": "{b06a016b-ddaf-45fe-8b7f-8ffeffce3549}",
+            "out_index": 1
         }
     ],
     "nodes": [
@@ -122,8 +189,8 @@ void main()
                 "name": "ShaderTemplateLighting"
             },
             "position": {
-                "x": 0,
-                "y": 288
+                "x": 113,
+                "y": 477
             }
         },
         {
@@ -135,8 +202,8 @@ void main()
                 "name": "Color"
             },
             "position": {
-                "x": -263,
-                "y": 402
+                "x": -64,
+                "y": 566
             }
         },
         {
@@ -193,6 +260,17 @@ void main()
             }
         },
         {
+            "id": "{bd1c5e15-1bc0-47a7-be16-0871328001cb}",
+            "model": {
+                "Variable": "OneMinus_274",
+                "name": "OneMinus"
+            },
+            "position": {
+                "x": -282,
+                "y": 550
+            }
+        },
+        {
             "id": "{b06a016b-ddaf-45fe-8b7f-8ffeffce3549}",
             "model": {
                 "Atla": "false",
@@ -202,8 +280,30 @@ void main()
                 "name": "Texture"
             },
             "position": {
-                "x": -742,
-                "y": 566
+                "x": -662,
+                "y": 517
+            }
+        },
+        {
+            "id": "{7ba10bef-3a96-4a39-ad0f-26a3dbcf47a2}",
+            "model": {
+                "Variable": "Split_275",
+                "name": "Split"
+            },
+            "position": {
+                "x": -443,
+                "y": 550
+            }
+        },
+        {
+            "id": "{02fd125d-ef50-4254-a2f9-019e5d7467a3}",
+            "model": {
+                "Variable": "Multiplication_276",
+                "name": "Multiplication"
+            },
+            "position": {
+                "x": -66,
+                "y": 363
             }
         }
     ]
