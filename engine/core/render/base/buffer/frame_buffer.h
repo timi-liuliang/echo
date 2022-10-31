@@ -122,6 +122,18 @@ namespace Echo
 		ResourcePath getColorC();
 		void setColorC(const ResourcePath& path);
 
+		// clear color D
+		bool isClearColorD() const { return m_isClearColor[Attachment::ColorD]; }
+		void setClearColorD(bool isClearColor) { m_isClearColor[Attachment::ColorD] = isClearColor; }
+
+		// background color
+		const Color& getClearColorDValue() const { return m_clearColor[Attachment::ColorD]; }
+		void setClearColorDValue(const Color& color) { m_clearColor[Attachment::ColorD] = color; }
+
+		// Attachment colorB
+		ResourcePath getColorD();
+		void setColorD(const ResourcePath& path);
+
         // Attachment depth
         ResourcePath getDepth();
         void setDepth(const ResourcePath& path);

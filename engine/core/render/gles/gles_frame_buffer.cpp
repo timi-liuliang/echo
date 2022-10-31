@@ -104,7 +104,16 @@ namespace Echo
 	{
 #ifdef ECHO_EDITOR_MODE
 		GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-		return status == GL_FRAMEBUFFER_COMPLETE ? true : false;
+		if (status == GL_FRAMEBUFFER_COMPLETE)
+		{
+			return true;
+		}
+		else
+		{
+			EchoLogError("Bind frame buffer [%s] failed.", getPath().c_str());
+
+			return false;
+		}
 #else
 		return true;
 #endif

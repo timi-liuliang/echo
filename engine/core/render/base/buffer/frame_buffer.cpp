@@ -72,6 +72,12 @@ namespace Echo
 		CLASS_BIND_METHOD(FrameBufferOffScreen, setClearColorCValue);
 		CLASS_BIND_METHOD(FrameBufferOffScreen, getColorC);
 		CLASS_BIND_METHOD(FrameBufferOffScreen, setColorC);
+		CLASS_BIND_METHOD(FrameBufferOffScreen, isClearColorD);
+		CLASS_BIND_METHOD(FrameBufferOffScreen, setClearColorD);
+		CLASS_BIND_METHOD(FrameBufferOffScreen, getClearColorDValue);
+		CLASS_BIND_METHOD(FrameBufferOffScreen, setClearColorDValue);
+		CLASS_BIND_METHOD(FrameBufferOffScreen, getColorD);
+		CLASS_BIND_METHOD(FrameBufferOffScreen, setColorD);
 		CLASS_BIND_METHOD(FrameBufferOffScreen, getDepth);
 		CLASS_BIND_METHOD(FrameBufferOffScreen, setDepth);
 
@@ -82,6 +88,9 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(FrameBufferOffScreen, "IsClearColorC", Variant::Type::Bool, isClearColorC, setClearColorC);
 		CLASS_REGISTER_PROPERTY(FrameBufferOffScreen, "ClearColorC", Variant::Type::Color, getClearColorCValue, setClearColorCValue);
 		CLASS_REGISTER_PROPERTY(FrameBufferOffScreen, "ColorC", Variant::Type::ResourcePath, getColorC, setColorC);
+		CLASS_REGISTER_PROPERTY(FrameBufferOffScreen, "IsClearColorD", Variant::Type::Bool, isClearColorD, setClearColorD);
+		CLASS_REGISTER_PROPERTY(FrameBufferOffScreen, "ClearColorD", Variant::Type::Color, getClearColorDValue, setClearColorDValue);
+		CLASS_REGISTER_PROPERTY(FrameBufferOffScreen, "ColorD", Variant::Type::ResourcePath, getColorD, setColorD);
 		CLASS_REGISTER_PROPERTY(FrameBufferOffScreen, "DepthStencil", Variant::Type::ResourcePath, getDepth, setDepth);
 	}
 
@@ -118,6 +127,16 @@ namespace Echo
 	void FrameBufferOffScreen::setColorC(const ResourcePath& path)
 	{
 		m_views[Attachment::ColorC] = ECHO_DOWN_CAST<TextureRenderTarget2D*>(Res::get(path));
+	}
+
+	ResourcePath FrameBufferOffScreen::getColorD()
+	{
+		return m_views[Attachment::ColorD] ? ResourcePath(m_views[Attachment::ColorD]->getPath(), ".rt") : ResourcePath("", ".rt");
+	}
+
+	void FrameBufferOffScreen::setColorD(const ResourcePath& path)
+	{
+		m_views[Attachment::ColorD] = ECHO_DOWN_CAST<TextureRenderTarget2D*>(Res::get(path));
 	}
 
 	ResourcePath FrameBufferOffScreen::getDepth()

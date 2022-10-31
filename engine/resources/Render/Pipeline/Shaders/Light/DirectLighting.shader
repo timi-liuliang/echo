@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<res class="ShaderProgram" Type="glsl" Domain="Lighting" CullMode="CULL_BACK" BlendMode="Opaque" Uniforms.GBuffer_Depth="Engine://Render/Pipeline/Framebuffer/GBuffer/GBufferDepth.rt" Uniforms.GBuffer_Normal="Engine://Render/Pipeline/Framebuffer/GBuffer/GBufferNormal.rt">
+<res class="ShaderProgram" Type="glsl" Domain="Lighting" CullMode="CULL_BACK" BlendMode="Opaque" Uniforms.GBuffer_Normal="Engine://Render/Pipeline/Framebuffer/GBuffer/GBufferNormal.rt" Uniforms.GBuffer_Position="Engine://Render/Pipeline/Framebuffer/GBuffer/GBufferPosition.rt">
 	<property name="VertexShader"><![CDATA[#version 450
 
 struct Position
@@ -50,7 +50,7 @@ struct Position
 };
 
 layout(binding = 2) uniform sampler2D GBuffer_Normal;
-layout(binding = 3) uniform sampler2D GBuffer_Depth;
+layout(binding = 3) uniform sampler2D GBuffer_Position;
 
 layout(location = 7) in vec2 v_UV;
 layout(location = 3) in vec3 v_Normal;
@@ -70,13 +70,13 @@ void main()
 {
     vec4 Color_627_Value = vec4(0.0, 0.0, 0.0, 1.0);
     vec4 GBuffer_Normal_Color = texture(GBuffer_Normal, v_UV);
-    vec4 GBuffer_Depth_Color = texture(GBuffer_Depth, v_UV);
+    vec4 GBuffer_Position_Color = texture(GBuffer_Position, v_UV);
     vec3 param = GBuffer_Normal_Color.xyz;
     vec3 param_1 = v_Normal;
     vec4 param_2 = v_Color;
     vec3 GLSL_569 = Diffuse(param, param_1, param_2);
-    float OneMinus_274 = 1.0 - GBuffer_Depth_Color.x;
-    vec3 Multiplication_276 = GLSL_569 * OneMinus_274;
+    float Length_324 = length(GBuffer_Position_Color.xyz);
+    vec3 Multiplication_276 = GLSL_569 * Length_324;
     vec3 _Diffuse = Multiplication_276;
     vec3 _Specular = Color_627_Value.xyz;
     o_FragDiffuse = vec4(_Diffuse, 1.0);
@@ -87,9 +87,15 @@ void main()
 	<property name="Graph"><![CDATA[{
     "connections": [
         {
-            "in_id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
+            "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
+            "in_index": 0,
+            "out_id": "{1b18812f-5203-4858-9e11-64f3a3df9a09}",
+            "out_index": 1
+        },
+        {
+            "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
             "in_index": 1,
-            "out_id": "{e2eb8b65-65fd-425d-93c8-944c74cd8c75}",
+            "out_id": "{be8c8bd3-7694-4adc-8762-9f2645122d0f}",
             "out_index": 0
         },
         {
@@ -105,7 +111,13 @@ void main()
             },
             "in_id": "{02fd125d-ef50-4254-a2f9-019e5d7467a3}",
             "in_index": 1,
-            "out_id": "{bd1c5e15-1bc0-47a7-be16-0871328001cb}",
+            "out_id": "{d99a6cae-0b93-434c-81fd-e5d51e8513ea}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
+            "in_index": 0,
+            "out_id": "{02fd125d-ef50-4254-a2f9-019e5d7467a3}",
             "out_index": 0
         },
         {
@@ -125,15 +137,15 @@ void main()
             "out_index": 0
         },
         {
-            "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
-            "in_index": 2,
-            "out_id": "{7028fed8-7e12-4907-aa83-5d7b810b388e}",
+            "in_id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
+            "in_index": 1,
+            "out_id": "{e2eb8b65-65fd-425d-93c8-944c74cd8c75}",
             "out_index": 0
         },
         {
             "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
-            "in_index": 1,
-            "out_id": "{be8c8bd3-7694-4adc-8762-9f2645122d0f}",
+            "in_index": 2,
+            "out_id": "{7028fed8-7e12-4907-aa83-5d7b810b388e}",
             "out_index": 0
         },
         {
@@ -143,56 +155,17 @@ void main()
                     "name": "A"
                 },
                 "out": {
-                    "id": "float",
-                    "name": "r"
-                }
-            },
-            "in_id": "{bd1c5e15-1bc0-47a7-be16-0871328001cb}",
-            "in_index": 0,
-            "out_id": "{7ba10bef-3a96-4a39-ad0f-26a3dbcf47a2}",
-            "out_index": 0
-        },
-        {
-            "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
-            "in_index": 0,
-            "out_id": "{1b18812f-5203-4858-9e11-64f3a3df9a09}",
-            "out_index": 1
-        },
-        {
-            "in_id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
-            "in_index": 0,
-            "out_id": "{02fd125d-ef50-4254-a2f9-019e5d7467a3}",
-            "out_index": 0
-        },
-        {
-            "converter": {
-                "in": {
-                    "id": "any",
-                    "name": "any"
-                },
-                "out": {
                     "id": "vec3",
                     "name": "rgb"
                 }
             },
-            "in_id": "{7ba10bef-3a96-4a39-ad0f-26a3dbcf47a2}",
+            "in_id": "{d99a6cae-0b93-434c-81fd-e5d51e8513ea}",
             "in_index": 0,
             "out_id": "{b06a016b-ddaf-45fe-8b7f-8ffeffce3549}",
             "out_index": 1
         }
     ],
     "nodes": [
-        {
-            "id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
-            "model": {
-                "Variable": "ShaderTemplate_624",
-                "name": "ShaderTemplateLighting"
-            },
-            "position": {
-                "x": 113,
-                "y": 477
-            }
-        },
         {
             "id": "{e2eb8b65-65fd-425d-93c8-944c74cd8c75}",
             "model": {
@@ -207,15 +180,14 @@ void main()
             }
         },
         {
-            "id": "{be8c8bd3-7694-4adc-8762-9f2645122d0f}",
+            "id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
             "model": {
-                "Attribute": "direction",
-                "Variable": "DirectionLight_570",
-                "name": "DirectionLight"
+                "Variable": "ShaderTemplate_624",
+                "name": "ShaderTemplateLighting"
             },
             "position": {
-                "x": -781,
-                "y": 228
+                "x": 113,
+                "y": 477
             }
         },
         {
@@ -230,6 +202,18 @@ void main()
             "position": {
                 "x": -732,
                 "y": 84
+            }
+        },
+        {
+            "id": "{be8c8bd3-7694-4adc-8762-9f2645122d0f}",
+            "model": {
+                "Attribute": "direction",
+                "Variable": "DirectionLight_570",
+                "name": "DirectionLight"
+            },
+            "position": {
+                "x": -781,
+                "y": 228
             }
         },
         {
@@ -260,39 +244,17 @@ void main()
             }
         },
         {
-            "id": "{bd1c5e15-1bc0-47a7-be16-0871328001cb}",
-            "model": {
-                "Variable": "OneMinus_274",
-                "name": "OneMinus"
-            },
-            "position": {
-                "x": -282,
-                "y": 550
-            }
-        },
-        {
             "id": "{b06a016b-ddaf-45fe-8b7f-8ffeffce3549}",
             "model": {
                 "Atla": "false",
-                "Texture": "Engine://Render/Pipeline/Framebuffer/GBuffer/GBufferDepth.rt",
+                "Texture": "Engine://Render/Pipeline/Framebuffer/GBuffer/GBufferPosition.rt",
                 "Type": "General",
-                "Variable": "GBuffer_Depth",
+                "Variable": "GBuffer_Position",
                 "name": "Texture"
             },
             "position": {
                 "x": -662,
                 "y": 517
-            }
-        },
-        {
-            "id": "{7ba10bef-3a96-4a39-ad0f-26a3dbcf47a2}",
-            "model": {
-                "Variable": "Split_275",
-                "name": "Split"
-            },
-            "position": {
-                "x": -443,
-                "y": 550
             }
         },
         {
@@ -304,6 +266,17 @@ void main()
             "position": {
                 "x": -66,
                 "y": 363
+            }
+        },
+        {
+            "id": "{d99a6cae-0b93-434c-81fd-e5d51e8513ea}",
+            "model": {
+                "Variable": "Length_324",
+                "name": "Length"
+            },
+            "position": {
+                "x": -375,
+                "y": 551
             }
         }
     ]
