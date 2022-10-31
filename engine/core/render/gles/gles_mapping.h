@@ -223,9 +223,8 @@ namespace Echo
 
 			case PF_RGBA16_FLOAT:			return GL_RGBA16F;
 
-			case PF_PVRTC_RGBA_4444:
-			case PF_RGBA32_FLOAT:
-				return GL_RGBA;
+			case PF_PVRTC_RGBA_4444:		return GL_RGBA;
+			case PF_RGBA32_FLOAT:			return GL_RGBA32F;
 
 				//case PF_R32_UNORM:
 				//case PF_R32_SNORM:
