@@ -76,8 +76,9 @@ void main()
     vec4 param_2 = v_Color;
     vec3 GLSL_569 = Diffuse(param, param_1, param_2);
     float Length_324 = length(GBuffer_Position_Color.xyz);
-    vec3 Multiplication_276 = GLSL_569 * Length_324;
-    vec3 _Diffuse = Multiplication_276;
+    float Sin_283 = sin(Length_324);
+    vec3 Multiplication_285 = GLSL_569 * Sin_283;
+    vec3 _Diffuse = Multiplication_285;
     vec3 _Specular = Color_627_Value.xyz;
     o_FragDiffuse = vec4(_Diffuse, 1.0);
     o_FragSpecular = vec4(_Specular, 1.0);
@@ -87,37 +88,31 @@ void main()
 	<property name="Graph"><![CDATA[{
     "connections": [
         {
+            "converter": {
+                "in": {
+                    "id": "any",
+                    "name": "A"
+                },
+                "out": {
+                    "id": "vec3",
+                    "name": "rgb"
+                }
+            },
+            "in_id": "{d99a6cae-0b93-434c-81fd-e5d51e8513ea}",
+            "in_index": 0,
+            "out_id": "{b06a016b-ddaf-45fe-8b7f-8ffeffce3549}",
+            "out_index": 1
+        },
+        {
             "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
             "in_index": 0,
             "out_id": "{1b18812f-5203-4858-9e11-64f3a3df9a09}",
             "out_index": 1
         },
         {
-            "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
-            "in_index": 1,
-            "out_id": "{be8c8bd3-7694-4adc-8762-9f2645122d0f}",
-            "out_index": 0
-        },
-        {
-            "converter": {
-                "in": {
-                    "id": "any",
-                    "name": "B"
-                },
-                "out": {
-                    "id": "float",
-                    "name": "float"
-                }
-            },
-            "in_id": "{02fd125d-ef50-4254-a2f9-019e5d7467a3}",
-            "in_index": 1,
-            "out_id": "{d99a6cae-0b93-434c-81fd-e5d51e8513ea}",
-            "out_index": 0
-        },
-        {
             "in_id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
-            "in_index": 0,
-            "out_id": "{02fd125d-ef50-4254-a2f9-019e5d7467a3}",
+            "in_index": 1,
+            "out_id": "{e2eb8b65-65fd-425d-93c8-944c74cd8c75}",
             "out_index": 0
         },
         {
@@ -127,19 +122,19 @@ void main()
                     "name": "A"
                 },
                 "out": {
-                    "id": "vec3",
-                    "name": "vec3"
+                    "id": "float",
+                    "name": "float"
                 }
             },
-            "in_id": "{02fd125d-ef50-4254-a2f9-019e5d7467a3}",
+            "in_id": "{5a79db56-8978-4608-9454-7c3cb99a3bc2}",
             "in_index": 0,
-            "out_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
+            "out_id": "{d99a6cae-0b93-434c-81fd-e5d51e8513ea}",
             "out_index": 0
         },
         {
-            "in_id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
+            "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
             "in_index": 1,
-            "out_id": "{e2eb8b65-65fd-425d-93c8-944c74cd8c75}",
+            "out_id": "{be8c8bd3-7694-4adc-8762-9f2645122d0f}",
             "out_index": 0
         },
         {
@@ -156,13 +151,35 @@ void main()
                 },
                 "out": {
                     "id": "vec3",
-                    "name": "rgb"
+                    "name": "vec3"
                 }
             },
-            "in_id": "{d99a6cae-0b93-434c-81fd-e5d51e8513ea}",
+            "in_id": "{7e76f36c-2bc6-4502-b640-c9087b0a37d0}",
             "in_index": 0,
-            "out_id": "{b06a016b-ddaf-45fe-8b7f-8ffeffce3549}",
-            "out_index": 1
+            "out_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
+            "out_index": 0
+        },
+        {
+            "converter": {
+                "in": {
+                    "id": "any",
+                    "name": "B"
+                },
+                "out": {
+                    "id": "float",
+                    "name": "float"
+                }
+            },
+            "in_id": "{7e76f36c-2bc6-4502-b640-c9087b0a37d0}",
+            "in_index": 1,
+            "out_id": "{5a79db56-8978-4608-9454-7c3cb99a3bc2}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
+            "in_index": 0,
+            "out_id": "{7e76f36c-2bc6-4502-b640-c9087b0a37d0}",
+            "out_index": 0
         }
     ],
     "nodes": [
@@ -232,6 +249,17 @@ void main()
             }
         },
         {
+            "id": "{d99a6cae-0b93-434c-81fd-e5d51e8513ea}",
+            "model": {
+                "Variable": "Length_324",
+                "name": "Length"
+            },
+            "position": {
+                "x": -690,
+                "y": 527
+            }
+        },
+        {
             "id": "{7028fed8-7e12-4907-aa83-5d7b810b388e}",
             "model": {
                 "Attribute": "color",
@@ -253,30 +281,30 @@ void main()
                 "name": "Texture"
             },
             "position": {
-                "x": -662,
-                "y": 517
+                "x": -978,
+                "y": 493
             }
         },
         {
-            "id": "{02fd125d-ef50-4254-a2f9-019e5d7467a3}",
+            "id": "{5a79db56-8978-4608-9454-7c3cb99a3bc2}",
             "model": {
-                "Variable": "Multiplication_276",
+                "Variable": "Sin_283",
+                "name": "Sin"
+            },
+            "position": {
+                "x": -498,
+                "y": 527
+            }
+        },
+        {
+            "id": "{7e76f36c-2bc6-4502-b640-c9087b0a37d0}",
+            "model": {
+                "Variable": "Multiplication_285",
                 "name": "Multiplication"
             },
             "position": {
-                "x": -66,
-                "y": 363
-            }
-        },
-        {
-            "id": "{d99a6cae-0b93-434c-81fd-e5d51e8513ea}",
-            "model": {
-                "Variable": "Length_324",
-                "name": "Length"
-            },
-            "position": {
-                "x": -375,
-                "y": 551
+                "x": -104,
+                "y": 349
             }
         }
     ]
