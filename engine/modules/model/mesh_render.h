@@ -23,6 +23,9 @@ namespace Echo
 		Material* getMaterial() const { return m_material; }
 		void setMaterial(Object* material);
 
+		bool isCastShadow() const { return m_castShadow; }
+		void setCastShadow(bool castShadow);
+
 	protected:
 		// update self
 		virtual void updateInternal(float elapsedTime) override;
@@ -37,6 +40,7 @@ namespace Echo
 		bool			m_isRenderableDirty = true;
 		MeshPtr			m_mesh;
 		MaterialPtr		m_material;
+		bool			m_castShadow = true;
 		RenderProxyPtr	m_renderable = nullptr;
 	};
 }

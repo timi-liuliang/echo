@@ -15,11 +15,14 @@ namespace Echo
 
 	void MeshRender::bindMethods()
 	{
+		CLASS_BIND_METHOD(MeshRender, isCastShadow);
+		CLASS_BIND_METHOD(MeshRender, setCastShadow);
 		CLASS_BIND_METHOD(MeshRender, getMesh);
 		CLASS_BIND_METHOD(MeshRender, setMesh);
 		CLASS_BIND_METHOD(MeshRender, getMaterial);
 		CLASS_BIND_METHOD(MeshRender, setMaterial);
 
+		CLASS_REGISTER_PROPERTY(MeshRender, "CastShadow", Variant::Type::Bool, isCastShadow, setCastShadow);
 		CLASS_REGISTER_PROPERTY(MeshRender, "Mesh", Variant::Type::Object, getMesh, setMesh);
 		CLASS_REGISTER_PROPERTY_HINT(MeshRender, "Mesh", PropertyHintType::ObjectType, "Mesh");
 		CLASS_REGISTER_PROPERTY(MeshRender, "Material", Variant::Type::Object, getMaterial, setMaterial);
@@ -42,6 +45,14 @@ namespace Echo
 		m_material = (Material*)material;
 
 		m_isRenderableDirty = true;
+	}
+
+	void MeshRender::setCastShadow(bool castShadow)
+	{
+		m_castShadow = castShadow;
+
+		if (m_renderable)
+			m_renderable->setCastShadow(m_castShadow);
 	}
 
 	void MeshRender::updateInternal(float elapsedTime)
@@ -79,6 +90,7 @@ namespace Echo
 			{
 				// create renderable
 				m_renderable = RenderProxy::create(m_mesh, m_material, this, true);
+				m_renderable->setCastShadow(m_castShadow);
 			}
 
 			m_isRenderableDirty = false;
