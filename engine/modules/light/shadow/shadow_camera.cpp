@@ -20,7 +20,7 @@ namespace Echo
 		{
 			const Vector3 cameraDir = /*m_dir == Vector3::ZERO ? -EchoSceneManager->getMainLightDir() :*/ m_forward;
 
-			float	halfLen = visibleActorsAABB->getDY() * 0.5f / Echo::Math::Abs(cameraDir.y) + 0.5f;
+			float	halfLen = visibleActorsAABB->getDiagonalLen() * 0.5f;
 			m_position = visibleActorsAABB->getCenter() - cameraDir * halfLen;
 
 			Matrix4 viewMat;
@@ -51,8 +51,6 @@ namespace Echo
 		{
 			orthAABB.addPoint(viewMat.transform(box.getCorner(AABB::Corner(i))));
 		}
-
-		orthAABB.vMax.z += 40.f;
 
 		m_width = orthAABB.getDX();
 		m_height = orthAABB.getDY();
