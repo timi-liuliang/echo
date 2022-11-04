@@ -181,6 +181,8 @@ namespace Echo
             if (colorView)
                 colorView->onSize(width, height);
         }
+
+		m_esTextures.assign(0);
 	}
 
 	// https://docs.gl/es3/glReadPixels
