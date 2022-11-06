@@ -21,7 +21,7 @@ namespace Echo
 
 	protected:
 		// set material global uniforms
-		void setGlobalUniforms();
+		virtual void setGlobalUniforms();
 
 	protected:
 		bool			m_dirty = true;

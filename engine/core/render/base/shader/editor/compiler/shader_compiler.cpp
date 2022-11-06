@@ -92,7 +92,7 @@ namespace Echo
 		m_fsFunctionCode.clear();
 		for (const Function& function : m_fsFunctions)
 		{
-			m_fsFunctionCode += function.m_code;
+			m_fsFunctionCode += function.m_code + "\n";
 		}
 	}
 

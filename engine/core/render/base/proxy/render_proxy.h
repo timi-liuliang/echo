@@ -47,9 +47,13 @@ namespace Echo
 		void setNode( Render* node) { m_node = node; }
 		Render* getNode() { return m_node; }
 
-		// Node(owner)
+		// Main camera
 		void setCamera(RenderCamera* camera) { m_camera = camera; }
 		RenderCamera* getCamera() { return m_camera; }
+
+		// Shadow camera
+		void setCameraShadow(RenderCamera* camera) { m_cameraShadow = camera; }
+		RenderCamera* getCameraShadow() { return m_cameraShadow; }
 
 		// Is a part of raytracing
 		bool isRaytracing() const { return m_raytracing; }
@@ -77,6 +81,7 @@ namespace Echo
 	protected:
 		Render*			m_node = nullptr;
 		RenderCamera*	m_camera = nullptr;
+		RenderCamera*	m_cameraShadow = nullptr;
 		i32				m_bvhNodeId = -1;
 		class Bvh*		m_bvh = nullptr;
 		MeshPtr			m_mesh;

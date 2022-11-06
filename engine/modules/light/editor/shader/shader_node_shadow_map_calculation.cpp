@@ -4,11 +4,11 @@
 
 static const char* shadowmapCalculation =R"(float ShadowMapCalculation(sampler2D texShdowDepth, vec3 worldPosition)
 {
-	float3 shadowDepthPosition = fs_ubo.u_ShadowCameraViewProjMatrix * worldPosition;
-	float2 shadowDepthUV = (shadowDepthPosition / shadowDepthPosition.w).xy;
+	highp vec4 shadowDepthPosition = fs_ubo.u_ShadowCameraViewProjMatrix * vec4(worldPosition, 1.0);
+	vec2 shadowDepthUV = ((shadowDepthPosition / shadowDepthPosition.w).xy + vec2(1.0, 1.0)) * 0.5;
 	
-	float depthInShadowMap = texture(texShdowDepth, shadowDepthUV).r;
-	float depthCurrent = dot(worldPosition - fs_ubo.u_ShadowCameraPosition, fs_ubo.u_ShadowCameraDirection) - fs_ubo.u_ShadowCameraNear;
+	highp float depthInShadowMap = texture(texShdowDepth, shadowDepthUV).r;
+	highp float depthCurrent = dot(worldPosition - fs_ubo.u_ShadowCameraPosition, fs_ubo.u_ShadowCameraDirection) - fs_ubo.u_ShadowCameraNear;
 
 	return depthInShadowMap < depthCurrent ? 0.0 : 1.0;
 })";

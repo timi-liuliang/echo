@@ -28,7 +28,16 @@ namespace Echo
 		if (render)
 		{
 			if (buildRenderable())
+			{
+				vector<Light*>::type dirLights = Light::gatherLights(Light::Type::Direction);
+				if (dirLights.size())
+				{
+					DirectionLight* dirLight = ECHO_DOWN_CAST<DirectionLight*>(dirLights[0]);
+					m_renderable->setCameraShadow(dirLight->getShadowCamera());
+				}
+
 				render->draw(m_renderable, frameBuffer);
+			}
 		}
 
 		onRenderEnd();

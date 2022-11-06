@@ -42,6 +42,9 @@ namespace Echo
 						if (!value && m_camera)
 							value = m_camera->getGlobalUniformValue(uniform->m_name);
 
+						if (!value && m_cameraShadow)
+							value = m_cameraShadow->getGlobalUniformValue(uniform->m_name);
+
 						if (!value && m_node)
 							value = m_node->getGlobalUniformValue(uniform->m_name);
 

@@ -30,7 +30,7 @@ namespace Echo
 		if (m_material)
 		{
 			setGlobalUniforms();
-			m_material->onShaderChanged.connectClassMethod(this, createMethodBind(&DeferredLighting::setGlobalUniforms));
+			onRenderBegin.connectClassMethod(this, createMethodBind(&DeferredLighting::setGlobalUniforms));
 		}
 
 		m_dirty = true;

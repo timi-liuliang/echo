@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<res class="ShaderProgram" Type="glsl" Domain="Lighting" CullMode="CULL_BACK" BlendMode="Opaque" Uniforms.GBuffer_Normal="Engine://Render/Pipeline/Framebuffer/GBuffer/GBufferNormal.rt" Uniforms.GBuffer_Position="Engine://Render/Pipeline/Framebuffer/GBuffer/GBufferPosition.rt">
+<res class="ShaderProgram" Type="glsl" Domain="Lighting" CullMode="CULL_BACK" BlendMode="Opaque" Uniforms.GBuffer_Normal="Engine://Render/Pipeline/Framebuffer/GBuffer/GBufferNormal.rt" Uniforms.GBuffer_Position="Engine://Render/Pipeline/Framebuffer/GBuffer/GBufferPosition.rt" Uniforms.ShadowDepthTex="Engine://Render/Pipeline/Framebuffer/ShadowDepth/ShadowDepthColorA.rt">
 	<property name="VertexShader"><![CDATA[#version 450
 
 struct Position
@@ -49,6 +49,14 @@ struct Position
     vec3 view;
 };
 
+layout(binding = 1, std140) uniform UBO
+{
+    mat4 u_ShadowCameraViewProjMatrix;
+    vec3 u_ShadowCameraPosition;
+    vec3 u_ShadowCameraDirection;
+    float u_ShadowCameraNear;
+} fs_ubo;
+
 layout(binding = 2) uniform sampler2D GBuffer_Normal;
 layout(binding = 3) uniform sampler2D GBuffer_Position;
 layout(binding = 4) uniform sampler2D ShadowDepthTex;
@@ -67,18 +75,27 @@ vec3 Diffuse(vec3 InNormal, vec3 InLightDir, vec4 InLightColor)
     return InLightColor.xyz * dot(InNormal, -InLightDir);
 }
 
+float ShadowMapCalculation(sampler2D texShdowDepth, vec3 worldPosition)
+{
+    vec4 shadowDepthPosition = fs_ubo.u_ShadowCameraViewProjMatrix * vec4(worldPosition, 1.0);
+    vec2 shadowDepthUV = ((shadowDepthPosition / vec4(shadowDepthPosition.w)).xy + vec2(1.0)) * 0.5;
+    float depthInShadowMap = texture(texShdowDepth, shadowDepthUV).x;
+    float depthCurrent = dot(worldPosition - fs_ubo.u_ShadowCameraPosition, fs_ubo.u_ShadowCameraDirection) - fs_ubo.u_ShadowCameraNear;
+    return (depthInShadowMap < depthCurrent) ? 0.0 : 1.0;
+}
+
 void main()
 {
     vec4 Color_627_Value = vec4(0.0, 0.0, 0.0, 1.0);
     vec4 GBuffer_Normal_Color = texture(GBuffer_Normal, v_UV);
     vec4 GBuffer_Position_Color = texture(GBuffer_Position, v_UV);
-    float Length_324 = length(GBuffer_Position_Color.xyz);
     vec3 param = GBuffer_Normal_Color.xyz;
     vec3 param_1 = v_Normal;
     vec4 param_2 = v_Color;
     vec3 GLSL_569 = Diffuse(param, param_1, param_2);
-    float Sin_283 = sin(Length_324);
-    vec3 Multiplication_285 = GLSL_569 * Sin_283;
+    vec3 param_3 = GBuffer_Position_Color.xyz;
+    float ShadowMapCalculation_288 = ShadowMapCalculation(ShadowDepthTex, param_3);
+    vec3 Multiplication_285 = GLSL_569 * ShadowMapCalculation_288;
     vec3 _Diffuse = Multiplication_285;
     vec3 _Specular = Color_627_Value.xyz;
     o_FragDiffuse = vec4(_Diffuse, 1.0);
@@ -89,26 +106,10 @@ void main()
 	<property name="Graph"><![CDATA[{
     "connections": [
         {
-            "converter": {
-                "in": {
-                    "id": "any",
-                    "name": "A"
-                },
-                "out": {
-                    "id": "vec3",
-                    "name": "rgb"
-                }
-            },
-            "in_id": "{d99a6cae-0b93-434c-81fd-e5d51e8513ea}",
-            "in_index": 0,
+            "in_id": "{c34ddd04-fba4-4882-804d-7e633f55e4dc}",
+            "in_index": 1,
             "out_id": "{b06a016b-ddaf-45fe-8b7f-8ffeffce3549}",
             "out_index": 1
-        },
-        {
-            "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
-            "in_index": 2,
-            "out_id": "{7028fed8-7e12-4907-aa83-5d7b810b388e}",
-            "out_index": 0
         },
         {
             "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
@@ -133,31 +134,21 @@ void main()
             "out_index": 0
         },
         {
-            "converter": {
-                "in": {
-                    "id": "any",
-                    "name": "A"
-                },
-                "out": {
-                    "id": "float",
-                    "name": "float"
-                }
-            },
-            "in_id": "{5a79db56-8978-4608-9454-7c3cb99a3bc2}",
-            "in_index": 0,
-            "out_id": "{d99a6cae-0b93-434c-81fd-e5d51e8513ea}",
+            "in_id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
+            "in_index": 1,
+            "out_id": "{e2eb8b65-65fd-425d-93c8-944c74cd8c75}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
+            "in_index": 2,
+            "out_id": "{7028fed8-7e12-4907-aa83-5d7b810b388e}",
             "out_index": 0
         },
         {
             "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
             "in_index": 1,
             "out_id": "{be8c8bd3-7694-4adc-8762-9f2645122d0f}",
-            "out_index": 0
-        },
-        {
-            "in_id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
-            "in_index": 1,
-            "out_id": "{e2eb8b65-65fd-425d-93c8-944c74cd8c75}",
             "out_index": 0
         },
         {
@@ -173,7 +164,7 @@ void main()
             },
             "in_id": "{7e76f36c-2bc6-4502-b640-c9087b0a37d0}",
             "in_index": 1,
-            "out_id": "{5a79db56-8978-4608-9454-7c3cb99a3bc2}",
+            "out_id": "{c34ddd04-fba4-4882-804d-7e633f55e4dc}",
             "out_index": 0
         },
         {
@@ -181,20 +172,15 @@ void main()
             "in_index": 0,
             "out_id": "{7e76f36c-2bc6-4502-b640-c9087b0a37d0}",
             "out_index": 0
+        },
+        {
+            "in_id": "{c34ddd04-fba4-4882-804d-7e633f55e4dc}",
+            "in_index": 0,
+            "out_id": "{26bfaf9c-ed54-4a30-ac06-d8e13b74410e}",
+            "out_index": 0
         }
     ],
     "nodes": [
-        {
-            "id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
-            "model": {
-                "Variable": "ShaderTemplate_624",
-                "name": "ShaderTemplateLighting"
-            },
-            "position": {
-                "x": 113,
-                "y": 477
-            }
-        },
         {
             "id": "{e2eb8b65-65fd-425d-93c8-944c74cd8c75}",
             "model": {
@@ -209,15 +195,14 @@ void main()
             }
         },
         {
-            "id": "{be8c8bd3-7694-4adc-8762-9f2645122d0f}",
+            "id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
             "model": {
-                "Attribute": "direction",
-                "Variable": "DirectionLight_570",
-                "name": "DirectionLight"
+                "Variable": "ShaderTemplate_624",
+                "name": "ShaderTemplateLighting"
             },
             "position": {
-                "x": -781,
-                "y": 228
+                "x": 85,
+                "y": 418
             }
         },
         {
@@ -230,19 +215,31 @@ void main()
                 "name": "Texture"
             },
             "position": {
-                "x": -732,
-                "y": 84
+                "x": -760,
+                "y": 25
             }
         },
         {
-            "id": "{d99a6cae-0b93-434c-81fd-e5d51e8513ea}",
+            "id": "{be8c8bd3-7694-4adc-8762-9f2645122d0f}",
             "model": {
-                "Variable": "Length_324",
-                "name": "Length"
+                "Attribute": "direction",
+                "Variable": "DirectionLight_570",
+                "name": "DirectionLight"
             },
             "position": {
-                "x": -690,
-                "y": 527
+                "x": -809,
+                "y": 169
+            }
+        },
+        {
+            "id": "{7e76f36c-2bc6-4502-b640-c9087b0a37d0}",
+            "model": {
+                "Variable": "Multiplication_285",
+                "name": "Multiplication"
+            },
+            "position": {
+                "x": -132,
+                "y": 290
             }
         },
         {
@@ -256,8 +253,8 @@ void main()
                 "name": "GLSL"
             },
             "position": {
-                "x": -342,
-                "y": 214
+                "x": -370,
+                "y": 155
             }
         },
         {
@@ -268,8 +265,8 @@ void main()
                 "name": "DirectionLight"
             },
             "position": {
-                "x": -783,
-                "y": 314
+                "x": -811,
+                "y": 255
             }
         },
         {
@@ -282,30 +279,8 @@ void main()
                 "name": "Texture"
             },
             "position": {
-                "x": -978,
-                "y": 493
-            }
-        },
-        {
-            "id": "{5a79db56-8978-4608-9454-7c3cb99a3bc2}",
-            "model": {
-                "Variable": "Sin_283",
-                "name": "Sin"
-            },
-            "position": {
-                "x": -498,
-                "y": 527
-            }
-        },
-        {
-            "id": "{7e76f36c-2bc6-4502-b640-c9087b0a37d0}",
-            "model": {
-                "Variable": "Multiplication_285",
-                "name": "Multiplication"
-            },
-            "position": {
-                "x": -104,
-                "y": 349
+                "x": -766,
+                "y": 556
             }
         },
         {
@@ -318,8 +293,23 @@ void main()
                 "name": "Texture"
             },
             "position": {
-                "x": -814,
-                "y": 703
+                "x": -764,
+                "y": 404
+            }
+        },
+        {
+            "id": "{c34ddd04-fba4-4882-804d-7e633f55e4dc}",
+            "model": {
+                "Code": "float ShadowMapCalculation(sampler2D texShdowDepth, vec3 worldPosition)\n{\n\thighp vec4 shadowDepthPosition = fs_ubo.u_ShadowCameraViewProjMatrix * vec4(worldPosition, 1.0);\n\tvec2 shadowDepthUV = ((shadowDepthPosition / shadowDepthPosition.w).xy + vec2(1.0, 1.0)) * 0.5;\n\t\n\thighp float depthInShadowMap = texture(texShdowDepth, shadowDepthUV).r;\n\thighp float depthCurrent = dot(worldPosition - fs_ubo.u_ShadowCameraPosition, fs_ubo.u_ShadowCameraDirection) - fs_ubo.u_ShadowCameraNear;\n\n\treturn depthInShadowMap < depthCurrent ? 0.0 : 1.0;\n}",
+                "FunctionName": "ShadowMapCalculation",
+                "Parameters": "sampler2D texShdowDepth, vec3 worldPosition",
+                "ReturnType": "float",
+                "Variable": "ShadowMapCalculation_288",
+                "name": "ShadowMapCalculation"
+            },
+            "position": {
+                "x": -380,
+                "y": 471
             }
         }
     ]
