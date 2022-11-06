@@ -15,7 +15,8 @@
 #include "editor/direction_light_editor.h"
 #include "editor/cube_light_capture_editor.h"
 #include "editor/cube_light_custom_editor.h"
-#include "editor/queue/shader_node_direction_light_attribute.h"
+#include "editor/shader/shader_node_direction_light_attribute.h"
+#include "editor/shader/shader_node_shadow_map_calculation.h"
 
 namespace Echo
 {
@@ -63,6 +64,7 @@ namespace Echo
 
     #ifdef ECHO_EDITOR_MODE
         Class::registerType<ShaderNodeDirectionLightAttribute>();
+        Class::registerType<ShaderNodeShadowMapCalculation>();
     #endif
 
         CLASS_REGISTER_EDITOR(PointLight, PointLightEditor)
