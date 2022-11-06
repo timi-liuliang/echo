@@ -51,6 +51,7 @@ struct Position
 
 layout(binding = 2) uniform sampler2D GBuffer_Normal;
 layout(binding = 3) uniform sampler2D GBuffer_Position;
+layout(binding = 4) uniform sampler2D ShadowDepthTex;
 
 layout(location = 7) in vec2 v_UV;
 layout(location = 3) in vec3 v_Normal;
@@ -71,11 +72,11 @@ void main()
     vec4 Color_627_Value = vec4(0.0, 0.0, 0.0, 1.0);
     vec4 GBuffer_Normal_Color = texture(GBuffer_Normal, v_UV);
     vec4 GBuffer_Position_Color = texture(GBuffer_Position, v_UV);
+    float Length_324 = length(GBuffer_Position_Color.xyz);
     vec3 param = GBuffer_Normal_Color.xyz;
     vec3 param_1 = v_Normal;
     vec4 param_2 = v_Color;
     vec3 GLSL_569 = Diffuse(param, param_1, param_2);
-    float Length_324 = length(GBuffer_Position_Color.xyz);
     float Sin_283 = sin(Length_324);
     vec3 Multiplication_285 = GLSL_569 * Sin_283;
     vec3 _Diffuse = Multiplication_285;
@@ -105,14 +106,30 @@ void main()
         },
         {
             "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
+            "in_index": 2,
+            "out_id": "{7028fed8-7e12-4907-aa83-5d7b810b388e}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
             "in_index": 0,
             "out_id": "{1b18812f-5203-4858-9e11-64f3a3df9a09}",
             "out_index": 1
         },
         {
-            "in_id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
-            "in_index": 1,
-            "out_id": "{e2eb8b65-65fd-425d-93c8-944c74cd8c75}",
+            "converter": {
+                "in": {
+                    "id": "any",
+                    "name": "A"
+                },
+                "out": {
+                    "id": "vec3",
+                    "name": "vec3"
+                }
+            },
+            "in_id": "{7e76f36c-2bc6-4502-b640-c9087b0a37d0}",
+            "in_index": 0,
+            "out_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
             "out_index": 0
         },
         {
@@ -138,25 +155,9 @@ void main()
             "out_index": 0
         },
         {
-            "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
-            "in_index": 2,
-            "out_id": "{7028fed8-7e12-4907-aa83-5d7b810b388e}",
-            "out_index": 0
-        },
-        {
-            "converter": {
-                "in": {
-                    "id": "any",
-                    "name": "A"
-                },
-                "out": {
-                    "id": "vec3",
-                    "name": "vec3"
-                }
-            },
-            "in_id": "{7e76f36c-2bc6-4502-b640-c9087b0a37d0}",
-            "in_index": 0,
-            "out_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
+            "in_id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
+            "in_index": 1,
+            "out_id": "{e2eb8b65-65fd-425d-93c8-944c74cd8c75}",
             "out_index": 0
         },
         {
@@ -184,6 +185,17 @@ void main()
     ],
     "nodes": [
         {
+            "id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
+            "model": {
+                "Variable": "ShaderTemplate_624",
+                "name": "ShaderTemplateLighting"
+            },
+            "position": {
+                "x": 113,
+                "y": 477
+            }
+        },
+        {
             "id": "{e2eb8b65-65fd-425d-93c8-944c74cd8c75}",
             "model": {
                 "Color": "0 0 0 1 ",
@@ -197,14 +209,15 @@ void main()
             }
         },
         {
-            "id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
+            "id": "{be8c8bd3-7694-4adc-8762-9f2645122d0f}",
             "model": {
-                "Variable": "ShaderTemplate_624",
-                "name": "ShaderTemplateLighting"
+                "Attribute": "direction",
+                "Variable": "DirectionLight_570",
+                "name": "DirectionLight"
             },
             "position": {
-                "x": 113,
-                "y": 477
+                "x": -781,
+                "y": 228
             }
         },
         {
@@ -222,15 +235,14 @@ void main()
             }
         },
         {
-            "id": "{be8c8bd3-7694-4adc-8762-9f2645122d0f}",
+            "id": "{d99a6cae-0b93-434c-81fd-e5d51e8513ea}",
             "model": {
-                "Attribute": "direction",
-                "Variable": "DirectionLight_570",
-                "name": "DirectionLight"
+                "Variable": "Length_324",
+                "name": "Length"
             },
             "position": {
-                "x": -781,
-                "y": 228
+                "x": -690,
+                "y": 527
             }
         },
         {
@@ -246,17 +258,6 @@ void main()
             "position": {
                 "x": -342,
                 "y": 214
-            }
-        },
-        {
-            "id": "{d99a6cae-0b93-434c-81fd-e5d51e8513ea}",
-            "model": {
-                "Variable": "Length_324",
-                "name": "Length"
-            },
-            "position": {
-                "x": -690,
-                "y": 527
             }
         },
         {
@@ -305,6 +306,20 @@ void main()
             "position": {
                 "x": -104,
                 "y": 349
+            }
+        },
+        {
+            "id": "{26bfaf9c-ed54-4a30-ac06-d8e13b74410e}",
+            "model": {
+                "Atla": "false",
+                "Texture": "Engine://Render/Pipeline/Framebuffer/ShadowDepth/ShadowDepthColorA.rt",
+                "Type": "General",
+                "Variable": "ShadowDepthTex",
+                "name": "Texture"
+            },
+            "position": {
+                "x": -814,
+                "y": 703
             }
         }
     ]

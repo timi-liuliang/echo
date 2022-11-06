@@ -14,10 +14,13 @@ namespace Echo
 		virtual ~ShaderNodeShadowMapCalculation();
 
 		// name
-		virtual QString name() const override { return "ShadowMapCalc"; }
+		virtual QString name() const override { return "ShadowMapCalculation"; }
 
 		// category
 		virtual QString category() const override { return "Lighting"; }
+
+		// generate code
+		virtual bool generateCode(ShaderCompiler& compiler) override;
 	};
 
 #endif

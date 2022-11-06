@@ -10,7 +10,7 @@ static const char* g_shadowDepthVsCode = R"(#version 450
 layout(binding = 0) uniform UBO
 {
     mat4 u_WorldMatrix;
-    mat4 u_ViewProjMatrix;
+    mat4 u_ShadowCameraViewProjMatrix;
 } vs_ubo;
 
 // inputs
@@ -24,7 +24,7 @@ void main(void)
     vec4 position = vs_ubo.u_WorldMatrix * vec4(a_Position, 1.0);
     
     v_WorldPosition  = position.xyz;
-    gl_Position = vs_ubo.u_ViewProjMatrix * position;
+    gl_Position = vs_ubo.u_ShadowCameraViewProjMatrix * position;
 }
 )";
 
@@ -33,9 +33,9 @@ static const char* g_shadowDepthPsCode = R"(#version 450
 // uniforms
 layout(binding = 0) uniform UBO
 {
-    vec3	u_CameraPosition;
-	vec3	u_CameraDirection;
-	float	u_CameraNear;
+    vec3	u_ShadowCameraPosition;
+	vec3	u_ShadowCameraDirection;
+	float	u_ShadowCameraNear;
 } fs_ubo;
 
 // inputs
@@ -46,7 +46,7 @@ layout(location = 0) out vec4 o_FragColor;
 
 void main(void)
 {
-	float distance = dot(v_WorldPosition - fs_ubo.u_CameraPosition, fs_ubo.u_CameraDirection) - fs_ubo.u_CameraNear;
+	float distance = dot(v_WorldPosition - fs_ubo.u_ShadowCameraPosition, fs_ubo.u_ShadowCameraDirection) - fs_ubo.u_ShadowCameraNear;
 	o_FragColor = vec4(distance, distance, distance, 1.0);
 }
 )";
