@@ -30,7 +30,12 @@
 		</queue>
 		<queue class="RenderQueue" Name="Transparent" Enable="true" Sort="true" CameraFilter="-1" />
 	</stage>
+	<stage class="RenderStage" Name="Bloom" Enable="true" EditorOnly="false">
+		<queue class="ImageFilter" Name="Extracting Bright Color" Enable="true" />
+		<queue class="ImageFilter" Name="Gaussian Blur" Enable="true" />
+	</stage>
 	<stage class="RenderStage" Name="Post Processing" Enable="true" EditorOnly="false">
+		<queue class="ImageFilter" Name="Bloom Composition" Enable="true" />
 		<queue class="ImageFilter" Name="Fog" Enable="true" />
 		<queue class="ImageFilter" Name="Antialiasing" Enable="true" />
 		<queue class="PostProcessMaterials" Name="Post Process Materials" Enable="true" />
