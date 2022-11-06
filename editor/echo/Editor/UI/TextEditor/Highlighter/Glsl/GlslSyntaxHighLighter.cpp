@@ -9,6 +9,7 @@ namespace Studio
 		// set words
 		m_keyWords << "void" << "function" << "if" << "then" << "for" << "return" << "end" << "do" << "pairs" << "ipairs";
 		m_keyWords << "float" << "vec2" << "vec3" << "vec4";
+		m_keyWords << "highp" << "mediump";
 
 		// function
 		appendForegroundRule(97, 175, 239, "\\b[A-Za-z0-9_]+(?=\\()");
@@ -18,6 +19,8 @@ namespace Studio
 		appendForegroundRule(192, 120, 221, "\\bvec2\\b");
 		appendForegroundRule(192, 120, 221, "\\bvec3\\b");
 		appendForegroundRule(192, 120, 221, "\\bvec4\\b");
+		appendForegroundRule(192, 120, 221, "\\bhighp\\b");
+		appendForegroundRule(192, 120, 221, "\\bmediump\\b");
 		appendForegroundRule(192, 120, 221, "\\bsampler2D\\b");
 		appendForegroundRule(192, 120, 221, "\\bfunction\\b");
 		appendForegroundRule(192, 120, 221, "\\bif\\b");

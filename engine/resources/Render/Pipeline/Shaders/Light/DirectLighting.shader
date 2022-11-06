@@ -106,16 +106,10 @@ void main()
 	<property name="Graph"><![CDATA[{
     "connections": [
         {
-            "in_id": "{c34ddd04-fba4-4882-804d-7e633f55e4dc}",
-            "in_index": 1,
-            "out_id": "{b06a016b-ddaf-45fe-8b7f-8ffeffce3549}",
-            "out_index": 1
-        },
-        {
             "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
-            "in_index": 0,
-            "out_id": "{1b18812f-5203-4858-9e11-64f3a3df9a09}",
-            "out_index": 1
+            "in_index": 1,
+            "out_id": "{be8c8bd3-7694-4adc-8762-9f2645122d0f}",
+            "out_index": 0
         },
         {
             "converter": {
@@ -134,22 +128,10 @@ void main()
             "out_index": 0
         },
         {
-            "in_id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
-            "in_index": 1,
-            "out_id": "{e2eb8b65-65fd-425d-93c8-944c74cd8c75}",
-            "out_index": 0
-        },
-        {
             "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
-            "in_index": 2,
-            "out_id": "{7028fed8-7e12-4907-aa83-5d7b810b388e}",
-            "out_index": 0
-        },
-        {
-            "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
-            "in_index": 1,
-            "out_id": "{be8c8bd3-7694-4adc-8762-9f2645122d0f}",
-            "out_index": 0
+            "in_index": 0,
+            "out_id": "{1b18812f-5203-4858-9e11-64f3a3df9a09}",
+            "out_index": 1
         },
         {
             "converter": {
@@ -165,6 +147,24 @@ void main()
             "in_id": "{7e76f36c-2bc6-4502-b640-c9087b0a37d0}",
             "in_index": 1,
             "out_id": "{c34ddd04-fba4-4882-804d-7e633f55e4dc}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{c34ddd04-fba4-4882-804d-7e633f55e4dc}",
+            "in_index": 1,
+            "out_id": "{b06a016b-ddaf-45fe-8b7f-8ffeffce3549}",
+            "out_index": 1
+        },
+        {
+            "in_id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
+            "in_index": 1,
+            "out_id": "{e2eb8b65-65fd-425d-93c8-944c74cd8c75}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
+            "in_index": 2,
+            "out_id": "{7028fed8-7e12-4907-aa83-5d7b810b388e}",
             "out_index": 0
         },
         {
@@ -201,7 +201,7 @@ void main()
                 "name": "ShaderTemplateLighting"
             },
             "position": {
-                "x": 85,
+                "x": 84,
                 "y": 418
             }
         },
@@ -215,7 +215,7 @@ void main()
                 "name": "Texture"
             },
             "position": {
-                "x": -760,
+                "x": -761,
                 "y": 25
             }
         },
@@ -227,7 +227,7 @@ void main()
                 "name": "DirectionLight"
             },
             "position": {
-                "x": -809,
+                "x": -810,
                 "y": 169
             }
         },
@@ -238,7 +238,7 @@ void main()
                 "name": "Multiplication"
             },
             "position": {
-                "x": -132,
+                "x": -133,
                 "y": 290
             }
         },
@@ -253,7 +253,7 @@ void main()
                 "name": "GLSL"
             },
             "position": {
-                "x": -370,
+                "x": -371,
                 "y": 155
             }
         },
@@ -265,7 +265,7 @@ void main()
                 "name": "DirectionLight"
             },
             "position": {
-                "x": -811,
+                "x": -812,
                 "y": 255
             }
         },
@@ -279,7 +279,7 @@ void main()
                 "name": "Texture"
             },
             "position": {
-                "x": -766,
+                "x": -767,
                 "y": 556
             }
         },
@@ -293,7 +293,7 @@ void main()
                 "name": "Texture"
             },
             "position": {
-                "x": -764,
+                "x": -765,
                 "y": 404
             }
         },
@@ -308,7 +308,7 @@ void main()
                 "name": "ShadowMapCalculation"
             },
             "position": {
-                "x": -380,
+                "x": -381,
                 "y": 471
             }
         }
