@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<res class="FrameBufferOffScreen" IsClearColor="false" ClearColor="0.0 0.0 0.0 1 " IsClearDepth="true" ColorA="Engine://Render/Pipeline/Framebuffer/Bloom/Color.rt" ColorB="" DepthStencil="Engine://Render/Pipeline/Framebuffer/Bloom/Depth.rt" />
