@@ -185,6 +185,28 @@ namespace Echo
 		m_esTextures.assign(0);
 	}
 
+	Texture* GLESFrameBufferOffScreen::getViewCopy(i32 index)
+	{
+		if (!m_viewCopys[index])
+			m_viewCopys[index] = ECHO_DOWN_CAST<TextureRenderTarget2D*>(TextureRenderTarget2D::create());
+
+		GLESTextureRender* view     = ECHO_DOWN_CAST<GLESTextureRender*>(m_views[index].ptr());
+		GLESTextureRender* viewCopy = ECHO_DOWN_CAST<GLESTextureRender*>(m_viewCopys[index].ptr());
+		if (view && viewCopy)
+		{
+			viewCopy->setWidth(view->getWidth());
+			viewCopy->setHeight(view->getHeight());
+			viewCopy->setPixelFormatName(view->getPixelFormatName());
+
+			GLuint glesTex = view->getGlesTexture();
+			GLuint glesTexCopy = view->getGlesTexture();
+
+			//glCopyTexImage2D
+		}
+
+		return m_viewCopys[index].ptr();
+	}
+
 	// https://docs.gl/es3/glReadPixels
 	bool GLESFrameBufferOffScreen::readPixels(Attachment attach, Pixels& pixels)
 	{

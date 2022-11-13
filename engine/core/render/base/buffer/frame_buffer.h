@@ -55,6 +55,10 @@ namespace Echo
 		virtual void onSize(ui32 width, ui32 height) {}
 
 	public:
+		// view index
+		virtual i32 getViewIndex(Texture* view) { return -1; }
+		virtual Texture* getViewCopy(i32 index) { return nullptr; }
+
 		// clear color
 		bool isClearColor() const { return m_isClearColor[Attachment::ColorA]; }
 		void setClearColor(bool isClearColor) { m_isClearColor[Attachment::ColorA] = isClearColor; }
@@ -142,8 +146,14 @@ namespace Echo
         bool hasColorAttachment() { return m_views[int(Attachment::ColorA)]; }
         bool hasDepthAttachment() { return m_views[int(Attachment::DepthStencil)]; }
 
+	public:
+		// Get view index
+		virtual i32 getViewIndex(Texture* view);
+		virtual Texture* getViewCopy(i32 index) { return nullptr; }
+
 	protected:
-        array<TextureRenderTarget2DPtr, 9>  m_views;
+        array<TextureRenderTarget2DPtr, 9>	m_views;
+		array<TextureRenderTarget2DPtr, 9>	m_viewCopys;
 	};
 
     class FrameBufferWindow : public FrameBuffer

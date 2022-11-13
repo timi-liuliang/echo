@@ -58,7 +58,7 @@ namespace Echo
 		virtual void draw(RenderProxy* renderable, FrameBufferPtr& frameBuffer) override;
 
 		// draw in WireFrame mode
-		bool drawWireframe(RenderProxy* renderable);
+		bool drawWireframe(RenderProxy* renderable, FrameBufferPtr& frameBuffer);
 
 		// convert matrix
 		virtual void getDepthRange(Vector2& vec) override;

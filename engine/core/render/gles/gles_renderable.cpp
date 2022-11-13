@@ -24,7 +24,7 @@ namespace Echo
 	{
 	}
 
-	void GLESRenderable::bindShaderParams()
+	void GLESRenderable::bindShaderParams(FrameBufferPtr& frameBuffer)
 	{
 		ShaderProgram* shaderProgram = m_material->getShader();
 		if (shaderProgram)
@@ -60,7 +60,23 @@ namespace Echo
 							Texture* texture = uniformValue->getTexture();
 							if (texture)
 							{
-								Renderer::instance()->setTexture(textureCount, texture);
+								if(texture->getType() == Texture::TT_Render)
+								{
+									i32 viewIdx = frameBuffer->getViewIndex(texture);
+									if (viewIdx == -1)
+									{
+										Renderer::instance()->setTexture(textureCount, texture);
+									}
+									else
+									{
+										Texture* textureCopy = frameBuffer->getViewCopy(viewIdx);
+										Renderer::instance()->setTexture(textureCount, textureCopy);
+									}
+								}
+								else
+								{
+									Renderer::instance()->setTexture(textureCount, texture);
+								}	
 							}
 						}
 

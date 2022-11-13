@@ -45,11 +45,13 @@ namespace Echo
 	FrameBufferOffScreen::FrameBufferOffScreen()
     {
         m_views.assign(nullptr);
+		m_viewCopys.assign(nullptr);
     }
 
 	FrameBufferOffScreen::FrameBufferOffScreen(ui32 width, ui32 height)
 	{
         m_views.assign(nullptr);
+		m_viewCopys.assign(nullptr);
 	}
 
 	FrameBufferOffScreen::~FrameBufferOffScreen()
@@ -97,6 +99,19 @@ namespace Echo
 	Res* FrameBufferOffScreen::create()
 	{
 		return Renderer::instance()->createFrameBufferOffScreen(Renderer::instance()->getWindowWidth(), Renderer::instance()->getWindowHeight());
+	}
+
+	i32 FrameBufferOffScreen::getViewIndex(Texture* view) 
+	{
+		for (size_t i=0; i<m_views.size(); i++)
+		{
+			if (m_views[i].ptr() == view)
+			{
+				return i;
+			}
+		}
+
+		return -1; 
 	}
 
 	ResourcePath FrameBufferOffScreen::getColorA()

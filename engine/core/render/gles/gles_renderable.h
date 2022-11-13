@@ -43,7 +43,7 @@ namespace Echo
 		void unbind();
 
 		// bind shader params
-		void bindShaderParams();
+		void bindShaderParams(FrameBufferPtr& frameBuffer);
 
 		// bind render state
 		void bindRenderState();

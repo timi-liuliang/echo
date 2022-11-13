@@ -199,7 +199,7 @@ namespace Echo
 		}
 	}
 
-	bool GLESRenderer::drawWireframe(RenderProxy* renderable)
+	bool GLESRenderer::drawWireframe(RenderProxy* renderable, FrameBufferPtr& frameBuffer)
 	{
 #ifdef ECHO_EDITOR_MODE
 		if (m_settings.m_polygonMode != RasterizerState::PM_FILL)
@@ -246,7 +246,7 @@ namespace Echo
 				GLESShaderProgram* shaderProgram = ECHO_DOWN_CAST<GLESShaderProgram*>(renderable->getMaterial()->getShader());
 				shaderProgram->bind();
 				glesRenderable->bindRenderState();
-				glesRenderable->bindShaderParams();
+				glesRenderable->bindShaderParams(frameBuffer);
 				shaderProgram->bindUniforms();
 				shaderProgram->bindRenderable(renderable);
 
@@ -284,7 +284,7 @@ namespace Echo
 		FrameState::instance()->increaseDrawCalls();
 
 #ifdef ECHO_EDITOR_MODE
-		if (drawWireframe(renderable))
+		if (drawWireframe(renderable, frameBuffer))
 			return;
 #endif
 
@@ -295,7 +295,7 @@ namespace Echo
 		{
 			shaderProgram->bind();
 			glesRenderable->bindRenderState();
-			glesRenderable->bindShaderParams();
+			glesRenderable->bindShaderParams(frameBuffer);
 			shaderProgram->bindUniforms();
 			shaderProgram->bindRenderable(renderable);
 

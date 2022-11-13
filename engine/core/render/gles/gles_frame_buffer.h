@@ -18,6 +18,9 @@ namespace Echo
         // on resize
         virtual void onSize(ui32 width, ui32 height) override;
 
+		// get view copy
+		virtual Texture* getViewCopy(i32 index) override;
+
 		// read pixels
 		virtual bool readPixels(Attachment attach, Pixels& pixels) override;
 
