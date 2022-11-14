@@ -121,6 +121,8 @@ namespace Echo
 
 	bool GLESFrameBufferOffScreen::begin()
 	{
+		FrameBuffer::begin();
+
 		i32 width = 0;
 		i32 height = 0;
 		if (bind(width, height))
@@ -187,6 +189,8 @@ namespace Echo
 
 	Texture* GLESFrameBufferOffScreen::getViewCopy(i32 index)
 	{
+		EchoAssert(g_current==this);
+
 		if (!m_copy)
 			return nullptr;
 
@@ -257,6 +261,8 @@ namespace Echo
 
 	bool GLESFramebufferWindow::begin()
 	{
+		FrameBuffer::begin();
+
 		// bind frame buffer
 		OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 

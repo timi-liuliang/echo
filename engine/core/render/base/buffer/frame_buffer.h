@@ -48,17 +48,13 @@ namespace Echo
 		FrameBuffer();
 
 		// begin|end render
-		virtual bool begin() { return false; }
+		virtual bool begin();
 		virtual bool end() { return false; }
 
 		// on resize
 		virtual void onSize(ui32 width, ui32 height) {}
 
 	public:
-		// view index
-		virtual i32 getViewIndex(Texture* view) { return -1; }
-		virtual Texture* getViewCopy(i32 index) { return nullptr; }
-
 		// clear color
 		bool isClearColor() const { return m_isClearColor[Attachment::ColorA]; }
 		void setClearColor(bool isClearColor) { m_isClearColor[Attachment::ColorA] = isClearColor; }
@@ -74,7 +70,13 @@ namespace Echo
 		// read pixels
 		virtual bool readPixels(Attachment attach, Pixels& pixels) { return false; }
 
+	public:
+		// view index
+		virtual i32 getViewIndex(Texture* view) { return -1; }
+		virtual Texture* getViewCopy(i32 index) { return nullptr; }
+
     protected:
+		static ResRef<FrameBuffer>				g_current;
 		array<bool, Attachment::DepthStencil>	m_isClearColor;
 		array<Color, Attachment::DepthStencil>	m_clearColor;
 
@@ -146,7 +148,7 @@ namespace Echo
         bool hasColorAttachment() { return m_views[int(Attachment::ColorA)]; }
         bool hasDepthAttachment() { return m_views[int(Attachment::DepthStencil)]; }
 
-	public:
+	protected:
 		// Get view index
 		virtual i32 getViewIndex(Texture* view);
 		virtual Texture* getViewCopy(i32 index) { return nullptr; }

@@ -5,6 +5,8 @@
 
 namespace Echo
 {
+	ResRef<FrameBuffer> FrameBuffer::g_current = nullptr;
+
 	FrameBuffer::FrameBuffer()
 	{
 		m_isClearColor = { 
@@ -40,6 +42,13 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(FrameBuffer, "IsClearColor", Variant::Type::Bool, isClearColor, setClearColor);
 		CLASS_REGISTER_PROPERTY(FrameBuffer, "ClearColor", Variant::Type::Color, getClearColorValue, setClearColorValue);
 		CLASS_REGISTER_PROPERTY(FrameBuffer, "IsClearDepth", Variant::Type::Bool, isClearDepth, setClearDepth);
+	}
+
+	bool FrameBuffer::begin()
+	{
+		g_current = this;
+
+		return true; 
 	}
 
 	FrameBufferOffScreen::FrameBufferOffScreen()
