@@ -153,8 +153,8 @@ namespace Echo
 
 	protected:
         array<TextureRenderTarget2DPtr, 9>	m_views;
-		array<TextureRenderTarget2DPtr, 9>	m_viewCopys;
 	};
+	typedef ResRef<FrameBufferOffScreen> FrameBufferOffScreenPtr;
 
     class FrameBufferWindow : public FrameBuffer
     {

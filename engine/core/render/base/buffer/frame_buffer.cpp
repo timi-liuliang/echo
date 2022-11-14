@@ -45,13 +45,11 @@ namespace Echo
 	FrameBufferOffScreen::FrameBufferOffScreen()
     {
         m_views.assign(nullptr);
-		m_viewCopys.assign(nullptr);
     }
 
 	FrameBufferOffScreen::FrameBufferOffScreen(ui32 width, ui32 height)
 	{
         m_views.assign(nullptr);
-		m_viewCopys.assign(nullptr);
 	}
 
 	FrameBufferOffScreen::~FrameBufferOffScreen()

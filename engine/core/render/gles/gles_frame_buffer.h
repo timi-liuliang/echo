@@ -7,6 +7,8 @@ namespace Echo
 {
 	class GLESFrameBufferOffScreen : public FrameBufferOffScreen
 	{
+		typedef ResRef<GLESFrameBufferOffScreen> FrameBufferOffScreenPtr;
+
 	public:
         GLESFrameBufferOffScreen(ui32 width, ui32 height);
 		virtual ~GLESFrameBufferOffScreen();
@@ -48,6 +50,7 @@ namespace Echo
 		GLuint					m_fbo;
 		array<GLuint, 9>		m_esTextures;
 		vector<GLenum>::type	m_attachments;
+		FrameBufferOffScreenPtr	m_copy;
 	};
 
 	class GLESFramebufferWindow : public FrameBufferWindow

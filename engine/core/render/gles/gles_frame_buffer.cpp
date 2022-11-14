@@ -187,11 +187,14 @@ namespace Echo
 
 	Texture* GLESFrameBufferOffScreen::getViewCopy(i32 index)
 	{
-		if (!m_viewCopys[index])
-			m_viewCopys[index] = ECHO_DOWN_CAST<TextureRenderTarget2D*>(TextureRenderTarget2D::create());
+		if (!m_copy)
+			return nullptr;
+
+		if (!m_copy->m_views[index])
+			m_copy->m_views[index] = ECHO_DOWN_CAST<TextureRenderTarget2D*>(TextureRenderTarget2D::create());
 
 		GLESTextureRender* view     = ECHO_DOWN_CAST<GLESTextureRender*>(m_views[index].ptr());
-		GLESTextureRender* viewCopy = ECHO_DOWN_CAST<GLESTextureRender*>(m_viewCopys[index].ptr());
+		GLESTextureRender* viewCopy = ECHO_DOWN_CAST<GLESTextureRender*>(m_copy->m_views[index].ptr());
 		if (view && viewCopy)
 		{
 			viewCopy->setWidth(view->getWidth());
@@ -201,10 +204,17 @@ namespace Echo
 			GLuint glesTex = view->getGlesTexture();
 			GLuint glesTexCopy = view->getGlesTexture();
 
-			//glCopyTexImage2D
+			OGLESDebug(glBindFramebuffer(GL_READ_FRAMEBUFFER, m_fbo));
+			OGLESDebug(glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_copy->m_fbo));
+			OGLESDebug(glReadBuffer(GL_COLOR_ATTACHMENT0));
+			OGLESDebug(glBlitFramebuffer(
+				0, 0, view->getWidth(), view->getHeight(),
+				0, 0, view->getWidth(), view->getHeight(),
+				GL_COLOR_BUFFER_BIT, GL_NEAREST));
+			OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
 		}
 
-		return m_viewCopys[index].ptr();
+		return m_copy->m_views[index].ptr();
 	}
 
 	// https://docs.gl/es3/glReadPixels
