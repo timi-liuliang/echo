@@ -100,9 +100,11 @@ namespace Echo
 				}
 				else
 				{
+					GLenum glFmt = GLESMapping::MapInternalFormat(m_pixFmt);
+
 					glGenRenderbuffers(1, &m_glesTexture);
 					glBindRenderbuffer(GL_RENDERBUFFER, m_glesTexture);
-					glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, m_width, m_height);
+					glRenderbufferStorage(GL_RENDERBUFFER, glFmt, m_width, m_height);
 				}
 			}
 			else

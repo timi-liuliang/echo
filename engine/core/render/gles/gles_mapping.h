@@ -250,6 +250,8 @@ namespace Echo
 				//case PF_RGBA32_SINT:
 
 			case PF_D16_UNORM:				return GL_DEPTH_COMPONENT16;
+			case PF_D24_UNORM_S8_UINT:		return GL_DEPTH_COMPONENT24;
+			case PF_D32_FLOAT:				return GL_DEPTH_COMPONENT32F;
 			case PF_ETC1:					return GL_ETC1_RGB8_OES;
 			case PF_ETC2_RGB:				return GL_COMPRESSED_RGB8_ETC2;
 			case PF_ETC2_RGBA:				return GL_COMPRESSED_RGBA8_ETC2_EAC;
