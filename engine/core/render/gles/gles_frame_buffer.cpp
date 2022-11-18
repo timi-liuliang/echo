@@ -203,6 +203,7 @@ namespace Echo
 			m_copy = ECHO_DOWN_CAST<GLESFrameBufferOffScreen*>( FrameBufferOffScreen::create());
 			m_copy->setClearColor(false);
 			m_copy->setClearDepth(false);
+			m_copy->setClearStencil(false);
 
 			for (i32 attachment : attachments)
 			{

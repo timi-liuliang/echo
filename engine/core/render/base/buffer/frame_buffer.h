@@ -67,6 +67,10 @@ namespace Echo
 		bool isClearDepth() const { return m_isClearDepth; }
 		void setClearDepth(bool isClearDepth) { m_isClearDepth = isClearDepth; }
 
+		// clear stencil
+		bool isClearStencil() const { return m_isClearStencil; }
+		void setClearStencil(bool isClearStencil) { m_isClearStencil = isClearStencil; }
+
 		// read pixels
 		virtual bool readPixels(Attachment attach, Pixels& pixels) { return false; }
 
