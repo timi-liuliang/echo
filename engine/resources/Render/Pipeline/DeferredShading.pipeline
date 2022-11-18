@@ -37,7 +37,11 @@
 				<obj class="Material" Shader="Engine://Render/Pipeline/Shaders/Bloom/ExtracingLighting.shader" />
 			</property>
 		</queue>
-		<queue class="ImageFilter" Name="Gaussian Blur" Enable="true" />
+		<queue class="ImageFilter" Name="Gaussian Blur" Enable="true">
+			<property name="Material">
+				<obj class="Material" Shader="Engine://Render/Pipeline/Shaders/Bloom/GaussianBlur.shader" />
+			</property>
+		</queue>
 	</stage>
 	<stage class="RenderStage" Name="Post Processing" Enable="true" EditorOnly="false">
 		<queue class="ImageFilter" Name="Bloom Composition" Enable="true" />

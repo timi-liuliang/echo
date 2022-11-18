@@ -196,38 +196,56 @@ namespace Echo
 	{
 		EchoAssert(g_current==this);
 
+		vector<i32>::type attachments = { index, Attachment::DepthStencil};
+
 		if (!m_copy)
 		{
 			m_copy = ECHO_DOWN_CAST<GLESFrameBufferOffScreen*>( FrameBufferOffScreen::create());
-			if (!m_copy->m_views[index])
-				m_copy->m_views[index] = ECHO_DOWN_CAST<TextureRenderTarget2D*>(TextureRenderTarget2D::create());
+			m_copy->setClearColor(false);
+			m_copy->setClearDepth(false);
+
+			for (i32 attachment : attachments)
+			{
+				if (!m_copy->m_views[attachment])
+					m_copy->m_views[attachment] = ECHO_DOWN_CAST<TextureRenderTarget2D*>(TextureRenderTarget2D::create());
+			}
 		}
 
-		if (!m_copy->m_views[index])
-			m_copy->m_views[index] = ECHO_DOWN_CAST<TextureRenderTarget2D*>(TextureRenderTarget2D::create());
-
-		GLESTextureRender* view     = ECHO_DOWN_CAST<GLESTextureRender*>(m_views[index].ptr());
-		GLESTextureRender* viewCopy = ECHO_DOWN_CAST<GLESTextureRender*>(m_copy->m_views[index].ptr());
-		if (view && viewCopy)
+		for (i32 attachment : attachments)
 		{
-			viewCopy->setWidth(view->getWidth());
-			viewCopy->setHeight(view->getHeight());
-			viewCopy->setPixelFormatName(view->getPixelFormatName());
+			GLESTextureRender* view = ECHO_DOWN_CAST<GLESTextureRender*>(m_views[attachment].ptr());
+			GLESTextureRender* viewCopy = ECHO_DOWN_CAST<GLESTextureRender*>(m_copy->m_views[attachment].ptr());
+			if (view && viewCopy)
+			{
+				viewCopy->setWidth(view->getWidth());
+				viewCopy->setHeight(view->getHeight());
+				viewCopy->setPixelFormatName(view->getPixelFormatName());
 
-			GLuint glesTex = view->getGlesTexture();
-			GLuint glesTexCopy = view->getGlesTexture();
+				GLuint glesTex = view->getGlesTexture();
+				GLuint glesTexCopy = viewCopy->getGlesTexture();
+				if(!glesTex || !glesTexCopy)
+					return nullptr;
+			}
+		}
+
+		if (m_copy)
+		{
+			m_copy->begin();
+			m_copy->end();
+
+			i32 width = m_views[index]->getWidth();
+			i32 height = m_views[index]->getHeight();
 
 			OGLESDebug(glBindFramebuffer(GL_READ_FRAMEBUFFER, m_fbo));
 			OGLESDebug(glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_copy->m_fbo));
 			OGLESDebug(glReadBuffer(GL_COLOR_ATTACHMENT0));
-			OGLESDebug(glBlitFramebuffer(
-				0, 0, view->getWidth(), view->getHeight(),
-				0, 0, view->getWidth(), view->getHeight(),
-				GL_COLOR_BUFFER_BIT, GL_NEAREST));
+			OGLESDebug(glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST));
 			OGLESDebug(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
+
+			return m_copy->m_views[index].ptr();
 		}
 
-		return m_copy->m_views[index].ptr();
+		return nullptr;
 	}
 
 	// https://docs.gl/es3/glReadPixels

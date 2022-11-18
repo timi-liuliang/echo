@@ -84,15 +84,6 @@ namespace Echo
 		}
 	}
 
-	//void TextureRenderTarget2D::setClearColor(const Color& color)
-	//{ 
-	//	if (m_clearColor != color)
-	//	{
-	//		m_clearColor = color;
-	//		unload();
-	//	}
-	//}
-
 	void TextureRenderTarget2D::onSize(ui32 width, ui32 height)
 	{
 		if (m_onSizeType != OnSizeType::Static)
