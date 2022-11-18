@@ -89,7 +89,7 @@ namespace Echo
 		virtual SamplerState* createSamplerState() override;
 	
 		// frame buffer
-		virtual FrameBufferOffScreen* createFrameBufferOffScreen(ui32 width, ui32 height);
+		virtual FrameBufferOffScreen* createFrameBufferOffScreen();
 		virtual FrameBufferWindow* createFrameBufferWindow();
 
         // screen size

@@ -93,7 +93,6 @@ namespace Echo
 
 	public:
         FrameBufferOffScreen();
-        FrameBufferOffScreen(ui32 width, ui32 height);
 		virtual ~FrameBufferOffScreen();
 
 		// create fun

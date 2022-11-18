@@ -10,7 +10,7 @@ namespace Echo
 		typedef ResRef<GLESFrameBufferOffScreen> FrameBufferOffScreenPtr;
 
 	public:
-        GLESFrameBufferOffScreen(ui32 width, ui32 height);
+        GLESFrameBufferOffScreen();
 		virtual ~GLESFrameBufferOffScreen();
 
         // begin render

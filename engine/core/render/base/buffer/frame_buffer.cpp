@@ -56,11 +56,6 @@ namespace Echo
         m_views.assign(nullptr);
     }
 
-	FrameBufferOffScreen::FrameBufferOffScreen(ui32 width, ui32 height)
-	{
-        m_views.assign(nullptr);
-	}
-
 	FrameBufferOffScreen::~FrameBufferOffScreen()
 	{
 	}
@@ -105,7 +100,7 @@ namespace Echo
 
 	Res* FrameBufferOffScreen::create()
 	{
-		return Renderer::instance()->createFrameBufferOffScreen(Renderer::instance()->getWindowWidth(), Renderer::instance()->getWindowHeight());
+		return Renderer::instance()->createFrameBufferOffScreen();
 	}
 
 	i32 FrameBufferOffScreen::getViewIndex(Texture* view) 

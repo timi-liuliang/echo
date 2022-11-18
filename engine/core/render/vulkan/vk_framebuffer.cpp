@@ -24,8 +24,8 @@ namespace Echo
         }
     }
 
-    VKFramebufferOffscreen::VKFramebufferOffscreen(ui32 width, ui32 height)
-        : FrameBufferOffScreen(width, height)
+    VKFramebufferOffscreen::VKFramebufferOffscreen()
+        : FrameBufferOffScreen()
     {
     }
 

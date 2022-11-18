@@ -38,7 +38,7 @@ namespace Echo
         virtual TextureRenderTarget2D* createTextureRender(const String& name) override;
 
         // create views
-        virtual FrameBufferOffScreen* createFrameBufferOffScreen(ui32 width, ui32 height) override { return EchoNew(VKFramebufferOffscreen(width, height));}
+        virtual FrameBufferOffScreen* createFrameBufferOffScreen() override { return EchoNew(VKFramebufferOffscreen);}
         virtual FrameBufferWindow* createFrameBufferWindow() override;
 
         // create states

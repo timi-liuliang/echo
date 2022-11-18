@@ -630,9 +630,9 @@ namespace Echo
 	}
 #endif
 
-	FrameBufferOffScreen* GLESRenderer::createFrameBufferOffScreen(ui32 width, ui32 height)
+	FrameBufferOffScreen* GLESRenderer::createFrameBufferOffScreen()
 	{
-		return EchoNew(GLESFrameBufferOffScreen(width, height));
+		return EchoNew(GLESFrameBufferOffScreen);
 	}
 
 	FrameBufferWindow* GLESRenderer::createFrameBufferWindow()

@@ -88,7 +88,7 @@ namespace Echo
 		virtual ShaderProgram* createShaderProgram()=0;
 		
 		// create views
-		virtual FrameBufferOffScreen* createFrameBufferOffScreen(ui32 width, ui32 height) = 0;
+		virtual FrameBufferOffScreen* createFrameBufferOffScreen() = 0;
 		virtual FrameBufferWindow* createFrameBufferWindow() = 0;
 
 		// create states

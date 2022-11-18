@@ -8,8 +8,8 @@
 
 namespace Echo
 {
-    GLESFrameBufferOffScreen::GLESFrameBufferOffScreen(ui32 width, ui32 height)
-		: FrameBufferOffScreen(width, height)
+    GLESFrameBufferOffScreen::GLESFrameBufferOffScreen()
+		: FrameBufferOffScreen()
         , m_fbo(0)
 	{
         OGLESDebug(glGenFramebuffers(1, &m_fbo));
@@ -185,6 +185,11 @@ namespace Echo
         }
 
 		m_esTextures.assign(0);
+
+		if (m_copy)
+		{
+			m_copy->onSize(width, height);
+		}
 	}
 
 	Texture* GLESFrameBufferOffScreen::getViewCopy(i32 index)
@@ -192,7 +197,11 @@ namespace Echo
 		EchoAssert(g_current==this);
 
 		if (!m_copy)
-			return nullptr;
+		{
+			m_copy = ECHO_DOWN_CAST<GLESFrameBufferOffScreen*>( FrameBufferOffScreen::create());
+			if (!m_copy->m_views[index])
+				m_copy->m_views[index] = ECHO_DOWN_CAST<TextureRenderTarget2D*>(TextureRenderTarget2D::create());
+		}
 
 		if (!m_copy->m_views[index])
 			m_copy->m_views[index] = ECHO_DOWN_CAST<TextureRenderTarget2D*>(TextureRenderTarget2D::create());

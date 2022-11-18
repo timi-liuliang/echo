@@ -52,7 +52,7 @@ namespace Echo
     class VKFramebufferOffscreen : public FrameBufferOffScreen, public VKFramebuffer
     {
     public:
-        VKFramebufferOffscreen(ui32 width, ui32 height);
+        VKFramebufferOffscreen();
         virtual ~VKFramebufferOffscreen();
 
         // begin render
