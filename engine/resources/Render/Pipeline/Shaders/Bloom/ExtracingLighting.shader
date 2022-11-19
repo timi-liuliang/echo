@@ -31,14 +31,13 @@ layout(location = 0) out vec4 o_FragColor;
 vec3 ExtractingBrightColor(vec3 color, float threshold)
 {
     float brightness = dot(color, vec3(0.2125999927520751953125, 0.715200006961822509765625, 0.072200000286102294921875));
-    float t = smoothstep(threshold - 0.0500000007450580596923828125, threshold + 0.0500000007450580596923828125, brightness);
-    return mix(vec3(0.0), color, vec3(t));
+    return max(color - vec3(threshold, threshold, threshold), vec3(0.0));
 }
 
 void main()
 {
     vec4 TransparentResult_Color = texture(TransparentResult, v_UV);
-    float Float_294_Value = 0.7799999713897705078125;
+    float Float_294_Value = 0.649990022182464599609375;
     vec3 param = TransparentResult_Color.xyz;
     float param_1 = Float_294_Value;
     vec3 GLSL_293 = ExtractingBrightColor(param, param_1);
@@ -56,16 +55,16 @@ void main()
 	<property name="Graph"><![CDATA[{
     "connections": [
         {
-            "in_id": "{61e56723-7b94-4f88-8160-79adffe762be}",
-            "in_index": 1,
-            "out_id": "{85aa3e36-349e-416a-9fb8-445af41bb6b2}",
-            "out_index": 0
-        },
-        {
             "in_id": "{85aa3e36-349e-416a-9fb8-445af41bb6b2}",
             "in_index": 0,
             "out_id": "{78e85592-fc0c-4037-96a4-2b04d2259a6b}",
             "out_index": 1
+        },
+        {
+            "in_id": "{61e56723-7b94-4f88-8160-79adffe762be}",
+            "in_index": 1,
+            "out_id": "{85aa3e36-349e-416a-9fb8-445af41bb6b2}",
+            "out_index": 0
         },
         {
             "in_id": "{85aa3e36-349e-416a-9fb8-445af41bb6b2}",
@@ -103,7 +102,7 @@ void main()
         {
             "id": "{85aa3e36-349e-416a-9fb8-445af41bb6b2}",
             "model": {
-                "Code": "vec3 ExtractingBrightColor(vec3 color, float threshold)\n{\n\tfloat brightness = dot(color, vec3(0.2126, 0.7152, 0.0722));\n\tfloat t = smoothstep(threshold-0.05, threshold+0.05, brightness);\n\n\treturn mix(vec3(0.0,0.0,0.0), color, t);\n}",
+                "Code": "vec3 ExtractingBrightColor(vec3 color, float threshold)\n{\n\tfloat brightness = dot(color, vec3(0.2126, 0.7152, 0.0722));\n\treturn max(color - vec3(threshold, threshold, threshold), vec3(0.0, 0.0, 0.0));\n\t//float t = smoothstep(threshold-0.05, threshold+0.05, brightness);\n\n\t//return mix(vec3(0.0,0.0,0.0), color, t);\n}",
                 "FunctionName": "ExtractingBrightColor",
                 "Parameters": "vec3 color, float threshold",
                 "ReturnType": "vec3",
@@ -119,7 +118,7 @@ void main()
             "id": "{380b116d-a58d-4e47-abd4-cfb1eea30282}",
             "model": {
                 "Uniform": "false",
-                "Value": "0.77999",
+                "Value": "0.64999",
                 "Variable": "Float_294",
                 "name": "Float"
             },
