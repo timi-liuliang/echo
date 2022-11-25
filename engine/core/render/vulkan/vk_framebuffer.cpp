@@ -40,7 +40,7 @@ namespace Echo
             if (m_views[i])
             {
                 VkClearValue clearValue;
-                if (i == i32(Attachment::DepthStencil))
+                if (i != i32(Attachment::DepthStencil))
                     clearValue.color = { m_clearColor[i].r, m_clearColor[i].g, m_clearColor[i].b, m_clearColor[i].a };
                 else
                     clearValue.depthStencil = { m_clearDepth, m_clearStencil };

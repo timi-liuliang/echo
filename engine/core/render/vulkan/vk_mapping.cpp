@@ -85,6 +85,7 @@ namespace Echo
         case PF_BGRA8_UNORM:        return VK_FORMAT_B8G8R8A8_UNORM;
 
         case PF_RGBA16_FLOAT:       return VK_FORMAT_R16G16B16A16_SFLOAT;
+        case PF_RGBA32_FLOAT:       return VK_FORMAT_R32G32B32A32_SFLOAT;
 
         case PF_R32_FLOAT:          return VK_FORMAT_R32_SFLOAT;
 
