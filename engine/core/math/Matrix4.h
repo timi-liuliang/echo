@@ -56,6 +56,12 @@ namespace Echo
 			memcpy(m, arr, sizeof(Real)*16);
 		}
 
+		Matrix4(double* arr)
+		{
+			for(i32 i=0; i<16; i++)
+				m[i] = arr[i];
+		}
+
 		Matrix4(const Matrix4& mat)
 		{
 			memcpy(m, mat.m, sizeof(Real)*16);
@@ -485,7 +491,7 @@ namespace Echo
 			m32 += d;
 		}
 
-		void			rotateAxis(const Vector3 &axis, Real radian);
+		void			fromAxisAngle(const Vector3 &axis, Real radian);
 		void			rotateAxisReplace(const Vector3 &axis, Real radian);
 		void			rotateX(const Real radian);
 		void			rotateXReplace(const Real radian);
@@ -493,8 +499,9 @@ namespace Echo
 		void			rotateYReplace(const Real radian);
 		void			rotateZ(const Real radian);
 		void			rotateZReplace(const Real radian);
-		Vector3			rotateVec3(const Vector3 &vec);
-		Vector4			rotateVec4(const Vector4 &vec);
+
+		Vector3			rotateVec3(const Vector3 &vec) const;
+		Vector4			rotateVec4(const Vector4 &vec) const;
 		
 		void scale(const Vector3& scaleVec)
 		{

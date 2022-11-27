@@ -33,7 +33,7 @@ namespace Echo
 		quan.toMat4(*this);
 	}
 
-	void Matrix4::rotateAxis(const Vector3& v, Real radian)
+	void Matrix4::fromAxisAngle(const Vector3& v, Real radian)
 	{
 		Real x = v.x;
 		Real y = v.y;
@@ -221,7 +221,7 @@ namespace Echo
 		m30 = 0; m31 = 0; m32 = 0; m33 = 1;
 	}
 
-	Vector3 Matrix4::rotateVec3(const Vector3& vec)
+	Vector3 Matrix4::rotateVec3(const Vector3& vec) const
 	{
 		Vector3 result;
 
@@ -232,7 +232,7 @@ namespace Echo
 		return result;
 	}
 
-	Vector4 Matrix4::rotateVec4(const Vector4& vec)
+	Vector4 Matrix4::rotateVec4(const Vector4& vec) const
 	{
 		Vector4 result;
 

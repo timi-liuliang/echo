@@ -61,7 +61,7 @@ namespace Echo
 				const ofbx::Geometry* geometry = fbxMesh->getGeometry();
 				if (geometry)
 				{
-					ofbx::Matrix meshMatrix = fbxMesh->getGeometricMatrix();
+					Matrix4 matrix(fbxMesh->getGeometricMatrix().m);
 
 					MeshVertexFormat vertFormat;
 					vertFormat.m_isUseNormal = geometry->getNormals() ? true : false;
@@ -74,7 +74,9 @@ namespace Echo
 					for (int j = 0; j < geometry->getVertexCount(); j++)
 					{
 						const ofbx::Vec3 fbxPosition = geometry->getVertices()[j];
-						vertexData.setPosition(j, Vector3(fbxPosition.x, fbxPosition.y, fbxPosition.z) * fbxScene->getGlobalSettings()->UnitScaleFactor * CM_TO_M);
+						Vector3 position = matrix.transform(Vector3(fbxPosition.x, fbxPosition.y, fbxPosition.z));
+
+						vertexData.setPosition(j, position * fbxScene->getGlobalSettings()->UnitScaleFactor * CM_TO_M);
 					}
 
 					// normals
@@ -83,7 +85,9 @@ namespace Echo
 						for (int j = 0; j < geometry->getVertexCount(); j++)
 						{
 							const ofbx::Vec3 fbxNormal = geometry->getNormals()[j];
-							vertexData.setNormal(j, Vector3(fbxNormal.x, fbxNormal.y, fbxNormal.z));
+							Vector3 normal = matrix.rotateVec3(Vector3(fbxNormal.x, fbxNormal.y, fbxNormal.z));
+
+							vertexData.setNormal(j, normal);
 						}
 					}
 
