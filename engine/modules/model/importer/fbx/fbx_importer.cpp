@@ -53,6 +53,7 @@ namespace Echo
 
 	void FbxImporter::saveMeshs(ofbx::IScene* fbxScene, const String& fbxFile)
 	{
+		const ofbx::GlobalSettings* fbxGlobalSettings = fbxScene->getGlobalSettings();
 		for (int i = 0; i < fbxScene->getMeshCount(); i++)
 		{
 			const ofbx::Mesh* fbxMesh = fbxScene->getMesh(i);
