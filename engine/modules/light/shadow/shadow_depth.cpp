@@ -46,7 +46,8 @@ layout(location = 0) out vec4 o_FragColor;
 
 void main(void)
 {
-	float distance = dot(v_WorldPosition - fs_ubo.u_ShadowCameraPosition, fs_ubo.u_ShadowCameraDirection) - fs_ubo.u_ShadowCameraNear;
+	//float distance = dot(v_WorldPosition - fs_ubo.u_ShadowCameraPosition, fs_ubo.u_ShadowCameraDirection) - fs_ubo.u_ShadowCameraNear;
+	float distance = gl_FragCoord.z;
 	o_FragColor = vec4(distance, distance, distance, 1.0);
 }
 )";

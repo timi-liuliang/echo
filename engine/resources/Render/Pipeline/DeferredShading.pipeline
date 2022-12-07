@@ -47,7 +47,7 @@
 		<property name="FrameBuffer" path="Engine://Render/Pipeline/Framebuffer/PostProcessing/PostProcessing.fbos" />
 		<queue class="ImageFilter" Name="Bloom Composition" Enable="true">
 			<property name="Material">
-				<obj class="Material" Shader="Engine://Render/Pipeline/Shaders/Bloom/BloomComposition.shader" Uniforms.Bloom="Engine://Render/Pipeline/Framebuffer/Bloom/Color.rt" Uniforms.Transparent="Engine://Render/Pipeline/Framebuffer/Translucency/Color.rt" />
+				<obj class="Material" Shader="Engine://Render/Pipeline/Shaders/Bloom/BloomComposition.shader" />
 			</property>
 		</queue>
 		<queue class="ImageFilter" Name="Fog" Enable="true" />

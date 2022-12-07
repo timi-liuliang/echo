@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<res class="FrameBufferOffScreen" IsClearColor="true" ClearColor="0.298 0.298 0.322 1 " IsClearDepth="true" ColorA="Engine://Render/Pipeline/Framebuffer/ShadowDepth/ShadowDepthColorA.rt" ColorB="" ColorC="" DepthStencil="Engine://Render/Pipeline/Framebuffer/ShadowDepth/ShadowDepth.rt" />
+<res class="FrameBufferOffScreen" IsClearColor="true" ClearColor="1 1 1 1 " IsClearDepth="true" ColorA="Engine://Render/Pipeline/Framebuffer/ShadowDepth/ShadowDepthColorA.rt" IsClearColorB="false" ClearColorB="0 0 0 1 " ColorB="" IsClearColorC="false" ClearColorC="0 0 0 1 " ColorC="" IsClearColorD="false" ClearColorD="0 0 0 1 " ColorD="" DepthStencil="Engine://Render/Pipeline/Framebuffer/ShadowDepth/ShadowDepth.rt" />
