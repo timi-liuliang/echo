@@ -159,6 +159,50 @@ namespace Echo
 		return bind;
 	}
 
+
+	template <typename R, typename P0, typename P1, typename P2, typename P3, typename P4>
+	class MethodBind5R : public MethodBind
+	{
+	public:
+		R(*method)(P0, P1, P2, P3, P4);
+
+		virtual int call(lua_State* luaState) override
+		{
+			//check and fetch the arguments
+			P0 p0 = lua_getvalue<P0>(luaState, 1);
+			P1 p1 = lua_getvalue<P1>(luaState, 2);
+			P2 p2 = lua_getvalue<P2>(luaState, 3);
+			P3 p3 = lua_getvalue<P3>(luaState, 4);
+			P4 p4 = lua_getvalue<P4>(luaState, 5);
+
+			// exec method
+			R result = (*method)(p0, p1, p2, p3, p4);
+
+			// push the results
+			lua_pushvalue<R>(luaState, result);
+
+			// free value
+			lua_freevalue<P0>(p0);
+			lua_freevalue<P1>(p1);
+			lua_freevalue<P2>(p2);
+			lua_freevalue<P3>(p3);
+			lua_freevalue<P4>(p4);
+
+			// return number of results
+			return 1;
+		}
+	};
+
+	template<typename R, typename P0, typename P1, typename P2, typename P3, typename P4>
+	MethodBind* createMethodBind(R(*method)(P0, P1, P2, P3, P4))
+	{
+		MethodBind5R<R, P0, P1, P2, P3, P4>* bind = new (MethodBind5R<R, P0, P1, P2, P3, P4>);
+		bind->method = method;
+
+		return bind;
+	}
+
+
 	// register method
 	bool registerMethodBind(const String& methodName, MethodBind* method);
 

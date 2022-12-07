@@ -1,6 +1,6 @@
 #include "net_module.h"
-#include "http_server.h"
-#include "http_client.h"
+#include "http/http_server.h"
+#include "http/http_client.h"
 #include "editor/http_server_editor.h"
 #include "editor/http_client_editor.h"
 
