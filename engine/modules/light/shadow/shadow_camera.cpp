@@ -18,9 +18,9 @@ namespace Echo
 
 		if (visibleActorsAABB && visibleActorsAABB->isValid())
 		{
-			const Vector3 cameraDir = /*m_dir == Vector3::ZERO ? -EchoSceneManager->getMainLightDir() :*/ m_forward;
+			const Vector3 cameraDir = m_forward;
 
-			float	halfLen = visibleActorsAABB->getDiagonalLen() * 0.5f;
+			float halfLen = visibleActorsAABB->getDiagonalLen() * 0.5f;
 			m_position = visibleActorsAABB->getCenter() - cameraDir * halfLen;
 
 			Matrix4 viewMat;
