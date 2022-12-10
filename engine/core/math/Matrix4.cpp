@@ -317,7 +317,7 @@ namespace Echo
 		Vector3 upNorm;
 		Vector3::Normalize(upNorm, up);
 
-		Vector3 zAxis = at - eye;
+		Vector3 zAxis = -(at-eye);
 		zAxis.normalize();
 
 		Vector3 xAxis;

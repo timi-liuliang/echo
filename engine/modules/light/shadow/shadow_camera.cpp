@@ -54,8 +54,8 @@ namespace Echo
 
 		m_width = orthAABB.getDX();
 		m_height = orthAABB.getDY();
-		m_near = orthAABB.vMin.z;
-		m_far = orthAABB.vMax.z;
+		m_near = -orthAABB.vMax.z;
+		m_far = -orthAABB.vMin.z;
 
 		Matrix4::OrthoRH(oOrth, m_width, m_height, m_near, m_far);
 	}
