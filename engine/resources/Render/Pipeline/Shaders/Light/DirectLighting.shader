@@ -78,10 +78,11 @@ vec3 Diffuse(vec3 InNormal, vec3 InLightDir, vec4 InLightColor)
 float ShadowMapCalculation(sampler2D texShdowDepth, vec3 worldPosition)
 {
     vec4 shadowDepthPosition = fs_ubo.u_ShadowCameraViewProjMatrix * vec4(worldPosition, 1.0);
-    vec2 shadowDepthUV = ((shadowDepthPosition / vec4(shadowDepthPosition.w)).xy + vec2(1.0)) * 0.5;
+    vec3 shadowDepth = shadowDepthPosition.xyz / vec3(shadowDepthPosition.w);
+    vec2 shadowDepthUV = (shadowDepth.xy + vec2(1.0)) * 0.5;
     float depthInShadowMap = texture(texShdowDepth, shadowDepthUV).x;
-    float depthCurrent = dot(worldPosition - fs_ubo.u_ShadowCameraPosition, fs_ubo.u_ShadowCameraDirection) - fs_ubo.u_ShadowCameraNear;
-    return (depthInShadowMap < depthCurrent) ? 0.0 : 1.0;
+    float depthCurrent = shadowDepth.z;
+    return ((depthCurrent - 9.9999997473787516355514526367188e-05) > depthInShadowMap) ? 0.4000000059604644775390625 : 1.0;
 }
 
 void main()
@@ -107,8 +108,42 @@ void main()
     "connections": [
         {
             "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
+            "in_index": 0,
+            "out_id": "{1b18812f-5203-4858-9e11-64f3a3df9a09}",
+            "out_index": 1
+        },
+        {
+            "in_id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
+            "in_index": 1,
+            "out_id": "{e2eb8b65-65fd-425d-93c8-944c74cd8c75}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
             "in_index": 1,
             "out_id": "{be8c8bd3-7694-4adc-8762-9f2645122d0f}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
+            "in_index": 2,
+            "out_id": "{7028fed8-7e12-4907-aa83-5d7b810b388e}",
+            "out_index": 0
+        },
+        {
+            "converter": {
+                "in": {
+                    "id": "any",
+                    "name": "B"
+                },
+                "out": {
+                    "id": "float",
+                    "name": "float"
+                }
+            },
+            "in_id": "{7e76f36c-2bc6-4502-b640-c9087b0a37d0}",
+            "in_index": 1,
+            "out_id": "{c34ddd04-fba4-4882-804d-7e633f55e4dc}",
             "out_index": 0
         },
         {
@@ -128,44 +163,10 @@ void main()
             "out_index": 0
         },
         {
-            "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
-            "in_index": 0,
-            "out_id": "{1b18812f-5203-4858-9e11-64f3a3df9a09}",
-            "out_index": 1
-        },
-        {
-            "converter": {
-                "in": {
-                    "id": "any",
-                    "name": "B"
-                },
-                "out": {
-                    "id": "float",
-                    "name": "float"
-                }
-            },
-            "in_id": "{7e76f36c-2bc6-4502-b640-c9087b0a37d0}",
-            "in_index": 1,
-            "out_id": "{c34ddd04-fba4-4882-804d-7e633f55e4dc}",
-            "out_index": 0
-        },
-        {
             "in_id": "{c34ddd04-fba4-4882-804d-7e633f55e4dc}",
             "in_index": 1,
             "out_id": "{b06a016b-ddaf-45fe-8b7f-8ffeffce3549}",
             "out_index": 1
-        },
-        {
-            "in_id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
-            "in_index": 1,
-            "out_id": "{e2eb8b65-65fd-425d-93c8-944c74cd8c75}",
-            "out_index": 0
-        },
-        {
-            "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
-            "in_index": 2,
-            "out_id": "{7028fed8-7e12-4907-aa83-5d7b810b388e}",
-            "out_index": 0
         },
         {
             "in_id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
@@ -182,6 +183,17 @@ void main()
     ],
     "nodes": [
         {
+            "id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
+            "model": {
+                "Variable": "ShaderTemplate_624",
+                "name": "ShaderTemplateLighting"
+            },
+            "position": {
+                "x": 84,
+                "y": 418
+            }
+        },
+        {
             "id": "{e2eb8b65-65fd-425d-93c8-944c74cd8c75}",
             "model": {
                 "Color": "0 0 0 1 ",
@@ -195,14 +207,15 @@ void main()
             }
         },
         {
-            "id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
+            "id": "{be8c8bd3-7694-4adc-8762-9f2645122d0f}",
             "model": {
-                "Variable": "ShaderTemplate_624",
-                "name": "ShaderTemplateLighting"
+                "Attribute": "direction",
+                "Variable": "DirectionLight_570",
+                "name": "DirectionLight"
             },
             "position": {
-                "x": 84,
-                "y": 418
+                "x": -810,
+                "y": 169
             }
         },
         {
@@ -220,29 +233,6 @@ void main()
             }
         },
         {
-            "id": "{be8c8bd3-7694-4adc-8762-9f2645122d0f}",
-            "model": {
-                "Attribute": "direction",
-                "Variable": "DirectionLight_570",
-                "name": "DirectionLight"
-            },
-            "position": {
-                "x": -810,
-                "y": 169
-            }
-        },
-        {
-            "id": "{7e76f36c-2bc6-4502-b640-c9087b0a37d0}",
-            "model": {
-                "Variable": "Multiplication_285",
-                "name": "Multiplication"
-            },
-            "position": {
-                "x": -133,
-                "y": 290
-            }
-        },
-        {
             "id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
             "model": {
                 "Code": "vec3 Diffuse(vec3 InNormal, vec3 InLightDir, vec4 InLightColor)\n{\n\tvec3 Normal = InNormal * 2.0 - 1.0;\n\treturn InLightColor.rgb * dot(InNormal, -InLightDir);\n}",
@@ -255,6 +245,17 @@ void main()
             "position": {
                 "x": -371,
                 "y": 155
+            }
+        },
+        {
+            "id": "{7e76f36c-2bc6-4502-b640-c9087b0a37d0}",
+            "model": {
+                "Variable": "Multiplication_285",
+                "name": "Multiplication"
+            },
+            "position": {
+                "x": -133,
+                "y": 290
             }
         },
         {
@@ -300,7 +301,7 @@ void main()
         {
             "id": "{c34ddd04-fba4-4882-804d-7e633f55e4dc}",
             "model": {
-                "Code": "float ShadowMapCalculation(sampler2D texShdowDepth, vec3 worldPosition)\n{\n\thighp vec4 shadowDepthPosition = fs_ubo.u_ShadowCameraViewProjMatrix * vec4(worldPosition, 1.0);\n\tvec2 shadowDepthUV = ((shadowDepthPosition / shadowDepthPosition.w).xy + vec2(1.0, 1.0)) * 0.5;\n\t\n\thighp float depthInShadowMap = texture(texShdowDepth, shadowDepthUV).r;\n\thighp float depthCurrent = dot(worldPosition - fs_ubo.u_ShadowCameraPosition, fs_ubo.u_ShadowCameraDirection) - fs_ubo.u_ShadowCameraNear;\n\n\treturn depthInShadowMap < depthCurrent ? 0.0 : 1.0;\n}",
+                "Code": "float ShadowMapCalculation(sampler2D texShdowDepth, vec3 worldPosition)\n{\n\thighp vec4 shadowDepthPosition = fs_ubo.u_ShadowCameraViewProjMatrix * vec4(worldPosition, 1.0);\n\tvec3 shadowDepth = shadowDepthPosition.xyz / shadowDepthPosition.w;\n\tvec2 shadowDepthUV = (shadowDepth.xy + vec2(1.0, 1.0)) * 0.5;\n\t\n\thighp float depthInShadowMap = texture(texShdowDepth, shadowDepthUV).r;\n\thighp float depthCurrent = shadowDepth.z;//dot(worldPosition - fs_ubo.u_ShadowCameraPosition, fs_ubo.u_ShadowCameraDirection) - fs_ubo.u_ShadowCameraNear;\n\n\treturn (depthCurrent -0.0001) > depthInShadowMap ? 0.4 : 1.0;\n}",
                 "FunctionName": "ShadowMapCalculation",
                 "Parameters": "sampler2D texShdowDepth, vec3 worldPosition",
                 "ReturnType": "float",
@@ -308,8 +309,8 @@ void main()
                 "name": "ShadowMapCalculation"
             },
             "position": {
-                "x": -381,
-                "y": 471
+                "x": -380,
+                "y": 470
             }
         }
     ]
