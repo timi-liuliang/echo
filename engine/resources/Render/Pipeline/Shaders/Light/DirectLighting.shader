@@ -77,12 +77,12 @@ vec3 Diffuse(vec3 InNormal, vec3 InLightDir, vec4 InLightColor)
 
 float ShadowMapCalculation(sampler2D texShdowDepth, vec3 worldPosition)
 {
-    vec4 shadowDepthPosition = fs_ubo.u_ShadowCameraViewProjMatrix * vec4(worldPosition, 1.0);
-    vec3 shadowDepth = shadowDepthPosition.xyz / vec3(shadowDepthPosition.w);
-    vec2 shadowDepthUV = (shadowDepth.xy + vec2(1.0)) * 0.5;
-    float depthInShadowMap = texture(texShdowDepth, shadowDepthUV).x;
-    float depthCurrent = shadowDepth.z;
-    return ((depthCurrent - 9.9999997473787516355514526367188e-05) > depthInShadowMap) ? 0.4000000059604644775390625 : 1.0;
+    vec4 clip = fs_ubo.u_ShadowCameraViewProjMatrix * vec4(worldPosition, 1.0);
+    vec3 ndc = clip.xyz / vec3(clip.w);
+    vec3 win = (ndc / vec3(2.0)) + vec3(0.5);
+    float depthInShadowMap = texture(texShdowDepth, win.xy).x;
+    float depthCurrent = win.z;
+    return ((depthCurrent - 9.9999997473787516355514526367188e-06) > depthInShadowMap) ? 0.4000000059604644775390625 : 1.0;
 }
 
 void main()
@@ -113,15 +113,21 @@ void main()
             "out_index": 1
         },
         {
-            "in_id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
-            "in_index": 1,
-            "out_id": "{e2eb8b65-65fd-425d-93c8-944c74cd8c75}",
+            "in_id": "{c34ddd04-fba4-4882-804d-7e633f55e4dc}",
+            "in_index": 0,
+            "out_id": "{26bfaf9c-ed54-4a30-ac06-d8e13b74410e}",
             "out_index": 0
         },
         {
             "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
             "in_index": 1,
             "out_id": "{be8c8bd3-7694-4adc-8762-9f2645122d0f}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
+            "in_index": 1,
+            "out_id": "{e2eb8b65-65fd-425d-93c8-944c74cd8c75}",
             "out_index": 0
         },
         {
@@ -147,6 +153,18 @@ void main()
             "out_index": 0
         },
         {
+            "in_id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
+            "in_index": 0,
+            "out_id": "{7e76f36c-2bc6-4502-b640-c9087b0a37d0}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{c34ddd04-fba4-4882-804d-7e633f55e4dc}",
+            "in_index": 1,
+            "out_id": "{b06a016b-ddaf-45fe-8b7f-8ffeffce3549}",
+            "out_index": 1
+        },
+        {
             "converter": {
                 "in": {
                     "id": "any",
@@ -160,24 +178,6 @@ void main()
             "in_id": "{7e76f36c-2bc6-4502-b640-c9087b0a37d0}",
             "in_index": 0,
             "out_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
-            "out_index": 0
-        },
-        {
-            "in_id": "{c34ddd04-fba4-4882-804d-7e633f55e4dc}",
-            "in_index": 1,
-            "out_id": "{b06a016b-ddaf-45fe-8b7f-8ffeffce3549}",
-            "out_index": 1
-        },
-        {
-            "in_id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
-            "in_index": 0,
-            "out_id": "{7e76f36c-2bc6-4502-b640-c9087b0a37d0}",
-            "out_index": 0
-        },
-        {
-            "in_id": "{c34ddd04-fba4-4882-804d-7e633f55e4dc}",
-            "in_index": 0,
-            "out_id": "{26bfaf9c-ed54-4a30-ac06-d8e13b74410e}",
             "out_index": 0
         }
     ],
@@ -301,7 +301,7 @@ void main()
         {
             "id": "{c34ddd04-fba4-4882-804d-7e633f55e4dc}",
             "model": {
-                "Code": "float ShadowMapCalculation(sampler2D texShdowDepth, vec3 worldPosition)\n{\n\thighp vec4 shadowDepthPosition = fs_ubo.u_ShadowCameraViewProjMatrix * vec4(worldPosition, 1.0);\n\tvec3 shadowDepth = shadowDepthPosition.xyz / shadowDepthPosition.w;\n\tvec2 shadowDepthUV = (shadowDepth.xy + vec2(1.0, 1.0)) * 0.5;\n\t\n\thighp float depthInShadowMap = texture(texShdowDepth, shadowDepthUV).r;\n\thighp float depthCurrent = shadowDepth.z;//dot(worldPosition - fs_ubo.u_ShadowCameraPosition, fs_ubo.u_ShadowCameraDirection) - fs_ubo.u_ShadowCameraNear;\n\n\treturn (depthCurrent -0.0001) > depthInShadowMap ? 0.4 : 1.0;\n}",
+                "Code": "float ShadowMapCalculation(sampler2D texShdowDepth, vec3 worldPosition)\n{\n\thighp vec4 clip = fs_ubo.u_ShadowCameraViewProjMatrix * vec4(worldPosition, 1.0);\n\thighp vec3 ndc = clip.xyz / clip.w;\n\thighp vec3 win = ndc / 2.0 + 0.5;\n\t\t\n\thighp float depthInShadowMap = texture(texShdowDepth, win.xy).r;\n\thighp float depthCurrent = win.z;\n\n\treturn (depthCurrent -0.00001) > depthInShadowMap ? 0.4 : 1.0;\n}",
                 "FunctionName": "ShadowMapCalculation",
                 "Parameters": "sampler2D texShdowDepth, vec3 worldPosition",
                 "ReturnType": "float",

@@ -57,10 +57,9 @@ namespace Echo
 		{
 			//Vector3 position = NodeTree::instance()->get3dCamera()->getPosition();
 			//AABB aabb = NodeTree::instance()->get3dCamera()->getFrustum().getAABB();
-			//Vector3 dir = getDirection();
+			Vector3 dir = getDirection();
 
 			AABB aabb(- Vector3(10, 20, 10), Vector3(10, 20, 10));
-			Vector3 dir(0.001, -1.0, 0.0);
 
 			m_shadowCamera->setDirection(dir);
 			m_shadowCamera->update(&aabb);

@@ -17,14 +17,14 @@ layout(binding = 0) uniform UBO
 layout(location = 0) in vec3 a_Position;
 
 // outputs
-layout(location = 0) out vec4 v_WorldPosition;
+layout(location = 0) out vec4 v_ClipPosition;
 
 void main(void)
 {
     vec4 position = vs_ubo.u_WorldMatrix * vec4(a_Position, 1.0);
     
-    v_WorldPosition  = vs_ubo.u_ShadowCameraViewProjMatrix * position;
-    gl_Position = v_WorldPosition;
+    v_ClipPosition  = vs_ubo.u_ShadowCameraViewProjMatrix * position;
+    gl_Position = v_ClipPosition;
 }
 )";
 
@@ -39,17 +39,20 @@ layout(binding = 0) uniform UBO
 } fs_ubo;
 
 // inputs
-layout(location = 0) in vec4  v_WorldPosition;
+layout(location = 0) in vec4  v_ClipPosition;
 
 // outputs
 layout(location = 0) out vec4 o_FragColor;
 
 void main(void)
 {
-	//float distance = dot(v_WorldPosition - fs_ubo.u_ShadowCameraPosition, fs_ubo.u_ShadowCameraDirection) - fs_ubo.u_ShadowCameraNear;
-	//float distance = gl_FragCoord.z;
-	float distance = v_WorldPosition.z / v_WorldPosition.w;
-	o_FragColor = vec4(distance, distance, distance, 1.0);
+	// https://github.com/timi-liuliang/echo/issues/1214
+	vec3 ndc = v_ClipPosition.xyz / v_ClipPosition.w;
+
+	// win.z = (dfar - dnear)/2 * ndc.z + (dfar+dnear)/2;
+	float winZ = ndc.z / 2.0 + 0.5;
+
+	o_FragColor = vec4(winZ, winZ, winZ, 1.0);
 }
 )";
 
