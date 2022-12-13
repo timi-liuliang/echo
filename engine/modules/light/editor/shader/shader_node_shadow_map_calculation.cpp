@@ -2,15 +2,31 @@
 
 #ifdef ECHO_EDITOR_MODE
 
+// https://stackoverflow.com/questions/7777913/how-to-render-depth-linearly-in-modern-opengl-with-gl-fragcoord-z-in-fragment-sh
+// Support Perspective Projection ?
 static const char* shadowmapCalculation =R"(float ShadowMapCalculation(sampler2D texShdowDepth, vec3 worldPosition)
 {
-	highp vec4 shadowDepthPosition = fs_ubo.u_ShadowCameraViewProjMatrix * vec4(worldPosition, 1.0);
-	vec2 shadowDepthUV = ((shadowDepthPosition / shadowDepthPosition.w).xy + vec2(1.0, 1.0)) * 0.5;
-	
-	highp float depthInShadowMap = texture(texShdowDepth, shadowDepthUV).r;
-	highp float depthCurrent = dot(worldPosition - fs_ubo.u_ShadowCameraPosition, fs_ubo.u_ShadowCameraDirection) - fs_ubo.u_ShadowCameraNear;
+	highp vec4 clip = fs_ubo.u_ShadowCameraViewProjMatrix * vec4(worldPosition, 1.0);
+	highp vec3 ndc = clip.xyz / clip.w;
+	highp vec3 win = ndc / 2.0 + 0.5;
+		
+	highp float depthInShadowMap = texture(texShdowDepth, win.xy).r;
+	highp float depthCurrent = win.z;
 
-	return depthInShadowMap < depthCurrent ? 0.0 : 1.0;
+	highp float n = fs_ubo.u_ShadowCameraNear;
+	highp float f = fs_ubo.u_ShadowCameraFar;
+
+	// Orthographic Projection
+	highp float depthInShadowMapLinear = depthInShadowMap * (f - n) + n;
+	highp float depthCurrentLinear = depthCurrent * (f - n) + n;
+
+	// Perspective Projection
+	//highp float ndc_z_sm = depthInShadowMap * 2.0 - 1.0;
+
+	//highp float depthInShadowMapLinear = fs_ubo.u_ShadowCameraProjMatrix[3][2] / (fs_ubo.u_ShadowCameraProjMatrix[2][2] + ndc_z_sm);
+	//highp float depthCurrentLinear = fs_ubo.u_ShadowCameraProjMatrix[3][2] / (fs_ubo.u_ShadowCameraProjMatrix[2][2] + ndc.z);
+
+	return (depthCurrentLinear - 0.01) > depthInShadowMapLinear ? 0.4 : 1.0;
 })";
 
 namespace Echo
@@ -31,11 +47,13 @@ namespace Echo
 
 	bool ShaderNodeShadowMapCalculation::generateCode(Echo::ShaderCompiler& compiler)
 	{
+		compiler.addUniform("mat4", "u_ShadowCameraProjMatrix");
 		compiler.addUniform("mat4", "u_ShadowCameraViewProjMatrix");
 
 		compiler.addUniform("vec3", "u_ShadowCameraPosition");
 		compiler.addUniform("vec3", "u_ShadowCameraDirection");
 		compiler.addUniform("float", "u_ShadowCameraNear");
+		compiler.addUniform("float", "u_ShadowCameraFar");
 
 		ShaderNodeGLSL::generateCode(compiler);
 

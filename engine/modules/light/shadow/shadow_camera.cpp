@@ -31,6 +31,7 @@ namespace Echo
 
 			m_viewProj = viewMat * orthMat;
 			m_view = viewMat;
+			m_proj = orthMat;
 
 			Vector3 zAxis = -cameraDir;
 			zAxis.normalize();
@@ -70,6 +71,8 @@ namespace Echo
 	{
 		if (name == "u_ShadowCameraViewProjMatrix")
 			return (void*)(&getViewProjMatrix());
+		if (name == "u_ShadowCameraProjMatrix")
+			return (void*)(&m_proj);
 		else if (name == "u_ShadowCameraPosition")
 			return (void*)(&m_position);
 		else if (name == "u_ShadowCameraDirection")

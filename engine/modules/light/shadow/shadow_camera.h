@@ -46,6 +46,7 @@ namespace Echo
 		Vector3		m_right;
 		Matrix4		m_viewProj = Matrix4::IDENTITY;
 		Matrix4		m_view;
+		Matrix4		m_proj;
 		AABB 		m_visibleActorsAABB;
 		Frustum		m_frustum;
 	};
