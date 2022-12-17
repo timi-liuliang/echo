@@ -104,6 +104,9 @@ namespace Echo
 		// get class name
 		virtual const String& getClassName() const;
 
+		// get default object
+		Object* getDefaultObject();
+
 		// init class info
 		static void initClassInfo() { static Echo::ObjectFactoryT<Object> G_OBJECT_FACTORY("Object", ""); }
 

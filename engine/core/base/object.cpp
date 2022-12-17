@@ -80,6 +80,13 @@ namespace Echo
 		return className;
 	}
 
+	// get default object
+	Object* Object::getDefaultObject()
+	{ 
+		String className = getClassName();
+		return Class::getDefaultObject(className);
+	}
+
     void Object::registerToScript() 
     {
         if (!m_registeredToScript)

@@ -35,10 +35,13 @@ namespace Echo
 
 	bool PropertyInfoStatic::getPropertyValueDefault(Object* classPtr, const String& propertyName, Variant& oVar)
 	{
-		Variant::CallError error;
-		oVar = m_getterMethod->call(classPtr, nullptr, 0, error);
+		Object* defaultObject = classPtr->getDefaultObject();
+		if (defaultObject)
+		{
+			return Class::getPropertyValue(defaultObject, propertyName, oVar);
+		}
 
-		return true;
+		return false;
 	}
 
 	void PropertyInfoStatic::setPropertyValue(Object* classPtr, const String& propertyName, const Variant& propertyValue)
