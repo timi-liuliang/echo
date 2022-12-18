@@ -88,7 +88,8 @@ float ShadowMapCalculation(sampler2D texShdowDepth, vec3 worldPosition)
     float f = fs_ubo.u_ShadowCameraFar;
     float depthInShadowMapLinear = (depthInShadowMap * (f - n)) + n;
     float depthCurrentLinear = (depthCurrent * (f - n)) + n;
-    return ((depthCurrentLinear - 0.00999999977648258209228515625) > depthInShadowMapLinear) ? 0.4000000059604644775390625 : 1.0;
+    float lighting = exp((-10.0) * clamp(depthCurrentLinear - depthInShadowMapLinear, 0.0, 1.0));
+    return clamp(lighting, 0.0, 1.0);
 }
 
 void main()
@@ -116,16 +117,40 @@ void main()
 	<property name="Graph"><![CDATA[{
     "connections": [
         {
+            "in_id": "{c34ddd04-fba4-4882-804d-7e633f55e4dc}",
+            "in_index": 0,
+            "out_id": "{26bfaf9c-ed54-4a30-ac06-d8e13b74410e}",
+            "out_index": 0
+        },
+        {
             "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
             "in_index": 1,
             "out_id": "{be8c8bd3-7694-4adc-8762-9f2645122d0f}",
             "out_index": 0
         },
         {
+            "in_id": "{72d4d358-e8bc-4b7d-bbf6-1ed06c9b8fc7}",
+            "in_index": 2,
+            "out_id": "{1416aa6f-74ef-41ca-b5f9-4f2a6af5a6dc}",
+            "out_index": 2
+        },
+        {
             "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
             "in_index": 2,
             "out_id": "{7028fed8-7e12-4907-aa83-5d7b810b388e}",
             "out_index": 0
+        },
+        {
+            "in_id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
+            "in_index": 1,
+            "out_id": "{e2eb8b65-65fd-425d-93c8-944c74cd8c75}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{c34ddd04-fba4-4882-804d-7e633f55e4dc}",
+            "in_index": 1,
+            "out_id": "{b06a016b-ddaf-45fe-8b7f-8ffeffce3549}",
+            "out_index": 1
         },
         {
             "converter": {
@@ -156,28 +181,10 @@ void main()
             "out_index": 1
         },
         {
-            "in_id": "{c34ddd04-fba4-4882-804d-7e633f55e4dc}",
-            "in_index": 0,
-            "out_id": "{26bfaf9c-ed54-4a30-ac06-d8e13b74410e}",
-            "out_index": 0
-        },
-        {
-            "in_id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
-            "in_index": 1,
-            "out_id": "{e2eb8b65-65fd-425d-93c8-944c74cd8c75}",
-            "out_index": 0
-        },
-        {
-            "in_id": "{c34ddd04-fba4-4882-804d-7e633f55e4dc}",
-            "in_index": 1,
-            "out_id": "{b06a016b-ddaf-45fe-8b7f-8ffeffce3549}",
-            "out_index": 1
-        },
-        {
             "in_id": "{72d4d358-e8bc-4b7d-bbf6-1ed06c9b8fc7}",
-            "in_index": 2,
+            "in_index": 0,
             "out_id": "{1416aa6f-74ef-41ca-b5f9-4f2a6af5a6dc}",
-            "out_index": 2
+            "out_index": 0
         },
         {
             "in_id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
@@ -240,12 +247,6 @@ void main()
             "out_index": 0
         },
         {
-            "in_id": "{72d4d358-e8bc-4b7d-bbf6-1ed06c9b8fc7}",
-            "in_index": 0,
-            "out_id": "{1416aa6f-74ef-41ca-b5f9-4f2a6af5a6dc}",
-            "out_index": 0
-        },
-        {
             "converter": {
                 "in": {
                     "id": "any",
@@ -264,6 +265,17 @@ void main()
     ],
     "nodes": [
         {
+            "id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
+            "model": {
+                "Variable": "ShaderTemplate_624",
+                "name": "ShaderTemplateLighting"
+            },
+            "position": {
+                "x": 341,
+                "y": 434
+            }
+        },
+        {
             "id": "{e2eb8b65-65fd-425d-93c8-944c74cd8c75}",
             "model": {
                 "Color": "0 0 0 1 ",
@@ -277,14 +289,15 @@ void main()
             }
         },
         {
-            "id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
+            "id": "{be8c8bd3-7694-4adc-8762-9f2645122d0f}",
             "model": {
-                "Variable": "ShaderTemplate_624",
-                "name": "ShaderTemplateLighting"
+                "Attribute": "direction",
+                "Variable": "DirectionLight_570",
+                "name": "DirectionLight"
             },
             "position": {
-                "x": 341,
-                "y": 434
+                "x": -810,
+                "y": 169
             }
         },
         {
@@ -299,18 +312,6 @@ void main()
             "position": {
                 "x": -761,
                 "y": 25
-            }
-        },
-        {
-            "id": "{be8c8bd3-7694-4adc-8762-9f2645122d0f}",
-            "model": {
-                "Attribute": "direction",
-                "Variable": "DirectionLight_570",
-                "name": "DirectionLight"
-            },
-            "position": {
-                "x": -810,
-                "y": 169
             }
         },
         {
@@ -382,7 +383,7 @@ void main()
         {
             "id": "{c34ddd04-fba4-4882-804d-7e633f55e4dc}",
             "model": {
-                "Code": "float ShadowMapCalculation(sampler2D texShdowDepth, vec3 worldPosition)\n{\n\thighp vec4 clip = fs_ubo.u_ShadowCameraViewProjMatrix * vec4(worldPosition, 1.0);\n\thighp vec3 ndc = clip.xyz / clip.w;\n\thighp vec3 win = ndc / 2.0 + 0.5;\n\t\t\n\thighp float depthInShadowMap = texture(texShdowDepth, win.xy).r;\n\thighp float depthCurrent = win.z;\n\n\thighp float n = fs_ubo.u_ShadowCameraNear;\n\thighp float f = fs_ubo.u_ShadowCameraFar;\n\n\t// Orthographic Projection\n\thighp float depthInShadowMapLinear = depthInShadowMap * (f - n) + n;\n\thighp float depthCurrentLinear = depthCurrent * (f - n) + n;\n\n\t// Perspective Projection\n\t//highp float ndc_z_sm = depthInShadowMap * 2.0 - 1.0;\n\n\t//highp float depthInShadowMapLinear = fs_ubo.u_ShadowCameraProjMatrix[3][2] / (fs_ubo.u_ShadowCameraProjMatrix[2][2] + ndc_z_sm);\n\t//highp float depthCurrentLinear = fs_ubo.u_ShadowCameraProjMatrix[3][2] / (fs_ubo.u_ShadowCameraProjMatrix[2][2] + ndc.z);\n\n\treturn (depthCurrentLinear - 0.01) > depthInShadowMapLinear ? 0.4 : 1.0;\n}",
+                "Code": "float ShadowMapCalculation(sampler2D texShdowDepth, vec3 worldPosition)\n{\n\thighp vec4 clip = fs_ubo.u_ShadowCameraViewProjMatrix * vec4(worldPosition, 1.0);\n\thighp vec3 ndc = clip.xyz / clip.w;\n\thighp vec3 win = ndc / 2.0 + 0.5;\n\t\t\n\thighp float depthInShadowMap = texture(texShdowDepth, win.xy).r;\n\thighp float depthCurrent = win.z;\n\n\thighp float n = fs_ubo.u_ShadowCameraNear;\n\thighp float f = fs_ubo.u_ShadowCameraFar;\n\n\t// Orthographic Projection\n\thighp float depthInShadowMapLinear = depthInShadowMap * (f - n) + n;\n\thighp float depthCurrentLinear = depthCurrent * (f - n) + n;\n\n\t// Perspective Projection\n\t//highp float ndc_z_sm = depthInShadowMap * 2.0 - 1.0;\n\n\t//highp float depthInShadowMapLinear = fs_ubo.u_ShadowCameraProjMatrix[3][2] / (fs_ubo.u_ShadowCameraProjMatrix[2][2] + ndc_z_sm);\n\t//highp float depthCurrentLinear = fs_ubo.u_ShadowCameraProjMatrix[3][2] / (fs_ubo.u_ShadowCameraProjMatrix[2][2] + ndc.z);\n\n\thighp float lighting = exp(-10 * clamp((depthCurrentLinear-depthInShadowMapLinear), 0.0, 1.0));\n\n\treturn clamp(lighting, 0.0, 1.0);\n}",
                 "FunctionName": "ShadowMapCalculation",
                 "Parameters": "sampler2D texShdowDepth, vec3 worldPosition",
                 "ReturnType": "float",
@@ -390,7 +391,7 @@ void main()
                 "name": "ShadowMapCalculation"
             },
             "position": {
-                "x": -367,
+                "x": -368,
                 "y": 600
             }
         },

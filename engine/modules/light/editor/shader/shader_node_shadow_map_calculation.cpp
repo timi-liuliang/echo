@@ -4,6 +4,8 @@
 
 // https://stackoverflow.com/questions/7777913/how-to-render-depth-linearly-in-modern-opengl-with-gl-fragcoord-z-in-fragment-sh
 // Support Perspective Projection ?
+// ESM e^{-5\left(x\right)}
+// https://www.desmos.com/calculator?lang=zh-CN
 static const char* shadowmapCalculation =R"(float ShadowMapCalculation(sampler2D texShdowDepth, vec3 worldPosition)
 {
 	highp vec4 clip = fs_ubo.u_ShadowCameraViewProjMatrix * vec4(worldPosition, 1.0);
@@ -26,7 +28,10 @@ static const char* shadowmapCalculation =R"(float ShadowMapCalculation(sampler2D
 	//highp float depthInShadowMapLinear = fs_ubo.u_ShadowCameraProjMatrix[3][2] / (fs_ubo.u_ShadowCameraProjMatrix[2][2] + ndc_z_sm);
 	//highp float depthCurrentLinear = fs_ubo.u_ShadowCameraProjMatrix[3][2] / (fs_ubo.u_ShadowCameraProjMatrix[2][2] + ndc.z);
 
-	return (depthCurrentLinear - 0.01) > depthInShadowMapLinear ? 0.4 : 1.0;
+	// exponential shadow map https://jankautz.com/publications/esm_gi08.pdf
+	highp float lighting = exp(-10 * clamp((depthCurrentLinear-depthInShadowMapLinear), 0.0, 1.0));
+
+	return clamp(lighting, 0.0, 1.0);
 })";
 
 namespace Echo
