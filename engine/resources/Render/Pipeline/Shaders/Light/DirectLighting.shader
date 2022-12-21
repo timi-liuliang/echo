@@ -60,8 +60,8 @@ layout(binding = 1, std140) uniform UBO
 } fs_ubo;
 
 layout(binding = 2) uniform sampler2D GBuffer_Normal;
-layout(binding = 3) uniform sampler2D GBuffer_Position;
-layout(binding = 4) uniform sampler2D ShadowDepthTex;
+layout(binding = 4) uniform sampler2D GBuffer_Position;
+layout(binding = 3) uniform sampler2D ShadowDepthTex;
 
 layout(location = 7) in vec2 v_UV;
 layout(location = 3) in vec3 v_Normal;
@@ -89,7 +89,8 @@ float ShadowMapCalculation(sampler2D texShdowDepth, vec3 worldPosition)
     float depthBias = 0.0;
     float depthInShadowMapLinear = (depthInShadowMap * (f - n)) + n;
     float depthCurrentLinear = ((depthCurrent * (f - n)) + n) - depthBias;
-    float lighting = exp((-5.0) * clamp(depthCurrentLinear - depthInShadowMapLinear, 0.0, 1.0));
+    float _distance = depthCurrentLinear - depthInShadowMapLinear;
+    float lighting = exp((-10.0) * _distance);
     return clamp(lighting, 0.0, 1.0);
 }
 
@@ -98,17 +99,14 @@ void main()
     vec4 Color_627_Value = vec4(0.0, 0.0, 0.0, 1.0);
     vec4 GBuffer_Normal_Color = texture(GBuffer_Normal, v_UV);
     vec4 GBuffer_Position_Color = texture(GBuffer_Position, v_UV);
-    vec3 Vector3_352_Value = vec3(0.300000011920928955078125);
     vec3 param = GBuffer_Normal_Color.xyz;
     vec3 param_1 = v_Normal;
     vec4 param_2 = v_Color;
     vec3 GLSL_569 = Diffuse(param, param_1, param_2);
     vec3 param_3 = GBuffer_Position_Color.xyz;
     float ShadowMapCalculation_288 = ShadowMapCalculation(ShadowDepthTex, param_3);
-    vec4 Combine_339 = vec4(v_Color.x, v_Color.y, v_Color.z, 0.0);
-    vec3 Multiplication_337 = Vector3_352_Value * Combine_339.xyz;
-    vec3 Mix_351 = mix(Multiplication_337, GLSL_569, vec3(ShadowMapCalculation_288));
-    vec3 _Diffuse = Mix_351;
+    vec3 Multiplication_356 = GLSL_569 * ShadowMapCalculation_288;
+    vec3 _Diffuse = Multiplication_356;
     vec3 _Specular = Color_627_Value.xyz;
     o_FragDiffuse = vec4(_Diffuse, 1.0);
     o_FragSpecular = vec4(_Specular, 1.0);
@@ -124,48 +122,38 @@ void main()
             "out_index": 0
         },
         {
+            "in_id": "{c34ddd04-fba4-4882-804d-7e633f55e4dc}",
+            "in_index": 1,
+            "out_id": "{b06a016b-ddaf-45fe-8b7f-8ffeffce3549}",
+            "out_index": 1
+        },
+        {
+            "in_id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
+            "in_index": 1,
+            "out_id": "{e2eb8b65-65fd-425d-93c8-944c74cd8c75}",
+            "out_index": 0
+        },
+        {
+            "converter": {
+                "in": {
+                    "id": "any",
+                    "name": "B"
+                },
+                "out": {
+                    "id": "float",
+                    "name": "float"
+                }
+            },
+            "in_id": "{e80d3feb-2438-4b69-ae29-23ed6327748b}",
+            "in_index": 1,
+            "out_id": "{c34ddd04-fba4-4882-804d-7e633f55e4dc}",
+            "out_index": 0
+        },
+        {
             "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
             "in_index": 0,
             "out_id": "{1b18812f-5203-4858-9e11-64f3a3df9a09}",
             "out_index": 1
-        },
-        {
-            "converter": {
-                "in": {
-                    "id": "any",
-                    "name": "A"
-                },
-                "out": {
-                    "id": "vec3",
-                    "name": "vec3"
-                }
-            },
-            "in_id": "{15c55475-ec95-46c8-87c8-fde9c9515972}",
-            "in_index": 0,
-            "out_id": "{f149da60-9051-4fd8-a3a4-3cd2b73a510c}",
-            "out_index": 0
-        },
-        {
-            "converter": {
-                "in": {
-                    "id": "any",
-                    "name": "A"
-                },
-                "out": {
-                    "id": "vec3",
-                    "name": "vec3"
-                }
-            },
-            "in_id": "{f149da60-9051-4fd8-a3a4-3cd2b73a510c}",
-            "in_index": 0,
-            "out_id": "{e90941d1-600a-46c6-8571-52dd24bd3533}",
-            "out_index": 0
-        },
-        {
-            "in_id": "{72d4d358-e8bc-4b7d-bbf6-1ed06c9b8fc7}",
-            "in_index": 2,
-            "out_id": "{1416aa6f-74ef-41ca-b5f9-4f2a6af5a6dc}",
-            "out_index": 2
         },
         {
             "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
@@ -180,102 +168,29 @@ void main()
             "out_index": 0
         },
         {
-            "in_id": "{c34ddd04-fba4-4882-804d-7e633f55e4dc}",
-            "in_index": 1,
-            "out_id": "{b06a016b-ddaf-45fe-8b7f-8ffeffce3549}",
-            "out_index": 1
-        },
-        {
-            "in_id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
-            "in_index": 1,
-            "out_id": "{e2eb8b65-65fd-425d-93c8-944c74cd8c75}",
-            "out_index": 0
-        },
-        {
-            "in_id": "{72d4d358-e8bc-4b7d-bbf6-1ed06c9b8fc7}",
-            "in_index": 1,
-            "out_id": "{1416aa6f-74ef-41ca-b5f9-4f2a6af5a6dc}",
-            "out_index": 1
-        },
-        {
-            "in_id": "{72d4d358-e8bc-4b7d-bbf6-1ed06c9b8fc7}",
-            "in_index": 0,
-            "out_id": "{1416aa6f-74ef-41ca-b5f9-4f2a6af5a6dc}",
-            "out_index": 0
-        },
-        {
-            "in_id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
-            "in_index": 0,
-            "out_id": "{15c55475-ec95-46c8-87c8-fde9c9515972}",
-            "out_index": 0
-        },
-        {
-            "in_id": "{15c55475-ec95-46c8-87c8-fde9c9515972}",
-            "in_index": 2,
-            "out_id": "{c34ddd04-fba4-4882-804d-7e633f55e4dc}",
-            "out_index": 0
-        },
-        {
             "converter": {
                 "in": {
                     "id": "any",
-                    "name": "B"
+                    "name": "A"
                 },
                 "out": {
                     "id": "vec3",
                     "name": "vec3"
                 }
             },
-            "in_id": "{15c55475-ec95-46c8-87c8-fde9c9515972}",
-            "in_index": 1,
+            "in_id": "{e80d3feb-2438-4b69-ae29-23ed6327748b}",
+            "in_index": 0,
             "out_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
             "out_index": 0
         },
         {
-            "converter": {
-                "in": {
-                    "id": "any",
-                    "name": "any"
-                },
-                "out": {
-                    "id": "vec4",
-                    "name": "vec4"
-                }
-            },
-            "in_id": "{1416aa6f-74ef-41ca-b5f9-4f2a6af5a6dc}",
+            "in_id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
             "in_index": 0,
-            "out_id": "{7028fed8-7e12-4907-aa83-5d7b810b388e}",
+            "out_id": "{e80d3feb-2438-4b69-ae29-23ed6327748b}",
             "out_index": 0
-        },
-        {
-            "converter": {
-                "in": {
-                    "id": "any",
-                    "name": "B"
-                },
-                "out": {
-                    "id": "vec3",
-                    "name": "rgb"
-                }
-            },
-            "in_id": "{f149da60-9051-4fd8-a3a4-3cd2b73a510c}",
-            "in_index": 1,
-            "out_id": "{72d4d358-e8bc-4b7d-bbf6-1ed06c9b8fc7}",
-            "out_index": 1
         }
     ],
     "nodes": [
-        {
-            "id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
-            "model": {
-                "Variable": "ShaderTemplate_624",
-                "name": "ShaderTemplateLighting"
-            },
-            "position": {
-                "x": 341,
-                "y": 434
-            }
-        },
         {
             "id": "{e2eb8b65-65fd-425d-93c8-944c74cd8c75}",
             "model": {
@@ -285,20 +200,19 @@ void main()
                 "name": "Color"
             },
             "position": {
-                "x": -64,
-                "y": 566
+                "x": 3,
+                "y": 518
             }
         },
         {
-            "id": "{be8c8bd3-7694-4adc-8762-9f2645122d0f}",
+            "id": "{920e9e49-c656-4d39-91aa-3ded63350483}",
             "model": {
-                "Attribute": "direction",
-                "Variable": "DirectionLight_570",
-                "name": "DirectionLight"
+                "Variable": "ShaderTemplate_624",
+                "name": "ShaderTemplateLighting"
             },
             "position": {
-                "x": -810,
-                "y": 169
+                "x": 341,
+                "y": 433
             }
         },
         {
@@ -312,7 +226,19 @@ void main()
             },
             "position": {
                 "x": -761,
-                "y": 25
+                "y": 24
+            }
+        },
+        {
+            "id": "{be8c8bd3-7694-4adc-8762-9f2645122d0f}",
+            "model": {
+                "Attribute": "direction",
+                "Variable": "DirectionLight_570",
+                "name": "DirectionLight"
+            },
+            "position": {
+                "x": -810,
+                "y": 168
             }
         },
         {
@@ -327,7 +253,7 @@ void main()
             },
             "position": {
                 "x": -371,
-                "y": 155
+                "y": 154
             }
         },
         {
@@ -339,32 +265,7 @@ void main()
             },
             "position": {
                 "x": -812,
-                "y": 255
-            }
-        },
-        {
-            "id": "{72d4d358-e8bc-4b7d-bbf6-1ed06c9b8fc7}",
-            "model": {
-                "Variable": "Combine_339",
-                "name": "Combine"
-            },
-            "position": {
-                "x": -430,
-                "y": 365
-            }
-        },
-        {
-            "id": "{b06a016b-ddaf-45fe-8b7f-8ffeffce3549}",
-            "model": {
-                "Atla": "false",
-                "Texture": "Engine://Render/Pipeline/Framebuffer/GBuffer/GBufferPosition.rt",
-                "Type": "General",
-                "Variable": "GBuffer_Position",
-                "name": "Texture"
-            },
-            "position": {
-                "x": -750,
-                "y": 686
+                "y": 254
             }
         },
         {
@@ -377,14 +278,28 @@ void main()
                 "name": "Texture"
             },
             "position": {
-                "x": -748,
-                "y": 534
+                "x": -764,
+                "y": 366
+            }
+        },
+        {
+            "id": "{b06a016b-ddaf-45fe-8b7f-8ffeffce3549}",
+            "model": {
+                "Atla": "false",
+                "Texture": "Engine://Render/Pipeline/Framebuffer/GBuffer/GBufferPosition.rt",
+                "Type": "General",
+                "Variable": "GBuffer_Position",
+                "name": "Texture"
+            },
+            "position": {
+                "x": -766,
+                "y": 518
             }
         },
         {
             "id": "{c34ddd04-fba4-4882-804d-7e633f55e4dc}",
             "model": {
-                "Code": "float ShadowMapCalculation(sampler2D texShdowDepth, vec3 worldPosition)\n{\n\thighp vec4 clip = fs_ubo.u_ShadowCameraViewProjMatrix * vec4(worldPosition, 1.0);\n\thighp vec3 ndc = clip.xyz / clip.w;\n\thighp vec3 win = ndc / 2.0 + 0.5;\n\t\t\n\thighp float depthInShadowMap = texture(texShdowDepth, win.xy).r;\n\thighp float depthCurrent = win.z;\n\n\thighp float n = fs_ubo.u_ShadowCameraNear;\n\thighp float f = fs_ubo.u_ShadowCameraFar;\n\n\t// Orthographic Projection\n\thighp float depthBias = 0.0;\n\thighp float depthInShadowMapLinear = depthInShadowMap * (f - n) + n;\n\thighp float depthCurrentLinear = depthCurrent * (f - n) + n - depthBias;\n\n\t// Perspective Projection\n\t//highp float ndc_z_sm = depthInShadowMap * 2.0 - 1.0;\n\n\t//highp float depthInShadowMapLinear = fs_ubo.u_ShadowCameraProjMatrix[3][2] / (fs_ubo.u_ShadowCameraProjMatrix[2][2] + ndc_z_sm);\n\t//highp float depthCurrentLinear = fs_ubo.u_ShadowCameraProjMatrix[3][2] / (fs_ubo.u_ShadowCameraProjMatrix[2][2] + ndc.z);\n\n\thighp float lighting = exp(-5 * clamp(depthCurrentLinear-depthInShadowMapLinear, 0.0, 1.0));\n\n\treturn clamp(lighting, 0.0, 1.0);\n}",
+                "Code": "float ShadowMapCalculation(sampler2D texShdowDepth, vec3 worldPosition)\n{\n\thighp vec4 clip = fs_ubo.u_ShadowCameraViewProjMatrix * vec4(worldPosition, 1.0);\n\thighp vec3 ndc = clip.xyz / clip.w;\n\thighp vec3 win = ndc / 2.0 + 0.5;\n\t\t\n\thighp float depthInShadowMap = texture(texShdowDepth, win.xy).r;\n\thighp float depthCurrent = win.z;\n\n\thighp float n = fs_ubo.u_ShadowCameraNear;\n\thighp float f = fs_ubo.u_ShadowCameraFar;\n\n\t// Orthographic Projection\n\thighp float depthBias = 0.0;\n\thighp float depthInShadowMapLinear = depthInShadowMap * (f - n) + n;\n\thighp float depthCurrentLinear = depthCurrent * (f - n) + n - depthBias;\n\n\thighp float distance = depthCurrentLinear-depthInShadowMapLinear;\n\thighp float lighting = exp(-10 * distance);\n\n\treturn clamp(lighting, 0.0, 1.0);\n}",
                 "FunctionName": "ShadowMapCalculation",
                 "Parameters": "sampler2D texShdowDepth, vec3 worldPosition",
                 "ReturnType": "float",
@@ -392,54 +307,19 @@ void main()
                 "name": "ShadowMapCalculation"
             },
             "position": {
-                "x": -368,
-                "y": 600
+                "x": -385,
+                "y": 432
             }
         },
         {
-            "id": "{15c55475-ec95-46c8-87c8-fde9c9515972}",
+            "id": "{e80d3feb-2438-4b69-ae29-23ed6327748b}",
             "model": {
-                "Variable": "Mix_351",
-                "name": "Mix"
-            },
-            "position": {
-                "x": -12,
-                "y": 210
-            }
-        },
-        {
-            "id": "{e90941d1-600a-46c6-8571-52dd24bd3533}",
-            "model": {
-                "Uniform": "false",
-                "Value": "0.3 0.3 0.3",
-                "Variable": "Vector3_352",
-                "name": "Vector3"
-            },
-            "position": {
-                "x": -423,
-                "y": 298
-            }
-        },
-        {
-            "id": "{f149da60-9051-4fd8-a3a4-3cd2b73a510c}",
-            "model": {
-                "Variable": "Multiplication_337",
+                "Variable": "Multiplication_356",
                 "name": "Multiplication"
             },
             "position": {
-                "x": -287,
-                "y": 338
-            }
-        },
-        {
-            "id": "{1416aa6f-74ef-41ca-b5f9-4f2a6af5a6dc}",
-            "model": {
-                "Variable": "Split_338",
-                "name": "Split"
-            },
-            "position": {
-                "x": -552,
-                "y": 367
+                "x": -31,
+                "y": 268
             }
         }
     ]

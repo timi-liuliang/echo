@@ -19,20 +19,21 @@ static const char* shadowmapCalculation =R"(float ShadowMapCalculation(sampler2D
 	highp float f = fs_ubo.u_ShadowCameraFar;
 
 	// Orthographic Projection
+	highp float depthBias = 0.0;
 	highp float depthInShadowMapLinear = depthInShadowMap * (f - n) + n;
-	highp float depthCurrentLinear = depthCurrent * (f - n) + n;
+	highp float depthCurrentLinear = depthCurrent * (f - n) + n - depthBias;
 
-	// Perspective Projection
-	//highp float ndc_z_sm = depthInShadowMap * 2.0 - 1.0;
-
-	//highp float depthInShadowMapLinear = fs_ubo.u_ShadowCameraProjMatrix[3][2] / (fs_ubo.u_ShadowCameraProjMatrix[2][2] + ndc_z_sm);
-	//highp float depthCurrentLinear = fs_ubo.u_ShadowCameraProjMatrix[3][2] / (fs_ubo.u_ShadowCameraProjMatrix[2][2] + ndc.z);
-
-	// exponential shadow map https://jankautz.com/publications/esm_gi08.pdf
-	highp float lighting = exp(-10 * clamp((depthCurrentLinear-depthInShadowMapLinear), 0.0, 1.0));
+	highp float distance = depthCurrentLinear-depthInShadowMapLinear;
+	highp float lighting = exp(-10 * distance);
 
 	return clamp(lighting, 0.0, 1.0);
 })";
+
+// Perspective Projection
+//highp float ndc_z_sm = depthInShadowMap * 2.0 - 1.0;
+
+//highp float depthInShadowMapLinear = fs_ubo.u_ShadowCameraProjMatrix[3][2] / (fs_ubo.u_ShadowCameraProjMatrix[2][2] + ndc_z_sm);
+//highp float depthCurrentLinear = fs_ubo.u_ShadowCameraProjMatrix[3][2] / (fs_ubo.u_ShadowCameraProjMatrix[2][2] + ndc.z);
 
 namespace Echo
 {

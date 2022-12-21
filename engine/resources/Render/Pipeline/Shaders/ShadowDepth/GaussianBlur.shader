@@ -87,14 +87,14 @@ void main()
         },
         {
             "in_id": "{b158b18b-022f-43fd-af41-cf4245c938c5}",
-            "in_index": 2,
-            "out_id": "{102f3f6e-9505-4bc6-b6f3-6b494a4ae905}",
+            "in_index": 3,
+            "out_id": "{014cbe53-0dc0-408e-941c-6b1b14619efb}",
             "out_index": 0
         },
         {
             "in_id": "{b158b18b-022f-43fd-af41-cf4245c938c5}",
-            "in_index": 3,
-            "out_id": "{014cbe53-0dc0-408e-941c-6b1b14619efb}",
+            "in_index": 2,
+            "out_id": "{102f3f6e-9505-4bc6-b6f3-6b494a4ae905}",
             "out_index": 0
         }
     ],
@@ -137,19 +137,6 @@ void main()
             }
         },
         {
-            "id": "{014cbe53-0dc0-408e-941c-6b1b14619efb}",
-            "model": {
-                "Uniform": "false",
-                "Value": "4.0",
-                "Variable": "Float_316",
-                "name": "Float"
-            },
-            "position": {
-                "x": -624,
-                "y": 573
-            }
-        },
-        {
             "id": "{b158b18b-022f-43fd-af41-cf4245c938c5}",
             "model": {
                 "Code": "vec3 BoxBlur(sampler2D texSampler, vec2 texSize, vec2 uv, float radius)\n{\n\tvec2 invSize = 1.0 / texSize;\n\t\n\tvec4  color = vec4(0.0);\n\tfloat weights = 0.0;\n\tfor(float x=-radius; x<=radius; x++)\n\t{\n\t\tfor(float y=-radius; y<=radius; y++)\n\t\t{\n\t\t\tvec2 offset = vec2(x, y) * invSize;\n\t\t\tfloat weight = 1.0 - sqrt(x*x + y*y) / (radius * 1.4143);\n\t\t\t\n\t\t\tcolor += texture(texSampler, uv+offset) * weight;\n\t\t\tweights += weight;\n\t\t}\n\t}\n\n\treturn color.rgb / weights;\n}",
@@ -162,6 +149,19 @@ void main()
             "position": {
                 "x": -318,
                 "y": 276
+            }
+        },
+        {
+            "id": "{014cbe53-0dc0-408e-941c-6b1b14619efb}",
+            "model": {
+                "Uniform": "false",
+                "Value": "4.0",
+                "Variable": "Float_316",
+                "name": "Float"
+            },
+            "position": {
+                "x": -624,
+                "y": 573
             }
         },
         {
