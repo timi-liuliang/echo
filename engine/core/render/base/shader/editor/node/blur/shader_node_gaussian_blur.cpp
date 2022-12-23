@@ -2,29 +2,30 @@
 
 #ifdef ECHO_EDITOR_MODE
 
-static const char* gaussianBlur =R"(vec3 GaussianBlur(sampler2D tex,vec2 uv, float radius, float dirs, float samples, float weight, float strength)
+// https://en.wikipedia.org/wiki/Gaussian_blur
+static const char* gaussianBlur2D =R"(vec3 GaussianBlur(sampler2D tex, vec2 size, vec2 uv)
 {
-	// https://www.shadertoy.com/view/Xltfzj
-	float pi = 6.28318530718;
-	float directions = dirs;	// blur directions (default 16.0 - more is better but slower)
-	float step = 1.0 / samples * radius;
-	vec4 origin = texture(tex, uv);
-	vec4 color = origin;
-	float count = 1.0;
+	float radius = 3;
+	float sigma = 0.84089642;
+	float twoSigmaSigma = 2 * sigma * sigma;
+	float twoPiSigmaSigma = 1.0 / (twoSigmaSigma * 3.1415926);
+	vec2  texSizeInv = 1.0 / size;
 	
-	for (float d = 0.0; d < pi; d += pi / directions)
+	vec4 color = vec4(0.0);
+	float weights = 0.0;
+	for (float w = -radius; w <= radius; w++)
 	{
-		for (float i = 1.0; i <= samples; i += 1.0)
+		for (float h = -radius; h <= radius; h++)
 		{
-			float weightPow = pow(clamp(1.0 - i / samples, 0.0, 1.0), weight);
-			color += texture(tex, uv + vec2(cos(d), sin(d)) * step * i) * weightPow;
-			count += weightPow;
+			vec2 offset = vec2(w, h) * texSizeInv;
+			float weight = 1.0 / twoPiSigmaSigma * exp(-(w*w+h*h) / twoSigmaSigma);
+
+			color += texture(tex, uv + offset) * weight;
+			weights += weight;
 		}
 	}
 
-	color /= count;
-
-	return mix(origin.xyz, color.xyz, strength);
+	return color.xyz / weights;
 })";
 
 namespace Echo
@@ -32,7 +33,7 @@ namespace Echo
 	ShaderNodeGaussianBlur::ShaderNodeGaussianBlur()
 		: ShaderNodeGLSL()
 	{
-		setCode(gaussianBlur);
+		setCode(gaussianBlur2D);
 	}
 
 	ShaderNodeGaussianBlur::~ShaderNodeGaussianBlur()

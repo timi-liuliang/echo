@@ -86,11 +86,11 @@ float ShadowMapCalculation(sampler2D texShdowDepth, vec3 worldPosition)
     float depthCurrent = win.z;
     float n = fs_ubo.u_ShadowCameraNear;
     float f = fs_ubo.u_ShadowCameraFar;
-    float depthBias = 0.0;
     float depthInShadowMapLinear = (depthInShadowMap * (f - n)) + n;
-    float depthCurrentLinear = ((depthCurrent * (f - n)) + n) - depthBias;
+    float depthCurrentLinear = (depthCurrent * (f - n)) + n;
+    float lightingBias = 0.1500000059604644775390625;
     float _distance = depthCurrentLinear - depthInShadowMapLinear;
-    float lighting = exp((-10.0) * _distance);
+    float lighting = exp(((-3.5) * _distance) + lightingBias);
     return clamp(lighting, 0.0, 1.0);
 }
 
@@ -122,6 +122,12 @@ void main()
             "out_index": 0
         },
         {
+            "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
+            "in_index": 2,
+            "out_id": "{7028fed8-7e12-4907-aa83-5d7b810b388e}",
+            "out_index": 0
+        },
+        {
             "in_id": "{c34ddd04-fba4-4882-804d-7e633f55e4dc}",
             "in_index": 1,
             "out_id": "{b06a016b-ddaf-45fe-8b7f-8ffeffce3549}",
@@ -132,6 +138,18 @@ void main()
             "in_index": 1,
             "out_id": "{e2eb8b65-65fd-425d-93c8-944c74cd8c75}",
             "out_index": 0
+        },
+        {
+            "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
+            "in_index": 1,
+            "out_id": "{be8c8bd3-7694-4adc-8762-9f2645122d0f}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
+            "in_index": 0,
+            "out_id": "{1b18812f-5203-4858-9e11-64f3a3df9a09}",
+            "out_index": 1
         },
         {
             "converter": {
@@ -147,24 +165,6 @@ void main()
             "in_id": "{e80d3feb-2438-4b69-ae29-23ed6327748b}",
             "in_index": 1,
             "out_id": "{c34ddd04-fba4-4882-804d-7e633f55e4dc}",
-            "out_index": 0
-        },
-        {
-            "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
-            "in_index": 0,
-            "out_id": "{1b18812f-5203-4858-9e11-64f3a3df9a09}",
-            "out_index": 1
-        },
-        {
-            "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
-            "in_index": 1,
-            "out_id": "{be8c8bd3-7694-4adc-8762-9f2645122d0f}",
-            "out_index": 0
-        },
-        {
-            "in_id": "{5dbf7943-a2c1-470c-8dec-7aa0e0817f98}",
-            "in_index": 2,
-            "out_id": "{7028fed8-7e12-4907-aa83-5d7b810b388e}",
             "out_index": 0
         },
         {
@@ -299,7 +299,7 @@ void main()
         {
             "id": "{c34ddd04-fba4-4882-804d-7e633f55e4dc}",
             "model": {
-                "Code": "float ShadowMapCalculation(sampler2D texShdowDepth, vec3 worldPosition)\n{\n\thighp vec4 clip = fs_ubo.u_ShadowCameraViewProjMatrix * vec4(worldPosition, 1.0);\n\thighp vec3 ndc = clip.xyz / clip.w;\n\thighp vec3 win = ndc / 2.0 + 0.5;\n\t\t\n\thighp float depthInShadowMap = texture(texShdowDepth, win.xy).r;\n\thighp float depthCurrent = win.z;\n\n\thighp float n = fs_ubo.u_ShadowCameraNear;\n\thighp float f = fs_ubo.u_ShadowCameraFar;\n\n\t// Orthographic Projection\n\thighp float depthBias = 0.0;\n\thighp float depthInShadowMapLinear = depthInShadowMap * (f - n) + n;\n\thighp float depthCurrentLinear = depthCurrent * (f - n) + n - depthBias;\n\n\thighp float distance = depthCurrentLinear-depthInShadowMapLinear;\n\thighp float lighting = exp(-10 * distance);\n\n\treturn clamp(lighting, 0.0, 1.0);\n}",
+                "Code": "float ShadowMapCalculation(sampler2D texShdowDepth, vec3 worldPosition)\n{\n\thighp vec4 clip = fs_ubo.u_ShadowCameraViewProjMatrix * vec4(worldPosition, 1.0);\n\thighp vec3 ndc = clip.xyz / clip.w;\n\thighp vec3 win = ndc / 2.0 + 0.5;\n\t\t\n\thighp float depthInShadowMap = texture(texShdowDepth, win.xy).r;\n\thighp float depthCurrent = win.z;\n\n\thighp float n = fs_ubo.u_ShadowCameraNear;\n\thighp float f = fs_ubo.u_ShadowCameraFar;\n\n\t// Orthographic Projection\n\thighp float depthInShadowMapLinear = depthInShadowMap * (f - n) + n;\n\thighp float depthCurrentLinear = depthCurrent * (f - n) + n;\n\n\thighp float lightingBias = 0.15;\n\thighp float distance = depthCurrentLinear-depthInShadowMapLinear;\n\thighp float lighting = exp(-3.5 * distance + lightingBias);\n\n\treturn clamp(lighting, 0.0, 1.0);\n}",
                 "FunctionName": "ShadowMapCalculation",
                 "Parameters": "sampler2D texShdowDepth, vec3 worldPosition",
                 "ReturnType": "float",
@@ -307,7 +307,7 @@ void main()
                 "name": "ShadowMapCalculation"
             },
             "position": {
-                "x": -385,
+                "x": -384,
                 "y": 432
             }
         },

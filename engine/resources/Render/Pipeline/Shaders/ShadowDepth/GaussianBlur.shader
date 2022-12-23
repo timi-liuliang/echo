@@ -28,18 +28,22 @@ layout(binding = 2) uniform sampler2D BrightTexture;
 layout(location = 7) in vec2 v_UV;
 layout(location = 0) out vec4 o_FragColor;
 
-vec3 BoxBlur(sampler2D texSampler, vec2 texSize, vec2 uv, float radius)
+vec3 GaussianBlur(sampler2D tex, vec2 size, vec2 uv)
 {
-    vec2 invSize = vec2(1.0) / texSize;
+    float radius = 3.0;
+    float sigma = 0.840896427631378173828125;
+    float twoSigmaSigma = (2.0 * sigma) * sigma;
+    float twoPiSigmaSigma = 1.0 / (twoSigmaSigma * 3.141592502593994140625);
+    vec2 texSizeInv = vec2(1.0) / size;
     vec4 color = vec4(0.0);
     float weights = 0.0;
-    for (float x = -radius; x <= radius; x += 1.0)
+    for (float w = -radius; w <= radius; w += 1.0)
     {
-        for (float y = -radius; y <= radius; y += 1.0)
+        for (float h = -radius; h <= radius; h += 1.0)
         {
-            vec2 offset = vec2(x, y) * invSize;
-            float weight = 1.0 - (sqrt((x * x) + (y * y)) / (radius * 1.41429996490478515625));
-            color += (texture(texSampler, uv + offset) * weight);
+            vec2 offset = vec2(w, h) * texSizeInv;
+            float weight = (1.0 / twoPiSigmaSigma) * exp((-((w * w) + (h * h))) / twoSigmaSigma);
+            color += (texture(tex, uv + offset) * weight);
             weights += weight;
         }
     }
@@ -48,13 +52,12 @@ vec3 BoxBlur(sampler2D texSampler, vec2 texSize, vec2 uv, float radius)
 
 void main()
 {
-    float Float_316_Value = 4.0;
+    float Float_316_Value = 3.0;
     vec2 Vector2_356_Value = vec2(2048.0);
     vec2 param = Vector2_356_Value;
     vec2 param_1 = v_UV;
-    float param_2 = Float_316_Value;
-    vec3 GLSL_351 = BoxBlur(BrightTexture, param, param_1, param_2);
-    vec3 _Emissive = GLSL_351;
+    vec3 GaussianBlur_345 = GaussianBlur(BrightTexture, param, param_1);
+    vec3 _Emissive = GaussianBlur_345;
     vec3 _Diffuse = vec3(0.0);
     float _Opacity = 1.0;
     float _Metalic = 0.20000000298023223876953125;
@@ -68,33 +71,27 @@ void main()
 	<property name="Graph"><![CDATA[{
     "connections": [
         {
-            "in_id": "{b158b18b-022f-43fd-af41-cf4245c938c5}",
+            "in_id": "{62988fea-922b-4721-8f29-5a5dc00babb5}",
             "in_index": 0,
             "out_id": "{394656fc-a8e2-447a-b1fa-d4127abcafe5}",
             "out_index": 0
         },
         {
-            "in_id": "{b158b18b-022f-43fd-af41-cf4245c938c5}",
+            "in_id": "{62988fea-922b-4721-8f29-5a5dc00babb5}",
             "in_index": 1,
             "out_id": "{3934e5f9-18a5-4330-87ff-90eeb936a407}",
             "out_index": 0
         },
         {
-            "in_id": "{43d4e1da-ff31-4d37-b2ea-c57c20bade65}",
-            "in_index": 1,
-            "out_id": "{b158b18b-022f-43fd-af41-cf4245c938c5}",
-            "out_index": 0
-        },
-        {
-            "in_id": "{b158b18b-022f-43fd-af41-cf4245c938c5}",
-            "in_index": 3,
-            "out_id": "{014cbe53-0dc0-408e-941c-6b1b14619efb}",
-            "out_index": 0
-        },
-        {
-            "in_id": "{b158b18b-022f-43fd-af41-cf4245c938c5}",
+            "in_id": "{62988fea-922b-4721-8f29-5a5dc00babb5}",
             "in_index": 2,
             "out_id": "{102f3f6e-9505-4bc6-b6f3-6b494a4ae905}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{43d4e1da-ff31-4d37-b2ea-c57c20bade65}",
+            "in_index": 1,
+            "out_id": "{62988fea-922b-4721-8f29-5a5dc00babb5}",
             "out_index": 0
         }
     ],
@@ -108,6 +105,21 @@ void main()
             "position": {
                 "x": -17,
                 "y": 248
+            }
+        },
+        {
+            "id": "{62988fea-922b-4721-8f29-5a5dc00babb5}",
+            "model": {
+                "Code": "vec3 GaussianBlur(sampler2D tex, vec2 size, vec2 uv)\n{\n\tfloat radius = 3.0;\n\tfloat sigma = 0.84089642;\n\tfloat twoSigmaSigma = 2 * sigma * sigma;\n\tfloat twoPiSigmaSigma = 1.0 / (twoSigmaSigma * 3.1415926);\n\tvec2  texSizeInv = 1.0 / size;\n\t\n\tvec4  color = vec4(0.0);\n\tfloat weights = 0.0;\n\tfor (float w = -radius; w <= radius; w++)\n\t{\n\t\tfor (float h = -radius; h <= radius; h++)\n\t\t{\n\t\t\tvec2 offset = vec2(w, h) * texSizeInv;\n\t\t\tfloat weight = 1.0 / twoPiSigmaSigma * exp(-(w*w+h*h) / twoSigmaSigma);\n\n\t\t\tcolor += texture(tex, uv + offset) * weight;\n\t\t\tweights += weight;\n\t\t}\n\t}\n\n\treturn color.xyz / weights;\n}",
+                "FunctionName": "GaussianBlur",
+                "Parameters": "sampler2D tex, vec2 size, vec2 uv",
+                "ReturnType": "vec3",
+                "Variable": "GaussianBlur_345",
+                "name": "GaussianBlur"
+            },
+            "position": {
+                "x": -288,
+                "y": 272
             }
         },
         {
@@ -137,25 +149,10 @@ void main()
             }
         },
         {
-            "id": "{b158b18b-022f-43fd-af41-cf4245c938c5}",
-            "model": {
-                "Code": "vec3 BoxBlur(sampler2D texSampler, vec2 texSize, vec2 uv, float radius)\n{\n\tvec2 invSize = 1.0 / texSize;\n\t\n\tvec4  color = vec4(0.0);\n\tfloat weights = 0.0;\n\tfor(float x=-radius; x<=radius; x++)\n\t{\n\t\tfor(float y=-radius; y<=radius; y++)\n\t\t{\n\t\t\tvec2 offset = vec2(x, y) * invSize;\n\t\t\tfloat weight = 1.0 - sqrt(x*x + y*y) / (radius * 1.4143);\n\t\t\t\n\t\t\tcolor += texture(texSampler, uv+offset) * weight;\n\t\t\tweights += weight;\n\t\t}\n\t}\n\n\treturn color.rgb / weights;\n}",
-                "FunctionName": "BoxBlur",
-                "Parameters": "sampler2D texSampler, vec2 texSize, vec2 uv, float radius",
-                "ReturnType": "vec3",
-                "Variable": "GLSL_351",
-                "name": "GLSL"
-            },
-            "position": {
-                "x": -318,
-                "y": 276
-            }
-        },
-        {
             "id": "{014cbe53-0dc0-408e-941c-6b1b14619efb}",
             "model": {
                 "Uniform": "false",
-                "Value": "4.0",
+                "Value": "3.0",
                 "Variable": "Float_316",
                 "name": "Float"
             },
