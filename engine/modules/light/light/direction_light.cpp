@@ -55,14 +55,18 @@ namespace Echo
 
 		if (m_shadowCamera)
 		{
-			//Vector3 position = NodeTree::instance()->get3dCamera()->getPosition();
-			//AABB aabb = NodeTree::instance()->get3dCamera()->getFrustum().getAABB();
-			Vector3 dir = getDirection();
+			Frustum& frustum = NodeTree::instance()->get3dCamera()->getFrustum();
+			for (i32 i = 0; i < 1 /*m_csmSplitCount*/; i++)
+			{
+				Real near = 0.0;
+				Real far  = 15.0 / (frustum.getFar() - frustum.getNear());
 
-			AABB aabb(- Vector3(5, 20, 5), Vector3(5, 20, 5));
+				AABB aabb = frustum.getAABB(near, far);
+				Vector3 dir = getDirection();
 
-			m_shadowCamera->setDirection(dir);
-			m_shadowCamera->update(&aabb);
+				m_shadowCamera->setDirection(dir);
+				m_shadowCamera->update(&aabb);
+			}
 		}
 	}
 }

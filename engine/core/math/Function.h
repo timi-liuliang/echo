@@ -271,27 +271,33 @@ namespace Math
 	}
 
 	template <typename T>
-	inline const T& Min(const T& a, const T& b)
+	inline const T Min(const T& a, const T& b)
 	{
 		return std::min<T>(a, b);
 	}
 
 	template <typename T>
-	inline const T& Max(const T& a, const T& b)
+	inline const T Max(const T& a, const T& b)
 	{
 		return std::max<T>(a, b);
 	}
 
 	template <typename T>
-	inline const T& Min3(const T& a, const T& b, const T& c)
+	inline const T Min3(const T& a, const T& b, const T& c)
 	{
 		return std::min<T>(std::min<T>(a, b), c);
 	}
 
 	template <typename T>
-	inline const T& Max3(const T& a, const T& b, const T& c)
+	inline const T Max3(const T& a, const T& b, const T& c)
 	{
 		return std::max<T>(std::max<T>(a, b), c);
+	}
+
+	template <typename T>
+	inline const T Mix(const T& x, const T& y, Real a)
+	{
+		return x + (y-x) * a;
 	}
 
 	template <typename T>

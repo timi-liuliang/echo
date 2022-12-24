@@ -56,10 +56,10 @@ namespace Echo
 		m_flags.set();
 	}
 
-	const Vector3*  Frustum::getVertexs() const
+	const Vector3*  Frustum::getVertexes() const
 	{
 		if (!m_flags.test(FrustumDirtyFlags::Vertex))
-			return m_vertexs;
+			return m_vertexes;
 
 		// update vertexes
 		Vector3  n = m_forward * m_nearZ;
@@ -71,15 +71,15 @@ namespace Echo
 		Vector3  fr = m_right * m_farZ * m_rightFactorFar;
 		Vector3  fu = m_up * m_farZ * m_upFactorFar;
 
-		m_vertexs[0] = n - nr - nu;		m_vertexs[4] = f - fr - fu;
-		m_vertexs[1] = n + nr - nu;		m_vertexs[5] = f + fr - fu;
-		m_vertexs[2] = n + nr + nu;		m_vertexs[6] = f + fr + fu;
-		m_vertexs[3] = n - nr + nu;		m_vertexs[7] = f - fr + fu;
+		m_vertexes[0] = n - nr - nu;	m_vertexes[4] = f - fr - fu;
+		m_vertexes[1] = n + nr - nu;	m_vertexes[5] = f + fr - fu;
+		m_vertexes[2] = n + nr + nu;	m_vertexes[6] = f + fr + fu;
+		m_vertexes[3] = n - nr + nu;	m_vertexes[7] = f - fr + fu;
 
-		m_vertexs[0] += m_eyePosition;	m_vertexs[4] += m_eyePosition;
-		m_vertexs[1] += m_eyePosition;	m_vertexs[5] += m_eyePosition;
-		m_vertexs[2] += m_eyePosition;	m_vertexs[6] += m_eyePosition;
-		m_vertexs[3] += m_eyePosition;	m_vertexs[7] += m_eyePosition;
+		m_vertexes[0] += m_eyePosition;	m_vertexes[4] += m_eyePosition;
+		m_vertexes[1] += m_eyePosition;	m_vertexes[5] += m_eyePosition;
+		m_vertexes[2] += m_eyePosition;	m_vertexes[6] += m_eyePosition;
+		m_vertexes[3] += m_eyePosition;	m_vertexes[7] += m_eyePosition;
 
 		//     7+------+6
 		//     /|     /|         y
@@ -92,7 +92,7 @@ namespace Echo
 
 		m_flags.reset(FrustumDirtyFlags::Vertex);
 
-		return m_vertexs;
+		return m_vertexes;
 	}
 
 	const array<Plane, 6>& Frustum::getPlanes() const
@@ -100,18 +100,18 @@ namespace Echo
 		if (!m_flags.test(FrustumDirtyFlags::Planes))
 			return m_planes;
 
-		getVertexs();
+		getVertexes();
 
 		// Plane's normal facing box outer
 
-		m_planes[0].set(m_vertexs[0], m_vertexs[1], m_vertexs[3]);
-		m_planes[1].set(m_vertexs[4], m_vertexs[7], m_vertexs[5]);
+		m_planes[0].set(m_vertexes[0], m_vertexes[1], m_vertexes[3]);
+		m_planes[1].set(m_vertexes[4], m_vertexes[7], m_vertexes[5]);
 
-		m_planes[2].set(m_vertexs[1], m_vertexs[5], m_vertexs[2]);
-		m_planes[3].set(m_vertexs[0], m_vertexs[3], m_vertexs[4]);
+		m_planes[2].set(m_vertexes[1], m_vertexes[5], m_vertexes[2]);
+		m_planes[3].set(m_vertexes[0], m_vertexes[3], m_vertexes[4]);
 
-		m_planes[4].set(m_vertexs[0], m_vertexs[4], m_vertexs[1]);
-		m_planes[5].set(m_vertexs[3], m_vertexs[2], m_vertexs[7]);
+		m_planes[4].set(m_vertexes[0], m_vertexes[4], m_vertexes[1]);
+		m_planes[5].set(m_vertexes[3], m_vertexes[2], m_vertexes[7]);
 
 		m_flags.reset(FrustumDirtyFlags::Planes);
 
@@ -123,18 +123,32 @@ namespace Echo
 		if (!m_flags.test(FrustumDirtyFlags::Aabb))
 			return m_aabb;
 
-		getVertexs();
+		getVertexes();
 
 		m_aabb.reset();
 
-		m_aabb.addPoint(m_vertexs[0]);		m_aabb.addPoint(m_vertexs[4]);
-		m_aabb.addPoint(m_vertexs[1]);		m_aabb.addPoint(m_vertexs[5]);
-		m_aabb.addPoint(m_vertexs[2]);		m_aabb.addPoint(m_vertexs[6]);
-		m_aabb.addPoint(m_vertexs[3]);		m_aabb.addPoint(m_vertexs[7]);
+		m_aabb.addPoint(m_vertexes[0]);		m_aabb.addPoint(m_vertexes[4]);
+		m_aabb.addPoint(m_vertexes[1]);		m_aabb.addPoint(m_vertexes[5]);
+		m_aabb.addPoint(m_vertexes[2]);		m_aabb.addPoint(m_vertexes[6]);
+		m_aabb.addPoint(m_vertexes[3]);		m_aabb.addPoint(m_vertexes[7]);
 
 		m_flags.reset(FrustumDirtyFlags::Aabb);
 
 		return m_aabb;
+	}
+
+	const AABB Frustum::getAABB(Real start, Real end) const
+	{
+		getVertexes();
+
+		AABB aabb;
+		for (i32 i = 0; i < 4; i++)
+		{
+			aabb.addPoint(Math::Mix(m_vertexes[i], m_vertexes[i + 4], start));
+			aabb.addPoint(Math::Mix(m_vertexes[i], m_vertexes[i + 4], end));
+		}
+
+		return aabb;
 	}
 
 	bool  Frustum::isPointIn(const Vector3& point) const

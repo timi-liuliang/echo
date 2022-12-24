@@ -38,7 +38,7 @@ namespace Echo
 				camera.update();
 
 				// vertices
-				const Vector3* eightVertices = camera.getFrustum().getVertexs();
+				const Vector3* eightVertices = camera.getFrustum().getVertexes();
 
 				m_gizmo->clear();
 				m_gizmo->drawLine(eightVertices[0], eightVertices[1], Color::BLUE);

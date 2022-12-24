@@ -33,5 +33,6 @@ namespace Echo
 	protected:
 		bool				m_castShadow = true;
 		ShadowCamera*		m_shadowCamera = nullptr;
+		i32					m_csmSplitCount = 3.0;
 	};
 }

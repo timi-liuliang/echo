@@ -36,9 +36,10 @@ namespace Echo
 
 		// get AABB
 		const AABB& getAABB() const;
+		const AABB getAABB(Real start, Real end) const;
 
 		// get eight vertices
-		const Vector3*  getVertexs() const;
+		const Vector3*  getVertexes() const;
 
 		// Get planes
 		const array<Plane, 6>& getPlanes() const;
@@ -63,7 +64,7 @@ namespace Echo
 		float					m_upFactorFar;
 		float					m_nearZ;
 		float					m_farZ;
-		mutable Vector3			m_vertexs[8];
+		mutable Vector3			m_vertexes[8];
 		mutable AABB			m_aabb;
 		mutable array<Plane, 6>	m_planes;
 		mutable std::bitset<16>	m_flags;
