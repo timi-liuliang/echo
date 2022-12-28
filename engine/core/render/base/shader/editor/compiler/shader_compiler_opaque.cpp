@@ -17,7 +17,6 @@ layout(binding = 0) uniform UBO
 // inputs
 layout(location = 0) in vec3 a_Position;
 
-#ifdef ENABLE_VERTEX_POSITION
 struct Position
 {
 	vec3 local;
@@ -25,7 +24,6 @@ struct Position
 	vec3 view;
 };
 layout(location = 0) out Position v_Position;
-#endif
 
 #ifdef ENABLE_VERTEX_NORMAL
 layout(location = 1) in vec3 a_Normal;
@@ -74,11 +72,9 @@ void main(void)
 	vec4 worldPosition = vs_ubo.u_WorldMatrix * vec4(a_Position, 1.0);
     vec4 clipPosition = vs_ubo.u_ViewProjMatrix * worldPosition;
 
-#ifdef ENABLE_VERTEX_POSITION
 	v_Position.local = a_Position;
 	v_Position.world = worldPosition.xyz;
 	v_Position.view = (clipPosition.xyz / clipPosition.w + vec3(1.0)) * 0.5;
-#endif
 
 	gl_Position = clipPosition;
 
@@ -125,7 +121,6 @@ ${FS_UNIFORMS}
 ${FS_TEXTURE_UNIFORMS}
 
 // inputs
-#ifdef ENABLE_VERTEX_POSITION
 struct Position
 {
 	vec3 local;
@@ -133,7 +128,6 @@ struct Position
 	vec3 view;
 };
 layout(location = 0) in Position  v_Position;
-#endif
 
 #ifdef ENABLE_VERTEX_NORMAL
 layout(location = 3) in vec3 v_Normal;
