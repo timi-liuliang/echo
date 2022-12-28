@@ -38,20 +38,24 @@ namespace Echo
 					Material::UniformValue* uniformValue = m_material->getUniform(uniform->m_name);
 					if (uniform->m_type != SPT_TEXTURE)
 					{
-						const void* value = nullptr;
-						if (!value && m_camera)
-							value = m_camera->getGlobalUniformValue(uniform->m_name);
+						if(uniformValue)
+						{
+							const void* value = nullptr;
+							if (!value && m_camera)
+								value = m_camera->getGlobalUniformValue(uniform->m_name);
 
-						if (!value && m_cameraShadow)
-							value = m_cameraShadow->getGlobalUniformValue(uniform->m_name);
+							if (!value && m_cameraShadow)
+								value = m_cameraShadow->getGlobalUniformValue(uniform->m_name);
 
-						if (!value && m_node)
-							value = m_node->getGlobalUniformValue(uniform->m_name);
+							if (!value && m_node)
+								value = m_node->getGlobalUniformValue(uniform->m_name);
 
-						if (!value)
-							value = uniformValue->getValue();
+							if (!value)
+								value = uniformValue->getValue();
 
-						shaderProgram->setUniform(uniform->m_name.c_str(), value, uniform->m_type, uniform->m_count);
+							if (value)
+								shaderProgram->setUniform(uniform->m_name.c_str(), value, uniform->m_type, uniform->m_count);
+						}
 					}
 					else
 					{
@@ -76,7 +80,9 @@ namespace Echo
 								else
 								{
 									Renderer::instance()->setTexture(textureCount, texture);
-								}	
+								}							
+								
+								shaderProgram->setUniform(StringUtil::Format("u_%sSize", uniform->m_name.c_str()), &texture->getSize(), ShaderParamType::SPT_VEC2, 1);
 							}
 						}
 

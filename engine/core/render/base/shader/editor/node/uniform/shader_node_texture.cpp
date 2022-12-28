@@ -18,10 +18,11 @@ namespace Echo
 
 		m_inputs.resize(m_inputDataTypes.size());
 
-		m_outputs.resize(3);
+		m_outputs.resize(4);
 		m_outputs[0] = std::make_shared<DataSampler2D>(this, "tex");
-		m_outputs[1] = std::make_shared<DataVector3>(this, "rgb");
-		m_outputs[2] = std::make_shared<DataFloat>(this, "a");
+		m_outputs[1] = std::make_shared<DataVector2>(this, "size");
+		m_outputs[2] = std::make_shared<DataVector3>(this, "rgb");
+		m_outputs[3] = std::make_shared<DataFloat>(this, "a");
 
 		updateOutputDataVariableName();
 	}
@@ -55,12 +56,14 @@ namespace Echo
 		Echo::String variableName = getVariableName();
 
 		m_outputs[0]->setVariableName(variableName.c_str());
-		m_outputs[1]->setVariableName(Echo::StringUtil::Format("%s_Color.rgb", variableName.c_str()));
-		m_outputs[2]->setVariableName(Echo::StringUtil::Format("%s_Color.a", variableName.c_str()));
+		m_outputs[1]->setVariableName(Echo::StringUtil::Format("fs_ubo.u_%sSize", variableName.c_str()));
+		m_outputs[2]->setVariableName(Echo::StringUtil::Format("%s_Color.rgb", variableName.c_str()));
+		m_outputs[3]->setVariableName(Echo::StringUtil::Format("%s_Color.a", variableName.c_str()));
 
 		Q_EMIT dataUpdated(0);
 		Q_EMIT dataUpdated(1);
 		Q_EMIT dataUpdated(2);
+		Q_EMIT dataUpdated(3);
 	}
 
 	void ShaderNodeTexture::setInData(std::shared_ptr<NodeData> nodeData, int portIndex)
@@ -70,6 +73,7 @@ namespace Echo
 		Q_EMIT dataUpdated(0);
 		Q_EMIT dataUpdated(1);
 		Q_EMIT dataUpdated(2);
+		Q_EMIT dataUpdated(3);
 	}
 
 	bool ShaderNodeTexture::getDefaultValue(Echo::StringArray& uniformNames, Echo::VariantArray& uniformValues)
@@ -93,6 +97,11 @@ namespace Echo
 		compiler.addMacro("ENABLE_VERTEX_UV0");
 
 		compiler.addTextureUniform(getVariableName());
+
+		if (m_outputs[1])
+		{
+			compiler.addUniform("vec2", Echo::StringUtil::Format("u_%sSize", getVariableName().c_str()));
+		}
 
 		Echo::String uvConvertCode;
 		if (isAtla())

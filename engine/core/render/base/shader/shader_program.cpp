@@ -516,7 +516,7 @@ namespace Echo
         return m_multiSampleState;
     }
     
-    void ShaderProgram::setUniform( const char* name, const void* value, ShaderParamType uniformType, ui32 count)
+    void ShaderProgram::setUniform( const String& name, const void* value, ShaderParamType uniformType, ui32 count)
     {
         for (UniformMap& unfiromMap : m_uniforms)
         {

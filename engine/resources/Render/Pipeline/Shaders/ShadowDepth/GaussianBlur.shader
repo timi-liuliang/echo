@@ -23,6 +23,11 @@ void main()
 ]]></property>
 	<property name="FragmentShader"><![CDATA[#version 450
 
+layout(binding = 1, std140) uniform UBO
+{
+    vec2 u_BrightTextureSize;
+} fs_ubo;
+
 layout(binding = 2) uniform sampler2D BrightTexture;
 
 layout(location = 7) in vec2 v_UV;
@@ -52,9 +57,8 @@ vec3 GaussianBlur(sampler2D tex, vec2 size, vec2 uv)
 
 void main()
 {
-    float Float_316_Value = 3.0;
-    vec2 Vector2_356_Value = vec2(2048.0);
-    vec2 param = Vector2_356_Value;
+    vec4 BrightTexture_Color = texture(BrightTexture, v_UV);
+    vec2 param = fs_ubo.u_BrightTextureSize;
     vec2 param_1 = v_UV;
     vec3 GaussianBlur_345 = GaussianBlur(BrightTexture, param, param_1);
     vec3 _Emissive = GaussianBlur_345;
@@ -78,12 +82,6 @@ void main()
         },
         {
             "in_id": "{62988fea-922b-4721-8f29-5a5dc00babb5}",
-            "in_index": 1,
-            "out_id": "{3934e5f9-18a5-4330-87ff-90eeb936a407}",
-            "out_index": 0
-        },
-        {
-            "in_id": "{62988fea-922b-4721-8f29-5a5dc00babb5}",
             "in_index": 2,
             "out_id": "{102f3f6e-9505-4bc6-b6f3-6b494a4ae905}",
             "out_index": 0
@@ -93,6 +91,12 @@ void main()
             "in_index": 1,
             "out_id": "{62988fea-922b-4721-8f29-5a5dc00babb5}",
             "out_index": 0
+        },
+        {
+            "in_id": "{62988fea-922b-4721-8f29-5a5dc00babb5}",
+            "in_index": 1,
+            "out_id": "{394656fc-a8e2-447a-b1fa-d4127abcafe5}",
+            "out_index": 1
         }
     ],
     "nodes": [
@@ -103,8 +107,22 @@ void main()
                 "name": "ShaderTemplateTransparent"
             },
             "position": {
-                "x": -17,
-                "y": 248
+                "x": -12,
+                "y": 239
+            }
+        },
+        {
+            "id": "{394656fc-a8e2-447a-b1fa-d4127abcafe5}",
+            "model": {
+                "Atla": "false",
+                "Texture": "Engine://Render/Pipeline/Framebuffer/ShadowDepth/ShadowDepthColorA.rt",
+                "Type": "General",
+                "Variable": "BrightTexture",
+                "name": "Texture"
+            },
+            "position": {
+                "x": -649,
+                "y": 274
             }
         },
         {
@@ -123,20 +141,6 @@ void main()
             }
         },
         {
-            "id": "{394656fc-a8e2-447a-b1fa-d4127abcafe5}",
-            "model": {
-                "Atla": "false",
-                "Texture": "Engine://Render/Pipeline/Framebuffer/ShadowDepth/ShadowDepthColorA.rt",
-                "Type": "General",
-                "Variable": "BrightTexture",
-                "name": "Texture"
-            },
-            "position": {
-                "x": -649,
-                "y": 274
-            }
-        },
-        {
             "id": "{102f3f6e-9505-4bc6-b6f3-6b494a4ae905}",
             "model": {
                 "Attribute": "uv0",
@@ -146,32 +150,6 @@ void main()
             "position": {
                 "x": -706,
                 "y": 485
-            }
-        },
-        {
-            "id": "{014cbe53-0dc0-408e-941c-6b1b14619efb}",
-            "model": {
-                "Uniform": "false",
-                "Value": "3.0",
-                "Variable": "Float_316",
-                "name": "Float"
-            },
-            "position": {
-                "x": -624,
-                "y": 573
-            }
-        },
-        {
-            "id": "{3934e5f9-18a5-4330-87ff-90eeb936a407}",
-            "model": {
-                "Uniform": "false",
-                "Value": "2048 2048",
-                "Variable": "Vector2_356",
-                "name": "Vector2"
-            },
-            "position": {
-                "x": -572,
-                "y": 413
             }
         }
     ]

@@ -136,7 +136,7 @@ namespace Echo
 		static bool isGlobalUniform(const String& name);
 
         // uniform
-        void setUniform(const char* name, const void* value, ShaderParamType uniformType, ui32 count);
+        void setUniform(const String& name, const void* value, ShaderParamType uniformType, ui32 count);
         UniformPtr getUniform(const String& name);
 
         // get all uniforms

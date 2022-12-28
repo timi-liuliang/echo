@@ -82,6 +82,9 @@ namespace Echo
 		// depth
 		ui32 getDepth() const { return m_depth; }
 
+		// size
+		virtual Vector2 getSize() const { return Vector2(getWidth(), getHeight()); }
+
 		// mip map
 		bool isMipmapEnable() const { return m_isMipMapEnable; }
 		void setMipmapEnable(bool isEanble) { m_isMipMapEnable = isEanble; }
