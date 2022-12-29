@@ -34,3 +34,5 @@ bin/editor/Win64/Debug/Echo.exe
 /bin/editor/Win64/Release/libGLESv2.dll
 /bin/editor/Win64/Release/libEGL.dll
 /bin/editor/Win64/Release/Echo.exe
+bin/editor/Win64/Debug/build.pdb
+bin/editor/Win64/Debug/build.exe
