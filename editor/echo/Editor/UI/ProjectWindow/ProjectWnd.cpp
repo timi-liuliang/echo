@@ -75,7 +75,7 @@ namespace Studio
 	{
 		if ( m_previewerWidget && NULL != project && 0 != project[0])
 		{
-			Echo::String icon = Echo::PathUtil::GetFileDirPath(project) + "icon.png";
+			Echo::String icon = Echo::PathUtil::GetFileDirPath(project) + "Res/icon.png";
 			icon = Echo::PathUtil::IsFileExist(icon) ? icon : ":/icon/Icon/error/delete.png";
 			m_previewerWidget->addItem(project, icon.c_str());
 		}
@@ -122,6 +122,10 @@ namespace Studio
         QFile qfile(qtFile.c_str());
         if (qfile.open(QIODevice::ReadOnly))
         {
+			Echo::String savePath = Echo::PathUtil::GetFileDirPath(writePath.c_str());
+			if(!Echo::PathUtil::IsDirExist(savePath))
+				Echo::PathUtil::CreateDir(savePath);
+
             // write files
             QFile writeFile(writePath.c_str());
             if (writeFile.open(QIODevice::WriteOnly))
@@ -152,7 +156,7 @@ namespace Studio
 
 				// 2.copy file
                 copyQtFile(":/project/project/blank.echo", newFilePath + "blank.echo");
-                copyQtFile(":/project/project/icon.png",   newFilePath + "icon.png");
+                copyQtFile(":/project/project/Res/icon.png",   newFilePath + "Res/icon.png");
 
 				// 3.rename
 				Echo::String projectPathName = newFilePath + "blank.echo";
@@ -230,7 +234,7 @@ namespace Studio
         QStandardItem* item = m_previewerWidget->itemAt( point);
         if(item)
         {
-            m_selectedProject = item->data(Qt::UserRole).toString().toStdString().c_str();// data(Qt::UserRole).toString()
+            m_selectedProject = item->data(Qt::UserRole).toString().toStdString().c_str();
             
             EchoSafeDelete(m_projectMenu, QMenu);
             m_projectMenu = EchoNew(QMenu);

@@ -77,7 +77,7 @@ namespace Echo
 		setlocale(LC_ALL, "zh_CN.UTF-8");
         if (PathUtil::IsFileExist( m_config.m_projectFile))
         {
-            String resPath = PathUtil::GetFileDirPath(m_config.m_projectFile);
+            String resPath = PathUtil::GetFileDirPath(m_config.m_projectFile) + "Res/";
             IO::instance()->setResPath(resPath);
         }
         else
