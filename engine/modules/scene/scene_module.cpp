@@ -3,7 +3,6 @@
 #include "terrain/editor/terrain_editor.h"
 #include "tilemap/tilemap.h"
 #include "tilemap/editor/tilemap_editor.h"
-#include "planet/planet.h"
 
 namespace Echo
 {
@@ -33,7 +32,6 @@ namespace Echo
     {
         Class::registerType<Terrain>();
         Class::registerType<TileMap>();
-		Class::registerType<Planet>();
         
         CLASS_REGISTER_EDITOR(Terrain, TerrainEditor)
         CLASS_REGISTER_EDITOR(TileMap, TileMapEditor)
