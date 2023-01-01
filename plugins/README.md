@@ -1,3 +1,0 @@
-# Echo Plugins Folder
-
-
