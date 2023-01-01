@@ -1,9 +1,7 @@
 MESSAGE( STATUS "Configuring module: build")
 
 # set module name
-SET(MODULE_NAME game)
-
-SET(ECHO_GAME_SOURCE D:/github/planet/moon/Source)
+SET(MODULE_NAME ${ECHO_GAME_NAME})
 
 # include directories
 INCLUDE_DIRECTORIES( ${ECHO_ROOT_PATH})
