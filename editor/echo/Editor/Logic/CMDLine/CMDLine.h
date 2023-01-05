@@ -41,4 +41,14 @@ namespace Echo
 		// exec command
 		bool exec(int argc, char* argv[]);
 	};
+
+	/**
+	 * Generate Visual Studio project files
+	 */
+	class VsGenMode
+	{
+	public:
+		// exec command
+		bool exec(int argc, char* argv[]);
+	};
 }

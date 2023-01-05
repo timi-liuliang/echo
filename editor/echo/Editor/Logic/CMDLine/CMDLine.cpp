@@ -32,6 +32,10 @@ namespace Echo
 				GameMode gameMode;
 				gameMode.exec(argc, argv);
 			}
+			else if (sargv[0] == "vs")
+			{
+
+			}
 			else if ( argc==2)
 			{
 				EditOpenMode openMode;
@@ -183,6 +187,16 @@ namespace Echo
 		app.exec();
 
 		delete g_astudio;
+
+		return true;
+	}
+
+	bool VsGenMode::exec(int argc, char* argv[])
+	{
+		Echo::String type = argv[1];
+		if (type != "vs")
+			return false;
+
 
 		return true;
 	}

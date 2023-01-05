@@ -20,12 +20,17 @@ int main( int argc, char* argv[])
 	QApplication::setLibraryPaths(QStringList() << QApplication::libraryPaths() << QDir::currentPath().append("/plugins/Qt"));
 
 #ifdef ECHO_PLATFORM_WINDOWS
-	// Generate Visual Studio project files
-	QSettings regGv("HKEY_CLASSES_ROOT\\.echo\\shell\\Generate Visual Studio Files\\command", QSettings::NativeFormat);
-	regGv.setValue("Default", (Echo::String(argv[0]) + " gen_vs %1").c_str());
+	QSettings regOpenIcon("HKEY_CLASSES_ROOT\\.echo\\shell\\Open", QSettings::NativeFormat);
+	regOpenIcon.setValue("Icon", Echo::StringUtil::Format("%s", argv[0]).c_str());
+
+	QSettings regOpen("HKEY_CLASSES_ROOT\\.echo\\shell\\Open\\command", QSettings::NativeFormat);
+	regOpen.setValue("Default", (Echo::String(argv[0]) + " %1").c_str());
 
 	QSettings regIcon("HKEY_CLASSES_ROOT\\.echo\\shell\\Generate Visual Studio Files", QSettings::NativeFormat);
 	regIcon.setValue("Icon", Echo::StringUtil::Format("%s", argv[0]).c_str());
+
+	QSettings regGv("HKEY_CLASSES_ROOT\\.echo\\shell\\Generate Visual Studio Files\\command", QSettings::NativeFormat);
+	regGv.setValue("Default", (Echo::String(argv[0]) + " vs %1").c_str());
 #endif
 
 	// parse & run
