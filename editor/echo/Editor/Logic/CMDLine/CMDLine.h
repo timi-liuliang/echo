@@ -50,6 +50,9 @@ namespace Echo
 	public:
 		// exec command
 		bool exec(int argc, char* argv[]);
+
+		// Write cmake.bat
+		void writeCMakeBatFile(const char* batFile);
 	};
 
 	/**

@@ -201,11 +201,37 @@ namespace Echo
 	bool VsGenMode::exec(int argc, char* argv[])
 	{
 		Echo::String type = argv[1];
-		if (type != "vs")
-			return false;
+		if (type == "vs")
+		{
+			Echo::String project = argv[2];
+			Echo::PathUtil::FormatPath(project);
 
+			Echo::String projectPath = Echo::PathUtil::GetFileDirPath(project);
+			Echo::String buildPath = projectPath + "Build/";
+			Echo::String binaryPath = projectPath + "Bin/";
+			Echo::String vsVersion = "-G\"Visual Studio 16 2019\" -A x64";
+			Echo::String batFile = buildPath + "cmake.bat";
 
-		return true;
+			writeCMakeBatFile(batFile.c_str());
+
+#ifdef ECHO_PLATFORM_WINDOWS
+			Echo::String app = QCoreApplication::applicationFilePath().toStdString().c_str();
+			Echo::String cmd = Echo::StringUtil::Format("cmake.exe %s %s", vsVersion.c_str());
+
+			QProcess process;
+			process.startDetached(cmd.c_str());
+
+#endif
+
+			return true;
+		}
+
+		return false;
+	}
+
+	void VsGenMode::writeCMakeBatFile(const char* batFile)
+	{
+
 	}
 
 	bool RegEditMode::exec(int argc, char* argv[])
