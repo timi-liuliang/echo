@@ -51,4 +51,14 @@ namespace Echo
 		// exec command
 		bool exec(int argc, char* argv[]);
 	};
+
+	/**
+	 * Link echo file
+	 */
+	class RegEditMode
+	{
+	public:
+		// exec command
+		bool exec(int argc, char* argv[]);
+	};
 }

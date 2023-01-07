@@ -4,6 +4,7 @@
 #include <QSplashScreen>
 #include <QApplication>
 #include <QTextCodec>
+#include <QSettings>
 #include <QTime>
 #include "Studio.h"
 #include "EchoEngine.h"
@@ -34,7 +35,13 @@ namespace Echo
 			}
 			else if (sargv[0] == "vs")
 			{
-
+				VsGenMode vsGenMode;
+				vsGenMode.exec(argc, argv);
+			}
+			else if (sargv[0] == "regedit")
+			{
+				RegEditMode regEditMode;
+				regEditMode.exec(argc, argv);
 			}
 			else if ( argc==2)
 			{
@@ -199,5 +206,26 @@ namespace Echo
 
 
 		return true;
+	}
+
+	bool RegEditMode::exec(int argc, char* argv[])
+	{
+		Echo::String type = argv[1];
+		if (type != "regedit")
+			return false;
+
+#ifdef ECHO_PLATFORM_WINDOWS
+		QSettings regOpenIcon("HKEY_CLASSES_ROOT\\.echo\\shell\\Open", QSettings::NativeFormat);
+		regOpenIcon.setValue("Icon", Echo::StringUtil::Format("%s", argv[0]).c_str());
+
+		QSettings regOpen("HKEY_CLASSES_ROOT\\.echo\\shell\\Open\\command", QSettings::NativeFormat);
+		regOpen.setValue("Default", (Echo::String(argv[0]) + " %1").c_str());
+
+		QSettings regIcon("HKEY_CLASSES_ROOT\\.echo\\shell\\Generate Visual Studio Files", QSettings::NativeFormat);
+		regIcon.setValue("Icon", Echo::StringUtil::Format("%s", argv[0]).c_str());
+
+		QSettings regGv("HKEY_CLASSES_ROOT\\.echo\\shell\\Generate Visual Studio Files\\command", QSettings::NativeFormat);
+		regGv.setValue("Default", (Echo::String(argv[0]) + " vs %1").c_str());
+#endif
 	}
 }
