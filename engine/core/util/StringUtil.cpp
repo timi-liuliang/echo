@@ -740,20 +740,4 @@ namespace Echo
 
 		return out;
 	}
-
-	int sprintf_append(char* s, const int max, const char* const format, ...)
-	{
-		va_list arg;
-		va_start(arg, format);
-		int copylen = 0;
-		int len = int(strlen(s));
-		int freelen = max - len;
-		if (freelen > 0)
-		{
-			copylen = ::vsnprintf(s + len, freelen, format, arg);
-			s[max - 1] = 0;
-		}
-		va_end(arg);
-		return copylen;
-	}
 }

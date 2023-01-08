@@ -38,10 +38,6 @@ namespace Echo
         void log(const char* formats, ...);
 
     protected:
-        // write line
-		static void writeLine(String& str, const String& line) { str += line + "\n"; }
-        
-    protected:
         BuildListener*    m_listener = nullptr;
     };
 }

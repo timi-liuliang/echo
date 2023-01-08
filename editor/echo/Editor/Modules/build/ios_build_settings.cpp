@@ -476,113 +476,108 @@ namespace Echo
         
         // module
         String moduleName = StringUtil::Replace(getProjectName(), " ", "");
-        writeLine( cmakeStr, StringUtil::Format("SET(MODULE_NAME %s)", moduleName.c_str()));
+        StringUtil::WriteLine( cmakeStr, StringUtil::Format("SET(MODULE_NAME %s)", moduleName.c_str()));
         
         // set module path
-        writeLine( cmakeStr, "SET(MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR})");
+        StringUtil::WriteLine( cmakeStr, "SET(MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR})");
         
         // include directories
-        writeLine( cmakeStr, "INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})");
-        writeLine( cmakeStr, "INCLUDE_DIRECtORIES(${ECHO_ROOT_PATH})");
+        StringUtil::WriteLine( cmakeStr, "INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})");
+        StringUtil::WriteLine( cmakeStr, "INCLUDE_DIRECtORIES(${ECHO_ROOT_PATH})");
         
         // link directories
-        writeLine( cmakeStr, "LINK_DIRECTORIES(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})");
-        writeLine( cmakeStr, "LINK_DIRECTORIES(${ECHO_LIB_PATH})");
-        writeLine( cmakeStr, "LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/live2d/Cubism31SdkNative-EAP5/Core/lib/ios/)");
+        StringUtil::WriteLine( cmakeStr, "LINK_DIRECTORIES(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})");
+        StringUtil::WriteLine( cmakeStr, "LINK_DIRECTORIES(${ECHO_LIB_PATH})");
+        StringUtil::WriteLine( cmakeStr, "LINK_DIRECTORIES(${ECHO_ROOT_PATH}/thirdparty/live2d/Cubism31SdkNative-EAP5/Core/lib/ios/)");
         
         // AddFrameWork Macro
-        writeLine( cmakeStr, "MACRO(ADD_FRAMEWORK fwname)");
-        writeLine( cmakeStr, "    SET(FRAMEWORKS \"${FRAMEWORKS} -framework ${fwname}\")");
-        writeLine( cmakeStr, "ENDMACRO(ADD_FRAMEWORK)");
+        StringUtil::WriteLine( cmakeStr, "MACRO(ADD_FRAMEWORK fwname)");
+        StringUtil::WriteLine( cmakeStr, "    SET(FRAMEWORKS \"${FRAMEWORKS} -framework ${fwname}\")");
+        StringUtil::WriteLine( cmakeStr, "ENDMACRO(ADD_FRAMEWORK)");
         
         // Get all project files recursively
-        writeLine( cmakeStr, "FILE(GLOB_RECURSE HEADER_FILES *.h *.inl)");
-        writeLine( cmakeStr, "FILE(GLOB_RECURSE SOURCE_FILES *.cpp *.m *.mm)");
+        StringUtil::WriteLine( cmakeStr, "FILE(GLOB_RECURSE HEADER_FILES *.h *.inl)");
+        StringUtil::WriteLine( cmakeStr, "FILE(GLOB_RECURSE SOURCE_FILES *.cpp *.m *.mm)");
         
-        writeLine( cmakeStr, "SET(ALL_FILES ${HEADER_FILES} ${SOURCE_FILES})");
+        StringUtil::WriteLine( cmakeStr, "SET(ALL_FILES ${HEADER_FILES} ${SOURCE_FILES})");
         
         // group source files
-        writeLine( cmakeStr, "GROUP_FILES(ALL_FILES ${CMAKE_CURRENT_SOURCE_DIR})");
+        StringUtil::WriteLine( cmakeStr, "GROUP_FILES(ALL_FILES ${CMAKE_CURRENT_SOURCE_DIR})");
         
         // iOS platform resources
-        writeLine( cmakeStr, "SET(IOS_RESOURCE_FILES");
+        StringUtil::WriteLine( cmakeStr, "SET(IOS_RESOURCE_FILES");
         
         // icon
-        writeLine( cmakeStr, "    ${MODULE_PATH}/Assets.xcassets");
+        StringUtil::WriteLine( cmakeStr, "    ${MODULE_PATH}/Assets.xcassets");
         
         // launch images
         for(const LaunchImageItem& image : m_launchImages)
         {
             if(m_uiInterfaceOrientationPortrait || m_uiInterfaceOrientationPortraitUpsideDown)
-                writeLine( cmakeStr, image.getPortraitPath());
+                StringUtil::WriteLine( cmakeStr, image.getPortraitPath());
             
             if(m_uiInterfaceOrientationLandscapeLeft || m_uiInterfaceOrientationLandscapeRight)
-                writeLine(cmakeStr, image.getLandscapePath());
+                StringUtil::WriteLine(cmakeStr, image.getLandscapePath());
         }
         
         // data
-        writeLine( cmakeStr, "    ${MODULE_PATH}/resources/data");
-        writeLine( cmakeStr, ")");
-        writeLine( cmakeStr, "SET_SOURCE_FILES_PROPERTIES(${IOS_RESOURCE_FILES} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)");
+        StringUtil::WriteLine( cmakeStr, "    ${MODULE_PATH}/resources/data");
+        StringUtil::WriteLine( cmakeStr, ")");
+        StringUtil::WriteLine( cmakeStr, "SET_SOURCE_FILES_PROPERTIES(${IOS_RESOURCE_FILES} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)");
         
         // add framework
-        writeLine( cmakeStr, "ADD_FRAMEWORK(MediaPlayer)");
-        writeLine( cmakeStr, "ADD_FRAMEWORK(AudioToolbox)");
-        writeLine( cmakeStr, "ADD_FRAMEWORK(CoreGraphics)");
-        writeLine( cmakeStr, "ADD_FRAMEWORK(QuartzCore)");
-        writeLine( cmakeStr, "ADD_FRAMEWORK(UIKit)");
-        writeLine( cmakeStr, "ADD_FRAMEWORK(GLKit)");
-        writeLine( cmakeStr, "ADD_FRAMEWORK(OpenGLES)");
-        writeLine( cmakeStr, "ADD_FRAMEWORK(OpenAL)");
-        writeLine( cmakeStr, "ADD_FRAMEWORK(CFNetwork)");
-        writeLine( cmakeStr, "ADD_FRAMEWORK(MobileCoreServices)");
-        writeLine( cmakeStr, "ADD_FRAMEWORK(SystemConfiguration)");
-        writeLine( cmakeStr, "ADD_FRAMEWORK(AVFoundation)");
-        writeLine( cmakeStr, "ADD_FRAMEWORK(AdSupport)");
-        writeLine( cmakeStr, "ADD_FRAMEWORK(CoreFoundation)");
-        writeLine( cmakeStr, "ADD_FRAMEWORK(CoreTelephony)");
-        writeLine( cmakeStr, "ADD_FRAMEWORK(CoreText)");
-        writeLine( cmakeStr, "ADD_FRAMEWORK(iAd)");
-        writeLine( cmakeStr, "ADD_FRAMEWORK(StoreKit)");
-        writeLine( cmakeStr, "ADD_FRAMEWORK(CoreData)");
-        writeLine( cmakeStr, "ADD_FRAMEWORK(CoreMedia)");
-        writeLine( cmakeStr, "ADD_FRAMEWORK(CoreMotion)");
-        writeLine( cmakeStr, "ADD_FRAMEWORK(Security)");
+        StringUtil::WriteLine( cmakeStr, "ADD_FRAMEWORK(MediaPlayer)");
+        StringUtil::WriteLine( cmakeStr, "ADD_FRAMEWORK(AudioToolbox)");
+        StringUtil::WriteLine( cmakeStr, "ADD_FRAMEWORK(CoreGraphics)");
+        StringUtil::WriteLine( cmakeStr, "ADD_FRAMEWORK(QuartzCore)");
+        StringUtil::WriteLine( cmakeStr, "ADD_FRAMEWORK(UIKit)");
+        StringUtil::WriteLine( cmakeStr, "ADD_FRAMEWORK(GLKit)");
+        StringUtil::WriteLine( cmakeStr, "ADD_FRAMEWORK(OpenGLES)");
+        StringUtil::WriteLine( cmakeStr, "ADD_FRAMEWORK(OpenAL)");
+        StringUtil::WriteLine( cmakeStr, "ADD_FRAMEWORK(CFNetwork)");
+        StringUtil::WriteLine( cmakeStr, "ADD_FRAMEWORK(MobileCoreServices)");
+        StringUtil::WriteLine( cmakeStr, "ADD_FRAMEWORK(SystemConfiguration)");
+        StringUtil::WriteLine( cmakeStr, "ADD_FRAMEWORK(AVFoundation)");
+        StringUtil::WriteLine( cmakeStr, "ADD_FRAMEWORK(AdSupport)");
+        StringUtil::WriteLine( cmakeStr, "ADD_FRAMEWORK(CoreFoundation)");
+        StringUtil::WriteLine( cmakeStr, "ADD_FRAMEWORK(CoreTelephony)");
+        StringUtil::WriteLine( cmakeStr, "ADD_FRAMEWORK(CoreText)");
+        StringUtil::WriteLine( cmakeStr, "ADD_FRAMEWORK(iAd)");
+        StringUtil::WriteLine( cmakeStr, "ADD_FRAMEWORK(StoreKit)");
+        StringUtil::WriteLine( cmakeStr, "ADD_FRAMEWORK(CoreData)");
+        StringUtil::WriteLine( cmakeStr, "ADD_FRAMEWORK(CoreMedia)");
+        StringUtil::WriteLine( cmakeStr, "ADD_FRAMEWORK(CoreMotion)");
+        StringUtil::WriteLine( cmakeStr, "ADD_FRAMEWORK(Security)");
         
         // settings
-        writeLine( cmakeStr, "SET(FRAMEWORKS \"${FRAMEWORKS} -ObjC\")");
-        writeLine( cmakeStr, "SET(CMAKE_EXE_LINKER_FLAGS ${FRAMEWORKS})");
-        writeLine( cmakeStr, "SET(CMAKE_OSX_ARCHITECTURES \"${ARCHS_STANDARD}\")");
+        StringUtil::WriteLine( cmakeStr, "SET(FRAMEWORKS \"${FRAMEWORKS} -ObjC\")");
+        StringUtil::WriteLine( cmakeStr, "SET(CMAKE_EXE_LINKER_FLAGS ${FRAMEWORKS})");
+        StringUtil::WriteLine( cmakeStr, "SET(CMAKE_OSX_ARCHITECTURES \"${ARCHS_STANDARD}\")");
         
-        writeLine( cmakeStr, "ADD_EXECUTABLE(${MODULE_NAME} MACOSX_BUNDLE ${HEADER_FILES} ${SOURCE_FILES} ${IOS_RESOURCE_FILES} CMakeLists.txt)");
+        StringUtil::WriteLine( cmakeStr, "ADD_EXECUTABLE(${MODULE_NAME} MACOSX_BUNDLE ${HEADER_FILES} ${SOURCE_FILES} ${IOS_RESOURCE_FILES} CMakeLists.txt)");
         
         // link libraries
-        writeLine( cmakeStr, "TARGET_LINK_LIBRARIES(${MODULE_NAME} engine)");
-        writeLine( cmakeStr, "TARGET_LINK_LIBRARIES(${MODULE_NAME} pugixml physx spine recast lua freeimage freetype zlib box2d)");
-        writeLine( cmakeStr, "TARGET_LINK_LIBRARIES(${MODULE_NAME} Live2DCubismCore)");
-        writeLine( cmakeStr, "TARGET_LINK_LIBRARIES(${MODULE_NAME} glslang spirv-cross)");
+        StringUtil::WriteLine( cmakeStr, "TARGET_LINK_LIBRARIES(${MODULE_NAME} engine)");
+        StringUtil::WriteLine( cmakeStr, "TARGET_LINK_LIBRARIES(${MODULE_NAME} pugixml physx spine recast lua freeimage freetype zlib box2d)");
+        StringUtil::WriteLine( cmakeStr, "TARGET_LINK_LIBRARIES(${MODULE_NAME} Live2DCubismCore)");
+        StringUtil::WriteLine( cmakeStr, "TARGET_LINK_LIBRARIES(${MODULE_NAME} glslang spirv-cross)");
         
         // set target properties
-        writeLine( cmakeStr, "SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${MODULE_PATH}/Frame/Platform/iOS/Info.plist)");
-        writeLine( cmakeStr, "SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD \"c++14\")");
-        writeLine( cmakeStr, "SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY \"1,2\")");
-        writeLine( cmakeStr, "SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME \"AppIcon\")");
+        StringUtil::WriteLine( cmakeStr, "SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${MODULE_PATH}/Frame/Platform/iOS/Info.plist)");
+        StringUtil::WriteLine( cmakeStr, "SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD \"c++14\")");
+        StringUtil::WriteLine( cmakeStr, "SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY \"1,2\")");
+        StringUtil::WriteLine( cmakeStr, "SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME \"AppIcon\")");
 
 		// for archive https://stackoverflow.com/questions/10715211/cannot-generate-ios-app-archive-in-xcode
-		writeLine( cmakeStr, "SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES XCODE_ATTRIBUTE_SKIP_INSTALL  \"No\")");
-		writeLine( cmakeStr, "SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES XCODE_ATTRIBUTE_INSTALL_PATH  \"$(LOCAL_APPS_DIR)\")");
+        StringUtil::WriteLine( cmakeStr, "SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES XCODE_ATTRIBUTE_SKIP_INSTALL  \"No\")");
+        StringUtil::WriteLine( cmakeStr, "SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES XCODE_ATTRIBUTE_INSTALL_PATH  \"$(LOCAL_APPS_DIR)\")");
         
         // messages
-        writeLine( cmakeStr, "MESSAGE(STATUS \"Configure iOS App success!\")");
+        StringUtil::WriteLine( cmakeStr, "MESSAGE(STATUS \"Configure iOS App success!\")");
         
         // write to file
         String savePath = m_outputDir + "app/ios/CMakeLists.txt";
-        FileHandleDataStream stream(savePath, DataStream::WRITE);
-        if(!stream.fail())
-        {
-            stream.write(cmakeStr.data(), cmakeStr.size());
-            stream.close();
-        }
+        IO::instance()->saveStringToFile(savePath, cmakeStr);
     }
 
 	void iOSBuildSettings::writeModuleConfig()
@@ -590,32 +585,27 @@ namespace Echo
 		String  moduleSrc;
 
 		// include
-		writeLine(moduleSrc, "#include <engine/core/main/module.h>\n");
+        StringUtil::WriteLine(moduleSrc, "#include <engine/core/main/module.h>\n");
 
 		// namespace
-		writeLine(moduleSrc, "namespace Echo\n{");
-		writeLine(moduleSrc, "\tvoid registerModules()");
-		writeLine(moduleSrc, "\t{");
+        StringUtil::WriteLine(moduleSrc, "namespace Echo\n{");
+        StringUtil::WriteLine(moduleSrc, "\tvoid registerModules()");
+        StringUtil::WriteLine(moduleSrc, "\t{");
 		vector<Module*>::type* allModules = Module::getAllModules();
 		if (allModules)
 		{
 			for (Module* module : *allModules)
 			{
 				if (module->isEnable() && !module->isEditorOnly())
-					writeLine(moduleSrc, StringUtil::Format("\t\tREGISTER_MODULE(%s)", module->getClassName().c_str()));
+                    StringUtil::WriteLine(moduleSrc, StringUtil::Format("\t\tREGISTER_MODULE(%s)", module->getClassName().c_str()));
 			}
 		}
 
 		// end namespace
-		writeLine(moduleSrc, "\t}\n}\n");
+        StringUtil::WriteLine(moduleSrc, "\t}\n}\n");
 
 		// Write to file
 		String savePath = m_outputDir + "app/ios/frame/Config/ModuleConfig.cpp";
-		FileHandleDataStream stream(savePath, DataStream::WRITE);
-		if (!stream.fail())
-		{
-			stream.write(moduleSrc.data(), moduleSrc.size());
-			stream.close();
-		}
+        IO::instance()->saveStringToFile(savePath, moduleSrc);
 	}
 }

@@ -141,32 +141,27 @@ namespace Echo
 		String  moduleSrc;
 
 		// include
-		writeLine(moduleSrc, "#include <engine/core/main/module.h>\n");
+		StringUtil::WriteLine(moduleSrc, "#include <engine/core/main/module.h>\n");
 
 		// namespace
-		writeLine(moduleSrc, "namespace Echo\n{");
-		writeLine(moduleSrc, "\tvoid registerModules()");
-		writeLine(moduleSrc, "\t{");
+		StringUtil::WriteLine(moduleSrc, "namespace Echo\n{");
+		StringUtil::WriteLine(moduleSrc, "\tvoid registerModules()");
+		StringUtil::WriteLine(moduleSrc, "\t{");
 		vector<Module*>::type* allModules = Module::getAllModules();
 		if (allModules)
 		{
 			for (Module* module : *allModules)
 			{
 				if (module->isEnable() && !module->isEditorOnly())
-					writeLine(moduleSrc, StringUtil::Format("\t\tREGISTER_MODULE(%s)", module->getClassName().c_str()));
+					StringUtil::WriteLine(moduleSrc, StringUtil::Format("\t\tREGISTER_MODULE(%s)", module->getClassName().c_str()));
 			}
 		}
 
 		// end namespace
-		writeLine(moduleSrc, "\t}\n}\n");
+		StringUtil::WriteLine(moduleSrc, "\t}\n}\n");
 
 		// Write to file
 		String savePath = m_outputDir + "app/windows/Config/ModuleConfig.cpp";
-		FileHandleDataStream stream(savePath, DataStream::WRITE);
-		if (!stream.fail())
-		{
-			stream.write(moduleSrc.data(), moduleSrc.size());
-			stream.close();
-		}
+		IO::instance()->saveStringToFile(savePath, moduleSrc);
 	}
 }

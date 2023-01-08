@@ -265,33 +265,28 @@ namespace Echo
 		String  moduleSrc;
 
 		// include
-		writeLine(moduleSrc, "#include <engine/core/main/module.h>\n");
+		Echo::StringUtil::WriteLine(moduleSrc, "#include <engine/core/main/module.h>\n");
 
 		// namespace
-		writeLine(moduleSrc, "namespace Echo\n{");
-		writeLine(moduleSrc, "\tvoid registerModules()");
-		writeLine(moduleSrc, "\t{");
+		Echo::StringUtil::WriteLine(moduleSrc, "namespace Echo\n{");
+		Echo::StringUtil::WriteLine(moduleSrc, "\tvoid registerModules()");
+		Echo::StringUtil::WriteLine(moduleSrc, "\t{");
 		vector<Module*>::type* allModules = Module::getAllModules();
 		if (allModules)
 		{
 			for (Module* module : *allModules)
 			{
 				if (module->isEnable() && !module->isEditorOnly())
-					writeLine(moduleSrc, StringUtil::Format("\t\tREGISTER_MODULE(%s)", module->getClassName().c_str()));
+					Echo::StringUtil::WriteLine(moduleSrc, StringUtil::Format("\t\tREGISTER_MODULE(%s)", module->getClassName().c_str()));
 			}
 		}
 
 		// end namespace
-		writeLine(moduleSrc, "\t}\n}\n");
+		Echo::StringUtil::WriteLine(moduleSrc, "\t}\n}\n");
 
 		// Write to file
 		String savePath = m_outputDir + "app/android/app/src/main/cpp/echo/ModuleConfig.cpp";
-		FileHandleDataStream stream(savePath, DataStream::WRITE);
-		if (!stream.fail())
-		{
-			stream.write(moduleSrc.data(), moduleSrc.size());
-			stream.close();
-		}
+		IO::instance()->saveStringToFile(savePath, moduleSrc);
 	}
 
 	bool AndroidBuildSettings::rescaleIcon(const char* iFilePath, const char* oFilePath, ui32 targetWidth, ui32 targetHeight)

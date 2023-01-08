@@ -79,8 +79,8 @@ namespace Echo
 
 		bool			IsNumber(const String& val);
 		String			Hex2Char(Dword val);
-	};
 
-	int		sprintf_append	(char* s, const int maxByteSize, const char* const format, ...);
+		INLINE void		WriteLine(String& str, const String& line) { str += line + "\n"; }
+	};
 }
 
