@@ -5,6 +5,7 @@
 #include <QApplication>
 #include <QTextCodec>
 #include <QSettings>
+#include <QDesktopServices>
 #include <QTime>
 #include "Studio.h"
 #include "EchoEngine.h"
@@ -15,6 +16,7 @@
 #include "GameMainWindow.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/util/TimeProfiler.h>
+#include <engine/core/io/io.h>
 
 namespace Echo
 {
@@ -200,11 +202,16 @@ namespace Echo
 
 	bool VsGenMode::exec(int argc, char* argv[])
 	{
+		using namespace Echo;
+
 		Echo::String type = argv[1];
 		if (type == "vs")
 		{
 			Echo::String project = argv[2];
 			Echo::PathUtil::FormatPath(project);
+
+			Echo::String editor = argv[0];
+			Echo::PathUtil::FormatPath(editor);
 
 			Echo::String projectPath = Echo::PathUtil::GetFileDirPath(project);
 			Echo::String buildPath = projectPath + "Build/";
@@ -212,15 +219,20 @@ namespace Echo
 			Echo::String vsVersion = "-G\"Visual Studio 16 2019\" -A x64";
 			Echo::String batFile = buildPath + "cmake.bat";
 
-			writeCMakeBatFile(batFile.c_str());
+			Echo::String engineEditExePath = Echo::PathUtil::GetFileDirPath(editor);
+			Echo::String enginePath = PathUtil::GetParentPath(PathUtil::GetParentPath(PathUtil::GetParentPath(PathUtil::GetParentPath(engineEditExePath))));
+
+			writeCMakeBatFile(batFile.c_str(), enginePath.c_str());
 
 #ifdef ECHO_PLATFORM_WINDOWS
-			Echo::String app = QCoreApplication::applicationFilePath().toStdString().c_str();
-			Echo::String cmd = Echo::StringUtil::Format("cmake.exe %s %s", vsVersion.c_str());
+			Echo::String cmd = StringUtil::Format("%s", batFile.c_str());
 
 			QProcess process;
-			process.startDetached(cmd.c_str());
+			process.start("cmd.exe", QStringList() << "/c" << batFile.c_str());
+			process.waitForFinished();
 
+			Echo::String output(process.readAllStandardOutput());
+			printf(output.c_str());
 #endif
 
 			return true;
@@ -229,9 +241,20 @@ namespace Echo
 		return false;
 	}
 
-	void VsGenMode::writeCMakeBatFile(const char* batFile)
+	void VsGenMode::writeCMakeBatFile(const char* batFile, const char* enginePath)
 	{
+		using namespace Echo;
 
+		String batSrc;
+
+		StringUtil::WriteLine(batSrc, "echo off\n");
+
+		StringUtil::WriteLine(batSrc, ":: start in current directory ");
+		StringUtil::WriteLine(batSrc, "cd /D \"%~dp0\"\n");
+
+		StringUtil::WriteLine(batSrc, StringUtil::Format("call cmake.exe %s", enginePath).c_str());
+
+		IO::instance()->saveStringToFile(batFile, batSrc);
 	}
 
 	bool RegEditMode::exec(int argc, char* argv[])
@@ -253,5 +276,7 @@ namespace Echo
 		QSettings regGv("HKEY_CLASSES_ROOT\\.echo\\shell\\Generate Visual Studio Files\\command", QSettings::NativeFormat);
 		regGv.setValue("Default", (Echo::String(argv[0]) + " vs %1").c_str());
 #endif
+
+		return true;
 	}
 }
