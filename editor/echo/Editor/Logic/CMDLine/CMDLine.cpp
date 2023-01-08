@@ -252,7 +252,12 @@ namespace Echo
 		StringUtil::WriteLine(batSrc, ":: start in current directory ");
 		StringUtil::WriteLine(batSrc, "cd /D \"%~dp0\"\n");
 
-		StringUtil::WriteLine(batSrc, StringUtil::Format("call cmake.exe %s", enginePath).c_str());
+		//-DECHO_GAME=TRUE -DECHO_GAME_NAME=moon -DECHO_GAME_SOURCE=D:/github/myprojects/moon/Source
+		StringUtil::WriteLine(batSrc, StringUtil::Format("call cmake.exe %s\n", enginePath).c_str());
+
+		StringUtil::WriteLine(batSrc, ":: make link");
+		//StringUtil::WriteLine(batSrc, "cd /D \"%~dp0\"\n");
+		//StringUtil::WriteLine(batSrc, "if not exist ./../Moon.sln mklink ./../Moon.sln ./echo.sln");
 
 		IO::instance()->saveStringToFile(batFile, batSrc);
 	}
