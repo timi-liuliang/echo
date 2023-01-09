@@ -20,5 +20,5 @@ if not exist .\bin\app\win64\Debug\data mklink /D .\bin\app\win64\Debug\data ..\
 :: mklink sln
 if not exist .\echo.sln mklink .\echo.sln build\echo.sln
 
-:: dely close
+:: delay close
 timeout /t 10

@@ -18,6 +18,38 @@
 #include <engine/core/util/TimeProfiler.h>
 #include <engine/core/io/io.h>
 
+static const char* g_batchGotAdmin = R"(@echo off
+:: BatchGotAdmin
+:-------------------------------------
+REM  --> Check for permissions
+    IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" (
+>nul 2>&1 "%SYSTEMROOT%\SysWOW64\cacls.exe" "%SYSTEMROOT%\SysWOW64\config\system"
+) ELSE (
+>nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
+)
+
+REM --> If error flag set, we do not have admin.
+if '%errorlevel%' NEQ '0' (
+    echo Requesting administrative privileges...
+    goto UACPrompt
+) else ( goto gotAdmin )
+
+:UACPrompt
+    echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"
+    set params= %*
+    echo UAC.ShellExecute "cmd.exe", "/c ""%~s0"" %params:"=""%", "", "runas", 1 >> "%temp%\getadmin.vbs"
+
+    "%temp%\getadmin.vbs"
+    del "%temp%\getadmin.vbs"
+    exit /B
+
+:gotAdmin
+    pushd "%CD%"
+    CD /D "%~dp0"
+:--------------------------------------    
+
+)";
+
 namespace Echo
 {
 	Studio::AStudio* g_astudio = NULL;
@@ -214,6 +246,7 @@ namespace Echo
 			Echo::PathUtil::FormatPath(editor);
 
 			Echo::String projectPath = Echo::PathUtil::GetFileDirPath(project);
+			Echo::String projectName = Echo::PathUtil::GetPureFilename(project, false);
 			Echo::String buildPath = projectPath + "Build/";
 			Echo::String binaryPath = projectPath + "Bin/";
 			Echo::String vsVersion = "-G\"Visual Studio 16 2019\" -A x64";
@@ -222,7 +255,7 @@ namespace Echo
 			Echo::String engineEditExePath = Echo::PathUtil::GetFileDirPath(editor);
 			Echo::String enginePath = PathUtil::GetParentPath(PathUtil::GetParentPath(PathUtil::GetParentPath(PathUtil::GetParentPath(engineEditExePath))));
 
-			writeCMakeBatFile(batFile.c_str(), enginePath.c_str());
+			writeCMakeBatFile(projectName.c_str(), batFile.c_str(), enginePath.c_str());
 
 #ifdef ECHO_PLATFORM_WINDOWS
 			Echo::String cmd = StringUtil::Format("%s", batFile.c_str());
@@ -241,12 +274,13 @@ namespace Echo
 		return false;
 	}
 
-	void VsGenMode::writeCMakeBatFile(const char* batFile, const char* enginePath)
+	void VsGenMode::writeCMakeBatFile(const char* projectName, const char* batFile, const char* enginePath)
 	{
 		using namespace Echo;
 
 		String batSrc;
 
+		StringUtil::WriteLine(batSrc, g_batchGotAdmin);
 		StringUtil::WriteLine(batSrc, "echo off\n");
 
 		StringUtil::WriteLine(batSrc, ":: start in current directory ");
@@ -256,8 +290,12 @@ namespace Echo
 		StringUtil::WriteLine(batSrc, StringUtil::Format("call cmake.exe %s\n", enginePath).c_str());
 
 		StringUtil::WriteLine(batSrc, ":: make link");
-		//StringUtil::WriteLine(batSrc, "cd /D \"%~dp0\"\n");
-		//StringUtil::WriteLine(batSrc, "if not exist ./../Moon.sln mklink ./../Moon.sln ./echo.sln");
+		StringUtil::WriteLine(batSrc, "cd /D \"%~dp0\"");
+		StringUtil::WriteLine(batSrc, "cd ../\n");
+		StringUtil::WriteLine(batSrc, Echo::StringUtil::Format("if not exist .\\%s.sln mklink .\\%s.sln .\\Build\\echo.sln\n", projectName, projectName));
+
+		StringUtil::WriteLine(batSrc, ":: delay close");
+		StringUtil::WriteLine(batSrc, "timeout /t 10");
 
 		IO::instance()->saveStringToFile(batFile, batSrc);
 	}
