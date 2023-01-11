@@ -20,7 +20,7 @@ int main( int argc, char* argv[])
 	QApplication::setLibraryPaths(QStringList() << QApplication::libraryPaths() << QDir::currentPath().append("/plugins/Qt"));
 
 	// Regedit
-#ifdef ECHO_PLATFORM_WINDOWS
+#if defined(ECHO_PLATFORM_WINDOWS) && !defined(ECHO_GAME_SOURCE) 
 	QSettings regIcon("HKEY_CLASSES_ROOT\\.echo\\shell\\Generate Visual Studio Files", QSettings::NativeFormat);
 	Echo::String currentEdit = regIcon.value("Icon").toString().toStdString().c_str();
 	if (currentEdit != argv[0])

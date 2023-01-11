@@ -247,6 +247,7 @@ namespace Echo
 
 			Echo::String projectPath = Echo::PathUtil::GetFileDirPath(project);
 			Echo::String projectName = Echo::PathUtil::GetPureFilename(project, false);
+			Echo::String projectSrcPath = projectPath + "Source/";
 			Echo::String buildPath = projectPath + "Build/";
 			Echo::String binaryPath = projectPath + "Bin/";
 			Echo::String vsVersion = "-G\"Visual Studio 16 2019\" -A x64";
@@ -255,7 +256,7 @@ namespace Echo
 			Echo::String engineEditExePath = Echo::PathUtil::GetFileDirPath(editor);
 			Echo::String enginePath = PathUtil::GetParentPath(PathUtil::GetParentPath(PathUtil::GetParentPath(PathUtil::GetParentPath(engineEditExePath))));
 
-			writeCMakeBatFile(projectName.c_str(), batFile.c_str(), enginePath.c_str());
+			writeCMakeBatFile(projectName.c_str(), projectSrcPath.c_str(), batFile.c_str(), enginePath.c_str());
 
 #ifdef ECHO_PLATFORM_WINDOWS
 			Echo::String cmd = StringUtil::Format("%s", batFile.c_str());
@@ -274,7 +275,7 @@ namespace Echo
 		return false;
 	}
 
-	void VsGenMode::writeCMakeBatFile(const char* projectName, const char* batFile, const char* enginePath)
+	void VsGenMode::writeCMakeBatFile(const char* projectName, const char* projectSrcPath, const char* batFile, const char* enginePath)
 	{
 		using namespace Echo;
 
@@ -287,7 +288,7 @@ namespace Echo
 		StringUtil::WriteLine(batSrc, "cd /D \"%~dp0\"\n");
 
 		//-DECHO_GAME=TRUE -DECHO_GAME_NAME=moon -DECHO_GAME_SOURCE=D:/github/myprojects/moon/Source
-		StringUtil::WriteLine(batSrc, StringUtil::Format("call cmake.exe %s\n", enginePath).c_str());
+		StringUtil::WriteLine(batSrc, StringUtil::Format("call cmake.exe -DECHO_GAME_SOURCE=TRUE -DECHO_GAME_NAME=\"%s\" -DECHO_GAME_SOURCE_PATH=\"%s\" %s\n", projectName, projectSrcPath, enginePath).c_str());
 
 		StringUtil::WriteLine(batSrc, ":: make link");
 		StringUtil::WriteLine(batSrc, "cd /D \"%~dp0\"");
