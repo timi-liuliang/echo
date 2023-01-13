@@ -52,7 +52,7 @@ namespace Echo
 		bool exec(int argc, char* argv[]);
 
 		// Write cmake.bat
-		void writeCMakeBatFile(const char* projectName, const char* projectSrcPath, const char* batFile, const char* enginePath);
+		void writeCMakeBatFile(const char* projectName, const char* projectSrcPath, const char* batFile, const char* enginePath, const char* vsSolutionFile);
 	};
 
 	/**

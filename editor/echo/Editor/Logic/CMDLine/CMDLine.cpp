@@ -77,7 +77,7 @@ namespace Echo
 				RegEditMode regEditMode;
 				regEditMode.exec(argc, argv);
 			}
-			else if ( argc==2)
+			else if (sargv[0] == "open")
 			{
 				EditOpenMode openMode;
 				openMode.exec(argc, argv);
@@ -220,7 +220,7 @@ namespace Echo
 
 		TIME_PROFILE
 		(
-			Echo::String projectFile = argv[1];
+			Echo::String projectFile = argv[2];
 			Echo::PathUtil::FormatPath(projectFile, false);
 			g_astudio->getProjectWindow()->openProject( projectFile);
 		)
@@ -250,13 +250,14 @@ namespace Echo
 			Echo::String projectSrcPath = projectPath + "Source/";
 			Echo::String buildPath = projectPath + "Build/";
 			Echo::String binaryPath = projectPath + "Bin/";
-			Echo::String vsVersion = "-G\"Visual Studio 16 2019\" -A x64";
+			Echo::String vsVersion = "-G\"Visual Studio 17 2022\" -A x64";
 			Echo::String batFile = buildPath + "cmake.bat";
+			Echo::String vsSolutionFile = projectPath + projectName + ".sln";
 
 			Echo::String engineEditExePath = Echo::PathUtil::GetFileDirPath(editor);
 			Echo::String enginePath = PathUtil::GetParentPath(PathUtil::GetParentPath(PathUtil::GetParentPath(PathUtil::GetParentPath(engineEditExePath))));
 
-			writeCMakeBatFile(projectName.c_str(), projectSrcPath.c_str(), batFile.c_str(), enginePath.c_str());
+			writeCMakeBatFile(projectName.c_str(), projectSrcPath.c_str(), batFile.c_str(), enginePath.c_str(), vsSolutionFile.c_str());
 
 #ifdef ECHO_PLATFORM_WINDOWS
 			Echo::String cmd = StringUtil::Format("%s", batFile.c_str());
@@ -275,14 +276,13 @@ namespace Echo
 		return false;
 	}
 
-	void VsGenMode::writeCMakeBatFile(const char* projectName, const char* projectSrcPath, const char* batFile, const char* enginePath)
+	void VsGenMode::writeCMakeBatFile(const char* projectName, const char* projectSrcPath, const char* batFile, const char* enginePath, const char* vsSolutionFile)
 	{
 		using namespace Echo;
 
 		String batSrc;
 
 		StringUtil::WriteLine(batSrc, g_batchGotAdmin);
-		StringUtil::WriteLine(batSrc, "echo off\n");
 
 		StringUtil::WriteLine(batSrc, ":: start in current directory ");
 		StringUtil::WriteLine(batSrc, "cd /D \"%~dp0\"\n");

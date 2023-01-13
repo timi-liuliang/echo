@@ -11,6 +11,7 @@
 #include <shellapi.h>
 #endif
 #include <engine/core/base/echo_def.h>
+#include <app/game/game_config.h>
 
 int main( int argc, char* argv[])
 {
