@@ -50,6 +50,19 @@ if '%errorlevel%' NEQ '0' (
 
 )";
 
+static const char* g_runArguments = R"(<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LocalDebuggerCommandArguments>${Args}</LocalDebuggerCommandArguments>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LocalDebuggerCommandArguments>${Args}</LocalDebuggerCommandArguments>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
+</Project>
+)";
+
 namespace Echo
 {
 	Studio::AStudio* g_astudio = NULL;
@@ -268,6 +281,10 @@ namespace Echo
 
 			Echo::String output(process.readAllStandardOutput());
 			printf(output.c_str());
+
+			Echo::String userFilePath = buildPath + "editor/echo/echo.vcxproj.user";
+			Echo::String args = "open " + project;
+			writeVcxprojUser(userFilePath, args);
 #endif
 
 			return true;
@@ -299,6 +316,12 @@ namespace Echo
 		StringUtil::WriteLine(batSrc, "timeout /t 10");
 
 		IO::instance()->saveStringToFile(batFile, batSrc);
+	}
+
+	void VsGenMode::writeVcxprojUser(const Echo::String& userFilePath, const Echo::String& args)
+	{
+		Echo::String userSrc = Echo::StringUtil::Replace(g_runArguments, "${Args}", args.c_str());
+		IO::instance()->saveStringToFile(userFilePath, userSrc);
 	}
 
 	bool RegEditMode::exec(int argc, char* argv[])

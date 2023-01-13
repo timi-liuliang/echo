@@ -20,7 +20,7 @@ namespace Echo
 	class EditorMode
 	{
 	public:
-		// exec command
+		// Exec command
 		bool exec(int argc, char* argv[]);
 	};
 
@@ -38,7 +38,7 @@ namespace Echo
 	class GameMode
 	{
 	public:
-		// exec command
+		// Exec command
 		bool exec(int argc, char* argv[]);
 	};
 
@@ -48,11 +48,14 @@ namespace Echo
 	class VsGenMode
 	{
 	public:
-		// exec command
+		// Exec command
 		bool exec(int argc, char* argv[]);
 
 		// Write cmake.bat
 		void writeCMakeBatFile(const char* projectName, const char* projectSrcPath, const char* batFile, const char* enginePath, const char* vsSolutionFile);
+
+		// Write echo.vcxproj.user
+		void writeVcxprojUser(const Echo::String& userFilePath, const Echo::String& args);
 	};
 
 	/**
@@ -61,7 +64,7 @@ namespace Echo
 	class RegEditMode
 	{
 	public:
-		// exec command
+		// Exec command
 		bool exec(int argc, char* argv[]);
 	};
 }
