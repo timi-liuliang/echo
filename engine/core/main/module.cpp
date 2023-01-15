@@ -50,6 +50,10 @@ namespace Echo
 	{
 		registerModules();
 
+	#ifdef ECHO_GAME_SOURCE
+		registerGameModules();
+	#endif
+
 		if (g_modules)
 		{
 			for (Module* module : *g_modules)

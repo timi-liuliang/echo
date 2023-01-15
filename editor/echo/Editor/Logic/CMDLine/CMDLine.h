@@ -56,6 +56,9 @@ namespace Echo
 
 		// Write echo.vcxproj.user
 		void writeVcxprojUser(const Echo::String& userFilePath, const Echo::String& args);
+
+		// Write GameMain.cpp
+		void writeGameMain(const Echo::String& gameMainCppFilePath);
 	};
 
 	/**

@@ -63,6 +63,17 @@ static const char* g_runArguments = R"(<?xml version="1.0" encoding="utf-8"?>
 </Project>
 )";
 
+Echo::String g_gameMainSourceCode = R"(#include <engine/core/main/module.h>
+
+namespace Echo
+{
+	void registerGameModules()
+	{
+		// REGISTER_MODULE(YourGameModuleName)
+	}
+}
+)";
+
 namespace Echo
 {
 	Studio::AStudio* g_astudio = NULL;
@@ -285,6 +296,9 @@ namespace Echo
 			Echo::String userFilePath = buildPath + "editor/echo/echo.vcxproj.user";
 			Echo::String args = "open " + project;
 			writeVcxprojUser(userFilePath, args);
+
+			Echo::String gameMainCppFilePath = projectSrcPath + "GameMain.cpp";
+			writeGameMain(gameMainCppFilePath);
 #endif
 
 			return true;
@@ -322,6 +336,14 @@ namespace Echo
 	{
 		Echo::String userSrc = Echo::StringUtil::Replace(g_runArguments, "${Args}", args.c_str());
 		IO::instance()->saveStringToFile(userFilePath, userSrc);
+	}
+
+	void VsGenMode::writeGameMain(const Echo::String& gameMainCppFilePath)
+	{
+		if (!Echo::PathUtil::IsFileExist(gameMainCppFilePath))
+		{
+			IO::instance()->saveStringToFile(gameMainCppFilePath, g_gameMainSourceCode);
+		}
 	}
 
 	bool RegEditMode::exec(int argc, char* argv[])

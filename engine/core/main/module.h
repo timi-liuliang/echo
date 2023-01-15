@@ -7,6 +7,10 @@ namespace Echo
 	// implement by application or dll
 	void registerModules();
 
+#ifdef ECHO_GAME_SOURCE
+	void registerGameModules();
+#endif
+
 	class Module : public Object
 	{
 		ECHO_VIRTUAL_CLASS(Module, Object);
