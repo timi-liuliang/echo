@@ -312,6 +312,7 @@ IF(ECHO_EDITOR_MODE)
 
 	IF(ECHO_PLATFORM_WINDOWS)
 		IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
+			ADD_SUBDIRECTORY("tool")
 			ADD_SUBDIRECTORY("editor/echo")
 		ELSE()
 			MESSAGE(WARNING "Echo Editor only support x64 target on windows platform.")
