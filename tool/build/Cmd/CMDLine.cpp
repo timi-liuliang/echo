@@ -189,14 +189,19 @@ namespace Echo
 			return false;
 
 #ifdef ECHO_PLATFORM_WINDOWS
+		Echo::String buildToolFilePath = argv[0];
+		Echo::PathUtil::FormatPath(buildToolFilePath);
+
+		Echo::String editorFilePath = Echo::PathUtil::GetFileDirPath(buildToolFilePath) + "Echo.exe";
+
 		QSettings regOpenIcon("HKEY_CLASSES_ROOT\\.echo\\shell\\Open", QSettings::NativeFormat);
-		regOpenIcon.setValue("Icon", Echo::StringUtil::Format("%s", argv[0]).c_str());
+		regOpenIcon.setValue("Icon", editorFilePath.c_str());
 
 		QSettings regOpen("HKEY_CLASSES_ROOT\\.echo\\shell\\Open\\command", QSettings::NativeFormat);
-		regOpen.setValue("Default", (Echo::String(argv[0]) + " open %1").c_str());
+		regOpen.setValue("Default", (editorFilePath + " open %1").c_str());
 
 		QSettings regIcon("HKEY_CLASSES_ROOT\\.echo\\shell\\Generate Visual Studio Files", QSettings::NativeFormat);
-		regIcon.setValue("Icon", Echo::StringUtil::Format("%s", argv[0]).c_str());
+		regIcon.setValue("Icon", editorFilePath.c_str());
 
 		QSettings regGv("HKEY_CLASSES_ROOT\\.echo\\shell\\Generate Visual Studio Files\\command", QSettings::NativeFormat);
 		regGv.setValue("Default", (Echo::String(argv[0]) + " vs %1").c_str());

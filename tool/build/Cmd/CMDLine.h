@@ -15,34 +15,6 @@ namespace Echo
 	};
 
 	/**
-	 * EditorMode
-	 */
-	class EditorMode
-	{
-	public:
-		// Exec command
-		bool exec(int argc, char* argv[]);
-	};
-
-	// EditOpen
-	class EditOpenMode
-	{
-	public:
-		// exec command
-		bool exec(int argc, char* argv[]);
-	};
-
-	/**
-	 * GameMode
-	 */
-	class GameMode
-	{
-	public:
-		// Exec command
-		bool exec(int argc, char* argv[]);
-	};
-
-	/**
 	 * Generate Visual Studio project files
 	 */
 	class VsGenMode
