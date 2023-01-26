@@ -180,29 +180,25 @@ namespace Echo
 	{
 		if (PathUtil::IsFileExist(m_config.m_projectFile))
 		{
-			String projectFile;
-			if (IO::instance()->convertFullPathToResPath(m_config.m_projectFile, projectFile))
+			MemoryReader reader(m_config.m_projectFile);
+			if (reader.getSize())
 			{
-				MemoryReader reader(projectFile);
-				if (reader.getSize())
+				pugi::xml_document doc;
+				if (doc.load_buffer(reader.getData<char*>(), reader.getSize()))
 				{
-					pugi::xml_document doc;
-					if (doc.load_buffer(reader.getData<char*>(), reader.getSize()))
+					pugi::xml_node root = doc.child("settings");
+					if (root)
 					{
-						pugi::xml_node root = doc.child("settings");
-						if (root)
+						Echo::StringArray classes;
+						Echo::Class::getAllClasses(classes);
+						for (Echo::String& className : classes)
 						{
-							Echo::StringArray classes;
-							Echo::Class::getAllClasses(classes);
-							for (Echo::String& className : classes)
+							if (Echo::Class::isSingleton(className))
 							{
-								if (Echo::Class::isSingleton(className))
+								pugi::xml_node classNode = root.child(className.c_str());
+								if (classNode)
 								{
-									pugi::xml_node classNode = root.child(className.c_str());
-									if (classNode)
-									{
-										Echo::Object::instanceObject(&classNode);
-									}
+									Echo::Object::instanceObject(&classNode);
 								}
 							}
 						}
