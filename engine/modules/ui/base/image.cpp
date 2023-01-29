@@ -112,11 +112,11 @@ namespace Echo
             m_material->setShaderPath(defaultShader);
         }
 
-        if (!m_textureRes.getPath().empty() && m_material && m_material->isUniformExist("SrcTexture"))
-            m_material->setUniformTexture("SrcTexture", m_textureRes.getPath());
+        if (!m_textureRes.getPath().empty() && m_material && m_material->isUniformExist("BaseTexture"))
+            m_material->setUniformTexture("BaseTexture", m_textureRes.getPath());
 
-        if (m_material && m_material->isUniformExist("SrcColor"))
-            m_material->setUniformValue("SrcColor", &m_color);
+        if (m_material && m_material->isUniformExist("BaseColor"))
+            m_material->setUniformValue("BaseColor", &m_color);
             
         // Mesh
         Ui::VertexArray vertices;

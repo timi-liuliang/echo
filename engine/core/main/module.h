@@ -21,6 +21,9 @@ namespace Echo
 		void setName(const String& name) { m_name = name; }
 		const String& getName() const { return m_name; }
 
+		// Res path
+		virtual const String& getResPath();
+
         // register all types of this module
 		virtual void registerTypes() {}
 

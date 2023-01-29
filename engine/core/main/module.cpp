@@ -1,6 +1,7 @@
 #include "module.h"
 #include "engine/core/base/object.h"
 #include "engine/core/memory/MemAllocDef.h"
+#include "engine/core/io/io.h"
 
 namespace Echo
 {
@@ -13,6 +14,11 @@ namespace Echo
 		CLASS_BIND_METHOD(Module, isEnable);
 
 		CLASS_REGISTER_PROPERTY(Module, "Enable", Variant::Type::Bool, isEnable, setEnable);
+	}
+
+	const String& Module::getResPath()
+	{
+		return StringUtil::BLANK;
 	}
 
 	vector<Module*>::type* Module::getAllModules()
@@ -60,6 +66,8 @@ namespace Echo
 			{
 				g_currentModule = module;
 				module->registerTypes();
+
+				IO::instance()->addModuleResPath(module->getName(), module->getResPath());
 			}
 		}
 	}

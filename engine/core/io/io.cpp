@@ -41,6 +41,17 @@ namespace Echo
         return m_engineFileSystem.getPath();
     }
 
+    void IO::addModuleResPath(const String& moduleName, const String& moduleResPath)
+    {
+        if (PathUtil::IsDirExist(moduleResPath))
+        {
+            FileSystem moduleFileSystem;
+            moduleFileSystem.setPath("Module://" + moduleName + "/", moduleResPath);
+
+            m_moduleFileSystems.emplace_back(moduleFileSystem);
+        }
+    }
+
 	void IO::setResPath(const String& resPath)
 	{
 		m_resFileSystem.setPath(resPath, "Res://");

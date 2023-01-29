@@ -20,13 +20,16 @@ namespace Echo
 		// get instance
 		static IO* instance();
 
-		// Engine path
-		void setEngineResPath(const String& enginePath);
-		const String& getEngineResPath();
-
 		// Res path
 		void setResPath(const String& resPath);
 		const String& getResPath();
+
+		// Engine res path
+		void setEngineResPath(const String& enginePath);
+		const String& getEngineResPath();
+
+		// Module res path
+		void addModuleResPath(const String& moduleName, const String& moduleResPath);
 
 		// User path
 		void setUserPath(const String& userPath);
@@ -56,6 +59,7 @@ namespace Echo
 	protected:
 		EE_MUTEX					(m_mutex);
 		FileSystem					m_engineFileSystem;				// ("Engine://")
+		vector<FileSystem>::type	m_moduleFileSystems;			// ("Module://")
 		FileSystem					m_resFileSystem;				// ("Res://")
         vector<FilePackage*>::type  m_resFilePackages;
 		FileSystem					m_userFileSystem;				// ("User://")
