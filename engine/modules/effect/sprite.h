@@ -35,6 +35,10 @@ namespace Echo
 		Sprite();
 		virtual ~Sprite();
 
+		// Texture res path
+		void setTextureRes(const ResourcePath& path);
+		const ResourcePath& getTextureRes() { return m_textureRes; }
+
 		// type
 		StringOption getBillboardType();
 		void setBillobardType(const StringOption& type);
@@ -71,6 +75,7 @@ namespace Echo
 	private:
 		bool                    m_isRenderableDirty = true;
 		BillboardType			m_billboardType = BillboardType::None;
+		ResourcePath            m_textureRes = ResourcePath("", ".png");
 		float					m_width = 64.f;
 		float					m_height = 64.f;
 		Vector2					m_offset = Vector2::ZERO;

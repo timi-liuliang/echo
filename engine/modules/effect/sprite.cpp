@@ -29,6 +29,8 @@ namespace Echo
 		CLASS_BIND_METHOD(Sprite, setHeight);
 		CLASS_BIND_METHOD(Sprite, getOffset);
 		CLASS_BIND_METHOD(Sprite, setOffset);
+		CLASS_BIND_METHOD(Sprite, getTextureRes);
+		CLASS_BIND_METHOD(Sprite, setTextureRes);
 		CLASS_BIND_METHOD(Sprite, getMaterial);
 		CLASS_BIND_METHOD(Sprite, setMaterial);
 
@@ -36,8 +38,25 @@ namespace Echo
 		CLASS_REGISTER_PROPERTY(Sprite, "Width", Variant::Type::Real, getWidth, setWidth);
 		CLASS_REGISTER_PROPERTY(Sprite, "Height", Variant::Type::Real, getHeight, setHeight);
 		CLASS_REGISTER_PROPERTY(Sprite, "Offset", Variant::Type::Vector2, getOffset, setOffset);
+		CLASS_REGISTER_PROPERTY(Sprite, "Texture", Variant::Type::ResourcePath, getTextureRes, setTextureRes);
 		CLASS_REGISTER_PROPERTY(Sprite, "Material", Variant::Type::Object, getMaterial, setMaterial);
 		CLASS_REGISTER_PROPERTY_HINT(Sprite, "Material", PropertyHintType::ObjectType, "Material");
+	}
+
+	void Sprite::setTextureRes(const ResourcePath& path)
+	{
+		if (m_textureRes.setPath(path.getPath()))
+		{
+			if (m_material)
+			{
+				if (!m_textureRes.getPath().empty() && m_material && m_material->isUniformExist("BaseColor"))
+					m_material->setUniformTexture("BaseColor", m_textureRes.getPath());
+			}
+			else
+			{
+				m_isRenderableDirty = true;
+			}
+		}
 	}
 
 	StringOption Sprite::getBillboardType()
@@ -94,10 +113,14 @@ namespace Echo
 				m_material->setShaderPath(m_shaderDefault->getPath());
 			}
 
-			// mesh
+			// Default texture
+			if (!m_textureRes.getPath().empty() && m_material && m_material->isUniformExist("BaseColor"))
+				m_material->setUniformTexture("BaseColor", m_textureRes.getPath());
+
+			// Mesh
 			updateMeshBuffer();
 
-			// create render able
+			// Create render able
 			m_renderable = RenderProxy::create(m_mesh, m_material, this, false);
 
 			m_isRenderableDirty = false;
