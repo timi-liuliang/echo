@@ -18,7 +18,7 @@
 
 namespace Echo
 {
-	DECLARE_MODULE(Box2DModule)
+	DECLARE_MODULE(Box2DModule, __FILE__)
 
 	Box2DModule::Box2DModule()
         : m_drawDebugOption("Editor", {"None","Editor","Game","All"})

@@ -6,7 +6,7 @@
 
 namespace Echo
 {
-	DECLARE_MODULE(NetModule)
+	DECLARE_MODULE(NetModule, __FILE__)
 
 	NetModule::NetModule()
 	{

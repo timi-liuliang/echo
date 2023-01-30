@@ -8,7 +8,7 @@
 
 namespace Echo
 {
-	DECLARE_MODULE(RecastModule)
+	DECLARE_MODULE(RecastModule, __FILE__)
 
 	RecastModule::RecastModule()
 	{

@@ -8,7 +8,7 @@
 
 namespace Echo
 {
-	DECLARE_MODULE(EffectModule)
+	DECLARE_MODULE(EffectModule, __FILE__)
 
 	EffectModule::EffectModule()
 	{

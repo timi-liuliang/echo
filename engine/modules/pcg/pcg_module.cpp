@@ -9,7 +9,7 @@
 
 namespace Echo
 {
-	DECLARE_MODULE(PCGModule)
+	DECLARE_MODULE(PCGModule, __FILE__)
 
 	PCGModule::PCGModule()
 	{

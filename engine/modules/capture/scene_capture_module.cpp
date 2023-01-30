@@ -3,7 +3,7 @@
 
 namespace Echo
 {
-	DECLARE_MODULE(SceneCaptureModule)
+	DECLARE_MODULE(SceneCaptureModule, __FILE__)
 
 	SceneCaptureModule::SceneCaptureModule()
 	{

@@ -2,7 +2,7 @@
 
 namespace Echo
 {
-	DECLARE_MODULE(HLodModule)
+	DECLARE_MODULE(HLodModule, __FILE__)
 
     HLodModule::HLodModule()
 	{

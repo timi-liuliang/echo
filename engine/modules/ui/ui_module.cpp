@@ -20,7 +20,7 @@
 
 namespace Echo
 {
-	DECLARE_MODULE(UiModule)
+	DECLARE_MODULE(UiModule, __FILE__)
 
 	UiModule::UiModule()
 	{

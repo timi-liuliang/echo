@@ -7,7 +7,7 @@
 
 namespace Echo
 {
-	DECLARE_MODULE(TFLiteModule)
+	DECLARE_MODULE(TFLiteModule, __FILE__)
 
 	TFLiteModule::TFLiteModule()
 	{

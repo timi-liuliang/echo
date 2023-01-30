@@ -4,7 +4,7 @@
 
 namespace Echo
 {
-	DECLARE_MODULE(GltfModule)
+	DECLARE_MODULE(GltfModule, __FILE__)
 
 	GltfModule::GltfModule()
 	{

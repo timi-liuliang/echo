@@ -4,7 +4,7 @@
 
 namespace Echo
 {
-	DECLARE_MODULE(AnimModule)
+	DECLARE_MODULE(AnimModule, __FILE__)
 
 	AnimModule::AnimModule()
 	{

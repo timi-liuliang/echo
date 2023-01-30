@@ -5,7 +5,7 @@
 
 namespace Echo
 {
-	DECLARE_MODULE(Live2DModule)
+	DECLARE_MODULE(Live2DModule, __FILE__)
 
 	// log function for cubism
 	static void log_cb(const char* message)

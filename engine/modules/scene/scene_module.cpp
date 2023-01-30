@@ -6,7 +6,7 @@
 
 namespace Echo
 {
-	DECLARE_MODULE(SceneModule)
+	DECLARE_MODULE(SceneModule, __FILE__)
 
     SceneModule::SceneModule()
     {

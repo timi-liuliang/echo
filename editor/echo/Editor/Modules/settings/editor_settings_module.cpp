@@ -6,7 +6,7 @@
 
 namespace Echo
 {
-	DECLARE_MODULE(EditorSettingsModule)
+	DECLARE_MODULE(EditorSettingsModule, __FILE__)
 
 	EditorSettingsModule::EditorSettingsModule()
     {

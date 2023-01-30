@@ -10,7 +10,7 @@
 
 namespace Echo
 {
-	DECLARE_MODULE(SplineModule)
+	DECLARE_MODULE(SplineModule, __FILE__)
 
 	SplineModule::SplineModule()
 	{

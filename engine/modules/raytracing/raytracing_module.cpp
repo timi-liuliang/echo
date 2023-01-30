@@ -5,7 +5,7 @@
 
 namespace Echo
 {
-	DECLARE_MODULE(RaytracingModule)
+	DECLARE_MODULE(RaytracingModule, __FILE__)
 
 	RaytracingModule::RaytracingModule()
 	{

@@ -6,7 +6,7 @@
 
 namespace Echo
 {
-	DECLARE_MODULE(CameraModule)
+	DECLARE_MODULE(CameraModule, __FILE__)
 
 	CameraModule::CameraModule()
 	{

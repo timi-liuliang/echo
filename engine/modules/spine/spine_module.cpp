@@ -3,7 +3,7 @@
 
 namespace Echo
 {
-	DECLARE_MODULE(SpineModule)
+	DECLARE_MODULE(SpineModule, __FILE__)
 
 	SpineModule::SpineModule()
 	{

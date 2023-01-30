@@ -4,7 +4,7 @@
 
 namespace Echo
 {
-	DECLARE_MODULE(HitProxyModule)
+	DECLARE_MODULE(HitProxyModule, __FILE__)
 
     HitProxyModule::HitProxyModule()
 	{

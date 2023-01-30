@@ -7,7 +7,7 @@
 
 namespace Echo
 {
-	DECLARE_MODULE(ModelModule)
+	DECLARE_MODULE(ModelModule, __FILE__)
 
 	ModelModule::ModelModule()
 	{

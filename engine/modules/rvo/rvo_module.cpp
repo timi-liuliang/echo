@@ -5,7 +5,7 @@
 
 namespace Echo
 {
-	DECLARE_MODULE(RvoModule)
+	DECLARE_MODULE(RvoModule, __FILE__)
 
 	RvoModule::RvoModule()
 	{

@@ -6,7 +6,7 @@
 
 namespace Echo
 {
-	DECLARE_MODULE(OpenDriveModule)
+	DECLARE_MODULE(OpenDriveModule, __FILE__)
 
 	OpenDriveModule::OpenDriveModule()
 	{

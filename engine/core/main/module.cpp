@@ -18,7 +18,7 @@ namespace Echo
 
 	const String& Module::getResPath()
 	{
-		return StringUtil::BLANK;
+		return m_resPath;
 	}
 
 	vector<Module*>::type* Module::getAllModules()

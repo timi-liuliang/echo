@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/core/base/object.h"
+#include "engine/core/util/PathUtil.h"
 
 namespace Echo
 {
@@ -22,7 +23,8 @@ namespace Echo
 		const String& getName() const { return m_name; }
 
 		// Res path
-		virtual const String& getResPath();
+		const String& getResPath();
+		void setResPath(const String& resPath) { m_resPath = resPath; }
 
         // register all types of this module
 		virtual void registerTypes() {}
@@ -42,7 +44,7 @@ namespace Echo
 		static vector<Module*>::type* getAllModules();
 
         // add module by type
-        template<typename T> static void addModule(const char* name);
+        template<typename T> static void addModule(const char* name, const char* moduleFile);
         
         // add module
 		static void addModule(Module* module);
@@ -61,25 +63,31 @@ namespace Echo
 
 	protected:
 		String			m_name;
+		String			m_resPath;
 		bool			m_isEnable = true;
 	};
     
     // add module by type
-    template<typename T> void Module::addModule(const char* name)
+    template<typename T> void Module::addModule(const char* name, const char* moduleFile)
     {
 		Class::registerType<T>();
 
 		Echo::Module* module = ECHO_DOWN_CAST<Module*>(Echo::Class::create(name));
         module->setName(name);
+
+		String resPath = moduleFile;
+		PathUtil::FormatPath(resPath);
+		resPath = PathUtil::GetFileDirPath(resPath) + "res/";
+		module->setResPath(resPath);
         
         Echo::Module::addModule(module);
     }
 }
 
-#define DECLARE_MODULE(T) \
+#define DECLARE_MODULE(T, F) \
 void LoadModule_##T() \
 { \
-	Echo::Module::addModule<T>(#T); \
+	Echo::Module::addModule<T>(#T, F); \
 }
 
 #define REGISTER_MODULE(T) \

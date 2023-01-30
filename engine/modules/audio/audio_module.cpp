@@ -7,7 +7,7 @@
 
 namespace Echo
 {
-	DECLARE_MODULE(AudioModule)
+	DECLARE_MODULE(AudioModule, __FILE__)
 
 	AudioModule::AudioModule()
 	{

@@ -9,7 +9,7 @@
 
 namespace Echo
 {
-	DECLARE_MODULE(BuildModule)
+	DECLARE_MODULE(BuildModule, __FILE__)
 
     BuildModule::BuildModule()
     {

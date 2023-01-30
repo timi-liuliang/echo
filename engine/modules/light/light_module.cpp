@@ -20,7 +20,7 @@
 
 namespace Echo
 {
-	DECLARE_MODULE(LightModule)
+	DECLARE_MODULE(LightModule, __FILE__)
 
 	LightModule::LightModule()
 	{

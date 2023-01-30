@@ -4,7 +4,7 @@
 
 namespace Echo
 {
-	DECLARE_MODULE(OpenLabelModule)
+	DECLARE_MODULE(OpenLabelModule, __FILE__)
 
 	OpenLabelModule::OpenLabelModule()
 	{

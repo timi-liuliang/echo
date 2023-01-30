@@ -33,7 +33,7 @@
 
 namespace Echo
 {
-	DECLARE_MODULE(PhysxModule)
+	DECLARE_MODULE(PhysxModule, __FILE__)
 
 	PhysxModule::PhysxModule()
 	{

@@ -10,7 +10,7 @@
 
 namespace Echo
 {
-	DECLARE_MODULE(AIModule)
+	DECLARE_MODULE(AIModule, __FILE__)
 
 	AIModule::AIModule()
 	{

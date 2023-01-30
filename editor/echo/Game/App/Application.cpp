@@ -6,7 +6,7 @@
 
 namespace Echo
 {
-	DECLARE_MODULE(Application)
+	DECLARE_MODULE(Application, __FILE__)
 
 	Application::Application()
 		: m_log(nullptr)
