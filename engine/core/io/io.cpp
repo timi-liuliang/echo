@@ -46,7 +46,7 @@ namespace Echo
         if (PathUtil::IsDirExist(moduleResPath))
         {
             FileSystem moduleFileSystem;
-            moduleFileSystem.setPath("Module://" + moduleName + "/", moduleResPath);
+            moduleFileSystem.setPath(moduleResPath, "Module://" + moduleName + "/");
 
             m_moduleFileSystems.emplace_back(moduleFileSystem);
         }
@@ -109,6 +109,14 @@ namespace Echo
         {
             return m_engineFileSystem.open(resourceName, accessMode);
         }
+        else if (StringUtil::StartWith(resourceName, "Module://"))
+        {
+            for (FileSystem& moduleFileSystem : m_moduleFileSystems)
+            {
+                if(StringUtil::StartWith(resourceName, moduleFileSystem.getPrefix()))
+                    return moduleFileSystem.open(resourceName);
+            }
+        }
 		else
         {
             return m_externalFileSystem.open(resourceName, accessMode);
@@ -163,6 +171,14 @@ namespace Echo
         {
             return m_engineFileSystem.getFullPath(filename);
         }
+        else if (StringUtil::StartWith(filename, "Module://"))
+        {
+            for (FileSystem& moduleFileSystem : m_moduleFileSystems)
+            {
+                if (StringUtil::StartWith(filename, moduleFileSystem.getPrefix()))
+                    return moduleFileSystem.getFullPath(filename);
+            }
+        }
 
 		EchoLogError("getFileLocation [%s] failed", filename.c_str());
 
@@ -190,6 +206,16 @@ namespace Echo
         {
             resPath = result;
             return true;
+        }
+
+        for (FileSystem& moduleFileSystem : m_moduleFileSystems)
+        {
+            result = StringUtil::Replace(fullPath, moduleFileSystem.getPath(), moduleFileSystem.getPrefix());
+            if (StringUtil::StartWith(result, "Module://"))
+            {
+                resPath = result;
+                return true;
+            }
         }
 		
 		return false;

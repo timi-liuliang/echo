@@ -73,12 +73,14 @@ namespace Echo
 		Class::registerType<T>();
 
 		Echo::Module* module = ECHO_DOWN_CAST<Module*>(Echo::Class::create(name));
-        module->setName(name);
 
 		String resPath = moduleFile;
 		PathUtil::FormatPath(resPath);
-		resPath = PathUtil::GetFileDirPath(resPath) + "res/";
-		module->setResPath(resPath);
+		resPath = PathUtil::GetFileDirPath(resPath);
+		String lastPathName = PathUtil::GetLastDirName(resPath);
+
+		module->setName(lastPathName);
+		module->setResPath(resPath + "res/");
         
         Echo::Module::addModule(module);
     }

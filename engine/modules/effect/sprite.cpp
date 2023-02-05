@@ -10,7 +10,6 @@ namespace Echo
 	Sprite::Sprite()
         : Render()
 	{
-		m_shaderDefault = ShaderProgram::getDefault2D(StringArray());
 	}
 
 	Sprite::~Sprite()
@@ -49,8 +48,8 @@ namespace Echo
 		{
 			if (m_material)
 			{
-				if (!m_textureRes.getPath().empty() && m_material && m_material->isUniformExist("BaseColor"))
-					m_material->setUniformTexture("BaseColor", m_textureRes.getPath());
+				if (!m_textureRes.getPath().empty() && m_material && m_material->isUniformExist("BaseTexture"))
+					m_material->setUniformTexture("BaseTexture", m_textureRes.getPath());
 			}
 			else
 			{
@@ -110,12 +109,12 @@ namespace Echo
 			if (!m_material)
 			{
 				m_material = ECHO_CREATE_RES(Material);
-				m_material->setShaderPath(m_shaderDefault->getPath());
+				m_material->setShaderPath(m_transparentShader);
 			}
 
 			// Default texture
-			if (!m_textureRes.getPath().empty() && m_material && m_material->isUniformExist("BaseColor"))
-				m_material->setUniformTexture("BaseColor", m_textureRes.getPath());
+			if (!m_textureRes.getPath().empty() && m_material && m_material->isUniformExist("BaseTexture"))
+				m_material->setUniformTexture("BaseTexture", m_textureRes.getPath());
 
 			// Mesh
 			updateMeshBuffer();
