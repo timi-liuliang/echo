@@ -87,7 +87,7 @@ namespace Studio
 		return true;
 	}
 
-	void AStudio::Start()
+	void AStudio::start()
 	{
 		initLogSystem();
 
@@ -99,7 +99,7 @@ namespace Studio
 		Echo::Log::instance()->addOutput(m_logPanel);
 	}
 
-	void AStudio::Close()
+	void AStudio::close()
 	{
 
 	}
@@ -159,7 +159,7 @@ namespace Studio
 		return m_projectWindow;
 	}
 
-	void AStudio::OpenProject(const char* fileName)
+	void AStudio::openProject(const char* fileName)
 	{
 		// remember it
 		m_projectCfg->addRecentProject(fileName);

@@ -564,7 +564,7 @@ namespace Studio
 
 	void MainWindow::OpenProject(const char* projectName)
 	{
-		AStudio::instance()->OpenProject(projectName);
+		AStudio::instance()->openProject(projectName);
 
 		// init render window
 		AStudio::instance()->getRenderWindow();

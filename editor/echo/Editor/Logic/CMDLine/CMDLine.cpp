@@ -92,7 +92,7 @@ namespace Echo
 
 		TIME_PROFILE
 		(
-			g_astudio->Start();
+			g_astudio->start();
 		)
 
 		TIME_PROFILE
@@ -164,23 +164,20 @@ namespace Echo
 		TIME_PROFILE
 		(
 			g_astudio = Studio::AStudio::instance();
-		)
-
-		TIME_PROFILE
-		(
 			g_astudio->getConfigMgr()->loadCfgFile();
+			g_astudio->start();
 		)
 
 		TIME_PROFILE
 		(
-			g_astudio->Start();
-		)
-
-		TIME_PROFILE
-		(
-			Echo::String projectFile = argv[2];
-			Echo::PathUtil::FormatPath(projectFile, false);
-			g_astudio->getProjectWindow()->openProject( projectFile);
+			// How to execute initialization method after QApplication::exec has been called?
+			// https://forum.qt.io/topic/92873/how-to-execute-initialization-method-after-qapplication-exec-has-been-called
+			QTimer::singleShot(1000, [&]()
+			{
+				Echo::String projectFile = argv[2];
+				Echo::PathUtil::FormatPath(projectFile, false);
+				g_astudio->getProjectWindow()->openProject(projectFile);
+			});
 		)
 
 		app.exec();

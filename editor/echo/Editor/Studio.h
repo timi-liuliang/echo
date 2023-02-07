@@ -24,8 +24,8 @@ namespace Studio
 		static AStudio* instance();
 
 		// start|close
-		void Start();
-		void Close();
+		void start();
+		void close();
 
 		// config manager
 		EditorConfig* getConfigMgr() { return m_projectCfg; }
@@ -46,9 +46,8 @@ namespace Studio
 		// log panel
 		LogPanel* getLogPanel() { return m_logPanel; }
 
-
 		// open project
-		void OpenProject( const char* fileName);
+		void openProject( const char* fileName);
 
 	public:
 		// show bottom panel

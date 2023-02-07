@@ -105,7 +105,7 @@ namespace Studio
 			{
 				// 5.open project
 				AStudio::instance()->getMainWindow()->showMaximized();
-				AStudio::instance()->OpenProject(newProjectPathName.c_str());
+				AStudio::instance()->openProject(newProjectPathName.c_str());
 				AStudio::instance()->getRenderWindow();
 
 				close();
@@ -178,7 +178,7 @@ namespace Studio
 	void ProjectWnd::openProject(const Echo::String& projectFile)
 	{
 		AStudio::instance()->getMainWindow()->showMaximized();
-		AStudio::instance()->OpenProject(projectFile.c_str());
+		AStudio::instance()->openProject(projectFile.c_str());
 		AStudio::instance()->getRenderWindow();
 
 		close();
@@ -189,11 +189,7 @@ namespace Studio
 		Echo::String projectName = name.toStdString().c_str();
 		if (Echo::PathUtil::IsFileExist(projectName))
 		{
-			AStudio::instance()->getMainWindow()->showMaximized();
-			AStudio::instance()->OpenProject(name.toStdString().c_str());
-			AStudio::instance()->getRenderWindow();
-
-			close();
+			openProject(projectName);
 		}
 		else
 		{
