@@ -49,6 +49,21 @@ namespace Echo
 		m_renderType.setValue(type.getValue());
 	}
 
+	bool Render::isRenderType3D()
+	{
+		return m_renderType.getIdx() == 1;
+	}
+
+	bool Render::isRenderType2D()
+	{
+		return m_renderType.getIdx() == 0;
+	}
+
+	bool Render::isRenderTypeUi()
+	{
+		return m_renderType.getIdx() == 2;
+	}
+
 	Camera* Render::getCamera()
 	{
 		Camera* camera = m_renderType.getIdx() == 0 ? NodeTree::instance()->get2dCamera() : (m_renderType.getIdx() == 1 ? NodeTree::instance()->get3dCamera() : NodeTree::instance()->getUiCamera());

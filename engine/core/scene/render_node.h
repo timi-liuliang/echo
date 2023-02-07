@@ -32,6 +32,11 @@ namespace Echo
 		const StringOption& getRenderType() { return m_renderType; }
 		void setRenderType(const StringOption& type);
 
+		// Is render type
+		bool isRenderType3D();
+		bool isRenderType2D();
+		bool isRenderTypeUi();
+
 		// visible
 		void setVisible(bool isVisible) { m_isVisible = isVisible; }
 		bool isVisible() const { return m_isVisible; }

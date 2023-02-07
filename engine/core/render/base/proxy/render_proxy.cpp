@@ -54,7 +54,14 @@ namespace Echo
 	{
 		if (m_mesh && m_mesh->isValid())
 		{
-			pipeline->addRenderable(m_material->getRenderStage(), getId());
+			if (m_node->isRenderTypeUi())
+			{
+				pipeline->addRenderable("Ui", getId());
+			}
+			else
+			{
+				pipeline->addRenderable(m_material->getRenderStage(), getId());
+			}
 		}
 	}
 }
