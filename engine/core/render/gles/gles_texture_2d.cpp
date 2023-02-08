@@ -154,4 +154,14 @@ namespace Echo
 
 		return true;
 	}
+
+	void GLESTexture2D::onLostDevice()
+	{	
+		const String path = getPath();
+		if (IO::instance()->isExist(path))
+		{
+			unload();
+			load();
+		}
+	}
 }

@@ -459,8 +459,11 @@ namespace Echo
 		Viewport viewPort( 0, 0, m_screenWidth, m_screenHeight);
 		setViewport( &viewPort);
 
-        // render target
+        // Render target
         RenderPipeline::current()->onSize(width, height);
+
+		// Parent
+		Renderer::onSize(width, height);
 	}
 
 	bool GLESRenderer::present()

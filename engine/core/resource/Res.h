@@ -36,6 +36,7 @@ namespace Echo
 
 		// get res
 		static Res* get(const ResourcePath& path);
+		static std::unordered_map<String, Res*>& getAll();
 
 		// create by extension
 		static ResRef<Res> createByFileExtension(const String& extWithDot, bool ignoreError);
@@ -66,6 +67,9 @@ namespace Echo
 
 		// is loaded succeed
 		bool isLoaded() const { return m_isLoaded; }
+
+		// On lost device
+		virtual void onLostDevice() {}
 	
 		// save
 		virtual void save();

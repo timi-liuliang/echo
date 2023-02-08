@@ -20,6 +20,9 @@ namespace Echo
 		GLESTexture2D(const String& name);
 		virtual ~GLESTexture2D();
 
+		// On lost device
+		virtual void onLostDevice() override;
+
 		// load
 		virtual bool load() override;
 

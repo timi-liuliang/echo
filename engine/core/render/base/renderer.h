@@ -99,7 +99,7 @@ namespace Echo
 		virtual SamplerState* createSamplerState() = 0;
 
 		// on size
-		virtual void onSize(int width, int height) = 0;
+		virtual void onSize(int width, int height);
 
 		// draw
 		virtual void draw(RenderProxy* renderable, FrameBufferPtr& frameBuffer) = 0;

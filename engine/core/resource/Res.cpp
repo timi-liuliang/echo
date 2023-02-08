@@ -145,6 +145,11 @@ namespace Echo
 		return nullptr;
 	}
 
+	std::unordered_map<String, Res*>& Res::getAll()
+	{
+		return g_ress;
+	}
+
 	ResPtr Res::createByFileExtension(const String& extWithDot, bool ignoreError)
 	{
 		String ext = extWithDot;

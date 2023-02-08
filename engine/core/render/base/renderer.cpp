@@ -389,4 +389,14 @@ namespace Echo
 
 		return result;
 	}
+
+	void Renderer::onSize(int width, int height)
+	{
+		std::unordered_map<String, Res*>& allRes = Res::getAll();
+		for (auto it : allRes)
+		{
+			if(it.second)
+				it.second->onLostDevice();
+		}
+	}
 }
