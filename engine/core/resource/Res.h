@@ -68,8 +68,9 @@ namespace Echo
 		// is loaded succeed
 		bool isLoaded() const { return m_isLoaded; }
 
-		// On lost device
+		// On device lost
 		virtual void onLostDevice() {}
+		virtual void onResetDevice() {}
 	
 		// save
 		virtual void save();

@@ -156,11 +156,19 @@ namespace Echo
 	}
 
 	void GLESTexture2D::onLostDevice()
-	{	
-		const String path = getPath();
+	{
+		const String& path = getPath();
 		if (IO::instance()->isExist(path))
 		{
 			unload();
+		}
+	}
+
+	void GLESTexture2D::onResetDevice()
+	{	
+		const String& path = getPath();
+ 		if (IO::instance()->isExist(path))
+		{
 			load();
 		}
 	}

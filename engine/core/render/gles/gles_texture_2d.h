@@ -22,6 +22,7 @@ namespace Echo
 
 		// On lost device
 		virtual void onLostDevice() override;
+		virtual void onResetDevice() override;
 
 		// load
 		virtual bool load() override;

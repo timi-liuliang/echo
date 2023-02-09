@@ -394,9 +394,9 @@ namespace Echo
 	{
 		std::unordered_map<String, Res*>& allRes = Res::getAll();
 		for (auto it : allRes)
-		{
-			if(it.second)
-				it.second->onLostDevice();
-		}
+			it.second->onLostDevice();
+
+		for (auto it : allRes)
+			it.second->onResetDevice();
 	}
 }

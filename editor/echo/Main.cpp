@@ -19,6 +19,6 @@ int main( int argc, char* argv[])
 	QDir::setCurrent(filePath.c_str());
 	QApplication::setLibraryPaths(QStringList() << QApplication::libraryPaths() << QDir::currentPath().append("/plugins/Qt"));
 
-	// parse & run
+	// Parse & run
 	Echo::CMDLine::Parser(argc, argv);
 }
