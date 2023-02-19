@@ -259,16 +259,20 @@ namespace Echo
 
 		pugi::xml_document doc;
 
-		// declaration
+		// Declaration
 		pugi::xml_node dec = doc.prepend_child(pugi::node_declaration);
 		dec.append_attribute("version") = "1.0";
 		dec.append_attribute("encoding") = "utf-8";
 
-		// root node
+		// Root node
 		pugi::xml_node root = doc.append_child("res");
 		savePropertyRecursive(&root, this, this->getClassName());
 		saveChannels(&root, this);
 
+		// Res don't need save path
+		root.remove_attribute("path");
+
+		// Save
 		doc.save_file(fullPath.c_str(), "\t", 1U, pugi::encoding_utf8);
 	}
 }
