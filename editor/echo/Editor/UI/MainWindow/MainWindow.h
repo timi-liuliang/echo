@@ -4,6 +4,7 @@
 #include <QTimer>
 #include "ui_MainWindow.h"
 #include <engine/core/util/StringUtil.h>
+#include <engine/core/main/game_settings.h>
 #include <engine/core/editor/editor_dock_panel.h>
 #include <QComboBox>
 #include <QMdiArea>
@@ -97,6 +98,9 @@ namespace Studio
 
 		// game mode
 		void onPlayGame();
+
+		// Check launch scene
+		bool checkLaunchSceneSetting(Echo::GameSettings* projSettings);
 
 		// receive msg from game
 		void onReadMsgFromGame();

@@ -513,9 +513,37 @@ namespace Studio
 	}
 
 	void MainWindow::onPlayGame()
-	{
-		// if launch scene not exist, set it
+	{	
 		Echo::GameSettings* projSettings = Echo::GameSettings::instance();
+
+		// If launch scene not exist, set it
+		if (checkLaunchSceneSetting(projSettings))
+		{
+			// Save project
+			onSaveProject();
+
+			// Start game
+			if (!projSettings->getLaunchScene().getPath().empty())
+			{
+				Echo::String app = QCoreApplication::applicationFilePath().toStdString().c_str();
+				Echo::String project = Echo::Engine::instance()->getConfig().m_projectFile;
+				Echo::String cmd = Echo::StringUtil::Format("play %s", project.c_str());
+
+				m_gameProcess.terminate();
+				m_gameProcess.waitForFinished();
+
+				m_gameProcess.start((app + " " + cmd).c_str());
+
+				QObject::connect(&m_gameProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(onGameProcessFinished(int, QProcess::ExitStatus)));
+				QObject::connect(&m_gameProcess, SIGNAL(readyRead()), this, SLOT(onReadMsgFromGame()));
+
+				EchoLogWarning("%s", cmd.c_str());
+			}
+		}
+	}
+
+	bool MainWindow::checkLaunchSceneSetting(Echo::GameSettings* projSettings)
+	{
 		if (projSettings)
 		{
 			const Echo::String& launchScene = projSettings->getLaunchScene().getPath();
@@ -528,38 +556,13 @@ namespace Studio
 					{
 						projSettings->setLaunchScene(Echo::ResourcePath(scene));
 					}
-					else
-					{
-						return;
-					}
-				}
-				else
-				{
-					return;
 				}
 			}
+
+			return !launchScene.empty();
 		}
 
-		// save project
-		onSaveProject();
-
-		// start game
-		if (!projSettings->getLaunchScene().getPath().empty())
-		{
-			Echo::String app = QCoreApplication::applicationFilePath().toStdString().c_str();
-			Echo::String project = Echo::Engine::instance()->getConfig().m_projectFile;
-			Echo::String cmd = Echo::StringUtil::Format("play %s", project.c_str());
-
-			m_gameProcess.terminate();
-			m_gameProcess.waitForFinished();
-
-			m_gameProcess.start((app + " " + cmd).c_str());
-
-			QObject::connect(&m_gameProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(onGameProcessFinished(int, QProcess::ExitStatus)));
-			QObject::connect(&m_gameProcess, SIGNAL(readyRead()), this, SLOT(onReadMsgFromGame()));
-
-			EchoLogWarning("%s", cmd.c_str());
-		}
+		return false;
 	}
 
 	void MainWindow::OpenProject(const char* projectName)
