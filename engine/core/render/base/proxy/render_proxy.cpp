@@ -43,6 +43,13 @@ namespace Echo
 		return nullptr;
 	}
 
+	bool RenderProxy::isSubmitToRenderQueue() const
+	{
+		return m_node ?
+			m_node->isEnable() && m_isSubmitToRenderQueue :
+			m_isSubmitToRenderQueue;
+	}
+
 	void RenderProxy::setSubmitToRenderQueue(bool enable)
 	{ 
 		m_isSubmitToRenderQueue = enable;

@@ -68,7 +68,7 @@ namespace Echo
 		void setCustomDepth( bool customDepth) { m_customDepth = customDepth; }
 
 		// Is enable submit to render queues
-		bool isSubmitToRenderQueue() const { return m_isSubmitToRenderQueue; }
+		bool isSubmitToRenderQueue() const;
 		void setSubmitToRenderQueue(bool enable);
 
 		// submit to renderqueue
