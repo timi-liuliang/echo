@@ -3,8 +3,8 @@
 #include "engine/core/util/Array.hpp"
 #include "engine/core/scene/node.h"
 #include "engine/core/resource/Res.h"
-#include "base/texture/texture.h"
-#include "base/texture/texture_render_target_2d.h"
+#include "engine/core/render/base/texture/texture.h"
+#include "engine/core/render/base/texture/texture_render_target_2d.h"
 
 namespace Echo
 {

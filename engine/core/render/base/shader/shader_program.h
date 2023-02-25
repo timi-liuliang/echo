@@ -1,10 +1,10 @@
 #pragma once
 
-#include "base/state/render_state.h"
+#include "engine/core/render/base/state/render_state.h"
 #include <utility>
 #include "engine/core/util/Array.hpp"
 #include "engine/core/resource/Res.h"
-#include "base/mesh/mesh_vertex_data.h"
+#include "engine/core/render/base/mesh/mesh_vertex_data.h"
 
 namespace Echo
 {

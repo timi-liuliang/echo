@@ -1,11 +1,11 @@
 #pragma once
 
 #include <engine/core/util/Array.hpp>
-#include "base/shader/shader_program.h"
-#include "base/texture/texture.h"
-#include "base/state/render_state.h"
-#include "base/shader/material.h"
-#include "base/mesh/mesh.h"
+#include "engine/core/render/base/shader/shader_program.h"
+#include "engine/core/render/base/texture/texture.h"
+#include "engine/core/render/base/state/render_state.h"
+#include "engine/core/render/base/shader/material.h"
+#include "engine/core/render/base/mesh/mesh.h"
 
 namespace Echo
 {

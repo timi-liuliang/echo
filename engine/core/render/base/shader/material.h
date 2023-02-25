@@ -1,10 +1,10 @@
 #pragma once
 
 #include "shader_program.h"
-#include "base/state/render_state.h"
+#include "engine/core/render/base/state/render_state.h"
 #include "engine/core/resource/Res.h"
-#include "base/texture/texture.h"
-#include "base/texture/texture_atla.h"
+#include "engine/core/render/base/texture/texture.h"
+#include "engine/core/render/base/texture/texture_atla.h"
 
 namespace Echo
 {

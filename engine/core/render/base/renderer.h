@@ -4,11 +4,11 @@
 #include "state/render_state.h"
 #include "texture/texture_cube.h"
 #include "scene/render_scene.h"
-#include "base/proxy/render_proxy.h"
-#include "base/proxy/compute_proxy.h"
-#include "base/buffer/frame_buffer.h"
-#include "base/buffer/gpu_buffer.h"
-#include "base/misc/view_port.h"
+#include "engine/core/render/base/proxy/render_proxy.h"
+#include "engine/core/render/base/proxy/compute_proxy.h"
+#include "engine/core/render/base/buffer/frame_buffer.h"
+#include "engine/core/render/base/buffer/gpu_buffer.h"
+#include "engine/core/render/base/misc/view_port.h"
 #include "scene/bvh.h"
 
 namespace Echo
