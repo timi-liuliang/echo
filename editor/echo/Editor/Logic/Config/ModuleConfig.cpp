@@ -35,7 +35,6 @@ namespace Echo
 		REGISTER_MODULE(EditorSettingsModule)
 		REGISTER_MODULE(RecastModule)
 		REGISTER_MODULE(HitProxyModule)
-		REGISTER_MODULE(HLodModule)
 
 		REGISTER_MODULE(Application)
 	}
