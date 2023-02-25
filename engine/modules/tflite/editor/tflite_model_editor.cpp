@@ -17,11 +17,6 @@ namespace Echo
 
 	}
 
-	ImagePtr TFLiteModelEditor::getThumbnail() const
-	{
-		return Image::loadFromFile(Engine::instance()->getRootPath() + "engine/modules/tflite/editor/icon/tflite-model.png");
-	}
-
 	void TFLiteModelEditor::onEditorSelectThisNode()
 	{
 	}

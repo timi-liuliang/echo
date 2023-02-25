@@ -12,9 +12,6 @@ namespace Echo
 		TFLiteModelEditor(Object* object);
 		virtual ~TFLiteModelEditor();
 
-		// get thumbnail
-		virtual ImagePtr getThumbnail() const override;
-
 		// on editor select this node
 		virtual void onEditorSelectThisNode() override;
 
