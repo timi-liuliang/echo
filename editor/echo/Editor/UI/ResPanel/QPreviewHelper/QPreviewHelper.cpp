@@ -177,12 +177,13 @@ namespace QT_UI
 				if (Echo::Res::getResFunByExtension(extWithDot))
 				{
 					Echo::ResPtr res = Echo::Res::get(resPath);
-					if (res && res->getEditor())
+					if (res)
 					{
-						icon = res->getEditor()->getThumbnail();
-
-						if (res->getEditor()->isThumbnailStatic())
+						if (Echo::ObjectEditor::isThumbnailStatic(res))
+						{
+							icon = Echo::ObjectEditor::getThumbnail(res);
 							resIconMap[fileExt] = icon;
+						}
 					}
 				}
 			}

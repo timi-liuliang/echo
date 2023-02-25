@@ -39,5 +39,39 @@ namespace Echo
 
 		return nullptr;
 	}
+
+	bool ObjectEditor::isThumbnailStatic(Object* object)
+	{
+		if(object->getEditor())
+			return object->getEditor()->isThumbnailStatic();
+
+		return true;
+	}
+
+	ImagePtr ObjectEditor::getThumbnail(Object* object)
+	{
+		if (object)
+		{
+			if (object->getEditor())
+			{
+				ImagePtr icon = object->getEditor()->getThumbnail();
+				if(icon)
+					return icon;
+			}
+
+			String className = object->getClassName();
+			ClassInfo* info = Echo::Class::getClassInfo(className);
+			String moduleName = (info && !info->m_module.empty()) ? info->m_module : "";
+			if (!moduleName.empty())
+			{
+				String iconPath = StringUtil::Format("Module://%s/editor/icon/%s.png", moduleName.c_str(), className.c_str());
+				ImagePtr icon = Image::loadFromFile(iconPath);
+				if(icon)
+					return icon;
+			}
+		}
+
+		return nullptr;
+	}
 #endif
 }

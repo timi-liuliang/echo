@@ -20,6 +20,13 @@ namespace Echo
 		// create editor
 		static ObjectEditor* createEditor(Object* object);
 
+		// Is thumbnail static
+		static bool isThumbnailStatic(Object* object);
+
+		// Get thumbnail
+		static ImagePtr getThumbnail(Object* object);
+
+	public:
 		/* editor update self*/
 		virtual void editor_update_self() {}
 

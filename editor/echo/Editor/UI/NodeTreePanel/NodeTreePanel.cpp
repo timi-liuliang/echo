@@ -221,7 +221,7 @@ namespace Studio
 
 	QIcon NodeTreePanel::getNodeIcon(Echo::Object* node)
 	{
-		Echo::ImagePtr thumbnail = node->getEditor() ? node->getEditor()->getThumbnail() : nullptr;
+		Echo::ImagePtr thumbnail = Echo::ObjectEditor::getThumbnail(node);
 		if (thumbnail)
 		{
 			QImage image(thumbnail->getData(), thumbnail->getWidth(), thumbnail->getHeight(), QImage::Format_RGBA8888);

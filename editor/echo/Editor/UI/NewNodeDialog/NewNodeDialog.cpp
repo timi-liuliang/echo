@@ -130,7 +130,7 @@ namespace Studio
 			if (node)
 			{
 				node->setName(nodeName);
-				Echo::ImagePtr thumbnail = node->getEditor() ? node->getEditor()->getThumbnail() : nullptr;
+				Echo::ImagePtr thumbnail = Echo::ObjectEditor::getThumbnail(node);
 				EchoSafeDelete(node, Node);
 				if (thumbnail)
 				{
