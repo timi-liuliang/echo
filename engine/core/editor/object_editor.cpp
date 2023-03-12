@@ -2,6 +2,7 @@
 #include "engine/core/memory/MemAllocDef.h"
 #include "engine/core/log/Log.h"
 #include "engine/core/main/Engine.h"
+#include "engine/core/io/io.h"
 
 namespace Echo
 {
@@ -65,9 +66,12 @@ namespace Echo
 			if (!moduleName.empty())
 			{
 				String iconPath = StringUtil::Format("Module://%s/editor/icon/%s.png", moduleName.c_str(), className.c_str());
-				ImagePtr icon = Image::loadFromFile(iconPath);
-				if(icon)
-					return icon;
+				if (IO::instance()->isExist(iconPath))
+				{
+					ImagePtr icon = Image::loadFromFile(iconPath);
+					if (icon)
+						return icon;
+				}
 			}
 		}
 

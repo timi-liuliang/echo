@@ -151,6 +151,14 @@ namespace Echo
         {
             return m_engineFileSystem.isExist(resourceName);
         }
+        else if (StringUtil::StartWith(resourceName, "Module://"))
+        {
+            for (FileSystem& moduleFileSystem : m_moduleFileSystems)
+            {
+                if (moduleFileSystem.isExist(resourceName))
+                    return true;
+            }
+        }
 
 		return PathUtil::IsFileExist(resourceName);
 	}

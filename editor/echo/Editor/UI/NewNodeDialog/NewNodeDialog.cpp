@@ -12,7 +12,7 @@ namespace Studio
 		Echo::ClassInfo* cinfo = Echo::Class::getClassInfo(nodeName);
 		if (!cinfo->m_module.empty())
 		{
-			Echo::Object* obj = Echo::Class::create(cinfo->m_module);
+			Echo::Object* obj = Echo::Class::create(cinfo->m_module + "Module");
 			if (obj)
 			{
 				Echo::Module* module = dynamic_cast<Echo::Module*>(obj);
@@ -90,13 +90,12 @@ namespace Studio
 	{
 		Echo::ClassInfo* cinfo = Echo::Class::getClassInfo(nodeName);
 		Echo::String moduleName = (cinfo && !cinfo->m_module.empty()) ? cinfo->m_module : "Core";
-		Echo::String moduleDisplayName = Echo::StringUtil::Replace(moduleName, "Module", "");
 
 		QStandardItem* rootItem = m_standardModel->invisibleRootItem();
 		for (int i = 0; i < rootItem->rowCount(); i++)
 		{
 			QStandardItem* moduleItem = rootItem->child(i, 0);
-			if (moduleItem->text().toStdString().c_str() == moduleDisplayName)
+			if (moduleItem->text().toStdString().c_str() == moduleName)
 			{
 				return moduleItem;
 			}
@@ -104,7 +103,7 @@ namespace Studio
 
 		// create module item
 		QStandardItem* moduleItem = new QStandardItem;
-		moduleItem->setText( moduleDisplayName.c_str());
+		moduleItem->setText(moduleName.c_str());
 		moduleItem->setData( "module", Qt::UserRole);
 		rootItem->setChild(rootItem->rowCount(), moduleItem);
 
