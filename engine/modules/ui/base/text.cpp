@@ -5,6 +5,7 @@
 #include "base/shader/shader_program.h"
 #include "engine/core/main/Engine.h"
 #include "engine/modules/ui/font/font_library.h"
+#include "engine/modules/ui/ui_module.h"
 
 namespace Echo
 {
@@ -91,13 +92,15 @@ namespace Echo
         if (!m_text.empty() && !m_fontRes.isEmpty())
         {
             clearRenderable();
-            
-            StringArray macros = {"ALPHA_ADJUST"};
-            m_shader = ShaderProgram::getDefault2D(macros);
-            
-            // material
-            m_material = EchoNew(Material(StringUtil::Format("UiTextMaterial_%d", getId())));
-            m_material->setShaderPath(m_shader->getPath());
+
+            if (!m_material)
+            {
+                const ResourcePath& defaultShader = UiModule::instance()->getUiImageDefaultShader();
+
+                m_material = EchoNew(Material(StringUtil::Format("UiTextMaterial_%d", getId())));
+                m_material->setShaderPath(defaultShader);
+
+            }  
             
             // mesh
             Ui::VertexArray vertices;
@@ -162,7 +165,7 @@ namespace Echo
 					oIndices.emplace_back(vertBase + 2);
 					oIndices.emplace_back(vertBase + 3);
 
-                    m_material->setUniformTexture("BaseColor", fontGlyph->m_texture->getTexture());
+                    m_material->setUniformTexture("BaseTexture", fontGlyph->m_texture->getTexture());
 
                     m_width += fontSize;
                 }
