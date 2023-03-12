@@ -22,7 +22,7 @@ namespace Echo
 		void setUiImageDefaultShader(const ResourcePath& path) { m_uiImageDefaultShader.setPath(path.getPath()); }
 		const ResourcePath& getUiImageDefaultShader() { return m_uiImageDefaultShader; }
 
-	protected:u
+	protected:
 		ResourcePath	m_uiImageDefaultShader = ResourcePath("Module://ui/Transparent.shader", ".shader");
 	};
 }
