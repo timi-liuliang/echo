@@ -42,8 +42,6 @@ namespace Echo
 	{
 		CLASS_BIND_METHOD(UiModule, getUiImageDefaultShader);
 		CLASS_BIND_METHOD(UiModule, setUiImageDefaultShader);
-
-		CLASS_REGISTER_PROPERTY(UiModule, "UiImageDefaultShader", Variant::Type::ResourcePath, getUiImageDefaultShader, setUiImageDefaultShader);
 	}
 
 	void UiModule::registerTypes()

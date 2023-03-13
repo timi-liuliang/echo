@@ -23,6 +23,6 @@ namespace Echo
 		const ResourcePath& getUiImageDefaultShader() { return m_uiImageDefaultShader; }
 
 	protected:
-		ResourcePath	m_uiImageDefaultShader = ResourcePath("Module://ui/Transparent.shader", ".shader");
+		ResourcePath	m_uiImageDefaultShader = ResourcePath("Module://Ui/Transparent.shader", ".shader");
 	};
 }
