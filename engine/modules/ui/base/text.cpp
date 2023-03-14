@@ -99,7 +99,6 @@ namespace Echo
 
                 m_material = EchoNew(Material(StringUtil::Format("UiTextMaterial_%d", getId())));
                 m_material->setShaderPath(defaultShader);
-
             }  
             
             // mesh

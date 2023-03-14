@@ -24,11 +24,11 @@ namespace Echo
         const Color& getColor() const { return m_color; }
         void setColor(const Color& color);
         
-        // width
+        // Width
         i32 getWidth() const { return m_width; }
         void setWidth(i32 width);
         
-        // width
+        // Height
         i32 getHeight() const { return m_height; }
         void setHeight(i32 height);
 
