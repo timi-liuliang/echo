@@ -40,6 +40,7 @@ namespace Echo
 #define LUA_STACK_CHECK(state)
 #endif 
 
+	extern ObjectPool<Vector2>		LuaVec2Pool;
 	extern ObjectPool<Vector3>		LuaVec3Pool;
 	extern ObjectPool<Quaternion>	LuaQuaternionPool;
 	extern ObjectPool<String>		LuaStrPool;
@@ -140,15 +141,32 @@ namespace Echo
 		LuaResourcePathPool.deleteObj(ptr);
 	}
 
+	template<> INLINE const Vector2& lua_getvalue<const Vector2&>(lua_State* state, int idx)
+	{
+		Vector2& result = *LuaVec2Pool.newObj();
+		lua_getfield(state, idx, "x");
+		lua_getfield(state, idx, "y");
+		result.x = (float)lua_tonumber(state, -2);
+		result.y = (float)lua_tonumber(state, -1);
+		lua_pop(state, 2);
+		return result;
+	}
+
+	template<> INLINE void lua_freevalue<const Vector2&>(const Vector2& value)
+	{
+		Vector2* ptr = (Vector2*)&value;
+		LuaVec2Pool.deleteObj(ptr);
+	}
+
 	template<> INLINE const Vector3& lua_getvalue<const Vector3&>(lua_State* state, int idx) 
 	{
 		Vector3& result = *LuaVec3Pool.newObj();
 		lua_getfield(state, idx, "x");
 		lua_getfield(state, idx, "y");
 		lua_getfield(state, idx, "z");
-		result.x = (float)lua_tonumber(state, idx+1);
-		result.y = (float)lua_tonumber(state, idx+2);
-		result.z = (float)lua_tonumber(state, idx+3);
+		result.x = (float)lua_tonumber(state, -3);
+		result.y = (float)lua_tonumber(state, -2);
+		result.z = (float)lua_tonumber(state, -1);
 		lua_pop(state, 3);
 		return result; 
 	}
@@ -166,10 +184,10 @@ namespace Echo
 		lua_getfield(state, idx, "y");
 		lua_getfield(state, idx, "z");
 		lua_getfield(state, idx, "w");
-		result.x = (float)lua_tonumber(state, idx + 1);
-		result.y = (float)lua_tonumber(state, idx + 2);
-		result.z = (float)lua_tonumber(state, idx + 3);
-		result.w = (float)lua_tonumber(state, idx + 4);
+		result.x = (float)lua_tonumber(state, -4);
+		result.y = (float)lua_tonumber(state, -3);
+		result.z = (float)lua_tonumber(state, -2);
+		result.w = (float)lua_tonumber(state, -1);
 		lua_pop(state, 4);
 		return result;
 	}

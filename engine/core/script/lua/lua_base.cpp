@@ -5,6 +5,7 @@
 
 namespace Echo
 {
+	ObjectPool<Vector2>		LuaVec2Pool = ObjectPool<Vector2>(32);
 	ObjectPool<Vector3>		LuaVec3Pool = ObjectPool<Vector3>(32);
 	ObjectPool<Quaternion>	LuaQuaternionPool = ObjectPool<Quaternion>(32);
 	ObjectPool<String>		LuaStrPool  = ObjectPool<String>(32);
