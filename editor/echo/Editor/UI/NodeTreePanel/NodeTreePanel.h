@@ -153,6 +153,11 @@ namespace Studio
 		// edit res
 		void onSelectRes(const Echo::String& resPath);
 
+	public slots:
+		// Move up|down node
+		void onMoveUpNode();
+		void onMoveDownNode();
+
 	protected:
 		// update item display
 		static void updateNodeTreeWidgetItemDisplay(QTreeWidget* treeWidget, QTreeWidgetItem* item);

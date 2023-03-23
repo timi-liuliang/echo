@@ -215,6 +215,16 @@
     <string>Rename</string>
    </property>
   </action>
+  <action name="m_actionMoveUp">
+    <property name="text">
+      <string>MoveUp</string>
+    </property>
+  </action>
+  <action name="m_actionMoveDown">
+    <property name="text">
+      <string>MoveDown</string>
+    </property>
+  </action>
   <action name="m_actionImportGltfScene">
    <property name="icon">
     <iconset resource="../../../Resource/App.qrc">

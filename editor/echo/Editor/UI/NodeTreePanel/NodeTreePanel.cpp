@@ -76,6 +76,9 @@ namespace Studio
 		QObject::connect(m_actionDiscardInstancing, SIGNAL(triggered()), this, SLOT(onDiscardInstancing()));
         QObject::connect(m_actionConnectSlot, SIGNAL(triggered()), this, SLOT(onConnectOjectSlot()));
 
+		QObject::connect(m_actionMoveUp, SIGNAL(triggered()), this, SLOT(onMoveUpNode()));
+		QObject::connect(m_actionMoveDown, SIGNAL(triggered()), this, SLOT(onMoveDownNode()));
+
 		// timer
 		m_timer = new QTimer(this);
 		connect(m_timer, SIGNAL(timeout()), this, SLOT(update()));
@@ -422,8 +425,14 @@ namespace Studio
 				m_nodeTreeMenu->addAction(m_actionChangeType);
 				if(node->getParent())
 					m_nodeTreeMenu->addAction(m_actionDuplicateNode);
+
 				m_nodeTreeMenu->addSeparator();
 				m_nodeTreeMenu->addAction(m_actionSaveBranchasScene);
+
+				m_nodeTreeMenu->addSeparator();
+				m_nodeTreeMenu->addAction(m_actionMoveUp);
+				m_nodeTreeMenu->addAction(m_actionMoveDown);
+
 				m_nodeTreeMenu->addSeparator();
                 if(!isRootNode)
                     m_nodeTreeMenu->addAction(m_actionDeleteNode);
@@ -438,14 +447,21 @@ namespace Studio
 				m_nodeTreeMenu->addAction(m_actionAddNode);
 				m_nodeTreeMenu->addAction(m_actionAddChildScene);
 				m_nodeTreeMenu->addAction(m_actionImportGltfScene);
+
 				m_nodeTreeMenu->addSeparator();
 				m_nodeTreeMenu->addAction(m_actionRenameNode);
 				m_nodeTreeMenu->addAction(m_actionChangeType);
 				if(node->getParent())
 					m_nodeTreeMenu->addAction(m_actionDuplicateNode);
+
 				m_nodeTreeMenu->addSeparator();
 				m_nodeTreeMenu->addAction(m_actionSaveBranchasScene);
 				m_nodeTreeMenu->addAction(m_actionDiscardInstancing);
+
+				m_nodeTreeMenu->addSeparator();
+				m_nodeTreeMenu->addAction(m_actionMoveUp);
+				m_nodeTreeMenu->addAction(m_actionMoveDown);
+
 				m_nodeTreeMenu->addSeparator();
                 if(!isRootNode)
                     m_nodeTreeMenu->addAction(m_actionDeleteNode);
@@ -1170,6 +1186,46 @@ namespace Studio
 			if (controller)
 			{
 				controller->onFocusNode( node);
+			}
+		}
+	}
+
+	void NodeTreePanel::onMoveUpNode()
+	{
+		QTreeWidgetItem* item = m_nodeTreeWidget->currentItem();
+		if (item)
+		{
+			QTreeWidgetItem* itemParent = item->parent();
+			if (itemParent)
+			{
+				int index = itemParent->indexOfChild(item);
+				if (index > 0)
+				{
+					itemParent->removeChild(item);
+					itemParent->insertChild(index-1, item);
+
+					onItemPositionChanged(item);
+				}
+			}
+		}
+	}
+
+	void NodeTreePanel::onMoveDownNode()
+	{
+		QTreeWidgetItem* item = m_nodeTreeWidget->currentItem();
+		if (item)
+		{
+			QTreeWidgetItem* itemParent = item->parent();
+			if (itemParent)
+			{
+				int index = itemParent->indexOfChild(item);
+				if (index < itemParent->childCount()-1)
+				{
+					itemParent->removeChild(item);
+					itemParent->insertChild(index + 1, item);
+
+					onItemPositionChanged(item);
+				}
 			}
 		}
 	}
