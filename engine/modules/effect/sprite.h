@@ -80,7 +80,7 @@ namespace Echo
 		float					m_height = 64.f;
 		Vector2					m_offset = Vector2::ZERO;
 		MeshPtr				    m_mesh;						// Geometry Data for render
-		ResourcePath			m_transparentShader = ResourcePath("Module://effect/shader/Transparent.shader", ".shader");
+		ResourcePath			m_transparentShader = ResourcePath("Module://Effect/shader/Transparent.shader", ".shader");
 		MaterialPtr				m_material;		            // Material Instance
 		RenderProxyPtr			m_renderable = nullptr;
 	};

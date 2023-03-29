@@ -192,6 +192,6 @@ void main()
 }
 ]]></property>
 	<property name="DepthStencilState">
-		<obj class="DepthStencilState" DepthEnable="true" WriteDepth="true" />
+		<obj class="DepthStencilState" DepthEnable="true" WriteDepth="false" />
 	</property>
 </res>
