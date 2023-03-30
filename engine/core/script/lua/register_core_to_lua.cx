@@ -92,6 +92,12 @@ function vec3:new(xv, yv, zv)
 	return setmetatable({x=xv, y=yv, z=zv}, vec3)
 end
 
+function vec3:set(x, y, z)
+    self.x = x
+    self.y = y
+    self.z = z
+end
+
 function vec3:length()
 	return math.sqrt(self.x * self.x + self.y * self.y + self.z * self.z)
 end
@@ -99,10 +105,12 @@ end
 function vec3:normalize()
 	local len = self:length()
 	if len > 0.000001 then
-		return vec3:new(self.x/len, self.y/len, self.z/len)
+		self:set(self.x/len, self.y/len, self.z/len)
 	else
-		return vec3:new(0.0, 0.0, 0.0)
+		self:set(0.0, 0.0, 0.0)
 	end
+
+    return self
 end
 
 function vec3:dot(rhs)
