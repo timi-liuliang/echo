@@ -31,6 +31,7 @@ namespace Echo
 
 		// angle
 		float getAngle() const;
+		void setAngle(float angle);
 
 		// angular velocity (radian/second)
 		void setAngularVelocity(float omega);

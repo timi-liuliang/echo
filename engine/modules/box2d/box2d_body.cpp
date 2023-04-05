@@ -28,6 +28,7 @@ namespace Echo
 		CLASS_BIND_METHOD(Box2DBody, setGravityScale);
         CLASS_BIND_METHOD(Box2DBody, setLinearVelocity);
 		CLASS_BIND_METHOD(Box2DBody, getLinearVelocity);
+		CLASS_BIND_METHOD(Box2DBody, setAngle);
 		CLASS_BIND_METHOD(Box2DBody, getAngle);
 		CLASS_BIND_METHOD(Box2DBody, setAngularVelocity);
 		CLASS_BIND_METHOD(Box2DBody, getAngularVelocity);
@@ -91,15 +92,18 @@ namespace Echo
 		return 0.f;
 	}
 
+	void Box2DBody::setAngle(float angle)
+	{
+		if (m_body)
+		{
+			m_body->SetTransform(m_body->GetPosition(), angle * Math::DEG2RAD);
+		}
+	}
+
 	void Box2DBody::setAngularVelocity(float omega)
 	{
 		if (m_body)
 		{
-			if (!(omega >=0.09 && omega<0.11))
-			{
-				int a = 19;
-			}
-
 			m_body->SetAngularVelocity(omega);
 		}
 	}
