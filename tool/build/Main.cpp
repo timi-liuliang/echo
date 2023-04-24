@@ -8,10 +8,8 @@
 
 namespace Echo
 {
-	void registerModules()
-	{
-
-	}
+	void registerGameModules() {}
+	void registerModules() {}
 }
 
 int main(int argc, char* argv[])
