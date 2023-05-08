@@ -33,7 +33,7 @@ namespace QT_UI
 
 	void QFileSelect::OnSelectPath()
 	{
-		QString qFileName = QFileDialog::getOpenFileName( this, tr("Open Picture"), "", tr("*.tga;; *.png;; *.*"));
+		QString qFileName = QFileDialog::getOpenFileName( this, tr("Open Picture"), "", tr("*.tga;; *.png;; *.*"), nullptr, QFileDialog::DontUseNativeDialog);
 		if( !qFileName.isEmpty())
 		{
 			m_lineEdit->setText( QFileInfo( qFileName).fileName().toStdString().c_str());

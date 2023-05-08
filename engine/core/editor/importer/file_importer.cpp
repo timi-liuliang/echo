@@ -26,7 +26,7 @@ namespace Echo
 	{
 		if (IO::instance()->convertFullPathToResPath(targetFolder, m_targetFoler))
 		{
-			QStringList resFiles = QFileDialog::getOpenFileNames(nullptr, "Import Files", "", "*.*");
+			QStringList resFiles = QFileDialog::getOpenFileNames(nullptr, "Import Files", "", "*.*", nullptr, QFileDialog::DontUseNativeDialog);
 			for (const QString& qFile : resFiles)
 			{
 				String srcFile = qFile.toStdString().c_str();

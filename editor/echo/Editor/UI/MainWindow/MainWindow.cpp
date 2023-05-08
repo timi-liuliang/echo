@@ -335,7 +335,7 @@ namespace Studio
 
 	void MainWindow::onOpenAnotherProject()
 	{
-		QString projectName = QFileDialog::getOpenFileName(this, tr("Open Project"), "", tr("(*.echo)"));
+		QString projectName = QFileDialog::getOpenFileName(this, tr("Open Project"), "", tr("(*.echo)"), nullptr, QFileDialog::DontUseNativeDialog);
 		if (!projectName.isEmpty())
 		{
 			openAnotherProject(projectName.toStdString().c_str());
@@ -498,7 +498,7 @@ namespace Studio
 
 	void MainWindow::onChooseTheme()
 	{
-		QString qssFile = QFileDialog::getOpenFileName(this, tr("Choose Theme"), "", tr("(*.qss)"));
+		QString qssFile = QFileDialog::getOpenFileName(this, tr("Choose Theme"), "", tr("(*.qss)"), nullptr, QFileDialog::DontUseNativeDialog);
 		if (!qssFile.isEmpty())
 		{
 			setTheme(qssFile.toStdString().c_str());

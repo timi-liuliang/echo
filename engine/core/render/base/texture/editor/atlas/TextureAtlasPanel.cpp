@@ -93,7 +93,7 @@ namespace Echo
 
 	void TextureAtlasPanel::onImportFromImages()
 	{
-		QStringList files = QFileDialog::getOpenFileNames(nullptr, "Select Images", "", "*.png");
+		QStringList files = QFileDialog::getOpenFileNames(nullptr, "Select Images", "", "*.png", nullptr, QFileDialog::DontUseNativeDialog);
 		if (!files.empty())
 		{
 			// load images

@@ -26,7 +26,7 @@ namespace Echo
 	{
 		if (IO::instance()->convertFullPathToResPath(targetFolder, m_targetFoler))
 		{
-			QStringList resFiles = QFileDialog::getOpenFileNames(nullptr, "Import Fbx", "", "*.fbx");
+			QStringList resFiles = QFileDialog::getOpenFileNames(nullptr, "Import Fbx", "", "*.fbx", nullptr, QFileDialog::DontUseNativeDialog);
 			for (const QString& qfbxFile : resFiles)
 			{
 				String fbxFile = qfbxFile.toStdString().c_str();

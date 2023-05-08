@@ -415,7 +415,7 @@ namespace QtNodes
 	{
 		clearScene();
 
-		QString fileName = QFileDialog::getOpenFileName(nullptr, tr("Open Flow Scene"), QDir::homePath(), tr("Flow Scene Files (*.flow)"));
+		QString fileName = QFileDialog::getOpenFileName(nullptr, tr("Open Flow Scene"), QDir::homePath(), tr("Flow Scene Files (*.flow)"), nullptr, QFileDialog::DontUseNativeDialog);
 		if (!QFileInfo::exists(fileName))
 			return;
 
