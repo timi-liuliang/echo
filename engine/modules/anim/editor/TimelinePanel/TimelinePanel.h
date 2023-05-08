@@ -1,14 +1,16 @@
 #pragma once
 
 #include "engine/core/util/Array.hpp"
-#include "engine/core/editor/editor_dock_panel.h"
+#include "engine/core/base/object.h"
 
 #ifdef ECHO_EDITOR_MODE
+
+#include "ui_TimelinePanel.h"
 
 namespace Echo
 {
 	class Timeline;
-	class TimelinePanel : public EditorDockPanel
+	class TimelinePanel : public QDockWidget, public Ui_TimelinePanel
 	{
 		typedef vector<QGraphicsItem*>::type QGraphicsItemArray;
 		typedef vector<QGraphicsProxyWidget*>::type QGraphicsWidgetArray;
@@ -124,18 +126,14 @@ namespace Echo
 		void drawRulerVertical();
 
 		// set tool button icon
-		void setToolbuttonIcon(const String& buttonName, const String& iconPath);
+		void setToolbuttonIcon(QToolButton* button, const String& iconPath);
 
 	protected:
-		QTreeWidget*				m_nodeTreeWidget = nullptr;
-		QComboBox*					m_clipsComboBox = nullptr;
 		Timeline*					m_timeline;
 		QMenu*						m_addObjectMenu;
-		QAction*					m_addNodeAction;
 		String						m_currentEditAnim;
 		int							m_nodeTreeWidgetWidth;
 		float						m_graphicsViewScale = 1.f;
-		QGraphicsView*				m_graphicsView = nullptr;
 		QGraphicsScene*				m_graphicsScene = nullptr;
 		String						m_currentEditObjectPath;
 		StringArray					m_currentEditPropertyChain;

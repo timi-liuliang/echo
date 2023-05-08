@@ -178,7 +178,7 @@ namespace Studio
 		TIME_PROFILE_OUTPUT
 	}
 
-	void AStudio::showBottomPanel(Echo::EditorDockPanel* bottomPanel)
+	void AStudio::showBottomPanel(QDockWidget* bottomPanel)
 	{
 		MainWindow::instance()->addBottomPanel(bottomPanel);
 	}

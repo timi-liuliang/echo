@@ -119,7 +119,6 @@ namespace Echo
 
 	void PCGFlowGraphPanel::onDeletePGNodes()
 	{
-		int a = 10;
 	}
 
 	void PCGFlowGraphPanel::onPlay()

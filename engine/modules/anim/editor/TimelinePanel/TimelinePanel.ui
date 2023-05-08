@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DockWidget</class>
+ <class>TimelinePanel</class>
  <widget class="QDockWidget" name="DockWidget">
   <property name="geometry">
    <rect>
@@ -58,7 +58,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QToolButton" name="AddNode">
+        <widget class="QToolButton" name="m_addNode">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -256,7 +256,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QComboBox" name="m_clips">
+        <widget class="QComboBox" name="m_clipsComboBox">
          <property name="minimumSize">
           <size>
            <width>145</width>
@@ -341,6 +341,92 @@
      </widget>
     </item>
    </layout>
+    <action name="m_actionAddNode">
+      <property name="text">
+        <string>Add Node</string>
+      </property>
+    </action>
+    <action name="m_actionAddSetting">
+      <property name="text">
+        <string>Add Setting</string>
+      </property>
+    </action>
+    <action name="m_actionAddResource">
+      <property name="text">
+        <string>Add Resource</string>
+      </property>
+    </action>
+    <action name="m_actionCurveRed">
+      <property name="text">
+        <string>Curve Red(X)</string>
+      </property>
+    </action>
+    <action name="m_actionCurveGreen">
+      <property name="text">
+        <string>Curve Green(Y)</string>
+      </property>
+    </action>
+    <action name="m_actionCurveBlue">
+      <property name="text">
+        <string>Curve Blue(Z)</string>
+      </property>
+      <property name="toolTip">
+        <string>Curve Blue(Z)</string>
+      </property>
+    </action>
+    <action name="m_actionCurveWhite">
+      <property name="text">
+        <string>Curve White(W)</string>
+      </property>
+      <property name="toolTip">
+        <string>Curve White(W)</string>
+      </property>
+    </action>
+    <action name="m_actionAddKeyToCurveRed">
+      <property name="text">
+        <string>Add Key To Curve Red (X)</string>
+      </property>
+    </action>
+    <action name="m_actionAddKeyToCurveGreen">
+      <property name="text">
+        <string>Add Key To Curve Green (Y)</string>
+      </property>
+      <property name="toolTip">
+        <string>Add Key To Curve Green</string>
+      </property>
+    </action>
+    <action name="m_actionAddKeyToCurveBlue">
+      <property name="text">
+        <string>Add Key To Curve Blue (Z)</string>
+      </property>
+      <property name="toolTip">
+        <string>Add Key To Curve Blue</string>
+      </property>
+    </action>
+    <action name="m_actionAddKeyToCurveWhite">
+      <property name="text">
+        <string>Add Key To Curve White (W)</string>
+      </property>
+      <property name="toolTip">
+        <string>Add Key To Curve White</string>
+      </property>
+    </action>
+    <action name="m_actionAddBoolKeyToCurve">
+      <property name="text">
+        <string>Add Bool Key To Curve</string>
+      </property>
+      <property name="toolTip">
+        <string>Add Bool Key To Curve</string>
+      </property>
+    </action>
+    <action name="m_actionAddStringKeyToCurve">
+      <property name="text">
+        <string>Add String Key To Curve</string>
+      </property>
+      <property name="toolTip">
+        <string>Add Bool Key To Curve</string>
+      </property>
+    </action>
   </widget>
  </widget>
  <resources/>

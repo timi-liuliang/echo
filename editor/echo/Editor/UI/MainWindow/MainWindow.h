@@ -27,7 +27,6 @@ namespace Studio
 		Q_OBJECT
 
 		typedef Echo::vector<QDockWidget*>::type QDockWidgets;
-		typedef Echo::vector<Echo::EditorDockPanel*>::type EditorDockPanels;
 
 	public:
 		MainWindow(QMainWindow* parent=0);
@@ -64,8 +63,8 @@ namespace Studio
 		void removeCenterPanel(QDockWidget* panel);
 
 		// add bottom panel
-		void addBottomPanel(Echo::EditorDockPanel* panel);
-		void removeBottomPanel(Echo::EditorDockPanel* panel);
+		void addBottomPanel(QDockWidget* panel);
+		void removeBottomPanel(QDockWidget* panel);
 
 	protected:
 		void closeEvent(QCloseEvent *event);
@@ -167,7 +166,7 @@ namespace Studio
 		TextEditorArea*	    m_scriptEditorMdiArea = nullptr;
 		ShaderEditor*		m_shaderEditorPanel = nullptr;
 		QDockWidgets		m_centerPanels;
-		EditorDockPanels	m_bottomPanels;
+		QDockWidgets		m_bottomPanels;
 		LogPanel*			m_logPanel = nullptr;
 		DocumentPanel*		m_documentPanel = nullptr;
 		DebuggerPanel*		m_debuggerPanel = nullptr;

@@ -51,7 +51,7 @@ namespace Studio
 
 	public:
 		// show bottom panel
-		virtual void showBottomPanel(Echo::EditorDockPanel* centerPanel) override;
+		virtual void showBottomPanel(QDockWidget* centerPanel) override;
 
 		// show center panel
 		virtual void showCenterPanel(QDockWidget* panel, float widthRatio) override;

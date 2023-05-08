@@ -23,11 +23,11 @@ namespace Echo
 
 	public:
 		// center panel
-        virtual void showCenterPanel(QDockWidget * panel, float widthRatio=0.75) = 0;
+        virtual void showCenterPanel(QDockWidget* panel, float widthRatio=0.75) = 0;
         virtual void removeCenterPanel(QDockWidget* panel)=0;
 
         // bottom panel
-		virtual void showBottomPanel(EditorDockPanel* bottomPanel)=0;
+		virtual void showBottomPanel(QDockWidget* bottomPanel)=0;
 
 	public:
         // select a class

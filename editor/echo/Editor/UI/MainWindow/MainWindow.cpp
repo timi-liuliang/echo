@@ -228,30 +228,30 @@ namespace Studio
 		}
 	}
 
-	void MainWindow::addBottomPanel(Echo::EditorDockPanel* panel)
+	void MainWindow::addBottomPanel(QDockWidget* panel)
 	{
 		if (std::find(m_bottomPanels.begin(), m_bottomPanels.end(), panel) == m_bottomPanels.end())
 		{
-			QDockWidget* tabifyPanel = m_bottomPanels.size() > 0 ? m_bottomPanels.back()->getUiPtr() : m_logPanel;
+			QDockWidget* tabifyPanel = m_bottomPanels.size() > 0 ? m_bottomPanels.back() : m_logPanel;
 
-			this->addDockWidget(Qt::BottomDockWidgetArea, panel->getUiPtr());
-			this->tabifyDockWidget(tabifyPanel, panel->getUiPtr());
+			this->addDockWidget(Qt::BottomDockWidgetArea, panel);
+			this->tabifyDockWidget(tabifyPanel, panel);
 
 			// https://www.qtcentre.org/threads/47927-How-to-set-focus-(select)-a-tabbed-QDockWidget
 			Echo::Time::instance()->addDelayTask(100, [panel]()
 			{
-				panel->getUiPtr()->raise();
+				panel->raise();
 			});
 
 			m_bottomPanels.push_back(panel);
 		}
 		else
 		{
-			panel->getUiPtr()->setVisible(true);
+			panel->setVisible(true);
 		}
 	}
 
-	void MainWindow::removeBottomPanel(Echo::EditorDockPanel* panel)
+	void MainWindow::removeBottomPanel(QDockWidget* panel)
 	{
 
 	}
@@ -820,9 +820,6 @@ namespace Studio
 	{
 		m_scriptEditorMdiArea->save();
 		m_shaderEditorPanel->save();
-
-		for (Echo::EditorDockPanel* panel : m_bottomPanels)
-			panel->save();
 	}
 
 	void MainWindow::onShowStatusMessage()
