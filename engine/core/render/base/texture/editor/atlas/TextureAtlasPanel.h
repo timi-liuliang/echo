@@ -7,10 +7,11 @@
 #ifdef ECHO_EDITOR_MODE
 
 #include <QtWidgets/QGraphicsItem>
+#include "ui_TextureAtlasPanel.h"
 
 namespace Echo
 {
-	class TextureAtlasPanel : public EditorDockPanel
+	class TextureAtlasPanel : public QDockWidget, public Ui_TextureAtlasPanel
 	{
 		typedef vector<QGraphicsItem*>::type QGraphicsItemArray;
 		typedef vector<QGraphicsProxyWidget*>::type QGraphicsWidgetArray;
@@ -46,10 +47,8 @@ namespace Echo
 		void clearImageItemAndBorder();
 
 	protected:
-		QTreeWidget*				m_nodeTreeWidget = nullptr;
 		TextureAtlas*				m_textureAtlas;
 		QMenu*						m_importMenu = nullptr;
-		QGraphicsView*				m_graphicsView = nullptr;
 		QGraphicsScene*				m_graphicsScene = nullptr;
 		QGraphicsItem*				m_imageItem = nullptr;
 		QGraphicsItem*				m_imageBorder = nullptr;

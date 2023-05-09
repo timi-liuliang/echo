@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DockWidget</class>
- <widget class="QDockWidget" name="DockWidget">
+ <class>TextureAtlasPanel</class>
+ <widget class="QDockWidget" name="TextureAtlasPanel">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -131,6 +131,21 @@
     </item>
    </layout>
   </widget>
+  <action name="m_actionAddNewOne">
+   <property name="text">
+    <string>Add New One</string>
+   </property>
+  </action>
+  <action name="m_actionBuildFromGrid">
+   <property name="text">
+    <string>Build From Grid</string>
+   </property>
+  </action>
+  <action name="m_actionImportFromImages">
+   <property name="text">
+    <string>Import From Images</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

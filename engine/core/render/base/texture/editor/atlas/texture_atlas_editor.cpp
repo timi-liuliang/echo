@@ -23,7 +23,7 @@ namespace Echo
 
 	void TextureAtlasEditor::onEditorSelectThisNode()
 	{
-		Editor::instance()->showBottomPanel(m_panel->getUiPtr());
+		Editor::instance()->showBottomPanel(m_panel);
 	}
 
 	void TextureAtlasEditor::editor_update_self()
