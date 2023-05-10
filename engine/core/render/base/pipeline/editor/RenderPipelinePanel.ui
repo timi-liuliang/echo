@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DockWidget</class>
- <widget class="QDockWidget" name="DockWidget">
+ <class>RenderPipelinePanel</class>
+ <widget class="QDockWidget" name="RenderPipelinePanel">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -58,7 +58,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QToolButton" name="m_apply">
+        <widget class="QToolButton" name="m_applyButton">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -80,7 +80,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="m_captureMode">
+        <widget class="QToolButton" name="m_captureModeButton">
          <property name="toolTip">
           <string>Capture stopped</string>
          </property>

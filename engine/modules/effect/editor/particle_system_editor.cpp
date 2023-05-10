@@ -23,7 +23,7 @@ namespace Echo
 
     void ParticleSystemEditor::onEditorSelectThisNode()
     {
-        Editor::instance()->showBottomPanel(m_panel->getUiPtr());
+        Editor::instance()->showBottomPanel(m_panel);
     }
 
     void ParticleSystemEditor::editor_update_self()

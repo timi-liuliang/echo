@@ -5,7 +5,6 @@
 #include "ui_MainWindow.h"
 #include <engine/core/util/StringUtil.h>
 #include <engine/core/main/game_settings.h>
-#include <engine/core/editor/editor_dock_panel.h>
 #include <QComboBox>
 #include <QMdiArea>
 

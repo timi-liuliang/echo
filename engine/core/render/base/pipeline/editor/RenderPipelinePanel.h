@@ -1,7 +1,6 @@
 #pragma once
 
 #include "engine/core/util/Array.hpp"
-#include "engine/core/editor/editor_dock_panel.h"
 #include "../../pipeline/render_pipeline.h"
 
 #ifdef ECHO_EDITOR_MODE
@@ -12,10 +11,11 @@
 #include "renderqueue_node_painter.h"
 #include "frame_buffer_painter.h"
 #include "custom/qgraphics_scene_ex.h"
+#include "ui_RenderPipelinePanel.h"
 
 namespace Echo
 {
-	class RenderpipelinePanel : public EditorDockPanel
+	class RenderpipelinePanel : public QDockWidget, public Ui_RenderPipelinePanel
 	{
 		typedef vector<QGraphicsItem*>::type QGraphicsItemArray;
 		typedef vector<QGraphicsProxyWidget*>::type QGraphicsWidgetArray;
@@ -48,20 +48,15 @@ namespace Echo
 
 	protected:
 		// save
-		virtual void save() override;
+		//virtual void save() override;
 
 	protected:
-		QSplitter*							m_splitter = nullptr;
 		RenderPipeline*						m_pipeline;
 		QIcon								m_playIcon;
 		QIcon								m_stopIcon;
-		QToolButton*						m_applyButton = nullptr;
 		QIcon								m_captureEnableIcon;
 		QIcon								m_captureDisableIcon;
 		bool								m_captureEnable = false;
-		QToolButton*						m_captureModeButton = nullptr;
-		QGraphicsView*						m_graphicsView = nullptr;
-		QGraphicsView*						m_graphicsViewFrameBuffer = nullptr;
 		Pipeline::QGraphicsSceneEx*			m_graphicsScene = nullptr;
 		Pipeline::QGraphicsSceneEx*			m_graphicsSceneFrameBuffer = nullptr;
 		QGraphicsLineItem*					m_borderTopLine = nullptr;

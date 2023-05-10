@@ -11,13 +11,12 @@ namespace Echo
 #ifdef ECHO_EDITOR_MODE
 	ScratchEditorPanel::ScratchEditorPanel(Object* obj)
 	{
-		m_ui = qobject_cast<QDockWidget*>(EditorApi.qLoadUi("engine/core/script/scratch/editor/panel/scratch_panel.ui"));
+		setupUi(this);
 
-		QSplitter* splitter = m_ui->findChild<QSplitter*>("m_splitter");
-		if (splitter)
+		if (m_splitter)
 		{
-			splitter->setStretchFactor(0, 0);
-			splitter->setStretchFactor(1, 1);
+			m_splitter->setStretchFactor(0, 0);
+			m_splitter->setStretchFactor(1, 1);
 		}
 	}
 

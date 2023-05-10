@@ -14,15 +14,13 @@ namespace Echo
 	{
 		m_pipeline = ECHO_DOWN_CAST<RenderPipeline*>(obj);
 
-		m_ui = (QDockWidget*)EditorApi.qLoadUi("engine/core/render/base/pipeline/editor/RenderPipelinePanel.ui");
+		setupUi(this);
 
 		// Tool button icons
-		m_applyButton = m_ui->findChild<QToolButton*>("m_apply");
 		m_playIcon = QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/pipeline/editor/icon/play.png").c_str());
 		m_stopIcon = QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/pipeline/editor/icon/stop.png").c_str());
 		m_applyButton->setIcon(m_playIcon);
 
-		m_captureModeButton = m_ui->findChild<QToolButton*>("m_captureMode");
 		m_captureEnableIcon = QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/pipeline/editor/icon/capture-enable.png").c_str());
 		m_captureDisableIcon = QIcon((Engine::instance()->getRootPath() + "engine/core/render/base/pipeline/editor/icon/capture-disable.png").c_str());
 		m_captureModeButton->setIcon(m_captureDisableIcon);
@@ -32,12 +30,10 @@ namespace Echo
 		EditorApi.qConnectWidget(m_captureModeButton, QSIGNAL(clicked()), this, createMethodBind(&RenderpipelinePanel::onCaputeModeChanged));
 
 		// create QGraphicsScene
-		m_graphicsView = m_ui->findChild<QGraphicsView*>("m_graphicsView");
 		m_graphicsScene = new Pipeline::QGraphicsSceneEx();
 		m_graphicsView->setScene(m_graphicsScene);
 		m_graphicsView->setAttribute(Qt::WA_AlwaysShowToolTips);
 
-		m_graphicsViewFrameBuffer = m_ui->findChild<QGraphicsView*>("m_graphicsViewFrameBuffer");
 		m_graphicsViewFrameBuffer->setVisible(false);
 
 		m_graphicsSceneFrameBuffer = new Pipeline::QGraphicsSceneEx();
@@ -209,7 +205,6 @@ namespace Echo
 			m_captureModeButton->setToolTip("Capture running");
 			m_graphicsViewFrameBuffer->setVisible(true);
 
-			m_splitter = m_ui->findChild<QSplitter*>("m_splitter");
 			if (m_splitter)
 			{
 				m_splitter->setSizes({1, 1});
@@ -224,13 +219,6 @@ namespace Echo
 		}
 	}
 
-	void RenderpipelinePanel::save()
-	{
-		if (m_pipeline)
-		{
-			m_pipeline->save();
-		}
-	}
 
 #endif
 }

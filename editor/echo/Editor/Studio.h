@@ -102,7 +102,7 @@ namespace Studio
 		RenderWindow*					m_renderWindow = nullptr;
 		Echo::LogDefault*				m_log = nullptr;
 		LogPanel*						m_logPanel = nullptr;
-		EditorConfig*						m_projectCfg = nullptr;
+		EditorConfig*					m_projectCfg = nullptr;
 	};
 }
 

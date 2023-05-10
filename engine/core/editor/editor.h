@@ -2,7 +2,6 @@
 
 #include "engine/core/base/echo_def.h"
 #include "engine/core/render/base/image/image.h"
-#include "editor_dock_panel.h"
 #include "qt/QWidgets.h"
 
 #ifdef ECHO_EDITOR_MODE

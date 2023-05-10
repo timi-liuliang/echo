@@ -1,7 +1,6 @@
 #pragma once
 
 #include "engine/core/util/Array.hpp"
-#include "engine/core/editor/editor_dock_panel.h"
 #include "base/texture/texture_atlas.h"
 
 #ifdef ECHO_EDITOR_MODE

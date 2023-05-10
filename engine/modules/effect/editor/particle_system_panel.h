@@ -6,9 +6,11 @@
 
 #ifdef ECHO_EDITOR_MODE
 
+#include "ui_particle_system_panel.h"
+
 namespace Echo
 {
-	class ParticleSystemPanel : public EditorDockPanel
+	class ParticleSystemPanel : public QDockWidget, Ui_ParticleSystemPanel
 	{
 		typedef vector<QGraphicsItem*>::type QGraphicsItemArray;
 		typedef vector<QGraphicsProxyWidget*>::type QGraphicsWidgetArray;
@@ -46,7 +48,6 @@ namespace Echo
 	protected:
 		ParticleSystem*				m_particleSystem;
 		QMenu*						m_importMenu = nullptr;
-		QGraphicsView*				m_graphicsView = nullptr;
 		QGraphicsScene*				m_graphicsScene = nullptr;
 		QGraphicsItem*				m_imageItem = nullptr;
 		QGraphicsItem*				m_imageBorder = nullptr;

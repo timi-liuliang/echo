@@ -37,7 +37,7 @@ namespace Echo
 
 	void RenderPipelineEditor::onEditorSelectThisNode()
 	{
-		Editor::instance()->showBottomPanel(m_panel->getUiPtr());
+		Editor::instance()->showBottomPanel(m_panel);
 	}
 
 	void RenderPipelineEditor::postEditorCreateObject()
