@@ -15,6 +15,21 @@
 
 namespace Echo
 {
+	static QWidget* qLoadUi(const char* uiFilePath)
+	{
+		Echo::String path = Echo::Engine::instance()->getRootPath() + uiFilePath;
+
+		QFile file(path.c_str());
+		file.open(QFile::ReadOnly);
+
+		QUiLoader loader;
+		QWidget* widget = loader.load(&file, nullptr);
+
+		file.close();
+
+		return widget;
+	}
+
 #ifdef ECHO_EDITOR_MODE
 	TextureAtlasPanel::TextureAtlasPanel(Object* obj)
 	{
@@ -22,7 +37,7 @@ namespace Echo
 
 		m_textureAtlas = ECHO_DOWN_CAST<TextureAtlas*>(obj);
 
-		m_splitDialog = (QDialog*)EditorApi.qLoadUi("engine/core/render/base/texture/editor/atlas/TextureAtlasSplitDialog.ui");
+		m_splitDialog = (QDialog*)qLoadUi("engine/core/render/base/texture/editor/atlas/TextureAtlasSplitDialog.ui");
 
 		QSplitter* splitter = m_splitter;
 		if (splitter)

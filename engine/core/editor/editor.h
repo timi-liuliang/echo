@@ -93,10 +93,6 @@ namespace Echo
         qGraphicsViewFitInViewFun qGraphicsViewFitInView = nullptr;
         
     public:
-        // load ui file by path. then return the widget
-        qLoadUiFun qLoadUi = nullptr;      
-        
-    public:
         // sender
         qSenderFun qSender = nullptr;
 
