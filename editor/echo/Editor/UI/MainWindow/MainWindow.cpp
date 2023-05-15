@@ -118,7 +118,7 @@ namespace Studio
 		EchoSafeDelete(m_shaderEditorPanel, ShaderEditor);
 		EchoSafeDelete(m_documentPanel, DocumentPanel);
 		EchoSafeDelete(m_debuggerPanel, DebuggerPanel);
-        EchoSafeDelete(m_scenePanel, NodeTreePanel);
+        EchoSafeDelete(m_nodeTreePanel, NodeTreePanel);
         EchoSafeDelete(m_resPanel, ResPanel);
         EchoSafeDelete(m_renderPanel, QDockWidget);
 	}
@@ -135,7 +135,7 @@ namespace Studio
 
 		m_renderPanel = EchoNew(QDockWidget(this));
 		m_resPanel = EchoNew(ResPanel(this));
-		m_scenePanel = EchoNew(NodeTreePanel(this));
+		m_nodeTreePanel = EchoNew(NodeTreePanel(this));
 		m_scriptEditorMdiArea = EchoNew(TextEditorArea);
 		m_shaderEditorPanel = EchoNew(ShaderEditor(this));
 		m_logPanel = AStudio::instance()->getLogPanel();
@@ -158,7 +158,7 @@ namespace Studio
 		this->addDockWidget(Qt::TopDockWidgetArea, m_shaderEditorPanel);
 		this->addDockWidget(Qt::TopDockWidgetArea, m_renderPanel);
 		this->addDockWidget(Qt::LeftDockWidgetArea, m_resPanel);
-		this->addDockWidget(Qt::RightDockWidgetArea, m_scenePanel);
+		this->addDockWidget(Qt::RightDockWidgetArea, m_nodeTreePanel);
 		this->addDockWidget(Qt::BottomDockWidgetArea, m_logPanel);
 		this->addDockWidget(Qt::BottomDockWidgetArea, m_documentPanel);
 		this->addDockWidget(Qt::BottomDockWidgetArea, m_debuggerPanel);
@@ -299,7 +299,7 @@ namespace Studio
 	void MainWindow::onNewScene()
 	{
 		onSaveProject();
-		m_scenePanel->clear();
+		m_nodeTreePanel->clear();
 		EchoEngine::instance()->newEditNodeTree();
         
         updateRenderWindowTitle();
@@ -474,7 +474,7 @@ namespace Studio
 		EchoEngine::instance()->saveCurrentEditNodeTree();
 
 		// save current edit res
-		m_scenePanel->saveCurrentEditRes();
+		m_nodeTreePanel->saveCurrentEditRes();
 
 		// refresh respanel display
 		m_resPanel->reslectCurrentDir();

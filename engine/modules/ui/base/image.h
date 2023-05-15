@@ -19,10 +19,6 @@ namespace Echo
         // Texture res path
         void setTextureRes(const ResourcePath& path);
         const ResourcePath& getTextureRes() { return m_textureRes; }
-
-        // Tint color
-        const Color& getColor() const { return m_color; }
-        void setColor(const Color& color);
         
         // Width
         i32 getWidth() const { return m_width; }
@@ -59,7 +55,6 @@ namespace Echo
         
     private:
         ResourcePath            m_textureRes = ResourcePath("", ".png|.rt");
-        Color                   m_color = Color::WHITE;
         MeshPtr                 m_mesh;
         MaterialPtr             m_material;
         RenderProxyPtr          m_renderable;

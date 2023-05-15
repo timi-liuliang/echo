@@ -16,15 +16,15 @@ namespace Echo
 		UiRender();
 		virtual ~UiRender();
 
-		// alpha
-		float getAlpha() const { return m_alpha; }
-		void setAlpha(float alpha) { m_alpha = alpha; }
+		// Tint color
+		const Color& getColor() const { return m_color; }
+		void setColor(const Color& color);
 
 	protected:
 		// get global uniforms
 		virtual void* getGlobalUniformValue(const String& name) override;
 
 	protected:
-		float					m_alpha = 1.f;
+		Color                   m_color = Color::WHITE;
 	};
 }

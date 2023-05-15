@@ -161,7 +161,7 @@ namespace Studio
 		QTimer				m_timer;
 		QDockWidget*		m_renderPanel = nullptr;
 		ResPanel*			m_resPanel = nullptr;
-		NodeTreePanel*		m_scenePanel = nullptr;
+		NodeTreePanel*		m_nodeTreePanel = nullptr;
 		TextEditorArea*	    m_scriptEditorMdiArea = nullptr;
 		ShaderEditor*		m_shaderEditorPanel = nullptr;
 		QDockWidgets		m_centerPanels;

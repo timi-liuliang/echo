@@ -18,10 +18,18 @@ namespace Echo
 
 	void UiRender::bindMethods()
 	{
-		CLASS_BIND_METHOD(UiRender, getAlpha);
-		CLASS_BIND_METHOD(UiRender, setAlpha);
+		CLASS_BIND_METHOD(UiRender, getColor);
+		CLASS_BIND_METHOD(UiRender, setColor);
 
-		CLASS_REGISTER_PROPERTY(UiRender, "Alpha", Variant::Type::Real, getAlpha, setAlpha);
+		CLASS_REGISTER_PROPERTY(UiRender, "Color", Variant::Type::Color, getColor, setColor);
+	}
+
+	void UiRender::setColor(const Color& color)
+	{
+		if (m_color != color)
+		{
+			m_color = color;
+		}
 	}
 
 	void* UiRender::getGlobalUniformValue(const String& name)
@@ -30,8 +38,8 @@ namespace Echo
 		if (value)
 			return value;
 
-		if (name == "u_Alpha")
-			return (void*)(&m_alpha);
+		if (name == "BaseColor")
+			return (void*)(&m_color);
 
 		return nullptr;
 	}

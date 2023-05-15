@@ -28,8 +28,6 @@ namespace Echo
         CLASS_BIND_METHOD(UiImage, setAnchor);
         CLASS_BIND_METHOD(UiImage, getTextureRes);
         CLASS_BIND_METHOD(UiImage, setTextureRes);
-        CLASS_BIND_METHOD(UiImage, getColor);
-        CLASS_BIND_METHOD(UiImage, setColor);
         CLASS_BIND_METHOD(UiImage, getMaterial);
         CLASS_BIND_METHOD(UiImage, setMaterial);
         
@@ -37,7 +35,6 @@ namespace Echo
         CLASS_REGISTER_PROPERTY(UiImage, "Height", Variant::Type::Int, getHeight, setHeight);
         CLASS_REGISTER_PROPERTY(UiImage, "Anchor", Variant::Type::Vector2, getAnchor, setAnchor);
         CLASS_REGISTER_PROPERTY(UiImage, "Texture", Variant::Type::ResourcePath, getTextureRes, setTextureRes);
-        CLASS_REGISTER_PROPERTY(UiImage, "Color", Variant::Type::Color, getColor, setColor);
         CLASS_REGISTER_PROPERTY(UiImage, "Material", Variant::Type::Object, getMaterial, setMaterial);
         CLASS_REGISTER_PROPERTY_HINT(UiImage, "Material", PropertyHintType::ObjectType, "Material");
     }
@@ -80,16 +77,6 @@ namespace Echo
         }
     }
 
-    void UiImage::setColor(const Color& color)
-    {
-        if (m_color != color)
-        {
-            m_color = color;
-
-            clearRenderable();
-        }
-    }
-
     void UiImage::setMaterial(Object* material)
     { 
         if (m_material != material)
@@ -114,9 +101,6 @@ namespace Echo
 
         if (!m_textureRes.getPath().empty() && m_material && m_material->isUniformExist("BaseTexture"))
             m_material->setUniformTexture("BaseTexture", m_textureRes.getPath());
-
-        if (m_material && m_material->isUniformExist("BaseColor"))
-            m_material->setUniformValue("BaseColor", &m_color);
             
         // Mesh
         Ui::VertexArray vertices;
