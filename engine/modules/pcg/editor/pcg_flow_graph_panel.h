@@ -1,7 +1,6 @@
 #pragma once
 
 #include "engine/core/util/Array.hpp"
-#include "engine/core/editor/editor_dock_panel.h"
 #include "engine/modules/pcg/pcg_flow_graph.h"
 
 #ifdef ECHO_EDITOR_MODE
