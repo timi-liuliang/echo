@@ -16,14 +16,12 @@ namespace Echo
 	{
 	}
 
-	// play
 	void Live2dCubismMotion::play()
 	{
 		csmResetAnimationState(&m_animationState);
 		m_isPlaying = Engine::instance()->getConfig().m_isGame;
 	}
 
-	// tick
 	void Live2dCubismMotion::tick(float delta, csmModel* model, csmModelHashTable* table)
 	{
 		if (m_isPlaying && m_motionRes)

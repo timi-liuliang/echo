@@ -19,14 +19,13 @@ namespace Echo
 
 	Live2dCubismMotionRes* Live2dCubismMotionRes::create(const ResourcePath& path)
 	{
-		Res* res = Res::get(path);
+		Res* res = Res::get(path, false);
 		if (res)
 			return dynamic_cast<Live2dCubismMotionRes*>(res);
 		else
 			return EchoNew(Live2dCubismMotionRes(path));
 	}
 
-	// set res
 	void Live2dCubismMotionRes::build()
 	{
 		if (!m_path.getPath().empty())

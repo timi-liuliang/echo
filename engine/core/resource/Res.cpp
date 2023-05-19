@@ -111,7 +111,7 @@ namespace Echo
 		}
 	}
 
-	Res* Res::get(const ResourcePath& path)
+	Res* Res::get(const ResourcePath& path, bool createNewIfNotExist)
 	{
 		auto it = g_ress.find(path.getPath());
 		if (it != g_ress.end())
@@ -119,26 +119,28 @@ namespace Echo
 			return it->second;
 		}
 
-		// get load fun
-		String ext = PathUtil::GetFileExt(path.getPath(), true);
-		if (!ext.empty())
+		if (createNewIfNotExist)
 		{
-			StringUtil::LowerCase(ext);
-			std::unordered_map<String, Res::ResFun>::iterator itfun = g_resFuncs.find(ext);
-			if (itfun != g_resFuncs.end())
+			String ext = PathUtil::GetFileExt(path.getPath(), true);
+			if (!ext.empty())
 			{
-				Res* res = itfun->second.m_lfun(path);
-				if (res)
+				StringUtil::LowerCase(ext);
+				std::unordered_map<String, Res::ResFun>::iterator itfun = g_resFuncs.find(ext);
+				if (itfun != g_resFuncs.end())
 				{
-                    res->setPath(path.getPath());
-                    return res;
-				}
+					Res* res = itfun->second.m_lfun(path);
+					if (res)
+					{
+						res->setPath(path.getPath());
+						return res;
+					}
 
-                EchoLogError("Res::get file [%s] failed.", path.getPath().c_str());
-			}
-			else
-			{
-				EchoLogError("Res::get file [%s] failed. can't find load method for this type of resource", path.getPath().c_str());
+					EchoLogError("Res::get file [%s] failed.", path.getPath().c_str());
+				}
+				else
+				{
+					EchoLogError("Res::get file [%s] failed. can't find load method for this type of resource", path.getPath().c_str());
+				}
 			}
 		}
 

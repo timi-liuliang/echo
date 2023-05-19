@@ -35,7 +35,7 @@ namespace Echo
 		static void registerRes(const String& className, const String& exts, RES_CREATE_FUNC cfun, RES_LOAD_FUNC lfun);
 
 		// get res
-		static Res* get(const ResourcePath& path);
+		static Res* get(const ResourcePath& path, bool createNewIfNotExist=true);
 		static std::unordered_map<String, Res*>& getAll();
 
 		// create by extension
