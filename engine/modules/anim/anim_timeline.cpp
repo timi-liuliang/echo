@@ -31,7 +31,9 @@ namespace Echo
 
 		CLASS_REGISTER_PROPERTY(Timeline, "TimeScale", Variant::Type::Real, getTimeScale, setTimeScale);
 		CLASS_REGISTER_PROPERTY(Timeline, "Anim", Variant::Type::StringOption, getAnim, setAnim);
-		CLASS_REGISTER_PROPERTY(Timeline, "AnimData", Variant::Type::Base64String, getAnimData, setAnimData);
+		CLASS_REGISTER_PROPERTY(Timeline, "AnimData", Variant::Type::String, getAnimData, setAnimData);
+
+		CLASS_REGISTER_PROPERTY_HINT(Timeline, "AnimData", PropertyHintType::XmlCData, "true");
 	}
 
 	void Timeline::setAnim(const StringOption& animName)
@@ -131,7 +133,7 @@ namespace Echo
 	static const char* AnimCurveInterpolationTypeStr[] = { "Linear", "Discrete" };
 	static const char* ObjectTypeStr[] = { "Node", "Setting", "Resource" };
 
-	const Base64String& Timeline::getAnimData()
+	const String& Timeline::getAnimData()
 	{ 
 		if (m_isAnimDataDirty)
 		{
@@ -211,13 +213,13 @@ namespace Echo
 				}
 			}
 
-			m_animData.encode( pugi::get_doc_string(doc).c_str());
+			m_animData = pugi::get_doc_string(doc).c_str();
 		}
 
 		return m_animData; 
 	}
 
-	void Timeline::setAnimData(const Base64String& data)
+	void Timeline::setAnimData(const String& data)
 	{ 
 		// clear
 		EchoSafeDeleteContainer(m_clips, AnimClip);
@@ -225,7 +227,7 @@ namespace Echo
 
 		// parse clips
 		pugi::xml_document doc; 
-		doc.load(data.decode().c_str());
+		doc.load(data.c_str());
 
 		// root node
 		pugi::xml_node rootXmlNode = doc.child("clips");

@@ -51,8 +51,8 @@ namespace Echo
 		bool isAnimExist(const char* animName);
 
 		// get|set anim data
-		const Base64String& getAnimData();
-		void setAnimData(const Base64String& data);
+		const String& getAnimData();
+		void setAnimData(const String& data);
 
 		// time scale
 		float getTimeScale() { return m_timeScale; }
@@ -127,7 +127,7 @@ namespace Echo
 		PlayState				m_playState;
 		float					m_timeScale = 1.f;
 		vector<AnimClip*>::type	m_clips;
-		Base64String			m_animData;
+		String					m_animData;
 		bool					m_isAnimDataDirty = false;
 		StringOption			m_animations = StringOption("");
 	};
