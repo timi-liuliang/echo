@@ -513,6 +513,8 @@ namespace Echo
 		{
 		case Variant::Type::Bool:			return AnimProperty::Type::Bool;
 		case Variant::Type::Vector3:		return AnimProperty::Type::Vector3;
+		case Variant::Type::Vector4:		return AnimProperty::Type::Vector4;
+		case Variant::Type::Color:			return AnimProperty::Type::Vector4;
 		case Variant::Type::ResourcePath:	return AnimProperty::Type::String;
 		case Variant::Type::Object:			return AnimProperty::Type::Object;
 		default:							return AnimProperty::Type::Unknown;

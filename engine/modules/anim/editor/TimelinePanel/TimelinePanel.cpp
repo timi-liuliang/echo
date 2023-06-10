@@ -441,14 +441,15 @@ namespace Echo
 				Node* node = m_timeline->getNode(text.c_str());
 				if (node)
 				{
+					String nodeRelativePath = node->getNodePathRelativeTo(m_timeline);
 					String propertyName = Editor::instance()->selectAProperty(node);
 					if (!propertyName.empty())
 					{
 						propertyChain.insert(propertyChain.begin(), propertyName);
-						AnimProperty::Type propertyType = m_timeline->getAnimPropertyType(node->getNodePathRelativeTo(m_timeline), propertyChain);
+						AnimProperty::Type propertyType = m_timeline->getAnimPropertyType(nodeRelativePath, propertyChain);
 						if (propertyType != AnimProperty::Type::Unknown)
 						{
-							m_timeline->addProperty(m_currentEditAnim, node->getNodePathRelativeTo(m_timeline), propertyChain, propertyType);
+							m_timeline->addProperty(m_currentEditAnim, nodeRelativePath, propertyChain, propertyType);
 
 							// addNodePropertyToEditor;
 							QTreeWidgetItem* propertyItem = new QTreeWidgetItem;
