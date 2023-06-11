@@ -32,18 +32,19 @@ namespace Echo
 		// get property chain and object path
 		static void queryNodePathAndPropertyChain(QTreeWidgetItem* item, String& nodePath, StringArray& propertyChain)
 		{
+			propertyChain.clear();
+
 			String userData = item->data(0, Qt::UserRole).toString().toStdString().c_str();
 			if (userData == "property")
 			{
-				QTreeWidgetItem* nodeItem = item->parent();
-				propertyChain.insert(propertyChain.begin(), nodeItem->text(0).toStdString().c_str());
-				while (isProperty(nodeItem))
+				QTreeWidgetItem* currItem = item;
+				while (isProperty(currItem))
 				{
-					propertyChain.insert(propertyChain.begin(), nodeItem->text(0).toStdString().c_str());
-					nodeItem = nodeItem->parent();
+					propertyChain.insert(propertyChain.begin(), currItem->text(0).toStdString().c_str());
+					currItem = currItem->parent();
 				}
 
-				nodePath = nodeItem->text(0).toStdString().c_str();
+				nodePath = currItem->text(0).toStdString().c_str();
 			}
 			else
 			{
@@ -616,6 +617,38 @@ namespace Echo
 				}
 			}
 			break;
+			case AnimProperty::Type::Vector4:
+			{
+				AnimPropertyVec4* vec3Proeprty = ECHO_DOWN_CAST<AnimPropertyVec4*>(animProperty);
+				if (vec3Proeprty)
+				{
+					const ui32 frameStep = 2;
+
+					//clearCurveItemsTo(3);
+					vector<Vector2>::type curvePaths[4];
+					for (i32 curveIdx = 0; curveIdx < 4; curveIdx++)
+					{
+						AnimCurve* curve = vec3Proeprty->m_curves[curveIdx];
+						if (curve && curve->getKeyCount())
+						{
+							for (ui32 t = curve->getStartTime(); t <= curve->getEndTime(); t += frameStep)
+							{
+								float value = curve->getValue(t);
+
+								Vector2 keyPos;
+								calcKeyPosByTimeAndValue(t, value, keyPos);
+								curvePaths[curveIdx].emplace_back(keyPos);
+							}
+						}
+					}
+
+					m_curveItems[0] = EditorApi.qGraphicsSceneAddPath(m_graphicsScene, curvePaths[0], 2.5f, Color(1.f, 0.f, 0.f, 0.7f));
+					m_curveItems[1] = EditorApi.qGraphicsSceneAddPath(m_graphicsScene, curvePaths[1], 2.5f, Color(0.f, 1.f, 0.f, 0.7f));
+					m_curveItems[2] = EditorApi.qGraphicsSceneAddPath(m_graphicsScene, curvePaths[2], 2.5f, Color(0.f, 0.f, 1.f, 0.7f));
+					m_curveItems[3] = EditorApi.qGraphicsSceneAddPath(m_graphicsScene, curvePaths[3], 2.5f, Color(0.f, 0.f, 1.f, 0.7f));
+				}
+			}
+			break;
             default: break;
 			}
 		}
@@ -932,7 +965,7 @@ namespace Echo
 	{
 		// test view port rect
 		QRectF viewRect = m_graphicsView->sceneRect();
-		if (viewRect.left() != m_rulerLeft || viewRect.top() != m_rulerTop)
+		if (viewRect.isEmpty())
 		{
 			m_rulerLeft = int(viewRect.left() / 20) * 20;
 			m_rulerTop = viewRect.top();
@@ -1227,7 +1260,7 @@ namespace Echo
 		}
 		else
 		{
-			m_graphicsView->setEnabled(false);
+			//m_graphicsView->setEnabled(false);
 		}
 	}
 
