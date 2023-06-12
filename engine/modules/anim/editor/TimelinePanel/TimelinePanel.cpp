@@ -103,10 +103,10 @@ namespace Echo
 		setToolbuttonIcon( DeleteClip, "engine/modules/anim/editor/icon/delete.png");
 
 		// set curve icons
-		setToolbuttonIcon(m_curveXVisible, "engine/modules/anim/editor/icon/curve_red.png");
-		setToolbuttonIcon(m_curveYVisible, "engine/modules/anim/editor/icon/curve_green.png");
-		setToolbuttonIcon(m_curveZVisible, "engine/modules/anim/editor/icon/curve_blue.png");
-		setToolbuttonIcon(m_curveWVisible, "engine/modules/anim/editor/icon/curve_white.png");
+		//setToolbuttonIcon(m_curveXVisible, "engine/modules/anim/editor/icon/curve_red.png");
+		//setToolbuttonIcon(m_curveYVisible, "engine/modules/anim/editor/icon/curve_green.png");
+		//setToolbuttonIcon(m_curveZVisible, "engine/modules/anim/editor/icon/curve_blue.png");
+		//setToolbuttonIcon(m_curveWVisible, "engine/modules/anim/editor/icon/curve_white.png");
 
 		// connect signal slots
 		EditorApi.qConnectWidget(NewClip, QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onNewClip));
@@ -121,10 +121,10 @@ namespace Echo
 		EditorApi.qConnectWidget(Stop, QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onStopAnim));
 		EditorApi.qConnectWidget(Restart, QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onRestartAnim));
 
-		EditorApi.qConnectWidget(m_curveXVisible, QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onSwitchCurveVisibility));
-		EditorApi.qConnectWidget(m_curveYVisible, QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onSwitchCurveVisibility));
-		EditorApi.qConnectWidget(m_curveZVisible, QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onSwitchCurveVisibility));
-		EditorApi.qConnectWidget(m_curveWVisible, QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onSwitchCurveVisibility));
+		//EditorApi.qConnectWidget(m_curveXVisible, QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onSwitchCurveVisibility));
+		//EditorApi.qConnectWidget(m_curveYVisible, QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onSwitchCurveVisibility));
+		//EditorApi.qConnectWidget(m_curveZVisible, QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onSwitchCurveVisibility));
+		//EditorApi.qConnectWidget(m_curveWVisible, QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onSwitchCurveVisibility));
 
 		// connect signals
 		EditorApi.qConnectWidget(m_graphicsView, QSIGNAL(customContextMenuRequested(const QPoint&)), this, createMethodBind(&TimelinePanel::onRightClickGraphicsView));
@@ -1082,10 +1082,10 @@ namespace Echo
 
 	void TimelinePanel::onSwitchCurveVisibility()
 	{
-		m_curveVisibles[0] = m_curveXVisible->isChecked();
-		m_curveVisibles[1] = m_curveYVisible->isChecked();
-		m_curveVisibles[2] = m_curveZVisible->isChecked();
-		m_curveVisibles[3] = m_curveWVisible->isChecked();
+		//m_curveVisibles[0] = m_curveXVisible->isChecked();
+		//m_curveVisibles[1] = m_curveYVisible->isChecked();
+		//m_curveVisibles[2] = m_curveZVisible->isChecked();
+		//m_curveVisibles[3] = m_curveWVisible->isChecked();
 
 		for (size_t i = 0; i < m_curveItems.size(); i++)
 		{

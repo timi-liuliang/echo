@@ -1,227 +1,181 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>TimelinePanel</class>
- <widget class="QDockWidget" name="DockWidget">
+ <widget class="QDockWidget" name="TimelinePanel">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>775</width>
-    <height>237</height>
+    <width>1047</width>
+    <height>435</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Timeline</string>
   </property>
   <widget class="QWidget" name="dockWidgetContents">
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <property name="spacing">
-     <number>0</number>
-    </property>
-    <property name="leftMargin">
-     <number>3</number>
-    </property>
-    <property name="topMargin">
-     <number>0</number>
-    </property>
-    <property name="rightMargin">
-     <number>3</number>
-    </property>
-    <property name="bottomMargin">
-     <number>0</number>
-    </property>
-    <item>
-     <widget class="QWidget" name="TopTools" native="true">
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>25</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>25</height>
-       </size>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="QToolButton" name="m_addNode">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string>Add objects to current animation</string>
-         </property>
-         <property name="statusTip">
-          <string>Add</string>
-         </property>
-         <property name="text">
-          <string>...</string>
-         </property>
-         <property name="popupMode">
-          <enum>QToolButton::DelayedPopup</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="Play">
-         <property name="toolTip">
-          <string>Play</string>
-         </property>
-         <property name="statusTip">
-          <string>Play</string>
-         </property>
-         <property name="text">
-          <string>...</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="Stop">
-         <property name="toolTip">
-          <string>Stop</string>
-         </property>
-         <property name="statusTip">
-          <string>Stop</string>
-         </property>
-         <property name="text">
-          <string>...</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="Restart">
-         <property name="toolTip">
-          <string>Restart</string>
-         </property>
-         <property name="statusTip">
-          <string>Restart</string>
-         </property>
-         <property name="text">
-          <string>...</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>725</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QToolButton" name="m_curveXVisible">
-         <property name="text">
-          <string>...</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="m_curveYVisible">
-         <property name="text">
-          <string>...</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="m_curveZVisible">
-         <property name="text">
-          <string>...</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="m_curveWVisible">
-         <property name="text">
-          <string>...</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
+   <layout class="QVBoxLayout" name="verticalLayout_3">
     <item>
      <widget class="QSplitter" name="m_splitter">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QTreeWidget" name="m_nodeTreeWidget">
-       <property name="animated">
-        <bool>false</bool>
-       </property>
-       <property name="headerHidden">
-        <bool>true</bool>
-       </property>
-       <property name="columnCount">
-        <number>2</number>
-       </property>
-       <column>
-        <property name="text">
-         <string notr="true">1</string>
+      <widget class="QWidget" name="verticalLayoutWidget">
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="spacing">
+         <number>0</number>
         </property>
-       </column>
-       <column>
-        <property name="text">
-         <string notr="true">2</string>
-        </property>
-       </column>
+        <item>
+         <widget class="QWidget" name="TopTools" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>25</height>
+           </size>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QToolButton" name="m_addNode">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="toolTip">
+              <string>Add objects to current animation</string>
+             </property>
+             <property name="statusTip">
+              <string>Add</string>
+             </property>
+             <property name="text">
+              <string>...</string>
+             </property>
+             <property name="popupMode">
+              <enum>QToolButton::DelayedPopup</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="Play">
+             <property name="toolTip">
+              <string>Play</string>
+             </property>
+             <property name="statusTip">
+              <string>Play</string>
+             </property>
+             <property name="text">
+              <string>...</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="Stop">
+             <property name="toolTip">
+              <string>Stop</string>
+             </property>
+             <property name="statusTip">
+              <string>Stop</string>
+             </property>
+             <property name="text">
+              <string>...</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="Restart">
+             <property name="toolTip">
+              <string>Restart</string>
+             </property>
+             <property name="statusTip">
+              <string>Restart</string>
+             </property>
+             <property name="text">
+              <string>...</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>725</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTreeWidget" name="m_nodeTreeWidget">
+          <property name="animated">
+           <bool>false</bool>
+          </property>
+          <property name="headerHidden">
+           <bool>true</bool>
+          </property>
+          <property name="columnCount">
+           <number>2</number>
+          </property>
+          <column>
+           <property name="text">
+            <string notr="true">1</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string notr="true">2</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
       </widget>
-      <widget class="QGraphicsView" name="m_graphicsView">
-       <property name="contextMenuPolicy">
-        <enum>Qt::CustomContextMenu</enum>
-       </property>
-       <property name="verticalScrollBarPolicy">
-        <enum>Qt::ScrollBarAsNeeded</enum>
-       </property>
-       <property name="horizontalScrollBarPolicy">
-        <enum>Qt::ScrollBarAsNeeded</enum>
-       </property>
+      <widget class="QWidget" name="verticalLayoutWidget_2">
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="Echo::TimelineRuler" name="m_timelineRuler" native="true"/>
+        </item>
+        <item>
+         <widget class="QGraphicsView" name="m_graphicsView">
+          <property name="contextMenuPolicy">
+           <enum>Qt::CustomContextMenu</enum>
+          </property>
+          <property name="verticalScrollBarPolicy">
+           <enum>Qt::ScrollBarAsNeeded</enum>
+          </property>
+          <property name="horizontalScrollBarPolicy">
+           <enum>Qt::ScrollBarAsNeeded</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </widget>
     </item>
@@ -341,94 +295,102 @@
      </widget>
     </item>
    </layout>
-    <action name="m_actionAddNode">
-      <property name="text">
-        <string>Add Node</string>
-      </property>
-    </action>
-    <action name="m_actionAddSetting">
-      <property name="text">
-        <string>Add Setting</string>
-      </property>
-    </action>
-    <action name="m_actionAddResource">
-      <property name="text">
-        <string>Add Resource</string>
-      </property>
-    </action>
-    <action name="m_actionCurveRed">
-      <property name="text">
-        <string>Curve Red(X)</string>
-      </property>
-    </action>
-    <action name="m_actionCurveGreen">
-      <property name="text">
-        <string>Curve Green(Y)</string>
-      </property>
-    </action>
-    <action name="m_actionCurveBlue">
-      <property name="text">
-        <string>Curve Blue(Z)</string>
-      </property>
-      <property name="toolTip">
-        <string>Curve Blue(Z)</string>
-      </property>
-    </action>
-    <action name="m_actionCurveWhite">
-      <property name="text">
-        <string>Curve White(W)</string>
-      </property>
-      <property name="toolTip">
-        <string>Curve White(W)</string>
-      </property>
-    </action>
-    <action name="m_actionAddKeyToCurveRed">
-      <property name="text">
-        <string>Add Key To Curve Red (X)</string>
-      </property>
-    </action>
-    <action name="m_actionAddKeyToCurveGreen">
-      <property name="text">
-        <string>Add Key To Curve Green (Y)</string>
-      </property>
-      <property name="toolTip">
-        <string>Add Key To Curve Green</string>
-      </property>
-    </action>
-    <action name="m_actionAddKeyToCurveBlue">
-      <property name="text">
-        <string>Add Key To Curve Blue (Z)</string>
-      </property>
-      <property name="toolTip">
-        <string>Add Key To Curve Blue</string>
-      </property>
-    </action>
-    <action name="m_actionAddKeyToCurveWhite">
-      <property name="text">
-        <string>Add Key To Curve White (W)</string>
-      </property>
-      <property name="toolTip">
-        <string>Add Key To Curve White</string>
-      </property>
-    </action>
-    <action name="m_actionAddBoolKeyToCurve">
-      <property name="text">
-        <string>Add Bool Key To Curve</string>
-      </property>
-      <property name="toolTip">
-        <string>Add Bool Key To Curve</string>
-      </property>
-    </action>
-    <action name="m_actionAddStringKeyToCurve">
-      <property name="text">
-        <string>Add String Key To Curve</string>
-      </property>
-      <property name="toolTip">
-        <string>Add Bool Key To Curve</string>
-      </property>
-    </action>
+   <action name="m_actionAddNode">
+    <property name="text">
+     <string>Add Node</string>
+    </property>
+   </action>
+   <action name="m_actionAddSetting">
+    <property name="text">
+     <string>Add Setting</string>
+    </property>
+   </action>
+   <action name="m_actionAddResource">
+    <property name="text">
+     <string>Add Resource</string>
+    </property>
+   </action>
+   <action name="m_actionCurveRed">
+    <property name="text">
+     <string>Curve Red(X)</string>
+    </property>
+   </action>
+   <action name="m_actionCurveGreen">
+    <property name="text">
+     <string>Curve Green(Y)</string>
+    </property>
+   </action>
+   <action name="m_actionCurveBlue">
+    <property name="text">
+     <string>Curve Blue(Z)</string>
+    </property>
+    <property name="toolTip">
+     <string>Curve Blue(Z)</string>
+    </property>
+   </action>
+   <action name="m_actionCurveWhite">
+    <property name="text">
+     <string>Curve White(W)</string>
+    </property>
+    <property name="toolTip">
+     <string>Curve White(W)</string>
+    </property>
+   </action>
+   <action name="m_actionAddKeyToCurveRed">
+    <property name="text">
+     <string>Add Key To Curve Red (X)</string>
+    </property>
+   </action>
+   <action name="m_actionAddKeyToCurveGreen">
+    <property name="text">
+     <string>Add Key To Curve Green (Y)</string>
+    </property>
+    <property name="toolTip">
+     <string>Add Key To Curve Green</string>
+    </property>
+   </action>
+   <action name="m_actionAddKeyToCurveBlue">
+    <property name="text">
+     <string>Add Key To Curve Blue (Z)</string>
+    </property>
+    <property name="toolTip">
+     <string>Add Key To Curve Blue</string>
+    </property>
+   </action>
+   <action name="m_actionAddKeyToCurveWhite">
+    <property name="text">
+     <string>Add Key To Curve White (W)</string>
+    </property>
+    <property name="toolTip">
+     <string>Add Key To Curve White</string>
+    </property>
+   </action>
+   <action name="m_actionAddBoolKeyToCurve">
+    <property name="text">
+     <string>Add Bool Key To Curve</string>
+    </property>
+    <property name="toolTip">
+     <string>Add Bool Key To Curve</string>
+    </property>
+   </action>
+   <action name="m_actionAddStringKeyToCurve">
+    <property name="text">
+     <string>Add String Key To Curve</string>
+    </property>
+    <property name="toolTip">
+     <string>Add Bool Key To Curve</string>
+    </property>
+   </action>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Echo::TimelineRuler</class>
+   <extends>QWidget</extends>
+   <header>timeline_ruler.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
