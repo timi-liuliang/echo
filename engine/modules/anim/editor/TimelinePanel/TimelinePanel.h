@@ -121,10 +121,6 @@ namespace Echo
 		void onNodeTreeWidgetSizeChanged();
 
 	private:
-		// draw ruler
-		void drawRuler();
-		void drawRulerVertical();
-
 		// set tool button icon
 		void setToolbuttonIcon(QToolButton* button, const String& iconPath);
 
@@ -137,12 +133,6 @@ namespace Echo
 		QGraphicsScene*				m_graphicsScene = nullptr;
 		String						m_currentEditObjectPath;
 		StringArray					m_currentEditPropertyChain;
-		float						m_rulerLeft = 0.f;
-		float						m_rulerTop = 0.f;
-		float						m_rulerHeight;
-		Color						m_rulerColor;
-		QGraphicsItemArray			m_rulerItems;
-		QGraphicsItemArray			m_rulerHItems;
 		float						m_keyRadius = 7.f;
 		QGraphicsItem*				m_editAreaBoudingBox = nullptr;
 		array<QGraphicsItem*, 4>	m_curveItems;

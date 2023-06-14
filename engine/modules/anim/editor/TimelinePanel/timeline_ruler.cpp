@@ -13,9 +13,9 @@ namespace Echo
     {
         setMouseTracking(true); // receive mouse move events even when no button is pressed
 
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < 200; i++)
         {
-            Event a("0", i);
+            Event a(Echo::StringUtil::Format("%d", i*20).c_str(), i);
             addEvent(a);
         }
     }
@@ -28,12 +28,12 @@ namespace Echo
 
     QSize TimelineRuler::minimumSizeHint() const
     {
-        return QSize(100, 46); // a reasonable minimum size for the control
+        return QSize(100, 26); // a reasonable minimum size for the control
     }
 
     QSize TimelineRuler::sizeHint() const
     {
-        return QSize(400, 46); // a reasonable default size for the control
+        return QSize(400, 26); // a reasonable default size for the control
     }
 
     void TimelineRuler::paintEvent(QPaintEvent* event)
@@ -41,45 +41,67 @@ namespace Echo
         Q_UNUSED(event);
 
         QPainter painter(this);
-        painter.setRenderHint(QPainter::Antialiasing); // smooth out lines and curves
-
-        const int margin = 10;
-        const int height = this->height() - 2 * margin;
 
         // Draw the timeline axis
-        painter.drawLine(margin, margin + height / 2, width() - margin, margin + height / 2);
+        QPen pen;
+        pen.setColor(m_normalColor);
+        pen.setWidthF(1.0);
+
+        painter.setPen(pen);
+        painter.drawLine(0.0, height()-3, width(), height()-3);
 
         // Draw the events
-        const int eventWidth = (width() - 2 * margin) / m_events.size();
-        for (int i = 0; i < m_events.size(); ++i) {
+        const int eventWidth = 20;
+        const int eventWidthHalf = eventWidth * 0.5;
+        for (int i = 0; i < m_events.size(); ++i) 
+        {
             const Event& event = m_events[i];
-            const int x1 = margin + i * eventWidth;
-            const int x2 = x1 + eventWidth;
-            const int y1 = margin;
-            const int y2 = margin + height;
             const bool isHovered = (m_hoveredEventIndex == i);
             const bool isSelected = (m_selectedEventIndex == i);
             const bool isDragged = (m_draggedEventIndex == i);
-            QPen pen;
-            if (isDragged) {
+
+            if (isDragged) 
+            {
                 pen.setColor(Qt::red);
                 pen.setWidthF(2.0);
             }
-            else if (isSelected) {
+            else if (isSelected) 
+            {
                 pen.setColor(Qt::blue);
                 pen.setWidthF(2.0);
             }
-            else if (isHovered) {
+            else if (isHovered) 
+            {
                 pen.setColor(Qt::gray);
                 pen.setWidthF(1.5);
             }
-            else {
-                pen.setColor(Qt::black);
+            else 
+            {
+                pen.setColor(m_normalColor);
                 pen.setWidthF(1.0);
             }
+
+            i32 centerX = (i + 0.5) * eventWidth;
+
             painter.setPen(pen);
-            painter.drawRect(x1, y1, x2 - x1, y2 - y1);
-            painter.drawText(QRectF(x1 + 5, y1 + 5, x2 - x1 - 10, y2 - y1 - 10), Qt::AlignTop | Qt::TextWordWrap, event.title());
+            painter.drawLine(centerX, height()-4, centerX, height() - 12);
+
+            if (i % 2 == 0)
+            {
+                const int textHeight = 20;
+                const int textWidth = 30;
+                const int textWidthHalf = textWidth * 0.5;
+
+                pen.setColor(QColor(0, 0, 0));
+                pen.setWidthF(1.0);
+                painter.setPen(pen);
+
+                QFont font = painter.font();
+                font.setBold(false);
+                painter.setFont(font);
+
+                painter.drawText(centerX - textWidthHalf + 1, height() - 12 - textHeight, textWidth, textHeight, Qt::AlignCenter | Qt::TextWordWrap, event.title());
+            }
         }
     }
 

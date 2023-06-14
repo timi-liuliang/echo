@@ -70,8 +70,6 @@ namespace Echo
 	TimelinePanel::TimelinePanel(Object* obj)
 		: m_addObjectMenu(nullptr)
 		, m_nodeTreeWidgetWidth(0)
-		, m_rulerHeight( 25.f)
-		, m_rulerColor( 0.73f, 0.73f, 0.73f)
 		, m_curveKeyLineEdit(nullptr)
 		, m_curveKeyItem(nullptr)
 	{
@@ -173,9 +171,6 @@ namespace Echo
 	void TimelinePanel::update()
 	{
 		onNodeTreeWidgetSizeChanged();
-
-		// update ruler draw
-		drawRuler();
 	}
 
 	void TimelinePanel::onDuplicateClip()
@@ -961,125 +956,6 @@ namespace Echo
 		}
 	}
 
-	void TimelinePanel::drawRuler()
-	{
-		// test view port rect
-		QRectF viewRect = m_graphicsView->sceneRect();
-		if (viewRect.isEmpty())
-		{
-			m_rulerLeft = int(viewRect.left() / 20) * 20;
-			m_rulerTop = viewRect.top();
-
-			for (QGraphicsItem* item : m_rulerItems)
-			{
-				m_graphicsScene->removeItem(item);
-				delete item;
-			}
-			m_rulerItems.clear();
-
-			const float keyWidth = 20;	// pixels
-			const int   keyCount = 100;
-
-			// ruler bottom
-			Color bgColor; bgColor.setRGBA(83, 83, 83, 255);
-			m_rulerItems.emplace_back(EditorApi.qGraphicsSceneAddRect(m_graphicsScene, std::max<float>(float(-keyWidth) + m_rulerLeft, -keyWidth), -1 + m_rulerTop, float(keyCount * keyWidth) + keyWidth, m_rulerHeight, bgColor, bgColor));
-			m_rulerItems.emplace_back(EditorApi.qGraphicsSceneAddLine(m_graphicsScene, std::max<float>(float(-keyWidth) + m_rulerLeft, 0), m_rulerHeight + m_rulerTop, float(keyCount * keyWidth) + keyWidth + m_rulerLeft, m_rulerHeight + m_rulerTop, m_rulerColor));
-
-			// key line
-			for (int i = 0; i <= keyCount; i++)
-			{
-				float xPos = i * keyWidth;
-				if(xPos+m_rulerLeft>=0)
-					m_rulerItems.emplace_back(EditorApi.qGraphicsSceneAddLine(m_graphicsScene, xPos + m_rulerLeft, 18.f + m_rulerTop, xPos + m_rulerLeft, m_rulerHeight + m_rulerTop, m_rulerColor));
-			}
-
-			// draw Text
-			for (int i = 0; i <= keyCount; i++)
-			{
-				if (i % 2 == 0)
-				{
-					i32 time;
-					float value;
-					Vector2 textPos(i * keyWidth + m_rulerLeft, 5.f + m_rulerTop);
-					calcKeyTimeAndValueByPos(textPos, time, value);
-					if (time >= 0)
-					{
-						QGraphicsItem* textItem = m_graphicsScene->addSimpleText(StringUtil::Format("%d", time).c_str());
-						if (textItem)
-						{
-							//float halfWidth = EditorApi.qGraphicsItemWidth(textItem) * 0.4f /*0.5f*/;
-							textItem->setPos(textPos.x, textPos.y);
-							m_rulerItems.push_back(textItem);
-						}
-					}
-				}
-			}
-
-			// set z value
-			for (QGraphicsItem* item : m_rulerItems)
-			{
-				item->setZValue(200.f);
-			}
-
-			// draw value
-			drawRulerVertical();
-		}
-	}
-
-	void TimelinePanel::drawRulerVertical()
-	{
-		for (QGraphicsItem* item : m_rulerHItems)
-		{
-			m_graphicsScene->removeItem(item);
-			delete item;
-		}
-		m_rulerHItems.clear();
-
-		const float keyWidth = 20;	// pixels
-		const int   keyCount = 50;
-
-		// ruler bottom
-		Color bgColor; bgColor.setRGBA(83, 83, 83, 255);
-		//m_rulerItems.emplace_back(qGraphicsSceneAddRect(m_graphicsScene, std::max<float>(float(-keyWidth) + m_rulerLeft, -keyWidth), -1 + m_rulerTop, float(keyCount * keyWidth) + keyWidth, m_rulerHeight, bgColor));
-		m_rulerItems.emplace_back(EditorApi.qGraphicsSceneAddLine(m_graphicsScene, std::max<float>(keyWidth + m_rulerLeft, 0), m_rulerHeight + m_rulerTop, std::max<float>(keyWidth + m_rulerLeft, 0), float(keyCount * keyWidth) + keyWidth + m_rulerLeft, m_rulerColor));
-
-		//// key line
-		//for (int i = 0; i <= keyCount; i++)
-		//{
-		//	float xPos = i * keyWidth;
-		//	if (xPos + m_rulerLeft >= 0)
-		//		m_rulerItems.emplace_back(qGraphicsSceneAddLine(m_graphicsScene, xPos + m_rulerLeft, 18.f + m_rulerTop, xPos + m_rulerLeft, m_rulerHeight + m_rulerTop, m_rulerColor));
-		//}
-
-		//// draw Text
-		//for (int i = 0; i <= keyCount; i++)
-		//{
-		//	if (i % 2 == 0)
-		//	{
-		//		i32 time;
-		//		float value;
-		//		Vector2 textPos(i * keyWidth + m_rulerLeft, 5.f + m_rulerTop);
-		//		calcKeyTimeAndValueByPos(textPos, time, value);
-		//		if (time >= 0)
-		//		{
-		//			QGraphicsItem* textItem = qGraphicsSceneAddSimpleText(m_graphicsScene, StringUtil::Format("%d", time).c_str(), m_rulerColor);
-		//			if (textItem)
-		//			{
-		//				float halfWidth = qGraphicsItemWidth(textItem) * 0.4f /*0.5f*/;
-		//				qGraphicsItemSetPos(textItem, textPos.x, textPos.y);
-		//				m_rulerItems.emplace_back(textItem);
-		//			}
-		//		}
-		//	}
-		//}
-
-		//// set z value
-		//for (QGraphicsItem* item : m_rulerItems)
-		//{
-		//	qGraphicsItemSetZValue(item, 200.f);
-		//}
-	}
-
 	void TimelinePanel::onSwitchCurveVisibility()
 	{
 		//m_curveVisibles[0] = m_curveXVisible->isChecked();
@@ -1288,9 +1164,6 @@ namespace Echo
 
 		// refresh curve key display
 		refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyChain);
-
-		// draw ruler
-		drawRuler();
 	}
 #endif
 }

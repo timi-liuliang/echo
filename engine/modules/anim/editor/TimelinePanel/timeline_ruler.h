@@ -38,6 +38,7 @@ namespace Echo
         void mouseReleaseEvent(QMouseEvent* event) override;
 
     private:
+        QColor m_normalColor = QColor(200,200, 200);
         QList<Event> m_events;
         int m_hoveredEventIndex;
         int m_selectedEventIndex;
