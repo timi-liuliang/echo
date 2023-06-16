@@ -94,10 +94,6 @@ namespace Echo
 		bool calcKeyTimeAndValueByPos(const Vector2& pos, i32& time, float& value);
 		bool calcKeyPosByTimeAndValue(i32 time, float value, Vector2& pos);
 
-		// enable or disable curve editor
-		void switchCurveEditor();
-		void zoomCurve();
-
 	private:
 		// get new name
 		String getNewClipName();
@@ -130,11 +126,9 @@ namespace Echo
 		String						m_currentEditAnim;
 		int							m_nodeTreeWidgetWidth;
 		float						m_graphicsViewScale = 1.f;
-		QGraphicsScene*				m_graphicsScene = nullptr;
 		String						m_currentEditObjectPath;
 		StringArray					m_currentEditPropertyChain;
 		float						m_keyRadius = 7.f;
-		QGraphicsItem*				m_editAreaBoudingBox = nullptr;
 		array<QGraphicsItem*, 4>	m_curveItems;
 		QGraphicsWidgetArray		m_curveKeyWidgets;
 		array<QGraphicsItemArray, 4>m_curveKeyItems;

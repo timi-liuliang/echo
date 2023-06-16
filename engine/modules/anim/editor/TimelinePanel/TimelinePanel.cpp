@@ -80,12 +80,6 @@ namespace Echo
 
 		m_timeline = ECHO_DOWN_CAST<Timeline*>(obj);
 
-		if (m_splitter)
-		{
-			m_splitter->setStretchFactor(0, 0);
-			m_splitter->setStretchFactor(1, 1);
-		}
-
 		// Top tool buttons icons
 		setToolbuttonIcon( m_addNode, "engine/modules/anim/editor/icon/add.png");
 		setToolbuttonIcon( Play, "engine/modules/anim/editor/icon/play.png");
@@ -118,24 +112,6 @@ namespace Echo
 		EditorApi.qConnectWidget(Play, QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onPlayAnim));
 		EditorApi.qConnectWidget(Stop, QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onStopAnim));
 		EditorApi.qConnectWidget(Restart, QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onRestartAnim));
-
-		//EditorApi.qConnectWidget(m_curveXVisible, QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onSwitchCurveVisibility));
-		//EditorApi.qConnectWidget(m_curveYVisible, QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onSwitchCurveVisibility));
-		//EditorApi.qConnectWidget(m_curveZVisible, QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onSwitchCurveVisibility));
-		//EditorApi.qConnectWidget(m_curveWVisible, QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onSwitchCurveVisibility));
-
-		// connect signals
-		EditorApi.qConnectWidget(m_graphicsView, QSIGNAL(customContextMenuRequested(const QPoint&)), this, createMethodBind(&TimelinePanel::onRightClickGraphicsView));
-
-		// create QGraphicsScene
-		m_graphicsScene = new QGraphicsScene();
-		m_graphicsView->setScene(m_graphicsScene);
-
-		// wheel event
-		EditorApi.qConnectObject( m_graphicsScene, QSIGNAL(wheelEvent(QGraphicsSceneWheelEvent*)), this, createMethodBind(&TimelinePanel::onGraphicsSceneWheelEvent));
-
-		// draw ruler
-		switchCurveEditor();
 	}
 
 	void TimelinePanel::setToolbuttonIcon(QToolButton* button, const String& iconPath)
@@ -534,12 +510,6 @@ namespace Echo
 
 			// refresh curve key display
 			refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyChain);
-
-			// enable disable curve edit
-			switchCurveEditor();
-			
-			// zoom curve
-			zoomCurve();
 		}
 	}
 
@@ -557,235 +527,234 @@ namespace Echo
 
 	void TimelinePanel::refreshCurveDisplayToEditor(const String& objectPath, const StringArray& propertyChain)
 	{
-		// clear curves
-		for (size_t i = 0; i < m_curveItems.size(); i++)
-		{
-			if (m_curveItems[i])
-			{
-				m_graphicsScene->removeItem(m_curveItems[i]);
-				delete m_curveItems[i];
-				m_curveItems[i] = nullptr;
-			}
-		}
+		//// clear curves
+		//for (size_t i = 0; i < m_curveItems.size(); i++)
+		//{
+		//	if (m_curveItems[i])
+		//	{
+		//		delete m_curveItems[i];
+		//		m_curveItems[i] = nullptr;
+		//	}
+		//}
 
-		// recreate curves
-		AnimProperty* animProperty = m_timeline->getProperty(m_currentEditAnim, objectPath, propertyChain);
-		if (animProperty)
-		{
-			switch (animProperty->m_type)
-			{
-			case AnimProperty::Type::Bool:
-				{
-					Vector2 keyPos;
-					calcKeyPosByTimeAndValue( animProperty->getLength(), 0.f, keyPos);
-					m_curveItems[0] = EditorApi.qGraphicsSceneAddLine(m_graphicsScene, 0.f, 0.f, keyPos.x, 0.f, Color(1.f, 0.f, 0.f, 0.7f));
-				}
-				break;
-			case AnimProperty::Type::Vector3:
-			{
-				AnimPropertyVec3* vec3Proeprty = ECHO_DOWN_CAST<AnimPropertyVec3*>(animProperty);
-				if (vec3Proeprty)
-				{
-					const ui32 frameStep = 2;
+		//// recreate curves
+		//AnimProperty* animProperty = m_timeline->getProperty(m_currentEditAnim, objectPath, propertyChain);
+		//if (animProperty)
+		//{
+		//	switch (animProperty->m_type)
+		//	{
+		//	case AnimProperty::Type::Bool:
+		//		{
+		//			Vector2 keyPos;
+		//			calcKeyPosByTimeAndValue( animProperty->getLength(), 0.f, keyPos);
+		//			m_curveItems[0] = EditorApi.qGraphicsSceneAddLine(m_graphicsScene, 0.f, 0.f, keyPos.x, 0.f, Color(1.f, 0.f, 0.f, 0.7f));
+		//		}
+		//		break;
+		//	case AnimProperty::Type::Vector3:
+		//	{
+		//		AnimPropertyVec3* vec3Proeprty = ECHO_DOWN_CAST<AnimPropertyVec3*>(animProperty);
+		//		if (vec3Proeprty)
+		//		{
+		//			const ui32 frameStep = 2;
 
-					//clearCurveItemsTo(3);
-					vector<Vector2>::type curvePaths[3];
-					for (i32 curveIdx = 0; curveIdx < 3; curveIdx++)
-					{
-						AnimCurve* curve = vec3Proeprty->m_curves[curveIdx];
-						if (curve && curve->getKeyCount())
-						{
-							for (ui32 t = curve->getStartTime(); t <= curve->getEndTime(); t += frameStep)
-							{
-								float value = curve->getValue(t);
+		//			//clearCurveItemsTo(3);
+		//			vector<Vector2>::type curvePaths[3];
+		//			for (i32 curveIdx = 0; curveIdx < 3; curveIdx++)
+		//			{
+		//				AnimCurve* curve = vec3Proeprty->m_curves[curveIdx];
+		//				if (curve && curve->getKeyCount())
+		//				{
+		//					for (ui32 t = curve->getStartTime(); t <= curve->getEndTime(); t += frameStep)
+		//					{
+		//						float value = curve->getValue(t);
 
-								Vector2 keyPos;
-								calcKeyPosByTimeAndValue(t, value, keyPos);
-								curvePaths[curveIdx].emplace_back(keyPos);
-							}
-						}
-					}
+		//						Vector2 keyPos;
+		//						calcKeyPosByTimeAndValue(t, value, keyPos);
+		//						curvePaths[curveIdx].emplace_back(keyPos);
+		//					}
+		//				}
+		//			}
 
-					m_curveItems[0] = EditorApi.qGraphicsSceneAddPath(m_graphicsScene, curvePaths[0], 2.5f, Color( 1.f, 0.f, 0.f, 0.7f));
-					m_curveItems[1] = EditorApi.qGraphicsSceneAddPath(m_graphicsScene, curvePaths[1], 2.5f, Color( 0.f, 1.f, 0.f, 0.7f));
-					m_curveItems[2] = EditorApi.qGraphicsSceneAddPath(m_graphicsScene, curvePaths[2], 2.5f, Color( 0.f, 0.f, 1.f, 0.7f));
-				}
-			}
-			break;
-			case AnimProperty::Type::Vector4:
-			{
-				AnimPropertyVec4* vec3Proeprty = ECHO_DOWN_CAST<AnimPropertyVec4*>(animProperty);
-				if (vec3Proeprty)
-				{
-					const ui32 frameStep = 2;
+		//			m_curveItems[0] = EditorApi.qGraphicsSceneAddPath(m_graphicsScene, curvePaths[0], 2.5f, Color( 1.f, 0.f, 0.f, 0.7f));
+		//			m_curveItems[1] = EditorApi.qGraphicsSceneAddPath(m_graphicsScene, curvePaths[1], 2.5f, Color( 0.f, 1.f, 0.f, 0.7f));
+		//			m_curveItems[2] = EditorApi.qGraphicsSceneAddPath(m_graphicsScene, curvePaths[2], 2.5f, Color( 0.f, 0.f, 1.f, 0.7f));
+		//		}
+		//	}
+		//	break;
+		//	case AnimProperty::Type::Vector4:
+		//	{
+		//		AnimPropertyVec4* vec3Proeprty = ECHO_DOWN_CAST<AnimPropertyVec4*>(animProperty);
+		//		if (vec3Proeprty)
+		//		{
+		//			const ui32 frameStep = 2;
 
-					//clearCurveItemsTo(3);
-					vector<Vector2>::type curvePaths[4];
-					for (i32 curveIdx = 0; curveIdx < 4; curveIdx++)
-					{
-						AnimCurve* curve = vec3Proeprty->m_curves[curveIdx];
-						if (curve && curve->getKeyCount())
-						{
-							for (ui32 t = curve->getStartTime(); t <= curve->getEndTime(); t += frameStep)
-							{
-								float value = curve->getValue(t);
+		//			//clearCurveItemsTo(3);
+		//			vector<Vector2>::type curvePaths[4];
+		//			for (i32 curveIdx = 0; curveIdx < 4; curveIdx++)
+		//			{
+		//				AnimCurve* curve = vec3Proeprty->m_curves[curveIdx];
+		//				if (curve && curve->getKeyCount())
+		//				{
+		//					for (ui32 t = curve->getStartTime(); t <= curve->getEndTime(); t += frameStep)
+		//					{
+		//						float value = curve->getValue(t);
 
-								Vector2 keyPos;
-								calcKeyPosByTimeAndValue(t, value, keyPos);
-								curvePaths[curveIdx].emplace_back(keyPos);
-							}
-						}
-					}
+		//						Vector2 keyPos;
+		//						calcKeyPosByTimeAndValue(t, value, keyPos);
+		//						curvePaths[curveIdx].emplace_back(keyPos);
+		//					}
+		//				}
+		//			}
 
-					m_curveItems[0] = EditorApi.qGraphicsSceneAddPath(m_graphicsScene, curvePaths[0], 2.5f, Color(1.f, 0.f, 0.f, 0.7f));
-					m_curveItems[1] = EditorApi.qGraphicsSceneAddPath(m_graphicsScene, curvePaths[1], 2.5f, Color(0.f, 1.f, 0.f, 0.7f));
-					m_curveItems[2] = EditorApi.qGraphicsSceneAddPath(m_graphicsScene, curvePaths[2], 2.5f, Color(0.f, 0.f, 1.f, 0.7f));
-					m_curveItems[3] = EditorApi.qGraphicsSceneAddPath(m_graphicsScene, curvePaths[3], 2.5f, Color(0.f, 0.f, 1.f, 0.7f));
-				}
-			}
-			break;
-            default: break;
-			}
-		}
+		//			m_curveItems[0] = EditorApi.qGraphicsSceneAddPath(m_graphicsScene, curvePaths[0], 2.5f, Color(1.f, 0.f, 0.f, 0.7f));
+		//			m_curveItems[1] = EditorApi.qGraphicsSceneAddPath(m_graphicsScene, curvePaths[1], 2.5f, Color(0.f, 1.f, 0.f, 0.7f));
+		//			m_curveItems[2] = EditorApi.qGraphicsSceneAddPath(m_graphicsScene, curvePaths[2], 2.5f, Color(0.f, 0.f, 1.f, 0.7f));
+		//			m_curveItems[3] = EditorApi.qGraphicsSceneAddPath(m_graphicsScene, curvePaths[3], 2.5f, Color(0.f, 0.f, 1.f, 0.7f));
+		//		}
+		//	}
+		//	break;
+  //          default: break;
+		//	}
+		//}
 	}
 
 	void TimelinePanel::refreshCurveKeyDisplayToEditor(const String& objectPath, const StringArray& propertyChain)
 	{
-		// clear all key items
-		for (size_t i = 0; i < m_curveItems.size(); i++)
-		{
-			for (QGraphicsItem* item : m_curveKeyItems[i])
-			{
-				m_graphicsScene->removeItem(item);
-				delete item;
-			}
+		//// clear all key items
+		//for (size_t i = 0; i < m_curveItems.size(); i++)
+		//{
+		//	for (QGraphicsItem* item : m_curveKeyItems[i])
+		//	{
+		//		m_graphicsScene->removeItem(item);
+		//		delete item;
+		//	}
 
-			m_curveKeyItems[i].clear();
-		}
+		//	m_curveKeyItems[i].clear();
+		//}
 
-		for (QGraphicsProxyWidget* widget : m_curveKeyWidgets)
-		{ 
-			m_graphicsScene->removeItem(widget);
-			delete widget;
-		}
-		m_curveKeyWidgets.clear();
+		//for (QGraphicsProxyWidget* widget : m_curveKeyWidgets)
+		//{ 
+		//	m_graphicsScene->removeItem(widget);
+		//	delete widget;
+		//}
+		//m_curveKeyWidgets.clear();
 
-		// create key
-		AnimProperty* animProperty = m_timeline->getProperty(m_currentEditAnim, objectPath, propertyChain);
-		if (animProperty)
-		{
-			array<Color, 4> KeyColors = { Color::RED, Color::GREEN, Color::BLUE, Color::WHITE};
+		//// create key
+		//AnimProperty* animProperty = m_timeline->getProperty(m_currentEditAnim, objectPath, propertyChain);
+		//if (animProperty)
+		//{
+		//	array<Color, 4> KeyColors = { Color::RED, Color::GREEN, Color::BLUE, Color::WHITE};
 
-			switch (animProperty->m_type)
-			{
-			case AnimProperty::Type::Bool:
-				{
-					AnimPropertyBool* boolProperty = ECHO_DOWN_CAST<AnimPropertyBool*>(animProperty);
-					if (boolProperty)
-					{
-						//i32 keyIdx = 0;
-						for (auto& it : boolProperty->m_keys)
-						{
-							ui32 t = it.first;
-							float value = it.second;
+		//	switch (animProperty->m_type)
+		//	{
+		//	case AnimProperty::Type::Bool:
+		//		{
+		//			AnimPropertyBool* boolProperty = ECHO_DOWN_CAST<AnimPropertyBool*>(animProperty);
+		//			if (boolProperty)
+		//			{
+		//				//i32 keyIdx = 0;
+		//				for (auto& it : boolProperty->m_keys)
+		//				{
+		//					ui32 t = it.first;
+		//					float value = it.second;
 
-							Vector2 center;
-							calcKeyPosByTimeAndValue(t, value, center);
+		//					Vector2 center;
+		//					calcKeyPosByTimeAndValue(t, value, center);
 
-							QWidget* checkBox = new QCheckBox;
-							QGraphicsProxyWidget* widget = EditorApi.qGraphicsSceneAddWidget(m_graphicsScene, checkBox);
+		//					QWidget* checkBox = new QCheckBox;
+		//					QGraphicsProxyWidget* widget = EditorApi.qGraphicsSceneAddWidget(m_graphicsScene, checkBox);
 
-							widget->setPos(center.x, 0.f);
-							widget->setZValue(250.f);
+		//					widget->setPos(center.x, 0.f);
+		//					widget->setZValue(250.f);
 
-							// set userdata
-							//String userData = StringUtil::Format("%s,%s,%s,%d,%d", m_currentEditAnim.c_str(), objectPath.c_str(), propertyName.c_str(), 0, keyIdx++);
-							//qGraphicsItemSetUserData(item, userData.c_str());
+		//					// set userdata
+		//					//String userData = StringUtil::Format("%s,%s,%s,%d,%d", m_currentEditAnim.c_str(), objectPath.c_str(), propertyName.c_str(), 0, keyIdx++);
+		//					//qGraphicsItemSetUserData(item, userData.c_str());
 
-							// set tooltip
-							//String toolTip = StringUtil::Format("Time : %d\nValue: %.3f", t, value);
-							//qGraphicsItemSetToolTip(item, toolTip.c_str());
+		//					// set tooltip
+		//					//String toolTip = StringUtil::Format("Time : %d\nValue: %.3f", t, value);
+		//					//qGraphicsItemSetToolTip(item, toolTip.c_str());
 
-							// set moveable
-							//qGraphicsItemSetMoveable(item, true);
+		//					// set moveable
+		//					//qGraphicsItemSetMoveable(item, true);
 
-							// connect signal slots
-							//qConnect(item, QSIGNAL(mouseDoubleClickEvent(QGraphicsSceneMouseEvent*)), this, createMethodBind(&TimelinePanel::onKeyDoubleClickedCurveKey));
-							//qConnect(item, QSIGNAL(mouseMoveEvent(QGraphicsSceneMouseEvent*)), this, createMethodBind(&TimelinePanel::onKeyPositionChanged));
+		//					// connect signal slots
+		//					//qConnect(item, QSIGNAL(mouseDoubleClickEvent(QGraphicsSceneMouseEvent*)), this, createMethodBind(&TimelinePanel::onKeyDoubleClickedCurveKey));
+		//					//qConnect(item, QSIGNAL(mouseMoveEvent(QGraphicsSceneMouseEvent*)), this, createMethodBind(&TimelinePanel::onKeyPositionChanged));
 
-							m_curveKeyWidgets.emplace_back( widget);
-						}
-					}
-				}
-				break;
-			case AnimProperty::Type::Vector3:
-			{
-				AnimPropertyVec3* vec3Proeprty = ECHO_DOWN_CAST<AnimPropertyVec3*>(animProperty);
-				if (vec3Proeprty)
-				{
-					for (int curveIdx = 0; curveIdx < 3; curveIdx++)
-					{
-						AnimCurve* curve = vec3Proeprty->m_curves[curveIdx];
-						for (int keyIdx = 0; keyIdx < curve->getKeyCount(); keyIdx++)
-						{
-							ui32 t = curve->getKeyTime(keyIdx);
-							float value = curve->getValueByKeyIdx(keyIdx);
+		//					m_curveKeyWidgets.emplace_back( widget);
+		//				}
+		//			}
+		//		}
+		//		break;
+		//	case AnimProperty::Type::Vector3:
+		//	{
+		//		AnimPropertyVec3* vec3Proeprty = ECHO_DOWN_CAST<AnimPropertyVec3*>(animProperty);
+		//		if (vec3Proeprty)
+		//		{
+		//			for (int curveIdx = 0; curveIdx < 3; curveIdx++)
+		//			{
+		//				AnimCurve* curve = vec3Proeprty->m_curves[curveIdx];
+		//				for (int keyIdx = 0; keyIdx < curve->getKeyCount(); keyIdx++)
+		//				{
+		//					ui32 t = curve->getKeyTime(keyIdx);
+		//					float value = curve->getValueByKeyIdx(keyIdx);
 
-							Vector2 center;
-							calcKeyPosByTimeAndValue(t, value, center);
+		//					Vector2 center;
+		//					calcKeyPosByTimeAndValue(t, value, center);
 
-							QGraphicsItem* item = EditorApi.qGraphicsSceneAddEclipse(m_graphicsScene, center.x - m_keyRadius, center.y - m_keyRadius, m_keyRadius * 2.f, m_keyRadius*2.f, KeyColors[curveIdx]);
+		//					QGraphicsItem* item = EditorApi.qGraphicsSceneAddEclipse(m_graphicsScene, center.x - m_keyRadius, center.y - m_keyRadius, m_keyRadius * 2.f, m_keyRadius*2.f, KeyColors[curveIdx]);
 
-							// set user data
-							String userData = StringUtil::Format("%s,%s,%s,%d,%d", m_currentEditAnim.c_str(), objectPath.c_str(), StringUtil::ToString(propertyChain).c_str(), curveIdx, keyIdx);
-							item->setData(Qt::UserRole, userData.c_str());
+		//					// set user data
+		//					String userData = StringUtil::Format("%s,%s,%s,%d,%d", m_currentEditAnim.c_str(), objectPath.c_str(), StringUtil::ToString(propertyChain).c_str(), curveIdx, keyIdx);
+		//					item->setData(Qt::UserRole, userData.c_str());
 
-							// set tooltip
-							String toolTip = StringUtil::Format("Time : %d\nValue: %.3f", t, value);
-							item->setToolTip(toolTip.c_str());
+		//					// set tooltip
+		//					String toolTip = StringUtil::Format("Time : %d\nValue: %.3f", t, value);
+		//					item->setToolTip(toolTip.c_str());
 
-							// set move able
-							item->setFlag(QGraphicsItem::ItemIsMovable, true);
+		//					// set move able
+		//					item->setFlag(QGraphicsItem::ItemIsMovable, true);
 
-							// connect signal slots
-							EditorApi.qConnectGraphicsItem(item, QSIGNAL(mouseDoubleClickEvent(QGraphicsSceneMouseEvent*)), this, createMethodBind(&TimelinePanel::onKeyDoubleClickedCurveKey));
-							EditorApi.qConnectGraphicsItem(item, QSIGNAL(mouseMoveEvent(QGraphicsSceneMouseEvent*)), this, createMethodBind(&TimelinePanel::onKeyPositionChanged));
+		//					// connect signal slots
+		//					EditorApi.qConnectGraphicsItem(item, QSIGNAL(mouseDoubleClickEvent(QGraphicsSceneMouseEvent*)), this, createMethodBind(&TimelinePanel::onKeyDoubleClickedCurveKey));
+		//					EditorApi.qConnectGraphicsItem(item, QSIGNAL(mouseMoveEvent(QGraphicsSceneMouseEvent*)), this, createMethodBind(&TimelinePanel::onKeyPositionChanged));
 
-							m_curveKeyItems[curveIdx].emplace_back(item);
-						}
-					}
-				}
-			}
-			break;
-			case AnimProperty::Type::String:
-			{
-				AnimPropertyString* strProperty = ECHO_DOWN_CAST<AnimPropertyString*>(animProperty);
-				if (strProperty)
-				{
-					//i32 keyIdx = 0;
-					for (auto& it : strProperty->m_keys)
-					{
-						ui32 t = it.first;
-						String value = it.second;
+		//					m_curveKeyItems[curveIdx].emplace_back(item);
+		//				}
+		//			}
+		//		}
+		//	}
+		//	break;
+		//	case AnimProperty::Type::String:
+		//	{
+		//		AnimPropertyString* strProperty = ECHO_DOWN_CAST<AnimPropertyString*>(animProperty);
+		//		if (strProperty)
+		//		{
+		//			//i32 keyIdx = 0;
+		//			for (auto& it : strProperty->m_keys)
+		//			{
+		//				ui32 t = it.first;
+		//				String value = it.second;
 
-						Vector2 center;
-						calcKeyPosByTimeAndValue(t, 0.f, center);
+		//				Vector2 center;
+		//				calcKeyPosByTimeAndValue(t, 0.f, center);
 
-						QWidget* checkBox = new QCheckBox;
-						QGraphicsProxyWidget* widget = EditorApi.qGraphicsSceneAddWidget(m_graphicsScene, checkBox);
+		//				QWidget* checkBox = new QCheckBox;
+		//				QGraphicsProxyWidget* widget = EditorApi.qGraphicsSceneAddWidget(m_graphicsScene, checkBox);
 
-						widget->setPos(center.x, 50.f);
-						widget->setZValue(250.f);
+		//				widget->setPos(center.x, 50.f);
+		//				widget->setZValue(250.f);
 
-						m_curveKeyWidgets.emplace_back(widget);
-					}
-				}
-			}
-			break;
-                    
-            default: break;
-			}
-		}
+		//				m_curveKeyWidgets.emplace_back(widget);
+		//			}
+		//		}
+		//	}
+		//	break;
+  //                  
+  //          default: break;
+		//	}
+		//}
 	}
 
 	bool TimelinePanel::getKeyInfo(TimelinePanel::KeyInfo& keyInfo, const String& animName, const String& objectPath, const String& propertyName, int curveIdx, int keyIdx)
@@ -819,37 +788,37 @@ namespace Echo
 
 	void TimelinePanel::onKeyDoubleClickedCurveKey()
 	{
-		// show key value editor widget
-		if (!m_curveKeyLineEdit)
-		{
-			m_curveKeyLineEdit = new QLineEdit;
-			m_curveKeyLineEdit->setMaximumWidth(100);
-			m_curveKeyLineEditProxyWidget = EditorApi.qGraphicsSceneAddWidget(m_graphicsScene, m_curveKeyLineEdit);
+		//// show key value editor widget
+		//if (!m_curveKeyLineEdit)
+		//{
+		//	m_curveKeyLineEdit = new QLineEdit;
+		//	m_curveKeyLineEdit->setMaximumWidth(100);
+		//	m_curveKeyLineEditProxyWidget = EditorApi.qGraphicsSceneAddWidget(m_graphicsScene, m_curveKeyLineEdit);
 
-			EditorApi.qConnectWidget(m_curveKeyLineEdit, QSIGNAL(editingFinished()), this, createMethodBind(&TimelinePanel::onCurveKeyEditingFinished));
-		}
+		//	EditorApi.qConnectWidget(m_curveKeyLineEdit, QSIGNAL(editingFinished()), this, createMethodBind(&TimelinePanel::onCurveKeyEditingFinished));
+		//}
 
-		// get current key value
-		QGraphicsItem* sender = EditorApi.qSenderItem();
-		if (sender)
-		{
-			String userData = sender->data(Qt::UserRole).toString().toStdString().c_str();
-			StringArray userDataSplits = StringUtil::Split(userData, ",");
-			KeyInfo keyInfo;
-			if (getKeyInfo(keyInfo, userDataSplits[0], userDataSplits[1], userDataSplits[2], StringUtil::ParseI32(userDataSplits[3]), StringUtil::ParseI32(userDataSplits[4])))
-			{
-				m_curveKeyItem = sender;
-				m_curveKeyLineEdit->setText( StringUtil::ToString( keyInfo.m_value).c_str());
+		//// get current key value
+		//QGraphicsItem* sender = EditorApi.qSenderItem();
+		//if (sender)
+		//{
+		//	String userData = sender->data(Qt::UserRole).toString().toStdString().c_str();
+		//	StringArray userDataSplits = StringUtil::Split(userData, ",");
+		//	KeyInfo keyInfo;
+		//	if (getKeyInfo(keyInfo, userDataSplits[0], userDataSplits[1], userDataSplits[2], StringUtil::ParseI32(userDataSplits[3]), StringUtil::ParseI32(userDataSplits[4])))
+		//	{
+		//		m_curveKeyItem = sender;
+		//		m_curveKeyLineEdit->setText( StringUtil::ToString( keyInfo.m_value).c_str());
 
-				int halfHeight = m_curveKeyLineEdit->height() / 2;
-				Vector2 mouseScenePos = EditorApi.qGraphicsItemGetEventAll(sender).graphicsSceneMouseEvent.scenePos;
-				m_curveKeyLineEditProxyWidget->setPos(mouseScenePos.x + m_keyRadius, mouseScenePos.y - halfHeight);
-				m_curveKeyLineEditProxyWidget->setZValue(250.f);
-			}
-		}
+		//		int halfHeight = m_curveKeyLineEdit->height() / 2;
+		//		Vector2 mouseScenePos = EditorApi.qGraphicsItemGetEventAll(sender).graphicsSceneMouseEvent.scenePos;
+		//		m_curveKeyLineEditProxyWidget->setPos(mouseScenePos.x + m_keyRadius, mouseScenePos.y - halfHeight);
+		//		m_curveKeyLineEditProxyWidget->setZValue(250.f);
+		//	}
+		//}
 
-		m_curveKeyLineEdit->setVisible(true);
-		m_curveKeyLineEdit->setCursorPosition(0);
+		//m_curveKeyLineEdit->setVisible(true);
+		//m_curveKeyLineEdit->setCursorPosition(0);
 	}
 
 	void TimelinePanel::onCurveKeyEditingFinished()
@@ -1016,7 +985,7 @@ namespace Echo
 		}
 
 		// record cursor pos
-		m_keyEditCursorScenePos = EditorApi.qObjectGetEventAll(m_graphicsScene).graphicsSceneMouseEvent.scenePos;
+		//m_keyEditCursorScenePos = EditorApi.qObjectGetEventAll(m_graphicsScene).graphicsSceneMouseEvent.scenePos;
 
 		// show menu
 		m_keyEditMenu->exec(QCursor::pos());
@@ -1024,17 +993,17 @@ namespace Echo
 
 	void TimelinePanel::onGraphicsSceneWheelEvent()
 	{
-		int delta = EditorApi.qObjectGetEventAll(m_graphicsScene).graphicsSceneWheelEvent.delta;
-		
-		m_millisecondPerPixel += delta > 0 ? -0.05f : 0.05f;
-		m_millisecondPerPixel = Math::Clamp(m_millisecondPerPixel, 1.f, 50.f);
+		//int delta = EditorApi.qObjectGetEventAll(m_graphicsScene).graphicsSceneWheelEvent.delta;
+		//
+		//m_millisecondPerPixel += delta > 0 ? -0.05f : 0.05f;
+		//m_millisecondPerPixel = Math::Clamp(m_millisecondPerPixel, 1.f, 50.f);
 
-		m_unitsPerPixel += delta > 0 ? -0.05f : 0.05f;
-		m_unitsPerPixel = Math::Clamp(m_unitsPerPixel, 1.f, 50.f);
+		//m_unitsPerPixel += delta > 0 ? -0.05f : 0.05f;
+		//m_unitsPerPixel = Math::Clamp(m_unitsPerPixel, 1.f, 50.f);
 
-		// refresh curve and key display
-		refreshCurveDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyChain);
-		refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyChain);
+		//// refresh curve and key display
+		//refreshCurveDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyChain);
+		//refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyChain);
 	}
 
 	bool TimelinePanel::calcKeyTimeAndValueByPos(const Vector2& pos, i32& time, float& value)
@@ -1128,42 +1097,5 @@ namespace Echo
 		refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyChain);
 	}
 
-	void TimelinePanel::switchCurveEditor()
-	{
-		if (!m_currentEditAnim.empty() && !m_currentEditObjectPath.empty() && !m_currentEditPropertyChain.empty())
-		{
-			m_graphicsView->setEnabled(true);
-		}
-		else
-		{
-			//m_graphicsView->setEnabled(false);
-		}
-	}
-
-	void TimelinePanel::zoomCurve()
-	{
-		// query item total rect
-		QRectF totalRect;
-		for (QGraphicsItem* item : m_curveItems)
-		{
-			if (item)
-			{
-				QRectF itemRect = item->sceneBoundingRect();
-
-				// need merge function
-				totalRect = itemRect;
-				//totalRect.merge(itemRect);
-			}
-		}
-
-		QRectF viewRect = m_graphicsView->sceneRect();
-		m_unitsPerPixel = (totalRect.height() + 20.f) / viewRect.height();
-
-		// refresh curve display
-		refreshCurveDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyChain);
-
-		// refresh curve key display
-		refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyChain);
-	}
 #endif
 }

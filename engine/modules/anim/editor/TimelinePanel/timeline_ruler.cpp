@@ -28,7 +28,7 @@ namespace Echo
 
     QSize TimelineRuler::minimumSizeHint() const
     {
-        return QSize(100, 26); // a reasonable minimum size for the control
+        return QSize(100, 26);
     }
 
     QSize TimelineRuler::sizeHint() const
