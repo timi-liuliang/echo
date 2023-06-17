@@ -5,16 +5,13 @@
 
 #ifdef ECHO_EDITOR_MODE
 
-#include "ui_TimelinePanel.h"
+#include "ui_timeline_panel.h"
 
 namespace Echo
 {
 	class Timeline;
 	class TimelinePanel : public QDockWidget, public Ui_TimelinePanel
 	{
-		typedef vector<QGraphicsItem*>::type QGraphicsItemArray;
-		typedef vector<QGraphicsProxyWidget*>::type QGraphicsWidgetArray;
-
 	public:
 		// key info
 		struct KeyInfo
@@ -125,21 +122,11 @@ namespace Echo
 		QMenu*						m_addObjectMenu;
 		String						m_currentEditAnim;
 		int							m_nodeTreeWidgetWidth;
-		float						m_graphicsViewScale = 1.f;
 		String						m_currentEditObjectPath;
 		StringArray					m_currentEditPropertyChain;
 		float						m_keyRadius = 7.f;
-		array<QGraphicsItem*, 4>	m_curveItems;
-		QGraphicsWidgetArray		m_curveKeyWidgets;
-		array<QGraphicsItemArray, 4>m_curveKeyItems;
-		array<bool, 4>				m_curveVisibles;
-		QLineEdit*					m_curveKeyLineEdit = nullptr;
-		QGraphicsProxyWidget*		m_curveKeyLineEditProxyWidget = nullptr;
-		QGraphicsItem*				m_curveKeyItem;
 		QMenu*						m_keyEditMenu = nullptr;
 		Vector2						m_keyEditCursorScenePos;
-		float						m_millisecondPerPixel = 1.f;
-		float						m_unitsPerPixel = 1.f;
 	};
 }
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../anim_timeline.h"
-#include "TimelinePanel/TimelinePanel.h"
+#include "ui/timeline_panel.h"
 
 namespace Echo
 {

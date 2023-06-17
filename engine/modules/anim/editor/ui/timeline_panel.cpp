@@ -1,4 +1,4 @@
-#include "TimelinePanel.h"
+#include "timeline_panel.h"
 #include "engine/core/editor/editor.h"
 #include "engine/core/editor/qt/QWidgets.h"
 #include "engine/core/base/class_method_bind.h"
@@ -6,6 +6,7 @@
 #include "engine/core/util/StringUtil.h"
 #include "engine/core/main/Engine.h"
 #include "../../anim_timeline.h"
+#include "timeline_header.h"
 
 namespace Echo
 {
@@ -70,15 +71,11 @@ namespace Echo
 	TimelinePanel::TimelinePanel(Object* obj)
 		: m_addObjectMenu(nullptr)
 		, m_nodeTreeWidgetWidth(0)
-		, m_curveKeyLineEdit(nullptr)
-		, m_curveKeyItem(nullptr)
 	{
 		setupUi(this);
-	
-		m_curveItems.assign(nullptr);
-		m_curveVisibles.assign(true);
 
 		m_timeline = ECHO_DOWN_CAST<Timeline*>(obj);
+		m_nodeTreeWidget->setHeader(new QTimelineHeader(Qt::Orientation::Horizontal, m_nodeTreeWidget));
 
 		// Top tool buttons icons
 		setToolbuttonIcon( m_addNode, "engine/modules/anim/editor/icon/add.png");
@@ -823,22 +820,22 @@ namespace Echo
 
 	void TimelinePanel::onCurveKeyEditingFinished()
 	{
-		String valueStr = m_curveKeyLineEdit->text().toStdString().c_str();
-		if (!valueStr.empty() && m_curveKeyItem)
-		{
-			String userData = m_curveKeyItem->data(Qt::UserRole).toString().toStdString().c_str();
-			StringArray userDataSplits = StringUtil::Split(userData, ",");
+		//String valueStr = m_curveKeyLineEdit->text().toStdString().c_str();
+		//if (!valueStr.empty() && m_curveKeyItem)
+		//{
+		//	String userData = m_curveKeyItem->data(Qt::UserRole).toString().toStdString().c_str();
+		//	StringArray userDataSplits = StringUtil::Split(userData, ",");
 
-			// modify key value
-			float value = StringUtil::ParseFloat(valueStr);
-			m_timeline->setKey(userDataSplits[0], userDataSplits[1], userDataSplits[2], StringUtil::ParseI32(userDataSplits[3]), StringUtil::ParseI32(userDataSplits[4]), value);
-		}
+		//	// modify key value
+		//	float value = StringUtil::ParseFloat(valueStr);
+		//	m_timeline->setKey(userDataSplits[0], userDataSplits[1], userDataSplits[2], StringUtil::ParseI32(userDataSplits[3]), StringUtil::ParseI32(userDataSplits[4]), value);
+		//}
 
-		m_curveKeyLineEdit->setVisible(false);
+		//m_curveKeyLineEdit->setVisible(false);
 
-		// refresh curve and key display
-		refreshCurveDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyChain);
-		refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyChain);
+		//// refresh curve and key display
+		//refreshCurveDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyChain);
+		//refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyChain);
 	}
 
 	void TimelinePanel::onKeyPositionChanged()
@@ -932,18 +929,18 @@ namespace Echo
 		//m_curveVisibles[2] = m_curveZVisible->isChecked();
 		//m_curveVisibles[3] = m_curveWVisible->isChecked();
 
-		for (size_t i = 0; i < m_curveItems.size(); i++)
-		{
-			if (m_curveItems[i])
-			{
-				m_curveItems[i]->setVisible(m_curveVisibles[i]);
-			}
+		//for (size_t i = 0; i < m_curveItems.size(); i++)
+		//{
+		//	if (m_curveItems[i])
+		//	{
+		//		m_curveItems[i]->setVisible(m_curveVisibles[i]);
+		//	}
 
-			for (QGraphicsItem* keyItem : m_curveKeyItems[i])
-			{
-				keyItem->setVisible(m_curveVisibles[i]);
-			}
-		}
+		//	for (QGraphicsItem* keyItem : m_curveKeyItems[i])
+		//	{
+		//		keyItem->setVisible(m_curveVisibles[i]);
+		//	}
+		//}
 	}
 
 	void TimelinePanel::onRightClickGraphicsView()
@@ -1008,15 +1005,15 @@ namespace Echo
 
 	bool TimelinePanel::calcKeyTimeAndValueByPos(const Vector2& pos, i32& time, float& value)
 	{
-		time = ui32(pos.x * m_millisecondPerPixel);
-		value = (pos.y) * m_unitsPerPixel;
+		//time = ui32(pos.x * m_millisecondPerPixel);
+		//value = (pos.y) * m_unitsPerPixel;
 
 		return true;
 	}
 
 	bool TimelinePanel::calcKeyPosByTimeAndValue(i32 time, float value, Vector2& pos)
 	{
-		pos = Vector2(time / m_millisecondPerPixel, value / m_unitsPerPixel);
+		//pos = Vector2(time / m_millisecondPerPixel, value / m_unitsPerPixel);
 
 		return true;
 	}
