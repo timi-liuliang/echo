@@ -1,11 +1,11 @@
-#include "timeline_ruler.h"
+#include "timeline_header_ruler.h"
 #include <QPainter>
 #include <QMouseEvent>
 #include <QDebug>
 
 namespace Echo
 {
-    TimelineRuler::TimelineRuler(QWidget* parent)
+    TimelineHeaderRuler::TimelineHeaderRuler(QWidget* parent)
         : m_hoveredEventIndex(-1)
         , m_selectedEventIndex(-1)
         , m_draggedEventIndex(-1)
@@ -17,12 +17,12 @@ namespace Echo
         }
     }
 
-    void TimelineRuler::addEvent(const Event& event)
+    void TimelineHeaderRuler::addEvent(const Event& event)
     {
         m_events.append(event);
     }
 
-    void TimelineRuler::draw(QPainter& painter, const QRect& rect)
+    void TimelineHeaderRuler::draw(QPainter& painter, const QRect& rect)
     {
         // Draw the timeline axis
         QPen pen;

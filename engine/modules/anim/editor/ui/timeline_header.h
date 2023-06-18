@@ -2,7 +2,7 @@
 
 #include "engine/core/base/object.h"
 #include "engine/core/math/Math.h"
-#include "timeline_ruler.h"
+#include "timeline_header_ruler.h"
 
 #ifdef ECHO_EDITOR_MODE
 
@@ -23,7 +23,7 @@ namespace Echo
         void paintSectionRuler(QPainter* painter, const QRect& rect) const;
 
     protected:
-        mutable TimelineRuler m_ruler;
+        mutable TimelineHeaderRuler m_ruler;
     };
 }
 

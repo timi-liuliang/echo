@@ -77,6 +77,7 @@ namespace Echo
 		m_timeline = ECHO_DOWN_CAST<Timeline*>(obj);
 		m_treeWidget->setHeader(new QTimelineHeader(Qt::Orientation::Horizontal, m_treeWidget));
 		m_treeWidget->setHeaderLabels({"", "", ""});
+		m_treeWidget->headerItem()->setSizeHint(0, QSize(550, 25));
 
 		// Top tool buttons icons
 		setToolbuttonIcon( m_addNode, "engine/modules/anim/editor/icon/add.png");

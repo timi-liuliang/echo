@@ -7,7 +7,7 @@
 
 namespace Echo
 {
-    class TimelineRuler
+    class TimelineHeaderRuler
     {
         //Q_OBJECT
 
@@ -26,7 +26,7 @@ namespace Echo
         };
 
     public:
-        explicit TimelineRuler(QWidget* parent = nullptr);
+        explicit TimelineHeaderRuler(QWidget* parent = nullptr);
         void addEvent(const Event& event);
 
         // Draw
