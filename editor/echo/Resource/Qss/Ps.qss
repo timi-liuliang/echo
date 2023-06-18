@@ -286,6 +286,7 @@ QTreeView
 	show-decoration-selected: 1;
 }
 
+/*
 QTreeView::branch
 {
 	background-color:rgba(0,0,0,0);
@@ -294,7 +295,7 @@ QTreeView::branch
 QTreeView::branch:selected
 {
 	background-color: rgb(14,99,156);
-}
+}*/
 
 QTreeView::item
 {
