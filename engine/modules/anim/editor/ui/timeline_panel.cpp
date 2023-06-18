@@ -75,7 +75,8 @@ namespace Echo
 		setupUi(this);
 
 		m_timeline = ECHO_DOWN_CAST<Timeline*>(obj);
-		m_nodeTreeWidget->setHeader(new QTimelineHeader(Qt::Orientation::Horizontal, m_nodeTreeWidget));
+		m_treeWidget->setHeader(new QTimelineHeader(Qt::Orientation::Horizontal, m_treeWidget));
+		m_treeWidget->setHeaderLabels({"", "", ""});
 
 		// Top tool buttons icons
 		setToolbuttonIcon( m_addNode, "engine/modules/anim/editor/icon/add.png");
@@ -105,7 +106,7 @@ namespace Echo
 		EditorApi.qConnectWidget(m_clipsComboBox, QSIGNAL(editTextChanged(const QString &)), this, createMethodBind(&TimelinePanel::onRenameClip));
 		EditorApi.qConnectWidget(m_clipsComboBox, QSIGNAL(currentIndexChanged(int)), this, createMethodBind(&TimelinePanel::onCurrentEditAnimChanged));
 		EditorApi.qConnectWidget(m_addNode, QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onAddObject));
-		EditorApi.qConnectWidget(m_nodeTreeWidget, QSIGNAL(itemClicked(QTreeWidgetItem*, int)), this, createMethodBind(&TimelinePanel::onSelectItem));
+		EditorApi.qConnectWidget(m_treeWidget, QSIGNAL(itemClicked(QTreeWidgetItem*, int)), this, createMethodBind(&TimelinePanel::onSelectItem));
 		EditorApi.qConnectWidget(Play, QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onPlayAnim));
 		EditorApi.qConnectWidget(Stop, QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onStopAnim));
 		EditorApi.qConnectWidget(Restart, QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onRestartAnim));
@@ -285,14 +286,14 @@ namespace Echo
 
 	void TimelinePanel::syncClipNodeDataToEditor()
 	{
-		if (m_nodeTreeWidget)
+		if (m_treeWidget)
 		{
-			m_nodeTreeWidget->clear();
+			m_treeWidget->clear();
 
 			AnimClip* clip = m_timeline->getClip(m_currentEditAnim.c_str());
 			if (clip)
 			{
-				QTreeWidgetItem* rootItem = m_nodeTreeWidget->invisibleRootItem();
+				QTreeWidgetItem* rootItem = m_treeWidget->invisibleRootItem();
 				if (rootItem)
 				{
 					for (AnimObject* animNode : clip->m_objects)
@@ -305,6 +306,9 @@ namespace Echo
 						objectItem->setData( 1, Qt::UserRole, "object");
 						//objectItem->setIcon(0, Editor::instance()->getNodeIcon(node).c_str());
 						objectItem->setIcon( 1, QIcon(( Engine::instance()->getRootPath() + "engine/modules/anim/editor/icon/add.png").c_str()));
+						objectItem->setData( 2, Qt::UserRole, "object");
+						objectItem->setBackground(2, QBrush(Qt::red));
+
 						rootItem->addChild(objectItem);
 
 						for (AnimProperty* property : animNode->m_properties)
@@ -347,6 +351,14 @@ namespace Echo
 				{
 					propertyItem->setData( 1, Qt::UserRole, "property");
 					propertyItem->setIcon(1, QIcon((Engine::instance()->getRootPath() + "engine/modules/anim/editor/icon/add.png").c_str()));
+
+					propertyItem->setData( 2, Qt::UserRole, "property");
+					propertyItem->setBackgroundColor(2, Qt::red);
+				}
+				else
+				{
+					propertyItem->setData(2, Qt::UserRole, "property");
+					propertyItem->setBackgroundColor(2, Qt::red);
 				}
 			}
 
@@ -385,7 +397,7 @@ namespace Echo
 	void TimelinePanel::onSelectItem()
 	{
 		//QTreeWidgetItem* item = qTreeWidgetCurrentItem(qFindChild(m_ui, "m_nodeTreeWidget"));
-		int column = m_nodeTreeWidget->currentColumn();
+		int column = m_treeWidget->currentColumn();
 		if (column == 1)
 		{
 			onAddProperty();
@@ -398,8 +410,8 @@ namespace Echo
 
 	void TimelinePanel::onAddProperty()
 	{
-		QTreeWidgetItem* item = m_nodeTreeWidget->currentItem();
-		int column = m_nodeTreeWidget->currentColumn();
+		QTreeWidgetItem* item = m_treeWidget->currentItem();
+		int column = m_treeWidget->currentColumn();
 		if (column == 1)
 		{
 			String userData = item->data(column, Qt::UserRole).toString().toStdString().c_str();
@@ -488,8 +500,8 @@ namespace Echo
 
 	void TimelinePanel::onSelectProperty()
 	{
-		QTreeWidgetItem* item = m_nodeTreeWidget->currentItem();
-		int column = m_nodeTreeWidget->currentColumn();
+		QTreeWidgetItem* item = m_treeWidget->currentItem();
+		int column = m_treeWidget->currentColumn();
 		if (column == 0)
 		{
 			String userData = item->data(column, Qt::UserRole).toString().toStdString().c_str();
@@ -886,17 +898,17 @@ namespace Echo
 
 	void TimelinePanel::onNodeTreeWidgetSizeChanged()
 	{
-		if (m_nodeTreeWidget)
+		if (m_treeWidget)
 		{
-			int curWidth = m_nodeTreeWidget->width();
+			int curWidth = m_treeWidget->width();
 			if (m_nodeTreeWidgetWidth != curWidth)
 			{
-				QHeaderView* header = m_nodeTreeWidget->header();
+				QHeaderView* header = m_treeWidget->header();
 
 				header->resizeSection(1, 30);
-				header->setSectionResizeMode(QHeaderView::ResizeMode::Fixed);
-				header->resizeSection(0, curWidth - 30);
-				m_nodeTreeWidgetWidth = m_nodeTreeWidget->width();
+				//header->setSectionResizeMode(QHeaderView::ResizeMode::Fixed);
+				header->resizeSection(2, curWidth - 30 - header->sectionSize(0));
+				m_nodeTreeWidgetWidth = m_treeWidget->width();
 			}
 		}
 	}

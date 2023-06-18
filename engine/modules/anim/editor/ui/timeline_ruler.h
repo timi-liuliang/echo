@@ -7,7 +7,7 @@
 
 namespace Echo
 {
-    class TimelineRuler : public QWidget
+    class TimelineRuler
     {
         //Q_OBJECT
 
@@ -28,14 +28,9 @@ namespace Echo
     public:
         explicit TimelineRuler(QWidget* parent = nullptr);
         void addEvent(const Event& event);
-        QSize minimumSizeHint() const override;
-        QSize sizeHint() const override;
 
-    protected:
-        void paintEvent(QPaintEvent* event) override;
-        void mousePressEvent(QMouseEvent* event) override;
-        void mouseMoveEvent(QMouseEvent* event) override;
-        void mouseReleaseEvent(QMouseEvent* event) override;
+        // Draw
+        void draw(QPainter& painter, const QRect& rect);
 
     private:
         QColor m_normalColor = QColor(200,200, 200);
