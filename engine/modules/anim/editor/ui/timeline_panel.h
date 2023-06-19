@@ -5,6 +5,7 @@
 
 #ifdef ECHO_EDITOR_MODE
 
+#include "timeline_panel.h"
 #include "ui_timeline_panel.h"
 
 namespace Echo

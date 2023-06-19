@@ -7,6 +7,7 @@
 #include "engine/core/main/Engine.h"
 #include "../../anim_timeline.h"
 #include "timeline_header.h"
+#include "timeline_keyframe_bar.h"
 
 namespace Echo
 {
@@ -307,10 +308,9 @@ namespace Echo
 						objectItem->setData( 1, Qt::UserRole, "object");
 						//objectItem->setIcon(0, Editor::instance()->getNodeIcon(node).c_str());
 						objectItem->setIcon( 1, QIcon(( Engine::instance()->getRootPath() + "engine/modules/anim/editor/icon/add.png").c_str()));
-						objectItem->setData( 2, Qt::UserRole, "object");
-						objectItem->setBackground(2, QBrush(Qt::red));
-
 						rootItem->addChild(objectItem);
+
+						m_treeWidget->setItemWidget(objectItem, 2, new QTimelineKeyFrameBar(objectItem));
 
 						for (AnimProperty* property : animNode->m_properties)
 						{
