@@ -7,6 +7,7 @@
 #ifdef ECHO_EDITOR_MODE
 
 #include <QHeaderView>
+#include "timeline_header_tool_bar.h"
 
 namespace Echo
 {
@@ -22,7 +23,11 @@ namespace Echo
         // Paint timeline ruler
         void paintSectionRuler(QPainter* painter, const QRect& rect) const;
 
+        // Event
+        virtual bool eventFilter(QObject* obj, QEvent* event) override;
+
     protected:
+        QTimelineHeaderToolBar*     m_toolBar = nullptr;
         mutable TimelineHeaderRuler m_ruler;
     };
 }
