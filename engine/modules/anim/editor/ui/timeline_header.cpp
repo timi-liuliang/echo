@@ -1,4 +1,5 @@
 #include "timeline_header.h"
+#include "timeline_panel.h"
 
 #ifdef ECHO_EDITOR_MODE
 
@@ -6,8 +7,9 @@
 
 namespace Echo
 {
-	QTimelineHeader::QTimelineHeader(Qt::Orientation orientation, QWidget* parent)
-		: QHeaderView(orientation, parent) 
+	QTimelineHeader::QTimelineHeader(Qt::Orientation orientation, TimelinePanel* timelinePanel)
+		: QHeaderView(orientation, timelinePanel)
+		, m_timelinePanel(timelinePanel)
 	{
 		m_toolBar = new QTimelineHeaderToolBar(this);
 		m_toolBar->installEventFilter(this);

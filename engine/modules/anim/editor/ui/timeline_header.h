@@ -14,12 +14,18 @@ namespace Echo
     class QTimelineHeader : public QHeaderView
     {
     public:
-        QTimelineHeader(Qt::Orientation orientation, QWidget* parent = nullptr);
+        QTimelineHeader(Qt::Orientation orientation,class TimelinePanel* timelinePanel);
 
+        // Get tool bar
+        QTimelineHeaderToolBar* getToolBar() { return m_toolBar; }
+
+        // Get main panel
+        class TimelinePanel* getTimelinePanel() { return m_timelinePanel; }
+
+    protected:
         // Paint section
         virtual void paintSection(QPainter* painter, const QRect& rect, int logicalIndex) const override;
 
-    protected:
         // Paint timeline ruler
         void paintSectionRuler(QPainter* painter, const QRect& rect) const;
 
@@ -27,6 +33,7 @@ namespace Echo
         virtual bool eventFilter(QObject* obj, QEvent* event) override;
 
     protected:
+        class TimelinePanel*        m_timelinePanel = nullptr;
         QTimelineHeaderToolBar*     m_toolBar = nullptr;
         mutable TimelineHeaderRuler m_ruler;
     };

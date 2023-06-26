@@ -76,29 +76,16 @@ namespace Echo
 		setupUi(this);
 
 		m_timeline = ECHO_DOWN_CAST<Timeline*>(obj);
-		m_treeWidget->setHeader(new QTimelineHeader(Qt::Orientation::Horizontal, m_treeWidget));
+
+		m_treeWidgetHeader = new QTimelineHeader(Qt::Orientation::Horizontal, this);
+		m_treeWidget->setHeader(m_treeWidgetHeader);
 		m_treeWidget->setHeaderLabels({"", "", ""});
 		m_treeWidget->headerItem()->setSizeHint(0, QSize(550, 25));
-
-		// Top tool buttons icons
-		setToolbuttonIcon( m_addNode, "engine/modules/anim/editor/icon/add.png");
-		setToolbuttonIcon( Play, "engine/modules/anim/editor/icon/play.png");
-		setToolbuttonIcon( Stop, "engine/modules/anim/editor/icon/stop.png");
-		setToolbuttonIcon( Restart, "engine/modules/anim/editor/icon/replay.png");
-
-		// set fixed width of add toolbutton
-		m_addNode->setIconSize(QSize(24, 24));
 
 		// set icons
 		setToolbuttonIcon( NewClip, "engine/modules/anim/editor/icon/new.png");
 		setToolbuttonIcon( DuplicateClip, "engine/modules/anim/editor/icon/duplicate.png");
 		setToolbuttonIcon( DeleteClip, "engine/modules/anim/editor/icon/delete.png");
-
-		// set curve icons
-		//setToolbuttonIcon(m_curveXVisible, "engine/modules/anim/editor/icon/curve_red.png");
-		//setToolbuttonIcon(m_curveYVisible, "engine/modules/anim/editor/icon/curve_green.png");
-		//setToolbuttonIcon(m_curveZVisible, "engine/modules/anim/editor/icon/curve_blue.png");
-		//setToolbuttonIcon(m_curveWVisible, "engine/modules/anim/editor/icon/curve_white.png");
 
 		// connect signal slots
 		EditorApi.qConnectWidget(NewClip, QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onNewClip));
@@ -107,11 +94,7 @@ namespace Echo
 		EditorApi.qConnectWidget(m_clipLengthLineEdit, QSIGNAL(editingFinished()), this, createMethodBind(&TimelinePanel::onCurrentEditAnimLengthChanged));
 		EditorApi.qConnectWidget(m_clipsComboBox, QSIGNAL(editTextChanged(const QString &)), this, createMethodBind(&TimelinePanel::onRenameClip));
 		EditorApi.qConnectWidget(m_clipsComboBox, QSIGNAL(currentIndexChanged(int)), this, createMethodBind(&TimelinePanel::onCurrentEditAnimChanged));
-		EditorApi.qConnectWidget(m_addNode, QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onAddObject));
 		EditorApi.qConnectWidget(m_treeWidget, QSIGNAL(itemClicked(QTreeWidgetItem*, int)), this, createMethodBind(&TimelinePanel::onSelectItem));
-		EditorApi.qConnectWidget(Play, QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onPlayAnim));
-		EditorApi.qConnectWidget(Stop, QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onStopAnim));
-		EditorApi.qConnectWidget(Restart, QSIGNAL(clicked()), this, createMethodBind(&TimelinePanel::onRestartAnim));
 	}
 
 	void TimelinePanel::setToolbuttonIcon(QToolButton* button, const String& iconPath)
@@ -867,36 +850,6 @@ namespace Echo
 		}
 	}
 
-	void TimelinePanel::onPlayAnim()
-	{
-		if (m_timeline->getPlayState() != Timeline::PlayState::Playing)
-		{
-			m_timeline->play(m_currentEditAnim.c_str());
-
-			setToolbuttonIcon(Play, "engine/modules/anim/editor/icon/pause.png");
-		}
-		else
-		{
-			m_timeline->pause();
-
-			setToolbuttonIcon(Play, "engine/modules/anim/editor/icon/play.png");
-		}
-	}
-
-	void TimelinePanel::onStopAnim()
-	{
-		m_timeline->stop();
-
-		// recover play button icon to "play.png"
-		setToolbuttonIcon(Play, "engine/modules/anim/editor/icon/play.png");
-	}
-
-	void TimelinePanel::onRestartAnim()
-	{
-		onStopAnim();
-		onPlayAnim();
-	}
-
 	void TimelinePanel::onNodeTreeWidgetSizeChanged()
 	{
 		if (m_treeWidget)
@@ -919,7 +872,7 @@ namespace Echo
 		String currentText = m_clipsComboBox->currentText().toStdString().c_str();
 		setCurrentEditAnim( currentText.c_str());
 
-		onStopAnim();
+		m_treeWidgetHeader->getToolBar()->onStopAnim();
 	}
 
 	void TimelinePanel::onCurrentEditAnimLengthChanged()

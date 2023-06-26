@@ -12,13 +12,19 @@ namespace Echo
 	class QTimelineHeaderToolBar : public QWidget, public Ui_TimelineHeaderToolBar
 	{
 	public:
-		QTimelineHeaderToolBar(QWidget* parent = nullptr);
+		QTimelineHeaderToolBar(class QTimelineHeader* parent = nullptr);
 
 		// Set tool button icon
 		void setToolbuttonIcon(QToolButton* button, const String& iconPath);
 
-	private:
+	public:
+		// play pause stop
+		void onPlayAnim();
+		void onStopAnim();
+		void onRestartAnim();
 
+	private:
+		class QTimelineHeader* m_parent = nullptr;
 	};
 }
 

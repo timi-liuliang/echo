@@ -13,6 +13,8 @@ namespace Echo
 	class Timeline;
 	class TimelinePanel : public QDockWidget, public Ui_TimelinePanel
 	{
+		friend class QTimelineHeaderToolBar;
+
 	public:
 		// key info
 		struct KeyInfo
@@ -50,11 +52,6 @@ namespace Echo
 		void onSelectItem();
 		void onAddProperty();
 		void onSelectProperty();
-
-		// play pause stop
-		void onPlayAnim();
-		void onStopAnim();
-		void onRestartAnim();
 
 		// current edit anim changed
 		void onCurrentEditAnimChanged();
@@ -120,6 +117,7 @@ namespace Echo
 
 	protected:
 		Timeline*					m_timeline;
+		class QTimelineHeader*		m_treeWidgetHeader = nullptr;
 		QMenu*						m_addObjectMenu;
 		String						m_currentEditAnim;
 		int							m_nodeTreeWidgetWidth;
