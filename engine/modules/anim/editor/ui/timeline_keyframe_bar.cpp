@@ -17,7 +17,7 @@ namespace Echo
 	void QTimelineKeyFrameBar::paintEvent(QPaintEvent* event)
 	{
         QPainter painter(this);
-        painter.fillRect(this->rect(), m_parent->isSelected() ? QColor(14, 99, 156) : QColor(0, 0, 0, 0));
+        painter.fillRect(this->rect(), m_parent->isSelected() ? QColor(14, 99, 156) : QColor(77, 77, 77, 255));
 	}
 }
 

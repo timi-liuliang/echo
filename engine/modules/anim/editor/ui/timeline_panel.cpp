@@ -7,11 +7,15 @@
 #include "engine/core/main/Engine.h"
 #include "../../anim_timeline.h"
 #include "timeline_header.h"
+#include "timeline_object_bar.h"
 #include "timeline_keyframe_bar.h"
+
+#ifdef ECHO_EDITOR_MODE
+
+#include <QtWidgets/QtWidgets>
 
 namespace Echo
 {
-#ifdef ECHO_EDITOR_MODE
 	class TimelinePanelUtil
 	{
 	public:
@@ -79,8 +83,9 @@ namespace Echo
 
 		m_treeWidgetHeader = new QTimelineHeader(Qt::Orientation::Horizontal, this);
 		m_treeWidget->setHeader(m_treeWidgetHeader);
-		m_treeWidget->setHeaderLabels({"", "", ""});
-		m_treeWidget->headerItem()->setSizeHint(0, QSize(550, 25));
+		m_treeWidget->setHeaderLabels({"", ""});
+		m_treeWidget->setColumnWidth(0, 265);
+		m_treeWidget->header()->setStretchLastSection(true);
 
 		// set icons
 		setToolbuttonIcon( NewClip, "engine/modules/anim/editor/icon/new.png");
@@ -129,7 +134,6 @@ namespace Echo
 
 	void TimelinePanel::update()
 	{
-		onNodeTreeWidgetSizeChanged();
 	}
 
 	void TimelinePanel::onDuplicateClip()
@@ -285,19 +289,22 @@ namespace Echo
 					{
 						const Timeline::ObjectUserData& userData = any_cast<Timeline::ObjectUserData>(animNode->m_userData);
 						Node* node = m_timeline->getNode(userData.m_path.c_str());
-						QTreeWidgetItem* objectItem = new QTreeWidgetItem;
-						objectItem->setText( 0, userData.m_path.c_str());
-						objectItem->setData( 0, Qt::UserRole, "object");
-						objectItem->setData( 1, Qt::UserRole, "object");
-						//objectItem->setIcon(0, Editor::instance()->getNodeIcon(node).c_str());
-						objectItem->setIcon( 1, QIcon(( Engine::instance()->getRootPath() + "engine/modules/anim/editor/icon/add.png").c_str()));
-						rootItem->addChild(objectItem);
-
-						m_treeWidget->setItemWidget(objectItem, 2, new QTimelineKeyFrameBar(objectItem));
-
-						for (AnimProperty* property : animNode->m_properties)
+						if (node)
 						{
-							syncPropertyDataToEditor(objectItem, property, StringUtil::Split(property->m_name));
+							QTreeWidgetItem* objectItem = new QTreeWidgetItem;
+							objectItem->setData(0, Qt::UserRole, "object");
+							rootItem->addChild(objectItem);
+
+							QTimelineObjectBar* objectBar = new QTimelineObjectBar(objectItem);
+							objectBar->setText(userData.m_path.c_str());
+							m_treeWidget->setItemWidget(objectItem, 0, objectBar);
+
+							m_treeWidget->setItemWidget(objectItem, 1, new QTimelineKeyFrameBar(objectItem));
+
+							for (AnimProperty* property : animNode->m_properties)
+							{
+								syncPropertyDataToEditor(objectItem, property, StringUtil::Split(property->m_name));
+							}
 						}
 					}
 				}
@@ -850,23 +857,6 @@ namespace Echo
 		}
 	}
 
-	void TimelinePanel::onNodeTreeWidgetSizeChanged()
-	{
-		if (m_treeWidget)
-		{
-			int curWidth = m_treeWidget->width();
-			if (m_nodeTreeWidgetWidth != curWidth)
-			{
-				QHeaderView* header = m_treeWidget->header();
-
-				header->resizeSection(1, 30);
-				//header->setSectionResizeMode(QHeaderView::ResizeMode::Fixed);
-				header->resizeSection(2, curWidth - 30 - header->sectionSize(0));
-				m_nodeTreeWidgetWidth = m_treeWidget->width();
-			}
-		}
-	}
-
 	void TimelinePanel::onCurrentEditAnimChanged()
 	{
 		String currentText = m_clipsComboBox->currentText().toStdString().c_str();
@@ -1059,6 +1049,6 @@ namespace Echo
 		refreshCurveDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyChain);
 		refreshCurveKeyDisplayToEditor(m_currentEditObjectPath, m_currentEditPropertyChain);
 	}
+}
 
 #endif
-}

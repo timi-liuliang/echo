@@ -108,9 +108,6 @@ namespace Echo
 		// set current edit anim
 		void setCurrentEditAnim(const char* animName);
 
-		// on nodetree widget size changed
-		void onNodeTreeWidgetSizeChanged();
-
 	private:
 		// set tool button icon
 		void setToolbuttonIcon(QToolButton* button, const String& iconPath);

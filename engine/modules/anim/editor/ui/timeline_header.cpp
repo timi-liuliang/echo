@@ -23,7 +23,7 @@ namespace Echo
 			m_toolBar->setGeometry(rect);
 			m_toolBar->show();
 		}
-		else if (logicalIndex == 2)
+		else if (logicalIndex == 1)
 		{
 			paintSectionRuler(painter, rect);
 		}
