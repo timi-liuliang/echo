@@ -356,7 +356,7 @@ namespace Studio
 
 	void MainWindow::onSaveasProject()
 	{
-		Echo::String projectName = QFileDialog::getSaveFileName(this, tr("Save as Project"), "", tr("(*.echo)")).toStdString().c_str();
+		Echo::String projectName = QFileDialog::getSaveFileName(this, tr("Save as Project"), "", tr("(*.echo)"), nullptr, QFileDialog::DontUseNativeDialog).toStdString().c_str();
 		if (!projectName.empty())
 		{
 			// 0.confirm path and file name

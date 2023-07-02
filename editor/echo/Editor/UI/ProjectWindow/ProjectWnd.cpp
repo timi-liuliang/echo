@@ -140,7 +140,7 @@ namespace Studio
 
 	Echo::String ProjectWnd::newProject()
 	{        
-		QString projectName = QFileDialog::getSaveFileName(this, tr("New Project"), "", tr("(*.echo)"));
+		QString projectName = QFileDialog::getSaveFileName(this, tr("New Project"), "", tr("(*.echo)"), nullptr, QFileDialog::DontUseNativeDialog);
 		if (!projectName.isEmpty())
 		{
 			// 0.confirm path and file name
