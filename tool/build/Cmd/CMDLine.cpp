@@ -63,10 +63,11 @@ namespace Echo
 )";
 
 Echo::String g_gameCMakeListsTxt = R"(
-MESSAGE( STATUS "Configuring module: build")
-
 # set module name
 SET(MODULE_NAME ${ECHO_GAME_NAME})
+
+# message
+MESSAGE( STATUS "Configuring module: ${MODULE_NAME} ...")
 
 # include directories
 INCLUDE_DIRECTORIES( ${ECHO_ROOT_PATH})
@@ -106,6 +107,19 @@ SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES FOLDER "game")
 # log
 MESSAGE(STATUS "Configure success!")
 
+)";
+
+Echo::String g_gameRootCMakeListsTxt = R"(
+# Debug message
+MESSAGE(STATUS "Add subdirectory [${CMAKE_CURRENT_SOURCE_DIR}]")
+
+# Set this directory as ECHO_GAME_ROOT_PATH
+SET(ECHO_GAME_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
+
+# Add game library
+ADD_SUBDIRECTORY("Source")
+
+# Add thirdparty libraries
 )";
 
 namespace Echo
@@ -164,7 +178,8 @@ namespace Echo
 			Echo::String enginePath = PathUtil::GetParentPath(PathUtil::GetParentPath(PathUtil::GetParentPath(PathUtil::GetParentPath(engineEditExePath))));
 
 			writeGameMain(projectSrcPath + "GameMain.cpp");
-			writeCMakeLists(projectSrcPath + "CMakeLists.txt");
+			writeCMakeLists(projectPath + "CMakeLists.txt", g_gameRootCMakeListsTxt);
+			writeCMakeLists(projectSrcPath + "CMakeLists.txt", g_gameCMakeListsTxt);
 			writeCMakeBatFile(projectName.c_str(), projectSrcPath.c_str(), batFile.c_str(), enginePath.c_str(), vsSolutionFile.c_str());
 
 #ifdef ECHO_PLATFORM_WINDOWS
@@ -225,10 +240,10 @@ namespace Echo
 			IO::instance()->saveStringToFile(gameMainCppFilePath, g_gameMainSourceCode);
 	}
 
-	void VsGenMode::writeCMakeLists(const Echo::String& cmakeListsFilePath)
+	void VsGenMode::writeCMakeLists(const Echo::String& cmakeListsFilePath, const Echo::String& content)
 	{
 		if (!Echo::PathUtil::IsFileExist(cmakeListsFilePath))
-			IO::instance()->saveStringToFile(cmakeListsFilePath, g_gameCMakeListsTxt);
+			IO::instance()->saveStringToFile(cmakeListsFilePath, content);
 	}
 
 	bool RegEditMode::exec(int argc, char* argv[])

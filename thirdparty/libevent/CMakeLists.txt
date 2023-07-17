@@ -1,14 +1,15 @@
 # Set Module Name
 SET(MODULE_NAME libevent)
 
+# message
+MESSAGE( STATUS "Configuring module: ${MODULE_NAME} ...")
+
 # Include Directories
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/compat)
 
-MESSAGE(STATUS ${CMAKE_CURRENT_SOURCE_DIR})
-
-# 平台相关
+# 
 IF(${LORD_PLATFORM_WIN32})
 	SET(SYS_SRC win32select.c evthread_win32.c buffer_iocp.c event_iocp.c bufferevent_async.c
 		strlcpy.c select.c poll.c devpoll.c kqueue.c epoll.c evport.c signal.c
@@ -48,3 +49,5 @@ ADD_LIBRARY(${MODULE_NAME} STATIC ${CORE_SRC} ${SYS_SRC} ${EXTRAS_SRC} ${INCLUDE
 
 # Set Folder
 SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES FOLDER "thirdparty")
+
+MESSAGE(STATUS "configure success!")

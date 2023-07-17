@@ -36,4 +36,4 @@ ADD_LIBRARY(${MODULE_NAME} STATIC ${ALL_FILES} CMakeLists.txt)
 # set folder
 SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES FOLDER "thirdparty")
 
-MESSAGE(STATUS "radeonrays configure success!")
+MESSAGE(STATUS "configure success!")

@@ -1,6 +1,9 @@
 # Set module name
 SET(MODULE_NAME freetype)
 
+# Message
+MESSAGE( STATUS "Configuring module: ${MODULE_NAME} ...")
+
 #  Header Files
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 INCLUDE_DIRECTORIES(${ECHO_ROOT_PATH}/ThirdParty/FreeImage/LibPNG)
@@ -86,4 +89,4 @@ ADD_LIBRARY(${MODULE_NAME} STATIC ${ALL_FILES} CMakeLists.txt)
 SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES FOLDER "thirdparty")
 
 # Message Output
-MESSAGE(STATUS "${MODULE_NAME} configure success!")
+MESSAGE(STATUS "configure success!")

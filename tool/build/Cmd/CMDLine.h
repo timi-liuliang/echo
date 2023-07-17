@@ -33,7 +33,7 @@ namespace Echo
 		void writeGameMain(const Echo::String& gameMainCppFilePath);
 
 		// Wirte CMakeLists.txt
-		void writeCMakeLists(const Echo::String& cmakeListsFilePath);
+		void writeCMakeLists(const Echo::String& cmakeListsFilePath, const Echo::String& content);
 	};
 
 	/**

@@ -1,4 +1,4 @@
-MESSAGE(STATUS "configuring module: baseserver...")
+MESSAGE(STATUS "configuring module: protobuf...")
 
 # 附加包含目录
 SET(INCLUDE_FILES
@@ -70,6 +70,6 @@ ADD_LIBRARY(${MODULE_NAME} STATIC ${HEADER_FILES} ${SOURCE_FILES} CMakeLists.txt
 # 设置目标属性
 SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES FOLDER "thirdparty/google")
 
-MESSAGE(STATUS "baseserver configure success!")
+MESSAGE(STATUS "configure success!")
 
 

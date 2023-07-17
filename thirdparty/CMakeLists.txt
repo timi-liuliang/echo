@@ -1,5 +1,7 @@
+# Debug message
+MESSAGE(STATUS "Add subdirectory [${CMAKE_CURRENT_SOURCE_DIR}]")
+
 # Config thridparty libaries
-#ADD_SUBDIRECTORY(libuv)
 ADD_SUBDIRECTORY(pugixml)
 ADD_SUBDIRECTORY(physx)
 ADD_SUBDIRECTORY(spine)
@@ -22,7 +24,6 @@ IF(ECHO_PLATFORM_WINDOWS)
 	ADD_SUBDIRECTORY(openal-soft)
 	ADD_SUBDIRECTORY(vulkan/vulkan-loader)
 	ADD_SUBDIRECTORY(vulkan/vulkan-validationlayers)
-	#ADD_SUBDIRECTORY(tensorflow/abseil)
 ELSEIF(ECHO_PLATFORM_ANDROID OR ECHO_PLATFORM_LINUX)
 	ADD_SUBDIRECTORY(openal-soft)
 ENDIF()

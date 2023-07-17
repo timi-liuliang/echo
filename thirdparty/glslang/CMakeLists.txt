@@ -34,4 +34,4 @@ ADD_LIBRARY(${MODULE_NAME} ${ALL_FILES} CMakeLists.txt)
 SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES FOLDER "thirdparty/khronosgroup")
 
 # Message
-MESSAGE(STATUS "Configure ${MODULE_NAME} success!")
+MESSAGE(STATUS "Configure success!")

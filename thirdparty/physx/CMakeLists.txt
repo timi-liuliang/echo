@@ -52,4 +52,4 @@ ADD_LIBRARY(${MODULE_NAME} STATIC ${ALL_FILES} CMakeLists.txt)
 # set target folder
 SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES FOLDER "thirdparty")
 
-MESSAGE(STATUS "baseserver configure success!")
+MESSAGE(STATUS "configure success!")
