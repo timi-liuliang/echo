@@ -117,9 +117,14 @@ MESSAGE(STATUS "Add subdirectory [${CMAKE_CURRENT_SOURCE_DIR}]")
 SET(ECHO_GAME_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Add game library
-ADD_SUBDIRECTORY("Source")
+ADD_SUBDIRECTORY("${ECHO_GAME_NAME}")
 
 # Add thirdparty libraries
+
+
+# Add custom editor
+
+
 )";
 
 namespace Echo
@@ -168,6 +173,7 @@ namespace Echo
 			Echo::String projectPath = Echo::PathUtil::GetFileDirPath(project);
 			Echo::String projectName = Echo::PathUtil::GetPureFilename(project, false);
 			Echo::String projectSrcPath = projectPath + "Source/";
+			Echo::String projectGameSrcPath = projectSrcPath + projectName + "/";
 			Echo::String buildPath = projectPath + "Build/";
 			Echo::String binaryPath = projectPath + "Bin/";
 			Echo::String vsVersion = "-G\"Visual Studio 17 2022\" -A x64";
@@ -177,9 +183,12 @@ namespace Echo
 			Echo::String engineEditExePath = Echo::PathUtil::GetFileDirPath(editor);
 			Echo::String enginePath = PathUtil::GetParentPath(PathUtil::GetParentPath(PathUtil::GetParentPath(PathUtil::GetParentPath(engineEditExePath))));
 
-			writeGameMain(projectSrcPath + "GameMain.cpp");
-			writeCMakeLists(projectPath + "CMakeLists.txt", g_gameRootCMakeListsTxt);
-			writeCMakeLists(projectSrcPath + "CMakeLists.txt", g_gameCMakeListsTxt);
+			// Root CMakeLists.txt
+			writeCMakeLists(projectSrcPath + "CMakeLists.txt", g_gameRootCMakeListsTxt);
+
+			// Game source
+			writeGameMain(projectGameSrcPath + "GameMain.cpp");
+			writeCMakeLists(projectGameSrcPath + "CMakeLists.txt", g_gameCMakeListsTxt);
 			writeCMakeBatFile(projectName.c_str(), projectSrcPath.c_str(), batFile.c_str(), enginePath.c_str(), vsSolutionFile.c_str());
 
 #ifdef ECHO_PLATFORM_WINDOWS
