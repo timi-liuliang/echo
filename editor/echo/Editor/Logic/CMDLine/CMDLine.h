@@ -13,32 +13,4 @@ namespace Echo
 		// Parse
 		static bool Parser(int argc, char* argv[]);
 	};
-
-	/**
-	 * EditorMode
-	 */
-	class EditorMode
-	{
-	public:
-		// Exec command
-		bool exec(int argc, char* argv[]);
-	};
-
-	// EditOpen
-	class EditOpenMode
-	{
-	public:
-		// exec command
-		bool exec(int argc, char* argv[]);
-	};
-
-	/**
-	 * GameMode
-	 */
-	class GameMode
-	{
-	public:
-		// Exec command
-		bool exec(int argc, char* argv[]);
-	};
 }
