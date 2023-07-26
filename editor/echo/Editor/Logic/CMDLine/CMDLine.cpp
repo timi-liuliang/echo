@@ -13,6 +13,8 @@
 #include "Window.h"
 #include "ProjectWnd.h"
 #include "EditorConfig.h"
+#include "VsGenMode.h"
+#include "RegEditMode.h"
 #include "GameMainWindow.h"
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/util/TimeProfiler.h>
@@ -39,6 +41,16 @@ namespace Echo
 			{
 				EditOpenMode openMode;
 				openMode.exec(argc, argv);
+			}
+			else if (sargv[0] == "vs")
+			{
+				VsGenMode vsGenMode;
+				vsGenMode.exec(argc, argv);
+			}
+			else if (sargv[0] == "regedit")
+			{
+				RegEditMode regEditMode;
+				regEditMode.exec(argc, argv);
 			}
 
 			return true;

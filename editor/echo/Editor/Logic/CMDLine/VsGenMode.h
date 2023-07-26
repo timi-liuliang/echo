@@ -5,18 +5,8 @@
 namespace Echo
 {
 	/**
-	 * Command Parser 2012-8-16 Liang
-	 */
-	class CMDLine
-	{
-	public:
-		// Parse
-		static bool Parser(int argc, char* argv[]);
-	};
-
-	/**
-	 * Generate Visual Studio project files
-	 */
+	  * Generate Visual Studio project files
+	  */
 	class VsGenMode
 	{
 	public:
@@ -34,15 +24,5 @@ namespace Echo
 
 		// Wirte CMakeLists.txt
 		void writeCMakeLists(const Echo::String& cmakeListsFilePath, const Echo::String& content);
-	};
-
-	/**
-	 * Link echo file
-	 */
-	class RegEditMode
-	{
-	public:
-		// Exec command
-		bool exec(int argc, char* argv[]);
 	};
 }
