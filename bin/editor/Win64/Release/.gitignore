@@ -1,1 +1,7 @@
 /opencv_world480.dll
+/plugins
+/libEGL.dll
+/libGLESv2.dll
+/Qt5Core.dll
+/Qt5Gui.dll
+/Qt5Widgets.dll
