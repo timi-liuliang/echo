@@ -829,11 +829,11 @@ namespace Echo
 			/* if dirent is a directory, call itself */
 			if(S_ISDIR(st.st_mode))
 			{
+				String subFolder = fullname;
+				ret.emplace_back(subFolder + "/");
+
 				if(bIncSubDirs)
 				{
-					String subFolder = fullname;
-					ret.emplace_back(subFolder);
-
 					EnumSubDirs(ret, subFolder, bIncSubDirs);
 				}
 			}
