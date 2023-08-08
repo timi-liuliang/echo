@@ -12,9 +12,9 @@
 
 // Mode
 #if defined(_DEBUG) || defined(DEBUG) || !defined(NDEBUG)
-	#define ECHO_DEBUG
+	#define ECHO_DEBUG 1
 #else
-	#define ECHO_RELEASE
+	#define ECHO_RELEASE 1
 #endif
 
 // Disable Warnings

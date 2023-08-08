@@ -18,17 +18,24 @@ namespace Echo
 		~OS();
 
 	public:
+		// Create process detatched
+		static bool createProcessDetached(const String& command);
+
 		// Get process name by id
-		String getProcessName(i64 processID);
+		static String getProcessName(i64 processID);
 
 		// Get process id by name
-		i64 getProcessID(const String& name);
+		static i64 getProcessID(const String& name);
 
 		// Is process exist
-		bool isProcessExist(const String& name);
+		static bool isProcessExist(const String& name);
 
 		// Enumerate all process infos
-		void enumAllProcesses(ProcessInfoArray& infos);
+		static void enumAllProcesses(ProcessInfoArray& infos);
+
+	public:
+		// Get Ip
+		static String getLocalIPV4();
 
 	public:
 		OS();

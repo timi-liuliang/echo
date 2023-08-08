@@ -18,6 +18,27 @@ namespace Echo
 
 	}
 
+    bool OS::createProcessDetached(const String& command)
+    {
+    #ifdef ECHO_PLATFORM_WINDOWS
+        STARTUPINFO si;
+        PROCESS_INFORMATION pi;
+
+        ZeroMemory(&si, sizeof(STARTUPINFO));
+        si.cb = sizeof(si);
+
+        if (!CreateProcess(NULL, (LPSTR)command.c_str(), NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi))
+            return false;
+
+        CloseHandle(pi.hProcess);
+        CloseHandle(pi.hThread);
+
+        return true;
+    #endif
+
+        return true;
+    }
+
     String OS::getProcessName(i64 processID)
     {
         TCHAR szProcessName[MAX_PATH] = TEXT("");
@@ -90,4 +111,44 @@ namespace Echo
 
 	#endif
 	}
+
+    String OS::getLocalIPV4()
+    {
+        return false;
+
+#ifdef ECHO_PLATFORM_WINDOWS
+        char szBuffer[1024];
+
+        WSADATA wsaData;
+        WORD wVersionRequested = MAKEWORD(2, 0);
+        if (::WSAStartup(wVersionRequested, &wsaData) != 0)
+            return "";
+
+
+        if (gethostname(szBuffer, sizeof(szBuffer)) == SOCKET_ERROR)
+        {
+            WSACleanup();
+            return "";
+        }
+
+        struct hostent* host = gethostbyname(szBuffer);
+        if (host == NULL)
+        {
+            WSACleanup();
+            return "";
+        }
+
+        //Obtain the computer's IP
+        unsigned char b1 = ((struct in_addr*)(host->h_addr))->S_un.S_un_b.s_b1;
+        unsigned char b2 = ((struct in_addr*)(host->h_addr))->S_un.S_un_b.s_b2;
+        unsigned char b3 = ((struct in_addr*)(host->h_addr))->S_un.S_un_b.s_b3;
+        unsigned char b4 = ((struct in_addr*)(host->h_addr))->S_un.S_un_b.s_b4;
+
+        WSACleanup();
+        
+        return StringUtil::Format("%d.%d.%d.%d", int(b1), int(b2), int(b3), int(b4));
+#endif
+
+        return "";
+    }
 }
