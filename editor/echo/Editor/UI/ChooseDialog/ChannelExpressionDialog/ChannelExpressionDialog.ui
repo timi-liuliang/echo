@@ -176,7 +176,7 @@
   <customwidget>
    <class>QT_UI::QMenuBarEx</class>
    <extends>QLabel</extends>
-   <header>engine/core/editor/qt/extension/QMenuBarEx.h</header>
+   <header>QMenuBarEx.h</header>
   </customwidget>
   <customwidget>
    <class>Studio::TextEdit</class>

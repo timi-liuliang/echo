@@ -5,7 +5,7 @@
 #include "XColorPreview.hpp"
 #include "XColorSquare.h"
 #include "XGradientSlider.hpp"
-#include <engine/core/editor/qt/extension/QMenuBarEx.h>
+#include <QMenuBarEx.h>
 #include <QLayout>
 #include <QLabel>
 #include <QPushButton>

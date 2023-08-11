@@ -138,14 +138,13 @@ ADD_EXECUTABLE(${MODULE_NAME} MACOSX_BUNDLE
 	CMakeLists.txt)
 
 # link libraries
-TARGET_LINK_LIBRARIES(${MODULE_NAME} zlib engine lua recast physx)
+TARGET_LINK_LIBRARIES(${MODULE_NAME} engine)
+TARGET_LINK_LIBRARIES(${MODULE_NAME} recast physx)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} pugixml spine box2d)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} freetype)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} radeonrays)
-TARGET_LINK_LIBRARIES(${MODULE_NAME} glslang spirv-cross)
-TARGET_LINK_LIBRARIES(${MODULE_NAME} icns openfbx libpng)
+TARGET_LINK_LIBRARIES(${MODULE_NAME} openfbx rvo2)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} tensorflow-lite)
-TARGET_LINK_LIBRARIES(${MODULE_NAME} nodeeditor)
 
 # link game library
 IF(ECHO_GAME_SOURCE)
@@ -155,6 +154,43 @@ ENDIF()
 
 # line qt
 TARGET_LINK_QTLIBRARIES(${MODULE_NAME})
+
+MACRO(COPY_QT_DLL src_dll_name dst_dll_name)
+	IF(${ECHO_PLATFORM_WINDOWS})
+		ADD_CUSTOM_COMMAND(
+			TARGET ${MODULE_NAME} PRE_BUILD 
+			COMMAND ${CMAKE_COMMAND} -E copy 
+			${QT_ROOT_PATH}/${src_dll_name}d.dll
+			${ECHO_BIN_PATH}Debug/${dst_dll_name}d.dll)
+
+		ADD_CUSTOM_COMMAND(
+			TARGET ${MODULE_NAME} PRE_BUILD 
+			COMMAND ${CMAKE_COMMAND} -E copy 
+			${QT_ROOT_PATH}/${src_dll_name}.dll
+			${ECHO_BIN_PATH}Release/${dst_dll_name}.dll)
+	ENDIF()
+ENDMACRO(COPY_QT_DLL)
+
+# Copy qt debug dlls
+IF(${ECHO_PLATFORM_WINDOWS})
+	COPY_QT_DLL(bin/Qt5Core Qt5Core)
+	COPY_QT_DLL(bin/Qt5Gui Qt5Gui)
+	COPY_QT_DLL(bin/Qt5Widgets Qt5Widgets)
+
+	COPY_QT_DLL(plugins/imageformats/qgif  plugins/Qt/imageformats/qgif)
+	COPY_QT_DLL(plugins/imageformats/qicns plugins/Qt/imageformats/qicns)
+	COPY_QT_DLL(plugins/imageformats/qico  plugins/Qt/imageformats/qico)
+	COPY_QT_DLL(plugins/imageformats/qjpeg plugins/Qt/imageformats/qjpeg)
+	COPY_QT_DLL(plugins/imageformats/qsvg  plugins/Qt/imageformats/qsvg)
+	COPY_QT_DLL(plugins/imageformats/qtga  plugins/Qt/imageformats/qtga)
+	COPY_QT_DLL(plugins/imageformats/qtiff plugins/Qt/imageformats/qtiff)
+	COPY_QT_DLL(plugins/imageformats/qwbmp plugins/Qt/imageformats/qwbmp)
+	COPY_QT_DLL(plugins/imageformats/qwebp plugins/Qt/imageformats/qwebp)
+
+	COPY_QT_DLL(plugins/platforms/qminimal   plugins/Qt/platforms/qminimal)
+	COPY_QT_DLL(plugins/platforms/qoffscreen plugins/Qt/platforms/qoffscreen)
+	COPY_QT_DLL(plugins/platforms/qwindows   plugins/Qt/platforms/qwindows)
+ENDIF()
 
 IF(${ECHO_PLATFORM_WINDOWS})
 	TARGET_LINK_LIBRARIES(${MODULE_NAME} winmm.lib imm32.lib dxgi.lib Shlwapi.lib CfgMgr32.lib)

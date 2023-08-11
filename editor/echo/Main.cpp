@@ -6,10 +6,7 @@
 #include <QSettings>
 #include "CMDLine.h"
 #include "Studio.h"
-#ifdef ECHO_PLATFORM_WINDOWS
-#include <windows.h>
-#include <shellapi.h>
-#endif
+#include "RegEditMode.h"
 #include <engine/core/base/echo_def.h>
 
 int main( int argc, char* argv[])
@@ -20,15 +17,7 @@ int main( int argc, char* argv[])
 	QApplication::setLibraryPaths(QStringList() << QApplication::libraryPaths() << QDir::currentPath().append("/plugins/Qt"));
 
 	// Regedit
-#if defined(ECHO_PLATFORM_WINDOWS) && !defined(ECHO_GAME_SOURCE)
-	QSettings regIcon("HKEY_CLASSES_ROOT\\.echo\\shell\\Generate Visual Studio Files\\command", QSettings::NativeFormat);
-	Echo::String currentEdit = regIcon.value("Default").toString().toStdString().c_str();
-	if (!Echo::StringUtil::StartWith(currentEdit, argv[0]))
-	{
-		HINSTANCE result = ShellExecute(NULL, "runas", argv[0], "regedit", NULL, SW_SHOWNORMAL);
-		assert(result != 0);
-	}
-#endif
+	Echo::RegEditMode::check(argv[0]);
 
 	// Parse & run
 	Echo::CMDLine::Parser(argc, argv);

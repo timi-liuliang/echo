@@ -4,7 +4,7 @@
 #include <QDialog>
 #include <QStandardItemModel>
 #include <QSortFilterProxyModel>
-#include <engine/core/editor/qt/extension/QMenuBarEx.h>
+#include <QMenuBarEx.h>
 #include "ui_NewNodeDialog.h"
 
 namespace Studio
