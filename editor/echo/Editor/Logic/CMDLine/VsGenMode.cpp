@@ -201,7 +201,7 @@ namespace Echo
 		StringUtil::WriteLine(batSrc, ":: make link");
 		StringUtil::WriteLine(batSrc, "cd /D \"%~dp0\"");
 		StringUtil::WriteLine(batSrc, "cd ../\n");
-		StringUtil::WriteLine(batSrc, Echo::StringUtil::Format("if not exist .\\%s.sln mklink .\\%s.sln .\\Build\\echo.sln\n", projectName, projectName));
+		StringUtil::WriteLine(batSrc, Echo::StringUtil::Format("if not exist .\\%s.sln mklink .\\%s.sln .\\Build\\%s.sln\n", projectName, projectName, projectName));
 
 		StringUtil::WriteLine(batSrc, ":: delay close");
 		StringUtil::WriteLine(batSrc, "timeout /t 10");
