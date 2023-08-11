@@ -63,23 +63,24 @@ namespace Echo
         return szProcessName;
     }
 
-    i64 OS::getProcessID(const String& name)
+    vector<i64>::type OS::getProcessID(const String& name)
     {
         ProcessInfoArray infos;
         enumAllProcesses(infos);
 
+        vector<i64>::type result;
         for (ProcessInfo info : infos)
         {
             if(info.m_name == name)
-                return info.m_id;
+                result.emplace_back(info.m_id);
         }
 
-        return -1;
+        return result;
     }
 
     bool OS::isProcessExist(const String& name)
     {
-        return getProcessID(name) >=0;
+        return getProcessID(name).size() >= 0;
     }
 
 	void OS::enumAllProcesses(ProcessInfoArray& infos)
@@ -111,6 +112,24 @@ namespace Echo
 
 	#endif
 	}
+
+    void OS::closeProcesses(vector<i64>::type processIds)
+    {
+#ifdef ECHO_PLATFORM_WINDOWS
+        for (i64 processId : processIds)
+        {
+            HANDLE hProcess = OpenProcess(PROCESS_TERMINATE, FALSE, processId);
+            if (hProcess)
+            {
+                bool success = TerminateProcess(hProcess, 0);
+                if (success)
+                {
+
+                }
+            }
+        }
+#endif
+    }
 
     String OS::getLocalIPV4()
     {

@@ -25,13 +25,16 @@ namespace Echo
 		static String getProcessName(i64 processID);
 
 		// Get process id by name
-		static i64 getProcessID(const String& name);
+		static vector<i64>::type getProcessID(const String& name);
 
 		// Is process exist
 		static bool isProcessExist(const String& name);
 
 		// Enumerate all process infos
 		static void enumAllProcesses(ProcessInfoArray& infos);
+
+		// Close process
+		static void closeProcesses(vector<i64>::type processIds);
 
 	public:
 		// Get Ip
