@@ -207,25 +207,25 @@ IF(${ECHO_PLATFORM_WINDOWS})
 		TARGET ${MODULE_NAME} PRE_BUILD 
 		COMMAND ${CMAKE_COMMAND} -E copy 
 		${ECHO_ROOT_PATH}/thirdparty/opengles/angle/lib/win64/libEGL.dll
-		${ECHO_ROOT_PATH}/bin/editor//${PLATFORM}/Debug/libEGL.dll)
+		${ECHO_BIN_PATH}/Debug/libEGL.dll)
 
 	ADD_CUSTOM_COMMAND(
 		TARGET ${MODULE_NAME} PRE_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy 
 		${ECHO_ROOT_PATH}/thirdparty/opengles/angle/lib/win64/libGLESv2.dll
-		${ECHO_ROOT_PATH}/bin/editor/${PLATFORM}/Debug/libGLESv2.dll)
+		${ECHO_BIN_PATH}/Debug/libGLESv2.dll)
 
 	ADD_CUSTOM_COMMAND(
 		TARGET ${MODULE_NAME} PRE_BUILD 
 		COMMAND ${CMAKE_COMMAND} -E copy 
 		${ECHO_ROOT_PATH}/thirdparty/opengles/angle/lib/win64/libEGL.dll
-		${ECHO_ROOT_PATH}/bin/editor//${PLATFORM}/Release/libEGL.dll)
+		${ECHO_BIN_PATH}/Release/libEGL.dll)
 
 	ADD_CUSTOM_COMMAND(
 		TARGET ${MODULE_NAME} PRE_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy 
 		${ECHO_ROOT_PATH}/thirdparty/opengles/angle/lib/win64/libGLESv2.dll
-		${ECHO_ROOT_PATH}/bin/editor/${PLATFORM}/Release/libGLESv2.dll)
+		${ECHO_BIN_PATH}/Release/libGLESv2.dll)
 
 ELSE()
 	# AddFrameWork Macro
