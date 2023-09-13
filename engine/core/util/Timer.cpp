@@ -231,4 +231,20 @@ namespace Echo
 		clock_t newClock = clock();
 		return (unsigned long)((float)(newClock-m_zeroClock) / ((float)CLOCKS_PER_SEC/1000000.0)) ;
 	}
+
+	bool Time::getTimeOfDay(i32& year, i32& month, i32& day)
+	{
+		std::time_t now = std::time(0);
+		std::tm* localTime = std::localtime(&now);
+		if (localTime)
+		{
+			year = localTime->tm_year + 1900;
+			month = localTime->tm_mon + 1;
+			day = localTime->tm_mday;
+
+			return true;
+		}
+
+		return false;
+	}
 }

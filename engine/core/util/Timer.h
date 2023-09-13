@@ -48,6 +48,9 @@ namespace Echo
 		/** Returns microseconds since initialization or last reset, only CPU time measured */	
 		unsigned long getMicrosecondsCPU();
 
+		// Get time of day
+		bool getTimeOfDay(i32& year, i32& month, i32& day);
+
 	public:
 		// add event
 		void addDelayTask(ulong delayMilliseconds, std::function<void()> cb);
