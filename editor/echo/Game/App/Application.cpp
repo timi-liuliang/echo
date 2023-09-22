@@ -63,7 +63,6 @@ namespace Echo
         rootcfg.m_isGame = true;
         rootcfg.m_userPath = Echo::PathUtil::GetCurrentDir() + "/user/" + Echo::StringUtil::Format("u%d/", Echo::BKDRHash(echoProject.c_str()));
 		rootcfg.m_rootPath = calcEngineRootPath();
-		rootcfg.m_engineResPath = rootcfg.m_rootPath + "engine/resources/";
 		Echo::PathUtil::FormatPath(rootcfg.m_userPath);
 		Echo::Engine::instance()->initialize(rootcfg);
 	}
