@@ -54,7 +54,11 @@ namespace Echo
 
 	void IO::setResPath(const String& resPath)
 	{
-		m_resFileSystem.setPath(resPath, "Res://");
+        String finalPath = resPath;
+        PathUtil::FormatPath(finalPath);
+        PathUtil::FormatPathAbsolut(finalPath);
+
+		m_resFileSystem.setPath(finalPath, "Res://");
         
         loadPackages();
 	}
