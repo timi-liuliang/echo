@@ -64,7 +64,7 @@ namespace Echo
 
 Echo::String g_gameCMakeListsTxt = R"(
 # set module name
-SET(MODULE_NAME ${ECHO_GAME_NAME})
+SET(MODULE_NAME ${ECHO_GAME_NAME}Lib)
 
 # message
 MESSAGE( STATUS "Configuring module: ${MODULE_NAME} ...")
@@ -117,7 +117,7 @@ MESSAGE(STATUS "Add subdirectory [${CMAKE_CURRENT_SOURCE_DIR}]")
 SET(ECHO_GAME_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Add game library
-ADD_SUBDIRECTORY("${ECHO_GAME_NAME}")
+ADD_SUBDIRECTORY("${ECHO_GAME_NAME}Lib")
 
 # Add thirdparty libraries
 
@@ -145,7 +145,7 @@ namespace Echo
 			Echo::String projectPath = Echo::PathUtil::GetFileDirPath(project);
 			Echo::String projectName = Echo::PathUtil::GetPureFilename(project, false);
 			Echo::String projectSrcPath = projectPath + "Source/";
-			Echo::String projectGameSrcPath = projectSrcPath + projectName + "/";
+			Echo::String projectGameSrcPath = projectSrcPath + projectName + "Lib/";
 			Echo::String buildPath = projectPath + "Build/";
 			Echo::String binaryPath = projectPath + "Bin/";
 			Echo::String vsVersion = "-G\"Visual Studio 17 2022\" -A x64";
