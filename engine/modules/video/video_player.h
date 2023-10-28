@@ -56,8 +56,11 @@ namespace Echo
 		bool				m_isPlayOnAwake = true;
 		bool				m_is2D = true;
         ResourcePath		m_videoRes = ResourcePath("", ".mp4|.video");
-		cmpeg::player*		m_jplayer = nullptr;
 		bool				m_isCustomRender = false;
+
+	#ifdef THIRDPARTY_JPLAYER
+		cmpeg::player*		m_jplayer = nullptr;
 		cmpeg::render_base* m_videoRender = nullptr;
+	#endif
 	};
 }

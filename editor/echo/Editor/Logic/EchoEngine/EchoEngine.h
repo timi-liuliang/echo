@@ -29,6 +29,9 @@ namespace Studio
 		// set project
 		static bool SetProject( const char* projectFile);
 
+		// Get engine root path
+		static Echo::String getEngineRootPath();
+
 	public:
 		// on open node tree
 		bool onOpenNodeTree(const Echo::String& resPath);

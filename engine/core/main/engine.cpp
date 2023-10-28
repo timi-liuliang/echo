@@ -79,6 +79,16 @@ namespace Echo
         {
             String resPath = PathUtil::GetFileDirPath(m_config.m_projectFile) + "Res/";
             IO::instance()->setResPath(resPath);
+
+			if (IsGame)
+			{
+				String engineResPath = PathUtil::GetFileDirPath(m_config.m_projectFile) + "Engine/";
+				IO::instance()->setEngineResPath(engineResPath);
+			}
+			else
+			{
+				IO::instance()->setEngineResPath(m_config.m_rootPath + "engine/resources/");
+			}
         }
         else
         {
@@ -87,7 +97,6 @@ namespace Echo
         }
 
         IO::instance()->setUserPath( m_config.m_userPath);
-		IO::instance()->setEngineResPath(m_config.m_engineResPath);
 
 		// lua script
 		{

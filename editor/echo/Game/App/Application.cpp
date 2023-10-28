@@ -3,6 +3,8 @@
 #include <engine/core/render/gles/gles.h>
 #include <engine/core/util/PathUtil.h>
 #include <engine/core/util/hash_generator.h>
+#include "EchoEngine.h"
+#include <QSettings>
 
 namespace Echo
 {
@@ -32,25 +34,6 @@ namespace Echo
 
 	void Application::init(QWidget* mainWindow, size_t hwnd, const Echo::String& echoProject)
 	{
-		auto calcEngineRootPath = []()
-		{
-			Echo::String appPath = Echo::PathUtil::GetCurrentDir();
-			Echo::PathUtil::FormatPath(appPath, false);
-
-			// calculate root path
-#ifdef ECHO_PLATFORM_WINDOWS
-			Echo::String rootPath = appPath + "../../../../";
-#elif defined ECHO_PLATFORM_MAC
-			Echo::String rootPath = appPath + "../echo/";
-#else
-			Echo::String rootPath = appPath + "../../../../";
-#endif
-			Echo::PathUtil::FormatPath(rootPath, false);
-			Echo::PathUtil::FormatPathAbsolut(rootPath, false);
-
-			return rootPath;
-		};
-
 		m_mainWindow = mainWindow;
 
 		m_log = EchoNew(Game::GameLog("Game"));
@@ -62,8 +45,7 @@ namespace Echo
         rootcfg.m_projectFile = echoProject;
         rootcfg.m_isGame = true;
         rootcfg.m_userPath = Echo::PathUtil::GetCurrentDir() + "/user/" + Echo::StringUtil::Format("u%d/", Echo::BKDRHash(echoProject.c_str()));
-		rootcfg.m_rootPath = calcEngineRootPath();
-		rootcfg.m_engineResPath = rootcfg.m_rootPath + "engine/resources/";
+		rootcfg.m_rootPath = Studio::EchoEngine::getEngineRootPath();
 		Echo::PathUtil::FormatPath(rootcfg.m_userPath);
 		Echo::Engine::instance()->initialize(rootcfg);
 	}

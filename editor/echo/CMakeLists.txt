@@ -37,8 +37,12 @@ IF(${ECHO_PLATFORM_WINDOWS})
 	ENDIF(MSVC)
 ENDIF()
 
-# set module name
-SET(MODULE_NAME echo)
+# Set module name
+IF(NOT ECHO_GAME_SOURCE)
+	SET(MODULE_NAME echo)
+ELSE()
+	SET(MODULE_NAME ${ECHO_GAME_NAME}Editor)
+ENDIF()
 
 # set path
 SET(MODULE_HEADER_PATH   ${ECHO_ROOT_PATH}/editor/echo)
@@ -149,7 +153,7 @@ TARGET_LINK_LIBRARIES(${MODULE_NAME} tensorflow-lite)
 # link game library
 IF(ECHO_GAME_SOURCE)
 	MESSAGE(STATUS "Editor link game library : " ${ECHO_GAME_NAME})
-	TARGET_LINK_LIBRARIES(${MODULE_NAME} ${ECHO_GAME_NAME})
+	TARGET_LINK_LIBRARIES(${MODULE_NAME} ${ECHO_GAME_NAME}Lib)
 ENDIF()
 
 # line qt
@@ -199,7 +203,6 @@ IF(${ECHO_PLATFORM_WINDOWS})
 	TARGET_LINK_LIBRARIES(${MODULE_NAME} openal-soft)
     TARGET_LINK_LIBRARIES(${MODULE_NAME} OpenCL)
 	TARGET_LINK_LIBRARIES(${MODULE_NAME} vulkan-loader)
-    TARGET_LINK_LIBRARIES(${MODULE_NAME} jplayer)
     TARGET_LINK_LIBRARIES(${MODULE_NAME} Live2DCubismCore)
 
 	# Copy dlls &{CMAKE_BUILD_TYPE} is empty!!!
@@ -207,25 +210,25 @@ IF(${ECHO_PLATFORM_WINDOWS})
 		TARGET ${MODULE_NAME} PRE_BUILD 
 		COMMAND ${CMAKE_COMMAND} -E copy 
 		${ECHO_ROOT_PATH}/thirdparty/opengles/angle/lib/win64/libEGL.dll
-		${ECHO_ROOT_PATH}/bin/editor//${PLATFORM}/Debug/libEGL.dll)
+		${ECHO_BIN_PATH}/Debug/libEGL.dll)
 
 	ADD_CUSTOM_COMMAND(
 		TARGET ${MODULE_NAME} PRE_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy 
 		${ECHO_ROOT_PATH}/thirdparty/opengles/angle/lib/win64/libGLESv2.dll
-		${ECHO_ROOT_PATH}/bin/editor/${PLATFORM}/Debug/libGLESv2.dll)
+		${ECHO_BIN_PATH}/Debug/libGLESv2.dll)
 
 	ADD_CUSTOM_COMMAND(
 		TARGET ${MODULE_NAME} PRE_BUILD 
 		COMMAND ${CMAKE_COMMAND} -E copy 
 		${ECHO_ROOT_PATH}/thirdparty/opengles/angle/lib/win64/libEGL.dll
-		${ECHO_ROOT_PATH}/bin/editor//${PLATFORM}/Release/libEGL.dll)
+		${ECHO_BIN_PATH}/Release/libEGL.dll)
 
 	ADD_CUSTOM_COMMAND(
 		TARGET ${MODULE_NAME} PRE_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy 
 		${ECHO_ROOT_PATH}/thirdparty/opengles/angle/lib/win64/libGLESv2.dll
-		${ECHO_ROOT_PATH}/bin/editor/${PLATFORM}/Release/libGLESv2.dll)
+		${ECHO_BIN_PATH}/Release/libGLESv2.dll)
 
 ELSE()
 	# AddFrameWork Macro
@@ -250,7 +253,10 @@ ENDIF()
 SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES FOLDER "editor")
 
 # set name
-SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES OUTPUT_NAME "Echo")
+IF(NOT ECHO_GAME_SOURCE)
+	SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES OUTPUT_NAME "Echo")
+ENDIF()
+
 
 IF(MSVC)
 	# set target properties

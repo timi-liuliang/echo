@@ -6,6 +6,7 @@
 #include <base/buffer/frame_buffer.h>
 #include "engine/core/thread/Threading.h"
 #include "Studio.h"
+#include <QSettings>
 #include "RenderWindow.h"
 #include <base/renderer.h>
 #include <string>
@@ -38,12 +39,16 @@ namespace Studio
 		return inst;
 	}
 
-	bool EchoEngine::Initialize(size_t hwnd)
+	Echo::String EchoEngine::getEngineRootPath()
 	{
-		auto calcEngineRootPath = []()
+		QSettings regIcon("HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes\\Echo.ProjectFile\\shell\\rungenproj\\command", QSettings::NativeFormat);
+		Echo::StringArray commands = Echo::StringUtil::Split(regIcon.value("Default").toString().toStdString().c_str(), " ");
+		if (commands.size())
 		{
-			Echo::String appPath = Echo::PathUtil::GetCurrentDir();
+			Echo::String appPath = commands[0];
 			Echo::PathUtil::FormatPath(appPath, false);
+			appPath = Echo::PathUtil::GetFileDirPath(appPath);
+
 
 			// calculate root path
 #ifdef ECHO_PLATFORM_WINDOWS
@@ -57,8 +62,13 @@ namespace Studio
 			Echo::PathUtil::FormatPathAbsolut(rootPath, false);
 
 			return rootPath;
-		};
+		}
 
+		return Echo::StringUtil::BLANK;
+	}
+
+	bool EchoEngine::Initialize(size_t hwnd)
+	{
         // init
         Echo::initRender( hwnd);
 
@@ -66,8 +76,7 @@ namespace Studio
 		rootcfg.m_projectFile = m_projectFile;
 		rootcfg.m_isGame = false;
 		rootcfg.m_userPath = Echo::PathUtil::GetCurrentDir() + "/user/" + Echo::StringUtil::Format("u%d/", Echo::BKDRHash(m_projectFile.c_str()));
-		rootcfg.m_rootPath = calcEngineRootPath();
-		rootcfg.m_engineResPath = rootcfg.m_rootPath + "engine/resources/";
+		rootcfg.m_rootPath = getEngineRootPath();
 		Echo::PathUtil::FormatPath(rootcfg.m_userPath);
 		Echo::Engine::instance()->initialize(rootcfg);
 
