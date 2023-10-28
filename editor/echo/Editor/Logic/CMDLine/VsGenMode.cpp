@@ -173,7 +173,7 @@ namespace Echo
 			Echo::String output(process.readAllStandardOutput());
 			printf(output.c_str());
 
-			Echo::String userFilePath = buildPath + "editor/echo/echo.vcxproj.user";
+			Echo::String userFilePath = buildPath + StringUtil::Format("editor/echo/%sEditor.vcxproj.user", projectName.c_str());
 			Echo::String args = "open " + project;
 			writeVcxprojUser(userFilePath, args);
 #endif
