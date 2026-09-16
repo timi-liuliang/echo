@@ -10,7 +10,8 @@ namespace Echo
 	class CMDLine
 	{
 	public:
-		// Parse
-		static bool Parser(int argc, char* argv[]);
+		// Parse. Returns the process exit code (0 = success): GUI modes always return 0,
+		// while cmd reports the outcome of the command it ran.
+		static int Parser(int argc, char* argv[]);
 	};
 }

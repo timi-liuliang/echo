@@ -3,11 +3,12 @@
 #include "EditorOpenMode.h"
 #include "GameMode.h"
 #include "VsGenMode.h"
+#include "CmdMode.h"
 #include "RegEditMode.h"
 
 namespace Echo
 {
-	bool CMDLine::Parser(int argc, char* argv[])
+	int CMDLine::Parser(int argc, char* argv[])
 	{
 		if ( argc > 1 )
 		{	
@@ -35,8 +36,14 @@ namespace Echo
 				RegEditMode regEditMode;
 				regEditMode.exec(argc, argv);
 			}
+			else if (sargv[0] == "cmd")
+			{
+				CmdMode cmdMode;
+				return cmdMode.exec(argc, argv);
+			}
 
-			return true;
+			// open / play / vs / regedit: the process exit code stays 0, as it always was
+			return 0;
 		}
 		else
 		{
@@ -44,6 +51,6 @@ namespace Echo
 			editorMode.exec(argc, argv);
 		}
 
-		return false;
+		return 0;
 	}
 }

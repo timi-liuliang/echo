@@ -19,6 +19,7 @@ int main( int argc, char* argv[])
 	// Regedit
 	Echo::RegEditMode::check(argv[0]);
 
-	// Parse & run
-	Echo::CMDLine::Parser(argc, argv);
+	// Parse & run. The exit code matters for the headless `cmd` mode: agents and CI
+	// decide success from it, not from parsing stdout.
+	return Echo::CMDLine::Parser(argc, argv);
 }
