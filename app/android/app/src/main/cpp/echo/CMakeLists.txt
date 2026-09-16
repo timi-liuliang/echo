@@ -22,7 +22,7 @@ ADD_LIBRARY(${MODULE_NAME} SHARED ${ALL_FILES} CMakeLists.txt)
 
 # Link engine libraries
 TARGET_LINK_LIBRARIES(${MODULE_NAME} engine)
-TARGET_LINK_LIBRARIES(${MODULE_NAME} lua pugixml freeimage box2d freetype physx spine zlib)
+TARGET_LINK_LIBRARIES(${MODULE_NAME} lua pugixml box2d freetype physx spine zlib)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} android log EGL GLESv2)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} glslang spirv-cross)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} OpenSLES openal-soft)

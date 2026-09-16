@@ -36,3 +36,8 @@ bin/editor/Win64/Debug/Echo.exe
 /bin/editor/Win64/Release/Echo.exe
 bin/editor/Win64/Debug/build.pdb
 bin/editor/Win64/Debug/build.exe
+
+# build artifacts produced by tests/unittest (do not commit binaries)
+/bin/editor/Win64/Release/unittest.exe
+/bin/editor/Win64/Debug/unittest.exe
+/bin/editor/Win64/Release/unittest.pdb

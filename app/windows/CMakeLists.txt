@@ -35,7 +35,7 @@ GROUP_FILES(ALL_FILES ${CMAKE_CURRENT_SOURCE_DIR})
 ADD_EXECUTABLE(${MODULE_NAME} ${ALL_FILES} CMakeLists.txt)
 
 # link libraries
-TARGET_LINK_LIBRARIES(${MODULE_NAME} zlib engine winmm.lib imm32.lib dxgi.lib Shlwapi.lib lua recast freeimage)
+TARGET_LINK_LIBRARIES(${MODULE_NAME} zlib engine winmm.lib imm32.lib dxgi.lib Shlwapi.lib lua recast)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} Live2DCubismCore.lib pugixml spine box2d)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} libEGL.lib libGLESv2.lib libMaliEmulator.lib)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} openal-soft jplayer)

@@ -41,7 +41,7 @@ IF(ECHO_PLATFORM_WINDOWS)
 	TARGET_LINK_LIBRARIES(${MODULE_NAME} glslang spirv-cross libpng)
 	TARGET_LINK_LIBRARIES(${MODULE_NAME} tinyexpr)
 ELSEIF(ECHO_PLATFORM_MAC)
-	TARGET_LINK_LIBRARIES(${MODULE_NAME} googletest engine glslang spirv-cross pugixml freeimage lua zlib)
+	TARGET_LINK_LIBRARIES(${MODULE_NAME} googletest engine glslang spirv-cross pugixml lua zlib)
 	TARGET_LINK_LIBRARIES(${MODULE_NAME} tinyexpr)
 ENDIF()
 

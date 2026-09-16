@@ -52,7 +52,7 @@ ADD_EXECUTABLE(${MODULE_NAME} MACOSX_BUNDLE ${ALL_FILES} ${MAC_RESOURCE_FILES} C
 
 # Link Library
 TARGET_LINK_LIBRARIES(${MODULE_NAME} engine)
-TARGET_LINK_LIBRARIES(${MODULE_NAME} pugixml physx spine recast lua freeimage freetype zlib box2d)
+TARGET_LINK_LIBRARIES(${MODULE_NAME} pugixml physx spine recast lua freetype zlib box2d)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} glslang spirv-cross)
 TARGET_LINK_LIBRARIES(${MODULE_NAME} Live2DCubismCore)
 
