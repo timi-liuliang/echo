@@ -25,7 +25,14 @@ namespace Echo
 
 	bool Terminal::execCmd(const String& cmd)
 	{
-		StringArray args = StringUtil::Split(cmd, " ");
+		return execCmd(StringUtil::Split(cmd, " "), nullptr);
+	}
+
+	bool Terminal::execCmd(const StringArray& args, bool* succeeded)
+	{
+		if (succeeded)
+			*succeeded = false;
+
 		if (!args.empty())
 		{
 			StringArray commandClasses;
@@ -39,7 +46,10 @@ namespace Echo
 					Command* commandObj = ECHO_DOWN_CAST<Command*>(Class::create(className));
 					if (commandObj)
 					{
-						commandObj->exec(args);
+						// keep the command own result: a failing command must not look like success
+						bool ok = commandObj->exec(args);
+						if (succeeded)
+							*succeeded = ok;
 
 						EchoSafeDelete(commandObj, Command);
 						return true;

@@ -70,6 +70,14 @@ namespace Echo
 		void loadSettings();
 		void saveSettings();
 
+		// Register all class types into the reflection system without requiring a project.
+		//
+		// Pure and side-effect free: it neither reads the project file, nor sets up IO res
+		// paths, nor creates a renderer. That makes reflection usable before (and without)
+		// Engine::initialize(), which is what `echo.exe cmd` needs: a command line that can
+		// run tools such as createproject without opening a window or touching the GPU.
+		static void registerTypeInfos();
+
 	private:
 		Engine();
         
@@ -78,6 +86,12 @@ namespace Echo
 
 		// register all class types
 		void registerClassTypes();
+
+		// Pure registration steps, shared by registerClassTypes() and registerTypeInfos().
+		// Kept as separate functions so the exact interleaved call order inside
+		// registerClassTypes() (core -> plugins -> modules) stays identical to before.
+		static void registerCoreClassTypes();
+		static void registerModuleTypes();
 
 		// load launch scene
 		void loadLaunchScene();

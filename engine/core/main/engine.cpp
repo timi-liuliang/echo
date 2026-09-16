@@ -144,6 +144,16 @@ namespace Echo
 		Class::registerType<PluginSettings>();
 		loadSettings();
 
+		registerCoreClassTypes();
+
+		// load all plugin
+		Plugin::loadAllPlugins();
+
+		registerModuleTypes();
+	}
+
+	void Engine::registerCoreClassTypes()
+	{
 		// register class types in core
 		Class::registerType<Object>();
         Class::registerType<FrameState>();
@@ -177,12 +187,29 @@ namespace Echo
 
 		// register render classes
 		Renderer::registerClassTypes();
+	}
 
-		// load all plugin
-		Plugin::loadAllPlugins();
-
+	void Engine::registerModuleTypes()
+	{
 		// register all module
 		Module::registerAllTypes();
+	}
+
+	void Engine::registerTypeInfos()
+	{
+		// Registration instantiates ObjectFactoryT<T>, whose constructor calls
+		// LuaBinder::registerClass(), so the lua state must exist before any class is
+		// registered. Same preamble Engine::initialize() runs; it needs neither the
+		// project file nor a renderer.
+		LuaBinder::instance()->init();
+		registerCoreToLua();
+
+		// NOTE: modules are deliberately NOT registered here. Registering a module
+		// instantiates its singleton, and some modules build render state in their
+		// constructor - Box2DModule -> Box2DDebugDraw -> Class::create("Gizmos") ->
+		// Renderer::createRasterizerState() - which requires a live renderer. A headless
+		// command line has none, so module registration stays with Engine::initialize().
+		registerCoreClassTypes();
 	}
 
 	void Engine::loadSettings()
